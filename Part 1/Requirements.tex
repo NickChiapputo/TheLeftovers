@@ -2,29 +2,169 @@
 
 \documentclass[12pt]{article}
 
-\usepackage{cite}
-\usepackage{subcaption}
-\usepackage{graphicx}
-\usepackage{float}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{hyperref}
-\usepackage{bookmark}
 \usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry} 
 
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+\newcommand\X{3}
+
 \begin{document}
+	\title{ The Leftovers \\
+			\Large{Requirements} }
+
+	\author{	Nicholas Chiapputo, Khaemon Edwards, Caleb Halter, \\
+				Jacob Robbins, Ryan Vanek, Saidat Babatunde, \\
+				Ephraim Emilimor, Jordan Simmons
+	}
+
+	\maketitle
+
 	\section{Introduction and Context}
-		
+		A wealthy entrepreneur is looking to open up a sit down restaurant. She wants to have as few employees as possible while also maintaining a high-level of customer service. In order to do this the restaurant needs instantaneous communication between servers, managers, and kitchen staff.
+        
+		The proposed system will have information easily accessible to all staff and will provide communication channels to allow them to request assistance. With the ability to communicate, store, and relay data, the system will reduce the number of staff required to effectively run the restaurant. This allows an increase in profit margins by reducing payroll. With the system, a customer will be able to place orders, contact managers and servers, be able to read nutritional information on menu items, and play two free games. Managers will be able to contact servers and kitchen staff, and update or modify any item on the menu. The kitchen will be able to request help from servers and managers.
 
 	\section{Users and Their Goals}
-
+		The users of this system are the customers and employees of a restaurant. They are not required to have above average levels of computer literacy. The goal is to produce a system that will allow quick and reliable communication between customers and employees and also improve the effectiveness of transactions. 
 
 	\section{Functional Requirements}
+		\begin{enumerate}
+			\item The system will allow the customer to place orders
+			\begin{enumerate}
+				\item The system will allow the customer to subtitute ingredients in selected menu items.
+				\item The system will allow the customer to view the price, nutrition information, allergens, and an image of each menu item.
+				\item The system will not show menu items whose ingredients are out of stock.
+				\item The system will allow the customer to write special requests to be sent with the order.
+				\item The system will send the order to the kitchen to be prepared.
+				\item The system will prompt the customer before sending the final order to the kitchen to alert the user that the system will not allow changes to the order after this point.
+				\item The system will not allow the customer to place an order at 11:30 p.m. or later.
+				\item The system will update the number of ingredients in inventory after an order is prepared.
+			\end{enumerate}
 
+			\item The system will allow the customer to choose from two games to play for free.
+				\begin{enumerate}
+					\item The system will not allow the customer to place an order, ask for help, or request a refill when playing a game.
+				\end{enumerate}
+
+			\item The system will allow the customer to call for help or ask for a drink refill when the system is not in kids' mode while playing a game.
+
+			\item The system will allow the customer to pay for their order(s).
+				\begin{enumerate}
+					\item The system will allow the customer to use coupons to discount the price of their order(s).
+					\item The system will allow a 100\% discount on a kids' meal on Monday nights from 4:00 p.m. to 11:59 p.m. with the purchase of an entre\`e.
+					\item The system will allow the customer to tip the server when paying for their order(s).
+					\item The system will allow the customer to play a game with a 20\% chance to win a free dessert item after paying for their order(s).
+					\item The system will allow the customer to split their order(s) into multiple bills.
+					\item The system will allow the user to receive their receipt in the form of an e-mail or a physical copy.
+				\end{enumerate}
+
+			\item The system will keep track of every table's status.
+
+			\item The system will allow servers to log in and log out of the system.
+				\begin{enumerate}
+					\item The system will track how long the server has worked.
+				\end{enumerate}
+
+			\item The system will allow servers to place orders.
+
+			\item The system will allow servers to process payments.
+
+			\item The system will allow servers to comp orders.
+
+			\item The system will allow servers to call a manager for assistance.
+				\begin{enumerate}
+					\item Managers will receive notifications when called.
+				\end{enumerate}
+
+			\item The system will display a list of orders to the kitchen
+				\begin{enumerate}
+					\item The system will allow the kitchen to mark meals as completed.
+					\item The system will allow the kitchen to mark orders as completed once each meal in the order is completed.
+				\end{enumerate}
+
+			\item The system will notify servers when orders for their assigned tables are completed.
+
+			\item The system will allow the kitchen to call servers and managers for help.
+				\begin{enumerate}
+					\item Managers and servers will receive notifications when called for help.
+				\end{enumerate}
+
+			\item The system will allow managers to edit menu items
+				\begin{enumerate}
+					\item The system will allow managers to add or remove items from the menu.
+					\item The system will allow managers to edit the details of menu items.
+				\end{enumerate}
+
+			\item The system will allow managers to edit the inventory
+				\begin{enumerate}
+					\item The system will allow managers to create and remove items from the inventory.
+					\item The system will allow managers to adjust the inventory count for inventory items.
+				\end{enumerate}
+
+			\item The system will allow managers to add or delete employee accounts.
+
+			\item The system will allow managers to view statistics of an employee.
+				\begin{enumerate}
+					\item The system will allow managers to view the hours worked for each employee.
+					\item The system will allow managers to view the total tips for each employee.
+					\item The system will allow managesr to view the number of comps for each employee.
+				\end{enumerate}
+
+			\item The system will allow managers to view the number of times a menu item has been purchased and what days of the week and times of day they were purchased.
+
+			\item The system will allow managers to generate coupons.
+
+			\item The system will allow customers to enroll in a loyalty reward system.
+				\begin{enumerate}
+					\item The system will allow customers to create a loyalty account to generate a customer ID.
+					\item The system will allow customers to enter their loyalty account when paying for an order.
+					\item The system will give loyalty reward members a coupon for a free dessert item for every \$50 spent at the restaurant.
+				\end{enumerate}
+
+			\item The system will give customers discounts on coffee during weekday lunch hours (Monday through Friday 11:00 a.m. to 2:00 p.m.).
+				
+			\item The system will give customers happy hour discounts on alcohol daily from 5:00 p.m. to 7:00 p.m.
+
+			\item The system will allow customers to choose from a selection of media entertainment.
+				\begin{enumerate}
+					\item The system will allow customers to search through a list of popular media to view during their meal.
+				\end{enumerate}
+
+			\item The system will allow customers to leave notes for their servers along with a tip.
+				\begin{enumerate}
+					\item They system will send a notification to the server when a customer leaves a note with a tip.
+				\end{enumerate}
+
+			\item The system will allow managers to generate a work schedule for employees.
+		\end{enumerate}
 
 	\section{Non-Functional Requirements}
-
+		\begin{enumerate}
+			\item The system will require internet access.
+			\item The system will run in Firefox on Windows, Mac, and Linux machines.
+		\end{enumerate}
 
 	\section{Glossary}
+		\begin{description}
+			\item[Employee] 			A server or manager user.
+			\item[Inventory] 			List of all ingredients in stock at restaurant.
+			\item[Menu] 				The list of all possible menu items.
+			\item[Menu Item] 			An item on the menu includes a name, price, picture, description, nutrition information, and ingredients list
+			\item[Order] 				List of customized menu items selected by a customer.
+			\item[Substitute] 			A potential replacement ingredient in a menu item.
+			\item[Menu Item Details] 	The details of a menu item include nutrition information, list of ingredients, and the price.
+			\item[Nutrition] 			Calorie count on a menu item.
+			\item[Ingredients]			Names of substances that are combined to form an menu item.
+			\item[Allergens]			Substances that cause allergic reactions.
+			\item[Coupon Code]			A code that is given to customers to be applied to an order that gives a discount.
+			\item[Discount]				Percentage taken off the subtotal of an order.
+			\item[Receipt]				Given to a customer after purchase and includes a list of the menu items ordered, time of order, subtotal, tip, and final total.
+			\item[Employee Accounts]	Account associated with each employee of the restaurant .Includes a name, and employee ID.
+			\item[Employee Statistics]	Set of information on an employee that includes hours worked, tips earned, and number and frequency of meal comps.
+			\item[Comps]				A meal comp occurs when an employee removes the cost of an item off of a customer's bill.
+			\item[Customer]				A customer is a patron of the restaurant who occupies a seat at a table. They are able to order menu items, process payment, request servers for refills and help, and play games on the system.
+			\item[Server]				A server is an employee whose main job is to bring customers food and drinks and assist with ordering and payment processing.
+			\item[Manager]				A manager is an employee who oversees servers in the restaurant. Managers pay attention to inventory to ensure there are enough ingredients to fulfill orders. They also track menu item popularity, adjust the menu as needed, generate coupons for customers, and fill in as a server where necessary.
+			\item[Kitchen Staff]		Staff in the kitchen can mark orders as complete to send notifications informing servers that the food has been prepared and is ready to be delivered. They are also able to request assistance from servers and managers.
+		\end{description}
 \end{document}
