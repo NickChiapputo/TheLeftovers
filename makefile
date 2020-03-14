@@ -16,7 +16,7 @@ usecase: cleanUse $(USE_SRC)
 	$(PDF) $(USE_FLAGS) $(USE_SRC) && $(PDF) $(USE_FLAGS) $(USE_SRC) && make cleanUse
 
 cleanUse: 
-	rm -f $(USE_NAMNE).log $(USE_NAME).aux
+	rm -f $(USE_NAME).log $(USE_NAME).aux
 
 reqs: cleanReqs $(REQS_SRC)
 	$(PDF) $(REQS_FLAGS) $(REQS_SRC) && $(PDF) $(REQS_FLAGS) $(REQS_SRC) && make cleanReqs

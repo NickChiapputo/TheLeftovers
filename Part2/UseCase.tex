@@ -2,6 +2,8 @@
 
 \documentclass[11pt]{article}
 
+\usepackage{graphicx}
+\usepackage{float}
 \usepackage{pdfpages}
 \usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry} 
 
@@ -636,5 +638,10 @@
 			\end{enumerate}
 	\end{enumerate}
 
-	\includepdf[pages=-]{Part2/diagram.pdf}
+	\begin{figure}[H]
+		\vspace{-0.75in}
+		\centering
+		\includegraphics[ width=0.95\linewidth, keepaspectratio ]{Part2/diagram.pdf}
+	\end{figure} %
+	% \includepdf[pages=-]{Part2/diagram.pdf}
 \end{document}
