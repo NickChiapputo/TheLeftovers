@@ -1,0 +1,30 @@
+\pdfsuppresswarningpagegroup=1
+
+\documentclass[11pt]{article}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry} 
+
+\renewcommand{\labelenumii}{\theenumii}			% Set first level enumerate items to use arabic numerals (1,2,3,4,etc.)
+\renewcommand{\theenumii}{\arabic{enumii}.}		% Set second level enumerate items to use the same as first level with following .
+
+\begin{document}
+	\title{ \vspace{-1in}The Leftovers \\
+			\Large{Class Diagram} }
+
+	\author{	Nicholas Chiapputo, Khaemon Edwards, Caleb Halter, \\
+				Jacob Robbins, Ryan Vanek, Saidat Babatunde, \\
+				Ephraim Emilimor, Jordan Simmons
+	}
+
+	\maketitle
+
+	\begin{figure}[H]
+		\vspace{-0.5in}
+		\centering
+		\includegraphics[ width=0.95\linewidth, keepaspectratio ]{Part2/classdiagram.pdf}
+	\end{figure} %
+
+\end{document}
