@@ -1,0 +1,57 @@
+#header {
+    background-color: black;
+    color: white;
+}
+
+.page {
+    background-color: crimson;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align:center;
+}
+
+.center-div {
+    position: absolute; 
+    top: 52%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+}
+
+.menu-row {
+    height: 35vh; 
+    margin: auto;
+}
+
+.menu-box {
+    background-color: mediumslateblue;
+    color: white;
+    margin: 1vw 1vw;
+    border: black;
+    border-width: 0.5vw;
+    border-style: solid;
+    border-radius: 5rem;
+    font-size: 6vw;
+    text-align: center;
+}
+
+.menu-text {
+    font-size: 10vh;
+    text-align: center;
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+a:link, a:visited {
+    color: white;
+}
+
+a:hover, a:active {
+    color: silver;
+}
+
+.title-bar {
+    height: 15vh; 
+    margin: auto;
+}
