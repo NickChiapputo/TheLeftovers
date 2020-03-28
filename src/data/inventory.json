@@ -1,0 +1,13 @@
+{
+	"items":
+	[
+		{
+			"name": "Lettuce",
+			"count": 4
+		},
+		{
+			"name": "Tomato",
+			"count": 2
+		}
+	]
+}
