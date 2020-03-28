@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+
+		<script type="text/javascript">
+			function buttonClick() {
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.onreadystatechange = function() {
+					if( this.readyState == 4 && this.status == 200 ) {
+						var obj = JSON.parse( this.responseText );
+						document.getElementById( 'textarea' ).innerHTML = "Number of Inventory Items: " + Object.keys( obj.items ).length + "\nFirst Item:\nName: " + obj.items[ 0 ].name + "\nCount: " + obj.items[ 0 ].count + "\n";
+						console.log( "Something went right.\n'" + obj + "'" );
+					}
+					else
+					{
+						console.log( "Something went wrong." + this.status );
+					}
+				};
+				xmlHttp.open( "GET", "test", true );
+				xmlHttp.send();
+			}
+
+			function postButtonClick()
+			{
+				var params = 'orem=ipsum&name=post';
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.onreadystatechange = function() {
+					if( this.readyState == 4 && this.status == 200 ) {
+						document.getElementById( 'textarea-post' ).innerHTML = "Response from server: '" + this.responseText + "'\n";
+					}
+					else
+					{
+						console.log( "Something went wrong with the post." + this.status );
+					}
+				};
+				xmlHttp.open( "POST", "inventory/edit?" + params, true );
+				xmlHttp.send( params );
+			}
+		</script>
+
+		<title>The Leftovers</title>
+
+		<!-- Link to css, javascript, etc. here -->
+		<!-- Remember to minify css and javascript before pushing the changes to the site -->
+		<link href="css/table.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<p>The Leftovers</p>
+		<div style="width: 100vw;">
+			<button type="button" onclick="buttonClick();">Request Inventory</button>
+		</div>
+		<div style="width: 100vw;">
+			<textarea readonly id="textarea" style="width: 50vw; height: 50vh;"></textarea>
+		</div>
+		<div style="width: 100vw; margin-top: 1vh;">
+			<button type="button" onclick="postButtonClick();">Test Post Feature</button>
+		</div>
+		<div style="width: 100vw;">
+			<textarea readonly id="textarea-post" style="width: 50vw; height: 50vh;"></textarea>
+		</div>
+	</body> 
+</html>
