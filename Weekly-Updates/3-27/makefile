@@ -1,12 +1,11 @@
 PDF = pdflatex
 
-UPD_NAME = Weekly Update - 3/27
 UPD_SRC = update.tex
-UPD_OUT = $(UPD_NAME)
-UPD_FLAG = -halt-on-error -jobname=$(UPD_OUT)
+UPD_OUT = update
+UPD_FLAGS = -halt-on-error -jobname=$(UPD_OUT)
 
 pdf: clean $(UPD_SRC)
 	$(PDF) $(UPD_FLAGS) $(UPD_SRC) && $(PDF) $(UPD_FLAGS) $(UPD_SRC) && make clean
 
 clean:
-	rm -f $(UPD_NAME).log $(UPD_NAME).aux
+	rm -f $(UPD_OUT).log $(UPD_OUT).aux $(UPD_OUT).out
