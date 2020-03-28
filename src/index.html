@@ -55,6 +55,12 @@
 		<div style="width: 100vw;">
 			<textarea readonly id="textarea" style="width: 50vw; height: 50vh;"></textarea>
 		</div>
+		
+		<form action="/inventory/edit" method="post">
+			<p>Name</p><input type="text" name="name" /><br />
+			<p>Count</p><input type="number" name="count" /><br />
+			<button>Save</button>
+		</form>
 		<div style="width: 100vw; margin-top: 1vh;">
 			<button type="button" onclick="postButtonClick();">Test Post Feature</button>
 		</div>
