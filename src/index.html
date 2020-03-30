@@ -4,68 +4,77 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 		<meta content="utf-8" http-equiv="encoding">
 
-		<script type="text/javascript">
-			function buttonClick() {
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.onreadystatechange = function() {
-					if( this.readyState == 4 && this.status == 200 ) {
-						var obj = JSON.parse( this.responseText );
-						document.getElementById( 'textarea' ).innerHTML = "Number of Inventory Items: " + Object.keys( obj.items ).length + "\nFirst Item:\nID: " + obj.items[ 0 ].id  + "\nName: " + obj.items[ 0 ].name + "\nCount: " + obj.items[ 0 ].count + "\n";
-						console.log( "Something went right.\n'" + obj + "'" );
-					}
-					else
-					{
-						console.log( "Something went wrong." + this.status );
-					}
-				};
-				xmlHttp.open( "GET", "test", true );
-				xmlHttp.send();
-			}
-
-			function postButtonClick()
-			{
-				var params = 'orem=ipsum&name=post';
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.onreadystatechange = function() {
-					if( this.readyState == 4 && this.status == 200 ) {
-						document.getElementById( 'textarea-post' ).innerHTML = "Response from server: '" + this.responseText + "'\n";
-					}
-					else
-					{
-						console.log( "Something went wrong with the post." + this.status );
-					}
-				};
-				xmlHttp.open( "POST", "inventory/edit?" + params, true );
-				xmlHttp.send( params );
-			}
-		</script>
+		<script src="js/index.js"></script>
 
 		<title>The Leftovers</title>
 
 		<!-- Link to css, javascript, etc. here -->
 		<!-- Remember to minify css and javascript before pushing the changes to the site -->
-		<link href="css/table.min.css" rel="stylesheet">
+		<!-- <link href="css/table.min.css" rel="stylesheet"> -->
 	</head>
 
 	<body>
-		<p>The Leftovers</p>
-		<div style="width: 100vw;">
-			<button type="button" onclick="buttonClick();">Request Inventory</button>
+		<div style="width: 100vw; text-align: center;">
+			<h2>The Leftovers</h2>
 		</div>
-		<div style="width: 100vw;">
-			<textarea readonly id="textarea" style="width: 50vw; height: 50vh;"></textarea>
-		</div>
-		
-		<form action="/inventory/edit" method="post">
-			<p>Name</p><input type="text" name="name" /><br />
-			<p>Count</p><input type="number" name="count" /><br />
-			<button>Save</button>
-		</form>
-		<div style="width: 100vw; margin-top: 1vh;">
-			<button type="button" onclick="postButtonClick();">Test Post Feature</button>
-		</div>
-		<div style="width: 100vw;">
-			<textarea readonly id="textarea-post" style="width: 50vw; height: 50vh;"></textarea>
+
+		<!-- Full-width row -->
+		<div style="width: 100vw; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+			<!-- Control buttons and fields -->
+			<div style="display: table-row; text-align: center;">
+				<!-- Request Inventory Button -->
+				<div style="width: 45%; display: table-cell; margin: auto;">
+					<button type="button" onclick="getInventoryList();">Request Inventory</button>
+				</div>
+
+				<!-- Edit Item Form -->
+				<div style="width: 45%; display: table-cell; text-align: left;">
+					<form onsubmit="postButtonClick()">
+						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Name input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									Name
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" name="name" />
+								</div>
+							</div>
+
+							<!-- Count input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									Count
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" name="count" />
+								</div>
+							</div>
+
+							<!-- Save button -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell; text-align: center;">
+									<button style="width: 12.5vw;" type="button" onclick="editFormSubmit()">Save</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Text areas -->
+			<div style="display: table-row;">
+				<!-- Inventory list textarea -->
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea" style="width: 49vw; height: 50vh;"></textarea>
+				</div>
+
+				<!-- Edit item textarea -->
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea-post" style="width: 49vw; height: 50vh;"></textarea>
+				</div>
+			</div>
 		</div>
 	</body> 
 </html>
