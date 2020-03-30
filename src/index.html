@@ -10,7 +10,7 @@
 				xmlHttp.onreadystatechange = function() {
 					if( this.readyState == 4 && this.status == 200 ) {
 						var obj = JSON.parse( this.responseText );
-						document.getElementById( 'textarea' ).innerHTML = "Number of Inventory Items: " + Object.keys( obj.items ).length + "\nFirst Item:\nName: " + obj.items[ 0 ].name + "\nCount: " + obj.items[ 0 ].count + "\n";
+						document.getElementById( 'textarea' ).innerHTML = "Number of Inventory Items: " + Object.keys( obj.items ).length + "\nFirst Item:\nID: " + obj.items[ 0 ].id  + "\nName: " + obj.items[ 0 ].name + "\nCount: " + obj.items[ 0 ].count + "\n";
 						console.log( "Something went right.\n'" + obj + "'" );
 					}
 					else
@@ -55,6 +55,12 @@
 		<div style="width: 100vw;">
 			<textarea readonly id="textarea" style="width: 50vw; height: 50vh;"></textarea>
 		</div>
+		
+		<form action="/inventory/edit" method="post">
+			<p>Name</p><input type="text" name="name" /><br />
+			<p>Count</p><input type="number" name="count" /><br />
+			<button>Save</button>
+		</form>
 		<div style="width: 100vw; margin-top: 1vh;">
 			<button type="button" onclick="postButtonClick();">Test Post Feature</button>
 		</div>
