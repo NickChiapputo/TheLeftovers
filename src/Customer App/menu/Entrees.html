@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
     <!-- Original CSS -->
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../../css/style.css">
 
     <title>Hello, world!</title>
   </head>
@@ -25,65 +25,63 @@
     <div id="header" class="container-fluid"> 
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
-          <a href="../index.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
+          <a href="menu.html">
+            <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
         <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
+          <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
         </div>
         <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
+          <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
         </div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script> 
-            /* credit w3schools for clock and addZero */
-            function clock() {
-              var date = new Date();
-              var am_pm = "pm"
-              var currentTime = date.getHours();
-              if (currentTime < 12) {
-                am_pm = "am"
-                if (currentTime == 0) {
-                  currentTime = 12
-                }
-              }
-              else {
-                currentTime = currentTime - 12;
-              }
-              currentTime += ":";
-              currentTime += addZero(date.getMinutes())
-              currentTime += am_pm;
-              document.getElementById("time").innerHTML = currentTime;
-              var x = setTimeout(clock, 1000);
-            }
-            function addZero(num) {
-              if (num < 10) {
-                num = "0" + num;
-              }
-              return num;
-            }
-          </script> 
+          <script src="../../js/get-time.js"> </script> 
         </div>
       </div>
     </div>
 
     <!-- Page contents-->
     <div class="container-fluid center-div">
+      <div class="row title-bar">
+        <div class="col menu-box">
+          <h1 class="menu-text">Entrees</h1>
+        </div>
+      </div>
       <div class="row menu-row">
         <div class="col menu-box">
-          <a href="Entrees.html">
-            <h1 class="menu-text">Entrees</h1>
+          <a href="">
+            <h1 class="menu-text">Drinks</h1>
           </a>
         </div>
         <div class="col menu-box">
           <a href="">
-            <h1 class="menu-text">Sides</h1>
+            <h1 class="menu-text">Drinks</h1>
+          </a>
+        </div>
+        <div class="col menu-box">
+          <a href="">
+            <h1 class="menu-text">Drinks</h1>
+          </a>
+        </div>
+        <div class="col menu-box">
+          <a href="">
+            <h1 class="menu-text">Desserts</h1>
           </a>
         </div>
       </div>
       <div class="row menu-row">
+        <div class="col menu-box">
+          <a href="">
+            <h1 class="menu-text">Drinks</h1>
+          </a>
+        </div>
+        <div class="col menu-box">
+          <a href="">
+            <h1 class="menu-text">Drinks</h1>
+          </a>
+        </div>
         <div class="col menu-box">
           <a href="">
             <h1 class="menu-text">Drinks</h1>
