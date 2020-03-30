@@ -1,8 +1,9 @@
 function getInventoryList() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) {
-			var doc = document.getElementById( 'textarea' );
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-view' );
 		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
@@ -32,18 +33,19 @@ function getInventoryList() {
 
 function editInventoryItem()
 {
-	var params = 	"name=" + document.getElementsByName( "name" )[ 0 ].value + 
-			"&count=" + document.getElementsByName( "count" )[ 0 ].value;
+	var params = 	"name=" + document.getElementsByName( "name-edit" )[ 0 ].value + 
+			"&count=" + document.getElementsByName( "count-edit" )[ 0 ].value;
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
 			console.log( this.responseText );
 			// Response is a JSON object
 			var obj = JSON.parse( this.responseText );
 			if( obj == null )
-				document.getElementById( 'textarea-post' ).innerHTML = "Unable to: find item '" + document.getElementsByName( "name" )[ 0 ].value + "'\n";
+				document.getElementById( 'textarea-edit' ).innerHTML = "Unable to: find item '" + document.getElementsByName( "name-edit" )[ 0 ].value + "'\n";
 			else
-				document.getElementById( 'textarea-post' ).innerHTML = "Updated Item: \n" + 
+				document.getElementById( 'textarea-edit' ).innerHTML = "Updated Item: \n" + 
 					"    Name:  " + obj.name + "\n" +  
 					"    Count: " + obj.count + "\n";
 		}
@@ -61,6 +63,85 @@ function editInventoryItem()
 function editFormSubmit()
 {
 	editInventoryItem();
+	// Function must return false to prevent reloading of page
+	return false;
+}
+
+
+function createInventoryItem()
+{
+	var params = "name=" + document.getElementsByName( "name-create" )[ 0 ].value + 
+				"&count=" + document.getElementsByName( "count-create" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			if( obj == null )
+			 	document.getElementById( 'textarea-create' ).innerHTML = "Unable to create item.\n";
+			else
+			 	document.getElementById( 'textarea-create' ).innerHTML = "Created Item: \n" + 
+			 		"    Name:  " + obj.name + "\n" + 
+			 		"    Count: " + obj.count + "\n";
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Create inventory item status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	xmlHttp.open( "POST", "inventory/create?" + params, true );
+	xmlHttp.send( params );
+}
+
+function createFormSubmit()
+{
+	createInventoryItem();
+	// Function must return false to prevent reloading of page
+	return false;
+}
+
+
+function deleteInventoryItem()
+{
+	var params = "name=" + document.getElementsByName( "name-delete" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			if( obj == null || obj.ok != 1 || obj.n != 1 )
+				document.getElementById( 'textarea-delete' ).innerHTML = "Unable to delete item.\n";
+			else
+				document.getElementById( 'textarea-delete' ).innerHTML = "Deleted Item\n";
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Create inventory item status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	xmlHttp.open( "POST", "inventory/delete?" + params, true );
+	xmlHttp.send( params );
+}
+
+function deleteFormSubmit()
+{
+	deleteInventoryItem();
 	// Function must return false to prevent reloading of page
 	return false;
 }
