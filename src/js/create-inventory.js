@@ -24,12 +24,14 @@ const dburl = 	"mongodb://" +
 		"?authSource=admin";
 
 const hostname = 'localhost';
-const port = 3002;
+const port = 3003;
 
 const server = http.createServer( ( req, res ) =>  {
  	console.log( "Server created." );
 	res.statusCode = 200;
 	res.setHeader( 'Content-Type', 'application/json' );
+
+	var values = url.parse( req.url, true ).query;
 
 	const MONGO_USERNAME = 'nick';
 	const MONGO_PASSWORD = '2bbjcdj7';
@@ -53,12 +55,18 @@ const server = http.createServer( ( req, res ) =>  {
 	 	if( err ) throw err;
 
 	 	var dbo = db.db( "restaurant" );
-	 	dbo.collection( "inventory" ).find( {} ).toArray( function( err, result ) {
+		
+		var newItem = {};
+		newItem[ "name" ] = values.name;
+		newItem[ "count" ] = values.count;
+
+	 	dbo.collection( "inventory" ).insertOne( newItem, function( err, result ) {
 	 		if( err ) throw err;
-			console.log( "Found: " + JSON.stringify( result ) );		
-	 		res.end( JSON.stringify( result ) );
-	 	});
-	});
+
+	 		console.log( "Inserted: " + JSON.stringify( result.ops[ 0 ] ) );
+	 		res.end( JSON.stringify( result.ops[ 0 ] ) );
+	 	} );
+	} );
 } );
 
 server.listen( port, hostname, () => {
