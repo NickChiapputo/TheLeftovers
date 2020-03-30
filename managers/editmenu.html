@@ -1,62 +1,73 @@
-<!DOCTYPE html>
-  <html lang="en" dir="ltr">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-      <style>
+<!doctype html>
+<html lang="en">
 
-        .btn-primary,
-        .btn-primary:hover,
-        .btn-primary:active,
-        .btn-primary:visited,
-        .btn-primary:focus 
-        {
-          background-color: rgb(160, 18, 179) !important;
-          border-color: white !important;
-          height: 300px;
-          width: 300px;
-          border-radius: 50px;
-        }
-        .container
-        {
-          margin-top:100px;
-          margin-left:100px;
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        }
-        h1
-        {
-          background-color: black;
-        }
-        body
-        {
-          background-color: rgb(253, 27, 83);
-        }
-        .bbtn
-        {
-          background-color: black;
-          color:white;
-          border-color: black;
-        }
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="style.css">
 
-      </style>
-      <h1>
-        <button id="back" type="button" class="bbtn" onclick="mfrontScreen()">&#8592</button>
-        <input type="text" id="currenttime" style="background-color:black; border-color:black; margin-left: 100px;" readonly/>
-        <script src="time.js"></script>
-      </h1>
-      <title>Manager EditMenu</title>
-    </head>
-    <body>
-      <div class="container">
-          <button id="mbtn" type="button" class="btn btn-primary" onclick="entrees()">Entrees</button>
-          <button id="mbtn" type="button" class="btn btn-primary">Sides</button>
-          <button id="mbtn" type="button" class="btn btn-primary">Drinks</button>
-          <button id="mbtn" type="button" class="btn btn-primary">Desserts</button>
+    <title>Hello, world!</title>
+  </head>
+
+  <body class="page" onload="clock()">
+    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Header bar -->
+    <div id="header" class="container-fluid"> 
+      <div class="row h-100" style="padding: 1vw;">
+        <div class="col-1" style="margin:auto;">
+          <a href="manager1.html">
+            <img src="Icons/Group 17.svg" style="max-width: 73%;">
+          </a>
+        </div>
+        <div class="col-1" style="margin:auto;">
+          <img src="Icons/Group 18.svg" style="max-width: 100%;">
+        </div>
+        <div class="col-1" style="margin:auto;">
+          <img src="Icons/Group 19.svg" style="max-width: 100%;">
+        </div>
+        <div class="col-9" style="margin: auto;">
+          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+          <script src=get-time.js> </script> 
+        </div>
       </div>
-    </body>
-  </html>
+    </div>
+
+    <!-- Page contents-->
+    <div class="container-fluid center-div">
+      <div class="row menu-row">
+          <div class="col menu-box">
+            <a href="entrees.html">
+              <h1 class="menu-text" >Entrees</h1>
+            </a>
+          </div>
+        <div class="col menu-box">
+          <a href="sides.html">
+            <h1 class="menu-text">Sides</h1>
+          </a>
+        </div>
+      </div>
+      <div class="row menu-row">
+        <div class="col menu-box">
+          <a href="drinks.html">
+            <h1 class="menu-text">Drinks</h1>
+          </a>
+        </div>
+        <div class="col menu-box">
+          <a href="desserts.html">
+            <h1 class="menu-text">Desserts</h1>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
