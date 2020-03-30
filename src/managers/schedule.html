@@ -15,8 +15,8 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock()">
-    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+  <body class="page" onload="clock(); week();">
+    <!-- Bootstrap: jQuery, Popper.js, and Bosotstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -42,42 +42,56 @@
       </div>
     </div>
 
-    <!-- Page contents-->
+    <!-- Page contents -->
     <div class="container-fluid center-div">
-      <div class="row menu-row">
-          <div class="col menu-box">
-            <a href="editmenu.html">
-              <h1 class="menu-text" >Edit Menu</h1>
-            </a>
-          </div>
+      <div class="row title-bar">
         <div class="col menu-box">
-          <a href="schedule.html">
-            <h1 class="menu-text">Schedule</h1>
-          </a>
+          <h1 class="menu-text">Schedule</h1>
         </div>
-        <div class="col menu-box">
+        <div class="col schuedule-box" style="background-color: black;">
           <a href="">
-            <h1 class="menu-text">Stats</h1>
+            <h1 class="menu-text" style="text-align: left; font-size: 5vwk;" >
+                Week
+                <p style="font-size: 3vw; font-weight: bold; text-align: right; margin: auto;" id="date"></p>
+            </h1>
           </a>
         </div>
       </div>
-      <div class="row menu-row">
-        <div class="col menu-box">
+      <div class = "row schedule-row">
+        <div class="col schedule-box">
           <a href="">
-            <h1 class="menu-text">Inventory</h1>
+            <h1 class="schedule-text" style="color: black;">Mon</h1>
           </a>
         </div>
-        <div class="col menu-box">
+        <div class="col schedule-box">
           <a href="">
-            <h1 class="menu-text">Staff</h1>
+            <h1 class="schedule-text" style="color: black;">Tues</h1>
           </a>
         </div>
-        <div class="col menu-box">
+        <div class="col schedule-box">
           <a href="">
-            <h1 class="menu-text">Coupons</h1>
+            <h1 class="schedule-text" style="color: black;">Wed</h1>
           </a>
+        </div>
+        <div class="col schedule-box">
+            <a href="">
+              <h1 class="schedule-text" style="color: black;">Thurs</h1>
+            </a>
+        </div>
+        <div class="col schedule-box">
+         <a href="">
+             <h1 class="schedule-text" style="color: black;">Fri</h1>
+         </a>
+        </div>
+        <div class="col schedule-box">
+            <a href="">
+              <h1 class="schedule-text" style="color: black;">Sat</h1>
+            </a>
+        </div>
+        <div class="col schedule-box">
+            <a href="">
+              <h1 class="schedule-text" style="color: black;">Sun </h1>
+            </a>
         </div>
       </div>
     </div>
-  </body>
-</html>
