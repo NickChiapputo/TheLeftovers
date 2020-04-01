@@ -33,6 +33,17 @@
     text-align: center;
 }
 
+.tab-box{
+    background-color: mediumslateblue;
+    color: black;
+    margin: 0vw 0vw;
+    border:black;
+    border-width: 2vw;
+    border-radius: 0rem;
+    font-size: 5vw;
+    text-align: center;
+}
+
 .schedule-row{
     height: 60vh;
     margin: auto;
@@ -83,3 +94,20 @@ a:hover, a:active {
     height: 15vh; 
     margin: auto;
 }
+.split {
+    height: 50%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  .left {
+    left: 0;
+  }
+  
+  .right {
+    right: 0;
+  }
