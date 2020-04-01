@@ -27,7 +27,7 @@ function getInventoryList() {
 	};
 
 	// Send a GET request to 64.225.29.130/inventory/view
-	xmlHttp.open( "GET", "inventory/view", true );
+	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
 }
 
@@ -56,7 +56,7 @@ function editInventoryItem()
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/edit with selected parameters in key-value format (?key1=value1&key2=value2 etc.)
-	xmlHttp.open( "POST", "inventory/edit?" + params, true );
+	xmlHttp.open( "POST", "http://64.225.29.130/inventory/edit?" + params, true );
 	xmlHttp.send( params );
 }
 
@@ -97,7 +97,7 @@ function createInventoryItem()
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "inventory/create?" + params, true );
+	xmlHttp.open( "POST", "http://64.225.29.130/inventory/create?" + params, true );
 	xmlHttp.send( params );
 }
 
@@ -135,7 +135,7 @@ function deleteInventoryItem()
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "inventory/delete?" + params, true );
+	xmlHttp.open( "POST", "http://64.225.29.130/inventory/delete?" + params, true );
 	xmlHttp.send( params );
 }
 

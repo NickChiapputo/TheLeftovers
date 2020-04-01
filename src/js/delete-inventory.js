@@ -5,24 +5,6 @@ const url = require( 'url' );
 const fs = require( 'fs' );
 
 
-const MONGO_USERNAME = 'nick';
-const MONGO_PASSWORD = '2bbjcdj7';
-const MONGO_HOSTNAME = '127.0.0.1';
-const MONGO_PORT = '27017';
-const MONGO_DB = 'restaurant';
-
-const dburl = 	"mongodb://" + 
-		MONGO_USERNAME + 
-		":" + 
-		MONGO_PASSWORD + 
-		"@" + 
-		MONGO_HOSTNAME + 
-		":" + 
-		MONGO_PORT + 
-		"/" + 
-		MONGO_DB + 
-		"?authSource=admin";
-
 const hostname = 'localhost';
 const port = 3004;
 
@@ -30,7 +12,8 @@ const server = http.createServer( ( req, res ) =>  {
  	console.log( "Server created." );
 	res.statusCode = 200;
 	res.setHeader( 'Content-Type', 'application/json' );
-
+	res.setHeader( 'Access-Control-Allow-Origin', '*' );
+	
 	var values = url.parse( req.url, true ).query;
 
 	const MONGO_USERNAME = 'nick';
