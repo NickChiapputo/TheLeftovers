@@ -4,13 +4,21 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 		<meta content="utf-8" http-equiv="encoding">
 
-		<script src="js/index.js"></script>
-
-		<title>The Leftovers</title>
 
 		<!-- Link to css, javascript, etc. here -->
 		<!-- Remember to minify css and javascript before pushing the changes to the site -->
 		<!-- <link href="css/table.min.css" rel="stylesheet"> -->
+
+
+		<!-- JQuery source -->
+		<script src="js/jquery-3.4.1.min.js"></script>
+
+
+		<!-- Source with examples for CRUD operations -->
+		<script src="js/index.js"></script>
+
+
+		<title>The Leftovers</title>
 	</head>
 
 	<body>
@@ -18,7 +26,353 @@
 			<h2>The Leftovers</h2>
 		</div>
 
-		<!-- Full-width row -->
+
+
+		<hr style="border-width: 0.5vh;">
+
+
+
+		<!-- MENU ITEM -->
+
+		<!-- Get menu item list and edit menu item -->
+		<div style="width: 100vw; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+			
+			<!-- Headers for menu query and edit menu item -->
+			<div style="display: table-row; text-align: center;">
+				<!-- Header for menu query -->
+				<div style="display: table-cell; width: 50vw;">
+					<h3>View Menu</h3>
+				</div>
+
+				<!-- Header for edit menu item -->
+				<div style="display: table-cell; width: 50vw;">
+					<h3>Edit Menu Item</h3>
+				</div>
+			</div>
+
+			<!-- Control buttons and fields -->
+			<div style="display: table-row; text-align: center;">
+
+				<!-- Request Menu Button -->
+				<div style="display: table-cell; margin: auto;">
+					<button style="" type="button" onclick="getMenu();">Request Menu</button>
+				</div>
+
+				<!-- Edit Menu Item Form -->
+				<div style="display: table-cell; text-align: left;">
+					<form>
+						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Name input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Name</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="name-menu-edit" />
+								</div>
+							</div>
+
+							<!-- Price input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw;">Price</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" name="count-menu-edit" />
+								</div>
+							</div>
+
+							<!-- Price input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw;">Price</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" name="count-menu-edit" />
+								</div>
+							</div>
+
+							<!-- Save button -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell; text-align: center;">
+									<button style="width: 12.5vw;" type="button" onclick="editMenuItemSubmit()">Save</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Text areas -->
+			<div style="display: table-row;">
+				<!-- Inventory list textarea -->
+				<div style="display: table-cell; vertical-align: top;">
+					<textarea readonly id="textarea-menu-view" style="width: 49vw; height: 25vh;"></textarea>
+				</div>
+
+				<!-- Edit item textarea -->
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea-menu-edit" style="width: 49vw; height: 25vh;"></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Create and delete menu item -->
+		<div style="width: 100vw; display: table; border-collapse: separate; border-spacing: 0vw 0vw; margin-top: 5vh;">
+			
+			<!-- Headers for create menu item and delete menu item -->
+			<div style="display: table-row; text-align: center;">
+				<!-- Header for create menu item -->
+				<div style="display: table-cell; width: 50vw;">
+					<h3>Create Menu Item</h3>
+				</div>
+
+				<!-- Header for delete menu item -->
+				<div style="display: table-cell; width: 50vw;">
+					<h3>Delete Menu Item</h3>
+				</div>
+			</div>
+
+			<!-- Forms for creating and deleting -->
+			<div style="display: table-row; text-align: center;">
+
+				<!-- Create Menu Item Form -->
+				<div style="width: 45%; display: table-cell; text-align: left;">
+					<form>
+						<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Name input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Name</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="menu-item-create-name" />
+								</div>
+							</div>
+
+							<!-- Price input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Price</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" required min="0" value="0" step="0.01" name="menu-item-create-price" />
+								</div>
+							</div>
+
+							<!-- Calories input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Calories</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" required name="menu-item-create-calories" />
+								</div>
+							</div>
+
+							<!-- Ingredient input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Ingredients</div>
+								</div>
+								<div style="display: table-cell;" id="menu-item-create-ingredients-cell">
+									<input style="width: 25vw;" type="text" required name="menu-item-create-ingredient-1" />
+								</div>
+							</div>
+
+							<!-- Has Ingredient input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Has Ingredient</div>
+								</div>
+								<div style="display: table-cell;" id="menu-item-create-has-ingredient-cell">
+									<input style="width: 25vw;" type="number" required name="menu-item-create-has-ingredient-1" />
+								</div>
+							</div>
+
+							<!-- Ingredient Count input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Ingredient Count</div>
+								</div>
+								<div style="display: table-cell;" id="menu-item-create-ingredient-count-cell">
+									<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-1" />
+								</div>
+							</div>
+
+							<!-- Allergens input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Allergens</div>
+								</div>
+								<div style="display: table-cell;" id="menu-item-create-allergens-cell">
+									<input style="width: 25vw;" type="text" required name="menu-item-create-allergens-1" />
+								</div>
+							</div>
+
+							<!-- Description input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Description</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="menu-item-create-description" />
+								</div>
+							</div>
+
+							<!-- File input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Picture</div>
+								</div>
+								<div style="display: table-cell;">
+									<input type="file" required id="menu-item-create-picture">
+								</div>
+							</div>
+
+							<!-- Save button field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell;">
+									<button style="width: 12.5vw;" type="button" onclick="createMenuItemSubmit()">Create</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<!-- Delete Menu Item Form -->
+				<div style="width: 45%; display: table-cell; text-align: left;">
+					<form>
+						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Name input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Name</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="name-menu-delete" />
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Empty field equal height to input -->
+							<div style="display: table-row">
+								<div style="display: table-cell; width: 12.5vw;">
+									<div style="margin-left: 5vw; height: 30px;"> </div>
+								</div>
+								<div style="display: table-cell;"> 
+									<p> </p>
+								</div>
+							</div>
+
+							<!-- Save button -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell; text-align: center;">
+									<button style="width: 12.5vw;" type="button" onclick="deleteFormSubmit()">Delete</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Text areas -->
+			<div style="display: table-row;">
+				<!-- Inventory list textarea -->
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea-menu-create" style="width: 49vw; height: 25vh;"></textarea>
+				</div>
+
+				<!-- Edit item textarea -->
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea-menu-delete" style="width: 49vw; height: 25vh;"></textarea>
+				</div>
+			</div>
+			
+		</div>
+
+
+
+		<hr style="border-width: 0.5vh;">
+
+
+
+		<!-- INVENTORY ITEM -->
+
+		<!-- Get inventory list and edit item -->
 		<div style="width: 100vw; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 			
 			<!-- Headers for inventory query and edit item -->
@@ -44,7 +398,7 @@
 
 				<!-- Edit Item Form -->
 				<div style="display: table-cell; text-align: left;">
-					<form onsubmit="postButtonClick()">
+					<form>
 						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 							<!-- Name input field -->
 							<div style="display: table-row">
@@ -52,7 +406,7 @@
 									<div style="margin-left: 5vw;">Name</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="text" name="name-edit" />
+									<input style="width: 25vw;" type="text" required name="name-edit" />
 								</div>
 							</div>
 
@@ -62,7 +416,7 @@
 									<div style="margin-left: 5vw;">Count</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="number" name="count-edit" />
+									<input style="width: 25vw;" type="number" required name="count-edit" />
 								</div>
 							</div>
 
@@ -93,7 +447,7 @@
 
 		</div>
 
-		<!-- Full-width row -->
+		<!-- Create and delete inventory item -->
 		<div style="width: 100vw; display: table; border-collapse: separate; border-spacing: 0vw 0vw; margin-top: 5vh;">
 			
 			<!-- Headers for create item and delete item -->
@@ -114,7 +468,7 @@
 
 				<!-- Create Item Form -->
 				<div style="width: 45%; display: table-cell; text-align: left;">
-					<form onsubmit="createItemClick()">
+					<form>
 						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 							<!-- Name input field -->
 							<div style="display: table-row">
@@ -122,7 +476,7 @@
 									<div style="margin-left: 5vw;">Name</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="text" name="name-create" />
+									<input style="width: 25vw;" type="text" required name="name-create" />
 								</div>
 							</div>
 
@@ -132,7 +486,7 @@
 									<div style="margin-left: 5vw;">Count</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="number" name="count-create" />
+									<input style="width: 25vw;" type="number" required name="count-create" />
 								</div>
 							</div>
 
@@ -149,7 +503,7 @@
 
 				<!-- Delete Item Form -->
 				<div style="width: 45%; display: table-cell; text-align: left;">
-					<form onsubmit="deleteItemClick()">
+					<form>
 						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 							<!-- Name input field -->
 							<div style="display: table-row">
@@ -157,7 +511,7 @@
 									<div style="margin-left: 5vw;">Name</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="text" name="name-delete" />
+									<input style="width: 25vw;" type="text" required name="name-delete" />
 								</div>
 							</div>
 
