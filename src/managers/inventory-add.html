@@ -44,7 +44,7 @@
           </a>
         </div>
 		<div class="col-1" style="margin: center-div;">
-		  <h1 class="menu-text">Inventory</h1>
+		  <h1 class="menu-text">Add</h1>
 		</div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
@@ -55,12 +55,12 @@
     <script src="../js/index.js"></script>
     <!-- Page contents-->
 	<div class="container-fluid" style="padding: 1vw;">
-		<form onsubmit="createItemClick()">
+		<form>
 			<label for="ingredient">Ingredient:</label>
 			<input type="text" name="name-create"/><br><br>
 			<label for="count">Count:</label>
 			<input type="number" name="count-create"/><br><br>
-      <input type="submit" style="width:12.5vw;" onclick="createFormSubmit()"/>
+      <button style="width: 12.5vw;" type="button" onclick="createFormSubmit()">Create</button>
 		</form>
 	</div>
   </body>
