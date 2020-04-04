@@ -195,7 +195,7 @@ function createMenuItem()
 	formData.append( "fileToUpload", blobFile );
 
 	$.ajax( {
-		url: "http:64.225.29.130/menu/create",
+		url: "http://64.225.29.130/menu/create",
 		type: "POST",
 		data: formData,
 		processData: false,
