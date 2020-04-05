@@ -44,7 +44,7 @@
           </a>
         </div>
 		<div class="col-1" style="margin: center-div;">
-		  <h1 class="menu-text">Inventory</h1>
+		  <h1 class="row-text">Edit</h1>
 		</div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
@@ -52,24 +52,17 @@
         </div>
       </div>
     </div>
-
+    <script src="../js/inventory.js"></script>
     <!-- Page contents-->
 	<div class="container-fluid" style="padding: 1vw;">
-		<table style="width:100%" id="t01">
-		  <tr>
-			<th>Ingredient</th>
-			<th>Count</th>
-		  </tr>
-		  <tr>
-			<td>Apples</td>
-			<td>
-				<form>
-					<input type="number" id="count" name="count">
-					<input type="submit" value="Submit">
-				</form>
-			</td>
-		  </tr>
-		</table>
+		<form>
+			<label for="ingredient">Ingredient:</label>
+			<input type="text" name="name-edit"/><br><br>
+			<label for="count">Count:</label>
+			<input type="number" name="count-edit"/><br><br>
+	  <button style="width: 12.5vw;" type="reset" onclick="editFormSubmit()">Create</button>
+	  <p id='textarea-edit'></p>
+		</form>
 	</div>
   </body>
 </html>
