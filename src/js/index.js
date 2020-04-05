@@ -190,25 +190,53 @@ function getMenu()
 
 function createMenuItem()
 {
-	var blobFile = $( "#menu-item-create-picture" )[ 0 ].files[ 0 ];
-	var formData = new FormData();
-	formData.append( "fileToUpload", blobFile );
+	// var blobFile = $( "#menu-item-create-picture" )[ 0 ].files[ 0 ];
 
-	$.ajax( {
-		url: "http://64.225.29.130/menu/create",
-		type: "POST",
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function( response )
+	var formData = new FormData( createMenuItemForm );
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
 		{
-			console.log( response );
-		},
 
-		error: function( jqXHR, textStatus, errorMessage ) {
-			console.log( errorMessage );
 		}
-	} );
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/menu/create
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/create" );
+	xmlHttp.send( formData );
+}
+
+function createMenuItemAddNewIngredient()
+{
+	var ingredientsLabel = document.getElementById( "menu-item-create-ingredients-label-cell" );
+	var ingredients = document.getElementById( "menu-item-create-ingredients-cell" );
+
+	var hasIngredientLabel = document.getElementById( "menu-item-create-has-ingredient-label-cell" );
+	var hasIngredient = document.getElementById( "menu-item-create-has-ingredient-cell" );
+
+	var ingredientCountLabel = document.getElementById( "menu-item-create-ingredient-count-label-cell" );
+	var ingredientCount = document.getElementById( "menu-item-create-ingredient-count-cell" );
+
+
+	var numIngredients = document.getElementsByName( "menu-item-create-ingredient" ).length;
+
+
+	// var newIngredientsLabel = document.createElement(  )
+
+
+	ingredientsLabel.innerHTML += '<div style="margin-left: 5vw;">Ingredient ' + ( numIngredients + 1 ) + '</div>';
+	ingredients.innerHTML += '<input style="width: 25vw;" type="text" required name="menu-item-create-ingredient-' + ( numIngredients + 1 ) + '" />';
+	
+	hasIngredientLabel.innerHTML += '<div style="margin-left: 5vw;">Has Ingredient ' + ( numIngredients + 1 ) + '</div>';
+	hasIngredient.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-has-ingredient-' + ( numIngredients + 1 ) + '" />';
+	
+	ingredientCountLabel.innerHTML += '<div style="margin-left: 5vw;">Ingredient ' + ( numIngredients + 1 ) + ' Count</div>';
+	ingredientCount.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-' + ( numIngredients + 1 ) + '" /><br>';
 }
 
 function createMenuItemSubmit()
