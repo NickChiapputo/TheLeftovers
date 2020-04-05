@@ -29,7 +29,7 @@
 	
   </head>
 
-  <body class="page" onload="clock()">
+  <body class="page" onload="clock();getInventoryList()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -43,47 +43,51 @@
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-		<div class="col-1" style="margin: center-div;">
-		  <h1 class="menu-text">Inventory</h1>
+    <div class="col-2" style="margin: center-div;">
+		  <p class="schedule-text" >Inventory</p>
 		</div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/inventory.js"></script>
         </div>
       </div>
     </div>
 
     <!-- Page contents-->
-	<div class="container-fluid">
-		<div class="row menu-row">
-          <div class="col menu-box">
-            <a href="inventory-add.html">
-              <h1 class="menu-text" >Add item</h1>
-			</a>
-          </div>
-		  <div class="col menu-box">
-            <a href="inventory-remove.html">
-              <h1 class="menu-text" >Remove Item</h1>
-			</a>
-          </div>
-		  <div class="col menu-box">
-            <a href="inventory-edit.html">
-              <h1 class="menu-text" >Edit Counts</h1>
-			</a>
-          </div>
-		</div>
-	</div>
-	<div class="container-fluid">
-		<table style="width:100%" id="t01">
-		  <tr>
-			<th>Ingredient</th>
-			<th>Count</th>
-		  </tr>
-		  <tr>
-			<td>Apples</td>
-			<td>7</td>
-		  </tr>
-		</table>
-	</div>
-  </body>
+  <ul class="col nav nav-pills">
+    <li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#view">View</a></li>
+  </ul>
+  
+  <div class="tab-content">
+    <div id="view" class="tab-pane fade in active">
+      <p id="invtxt"></p>
+    </div>
+      <form id="add" class="tab-pane fade">
+        <label for="ingredient">Ingredient:</label>
+        <input type="text" name="name-create"/><br><br>
+        <label for="count">Count:</label>
+        <input type="number" name="count-create"/><br><br>
+        <button style="width: 12.5vw;" type="reset" onclick="createFormSubmit()">Create</button>
+      </form>
+      <form id="remove" class="tab-pane fade">
+        <label for="ingredient">Ingredient:</label>
+        <input type="text" name="name-delete"/><br><br>
+        <button style="width: 12.5vw;" type="reset" onclick="deleteFormSubmit()">Delete</button>
+        <br>
+        <p id='textarea-delete'></p>
+      </form>
+        <form id="edit" class="tab-pane fade">
+        <label for="ingredient">Ingredient:</label>
+        <input type="text" name="name-edit"/><br><br>
+        <label for="count">Count:</label>
+        <input type="number" name="count-edit"/><br><br>
+      <button style="width: 12.5vw;" type="reset" onclick="editFormSubmit()">Update</button>
+      <p id='textarea-edit'></p>
+        </form>
+    </div>
+</body>
 </html>
