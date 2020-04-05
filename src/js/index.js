@@ -190,19 +190,18 @@ function getMenu()
 
 function createMenuItem()
 {
-	// var blobFile = $( "#menu-item-create-picture" )[ 0 ].files[ 0 ];
-
 	var formData = new FormData( createMenuItemForm );
+	formData.append( "fileToUpload", document.getElementById( "menu-item-create-picture" ).files[ 0 ] );
 
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
 		{
-
+			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-
+			console.log( "Create menu item status response: " + this.status );
 		}
 	};
 
@@ -222,11 +221,8 @@ function createMenuItemAddNewIngredient()
 	var ingredientCountLabel = document.getElementById( "menu-item-create-ingredient-count-label-cell" );
 	var ingredientCount = document.getElementById( "menu-item-create-ingredient-count-cell" );
 
-
-	var numIngredients = document.getElementsByName( "menu-item-create-ingredient" ).length;
-
-
-	// var newIngredientsLabel = document.createElement(  )
+	var numIngredients = Number( document.getElementById( "menu-item-add-ingredient-cell" ).getAttribute( "data-numIngredients" ) );
+	document.getElementById( "menu-item-add-ingredient-cell" ).setAttribute( "data-numIngredients", numIngredients + 1 );
 
 
 	ingredientsLabel.innerHTML += '<div style="margin-left: 5vw;">Ingredient ' + ( numIngredients + 1 ) + '</div>';
@@ -236,7 +232,7 @@ function createMenuItemAddNewIngredient()
 	hasIngredient.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-has-ingredient-' + ( numIngredients + 1 ) + '" />';
 	
 	ingredientCountLabel.innerHTML += '<div style="margin-left: 5vw;">Ingredient ' + ( numIngredients + 1 ) + ' Count</div>';
-	ingredientCount.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-' + ( numIngredients + 1 ) + '" /><br>';
+	ingredientCount.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-' + ( numIngredients + 1 ) + '" />';
 }
 
 function createMenuItemSubmit()
