@@ -235,6 +235,19 @@ function createMenuItemAddNewIngredient()
 	ingredientCount.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-' + ( numIngredients + 1 ) + '" />';
 }
 
+function createMenuItemAddNewAllergen()
+{
+	var allergensLabel = document.getElementById( "menu-item-create-allergens-label-cell" );
+	var allergens = document.getElementById( "menu-item-create-allergens-cell" );
+
+	var numAllergens = Number( document.getElementById( "menu-item-add-allergens-cell" ).getAttribute( "data-numAllergens" ) );
+	document.getElementById( "menu-item-add-allergens-cell" ).setAttribute( "data-numAllergens", numAllergens + 1 );
+
+
+	allergensLabel.innerHTML += '<div style="margin-left: 5vw;">Allergen ' + ( numAllergens + 1 ) + '</div>';
+	allergens.innerHTML += '<input style="width: 25vw;" type="text" required name="menu-item-create-allergens-' + ( numAllergens + 1 ) + '" />';
+}
+
 function createMenuItemSubmit()
 {
 	createMenuItem();

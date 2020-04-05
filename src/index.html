@@ -213,11 +213,20 @@
 
 							<!-- Allergens input field -->
 							<div style="display: table-row">
-								<div style="display: table-cell;">
-									<div style="margin-left: 5vw;">Allergens</div>
+								<div style="display: table-cell;" id="menu-item-create-allergens-label-cell">
+									<div style="margin-left: 5vw;">Allergen 1</div>
 								</div>
 								<div style="display: table-cell;" id="menu-item-create-allergens-cell">
-									<input style="width: 25vw;" type="text" required name="menu-item-create-allergens" />
+									<input style="width: 25vw;" type="text" required name="menu-item-create-allergens-1" />
+								</div>
+							</div>
+
+							<!-- Add New Allergens Button Row -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+								</div>
+								<div style="display: table-cell;" id="menu-item-add-allergens-cell" data-numAllergens="1">
+									<p style="color: blue; text-decoration: underline; cursor: pointer;" onclick="createMenuItemAddNewAllergen()">+ Add Allergen</p>
 								</div>
 							</div>
 
