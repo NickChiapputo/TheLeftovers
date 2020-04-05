@@ -190,25 +190,62 @@ function getMenu()
 
 function createMenuItem()
 {
-	var blobFile = $( "#menu-item-create-picture" )[ 0 ].files[ 0 ];
-	var formData = new FormData();
-	formData.append( "fileToUpload", blobFile );
+	var formData = new FormData( createMenuItemForm );
+	formData.append( "fileToUpload", document.getElementById( "menu-item-create-picture" ).files[ 0 ] );
 
-	$.ajax( {
-		url: "http://64.225.29.130/menu/create",
-		type: "POST",
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function( response )
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
 		{
-			console.log( response );
-		},
-
-		error: function( jqXHR, textStatus, errorMessage ) {
-			console.log( errorMessage );
+			console.log( this.responseText );
 		}
-	} );
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Create menu item status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/menu/create
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/create" );
+	xmlHttp.send( formData );
+}
+
+function createMenuItemAddNewIngredient()
+{
+	var ingredientsLabel = document.getElementById( "menu-item-create-ingredients-label-cell" );
+	var ingredients = document.getElementById( "menu-item-create-ingredients-cell" );
+
+	var hasIngredientLabel = document.getElementById( "menu-item-create-has-ingredient-label-cell" );
+	var hasIngredient = document.getElementById( "menu-item-create-has-ingredient-cell" );
+
+	var ingredientCountLabel = document.getElementById( "menu-item-create-ingredient-count-label-cell" );
+	var ingredientCount = document.getElementById( "menu-item-create-ingredient-count-cell" );
+
+	var numIngredients = Number( document.getElementById( "menu-item-add-ingredient-cell" ).getAttribute( "data-numIngredients" ) );
+	document.getElementById( "menu-item-add-ingredient-cell" ).setAttribute( "data-numIngredients", numIngredients + 1 );
+
+
+	ingredientsLabel.innerHTML += '<div style="margin-left: 5vw;">Ingredient ' + ( numIngredients + 1 ) + '</div>';
+	ingredients.innerHTML += '<input style="width: 25vw;" type="text" required name="menu-item-create-ingredient-' + ( numIngredients + 1 ) + '" />';
+	
+	hasIngredientLabel.innerHTML += '<div style="margin-left: 5vw;">Has Ingredient ' + ( numIngredients + 1 ) + '</div>';
+	hasIngredient.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-has-ingredient-' + ( numIngredients + 1 ) + '" />';
+	
+	ingredientCountLabel.innerHTML += '<div style="margin-left: 5vw;">Ingredient ' + ( numIngredients + 1 ) + ' Count</div>';
+	ingredientCount.innerHTML += '<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-' + ( numIngredients + 1 ) + '" />';
+}
+
+function createMenuItemAddNewAllergen()
+{
+	var allergensLabel = document.getElementById( "menu-item-create-allergens-label-cell" );
+	var allergens = document.getElementById( "menu-item-create-allergens-cell" );
+
+	var numAllergens = Number( document.getElementById( "menu-item-add-allergens-cell" ).getAttribute( "data-numAllergens" ) );
+	document.getElementById( "menu-item-add-allergens-cell" ).setAttribute( "data-numAllergens", numAllergens + 1 );
+
+
+	allergensLabel.innerHTML += '<div style="margin-left: 5vw;">Allergen ' + ( numAllergens + 1 ) + '</div>';
+	allergens.innerHTML += '<input style="width: 25vw;" type="text" required name="menu-item-create-allergens-' + ( numAllergens + 1 ) + '" />';
 }
 
 function createMenuItemSubmit()

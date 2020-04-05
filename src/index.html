@@ -140,7 +140,7 @@
 
 				<!-- Create Menu Item Form -->
 				<div style="width: 45%; display: table-cell; text-align: left;">
-					<form>
+					<form id="createMenuItemForm">
 						<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 							<!-- Name input field -->
 							<div style="display: table-row">
@@ -174,18 +174,27 @@
 
 							<!-- Ingredient input field -->
 							<div style="display: table-row">
-								<div style="display: table-cell;">
-									<div style="margin-left: 5vw;">Ingredients</div>
+								<div style="display: table-cell;" id="menu-item-create-ingredients-label-cell">
+									<div style="margin-left: 5vw;">Ingredient 1</div>
 								</div>
 								<div style="display: table-cell;" id="menu-item-create-ingredients-cell">
 									<input style="width: 25vw;" type="text" required name="menu-item-create-ingredient-1" />
 								</div>
 							</div>
 
-							<!-- Has Ingredient input field -->
+							<!-- Add New Ingredient Button Row -->
 							<div style="display: table-row">
 								<div style="display: table-cell;">
-									<div style="margin-left: 5vw;">Has Ingredient</div>
+								</div>
+								<div style="display: table-cell;" id="menu-item-add-ingredient-cell" data-numIngredients="1">
+									<p style="color: blue; text-decoration: underline; cursor: pointer;" onclick="createMenuItemAddNewIngredient()">+ Add Ingredient</p>
+								</div>
+							</div>
+
+							<!-- Has Ingredient input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;" id="menu-item-create-has-ingredient-label-cell">
+									<div style="margin-left: 5vw;">Has Ingredient 1</div>
 								</div>
 								<div style="display: table-cell;" id="menu-item-create-has-ingredient-cell">
 									<input style="width: 25vw;" type="number" required name="menu-item-create-has-ingredient-1" />
@@ -194,8 +203,8 @@
 
 							<!-- Ingredient Count input field -->
 							<div style="display: table-row">
-								<div style="display: table-cell;">
-									<div style="margin-left: 5vw;">Ingredient Count</div>
+								<div style="display: table-cell;" id="menu-item-create-ingredient-count-label-cell">
+									<div style="margin-left: 5vw;">Ingredient 1 Count</div>
 								</div>
 								<div style="display: table-cell;" id="menu-item-create-ingredient-count-cell">
 									<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-1" />
@@ -204,11 +213,20 @@
 
 							<!-- Allergens input field -->
 							<div style="display: table-row">
-								<div style="display: table-cell;">
-									<div style="margin-left: 5vw;">Allergens</div>
+								<div style="display: table-cell;" id="menu-item-create-allergens-label-cell">
+									<div style="margin-left: 5vw;">Allergen 1</div>
 								</div>
 								<div style="display: table-cell;" id="menu-item-create-allergens-cell">
 									<input style="width: 25vw;" type="text" required name="menu-item-create-allergens-1" />
+								</div>
+							</div>
+
+							<!-- Add New Allergens Button Row -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+								</div>
+								<div style="display: table-cell;" id="menu-item-add-allergens-cell" data-numAllergens="1">
+									<p style="color: blue; text-decoration: underline; cursor: pointer;" onclick="createMenuItemAddNewAllergen()">+ Add Allergen</p>
 								</div>
 							</div>
 
@@ -219,6 +237,21 @@
 								</div>
 								<div style="display: table-cell;">
 									<input style="width: 25vw;" type="text" required name="menu-item-create-description" />
+								</div>
+							</div>
+
+							<!-- Description input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Category</div>
+								</div>
+								<div style="display: table-cell;">
+									<select name="menu-item-create-category">
+										<option value="appetizer">Appetizer</option>
+										<option value="entree">Entree</option>
+										<option value="drink">Drink</option>
+										<option value="dessert">Dessert</option>
+									</select>
 								</div>
 							</div>
 
