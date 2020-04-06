@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/index.js"></script>
+
+    <title>Hello, world!</title>
+  </head>
+
+  
+  <body class="page" onload="clock()">
+    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Header bar -->
+    <div id="header" class="container-fluid"> 
+      <div class="row h-100" style="padding: 1vw;">
+        <div class="col-1" style="margin:auto;">
+          <a href="../index.html">
+            <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
+          </a>
+        </div>
+        <div class="col-1" style="margin:auto;">
+          <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
+        </div>
+        <div class="col-1" style="margin:auto;">
+          <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
+        </div>
+        <div class="col-9" style="margin: auto;">
+          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+          <script src="../../js/get-time.js"> </script> 
+        </div>
+      </div>
+    </div>
+
+    <!-- Page contents-->
+    <!-- Title bar -->
+    <div class="container-fluid row title-bar">
+      <div class="col menu-box">
+        <h1 class="menu-text">Table <text>7</text></h1>
+      </div>
+    </div>
+
+    <!-- Menu item -->
+    <div class="container-fluid">
+        <div class="row" style="min-height: 70vh; max-height: 70vh;">
+            <div class="col-6">
+                <div class="text-box" style="width: 100%; min-height: 100%; max-height: 100%;">
+                  <h1 style="font-weight: bold;">Order</h1>
+                  <ol>
+                    <li>Greek Burger
+                      <ul>
+                        <li>Add lettuce</li>
+                        <li>No bun</li>
+                      </ul>
+                    </li>
+                  </ol>
+                </div>
+            </div>
+            <div class="col-5">
+              <!-- Add item button -->
+              <a href="../menu/menu.html">
+                <div class="col menu-box" style="min-width: 100%; min-height: 20%;">
+                  <h1 class="menu-text">Add item</h1>
+                </div>
+              </a>
+
+              <!-- Edit item modal button -->
+              <button type="button" onclick="loadCookie()" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#edit-food" style="min-width: 100%; min-height: 20%; background-color:white; color: black;">
+                <h1 class="menu-text">Edit food</h1>
+              </button>
+              <!-- Edit item modal window -->
+              <div class="modal fade" id="edit-food" tabindex="-1" role="dialog" aria-labelledby="edit-food" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirm-order">Add item to order?</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">    
+                      <script>
+                        function saveCookie() {
+                          var date = new Date();
+                          if (date.getMinutes() < 59) {
+                            date.setMinutes(date.getMinutes() + 1);
+                          }
+                          else {
+                            date.setHours(date.getHours() + 1);
+                            date.setMinutes(0);
+                          }
+                          str = document.getElementById("cook").value;
+                          str = str.concat("; expires=", date.toUTCString());
+                          document.cookie = str;
+                          loadCookie();
+                        }
+
+                        function loadCookie() {
+                          document.getElementById("cokies").innerText = document.cookie;
+                        }
+
+                        function clearCookies() {
+                          var str = document.cookie.split(';');
+                          var date = new Date();
+                          for (i=0; i < document.cookie.length; i++) {
+                            document.cookie = ''.concat((str.split('='))[0],"=; expires=",date.toUTCString());
+                          }
+                        }
+                        
+                      </script>  
+                      <form id="myForm" onclick="saveCookie()">
+                        <input type="text" id="cook">
+                        <input type="submit">
+                        <p id="cokies">fd</p>
+                      </form>          
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
+                      <button type="button" class="btn btn-outline-success" onclick="window.location.href='../View Order/View-Order.html';">Yes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 #header {
     background-color: black;
+    height: 10vh;
     color: white;
 }
 
@@ -19,6 +20,12 @@
 .menu-row {
     height: 35vh; 
     margin: auto;
+}
+
+.scrollable-grid {
+    max-height: 75vh; 
+    overflow-y: scroll; 
+    max-width: 100vw;
 }
 
 .menu-box {
@@ -42,6 +49,18 @@
     border-radius: 0rem;
     font-size: 5vw;
     text-align: center;
+}
+
+.item-large-image {
+    color: white;
+    margin: 1vw 1vw;
+    border: black;
+    border-width: 0.5vw;
+    border-style: solid;
+    border-radius: 5rem;
+    background-position: center;
+    background-repeat: no-repeat; 
+    background-size: cover; 
 }
 
 .schedule-row{
@@ -73,7 +92,7 @@
 }
 
 .menu-text {
-    font-size: 10vh;
+    font-size: 8vh;
     text-align: center;
     position: absolute; 
     top: 50%; 
@@ -81,6 +100,17 @@
     transform: translate(-50%, -50%);
     width: 100%;
 }
+
+.menu-text-small {
+    font-size: 5vh;
+    text-align: center;
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
 
 a:link, a:visited {
     color: white;
@@ -94,6 +124,22 @@ a:hover, a:active {
     height: 15vh; 
     margin: auto;
 }
+
+.text-box {
+    background-color: white;
+    color: black;
+    margin: 1vw 1vw;
+    padding: 1vw 1vw;
+    border: black;
+    border-width: 0.5vw;
+    border-style: solid;
+    border-radius: 1rem;
+    font-size: 2vw;
+    text-align: left;
+    overflow: scroll;
+    width: 100%;
+}
+
 .split {
     height: 50%;
     width: 50%;
