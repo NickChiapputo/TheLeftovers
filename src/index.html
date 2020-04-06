@@ -21,7 +21,7 @@
 		<title>The Leftovers</title>
 	</head>
 
-	<body>
+	<body onload="loadIngredients();">
 		<div style="width: 100vw; text-align: center;">
 			<h2>The Leftovers</h2>
 		</div>
@@ -172,61 +172,131 @@
 								</div>
 							</div>
 
-							<!-- Ingredient input field -->
-							<div style="display: table-row">
-								<div style="display: table-cell;" id="menu-item-create-ingredients-label-cell">
-									<div style="margin-left: 5vw;">Ingredient 1</div>
+							<!-- Ingredient Row -->
+							<div style="display: table-row;" id="ingredientLabel">
+								<!-- Ingredient -->
+								<div style="display: table-cell;">
+									<div style="display: table; text-align: left;">
+										<!-- Ingredient Header -->
+										<div style="display: table-row;">
+											<div style="display: table-cell;">
+												<div style="margin-left: 5vw; margin-top: 1vw;">
+													Ingredient
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div style="display: table-cell;" id="menu-item-create-ingredients-cell">
-									<input style="width: 25vw;" type="text" required name="menu-item-create-ingredient-1" />
+
+								<!-- Included, Default, and Count -->
+								<div style="display: table-cell;">
+									<div style="display: table;  width: 25vw; text-align: center;">
+										<!-- Labels for Included, Default, and Count -->
+										<div style="display: table-row;">
+
+											<!-- Included Label -->
+											<div style="display: table-cell; width: 33%;">
+												<div style="">
+													Included
+												</div>
+											</div>
+
+											<!-- Default Label -->
+											<div style="display: table-cell; width: 33%;">
+												<div style="">
+													Default
+												</div>
+											</div>
+
+											<!-- Count Label -->
+											<div style="display: table-cell; width: 33%;">
+												<div style="">
+													Count
+												</div>
+											</div>
+
+										</div>
+									</div>
 								</div>
 							</div>
 
-							<!-- Add New Ingredient Button Row -->
+							<!-- Ham Allergen Checkbox -->
+							<div style="display: table-row;">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw; margin-top: 5vh;">Ham</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-1" value="ham" />
+								</div>
+							</div>
+
+							<!-- Meat Allergen Checkbox -->
 							<div style="display: table-row">
 								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Meat</div>
 								</div>
-								<div style="display: table-cell;" id="menu-item-add-ingredient-cell" data-numIngredients="1">
-									<p style="color: blue; text-decoration: underline; cursor: pointer;" onclick="createMenuItemAddNewIngredient()">+ Add Ingredient</p>
-								</div>
-							</div>
-
-							<!-- Has Ingredient input field -->
-							<div style="display: table-row">
-								<div style="display: table-cell;" id="menu-item-create-has-ingredient-label-cell">
-									<div style="margin-left: 5vw;">Has Ingredient 1</div>
-								</div>
-								<div style="display: table-cell;" id="menu-item-create-has-ingredient-cell">
-									<input style="width: 25vw;" type="number" required name="menu-item-create-has-ingredient-1" />
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-2" value="meat" />
 								</div>
 							</div>
 
-							<!-- Ingredient Count input field -->
-							<div style="display: table-row">
-								<div style="display: table-cell;" id="menu-item-create-ingredient-count-label-cell">
-									<div style="margin-left: 5vw;">Ingredient 1 Count</div>
-								</div>
-								<div style="display: table-cell;" id="menu-item-create-ingredient-count-cell">
-									<input style="width: 25vw;" type="number" required name="menu-item-create-ingredient-count-1" />
-								</div>
-							</div>
-
-							<!-- Allergens input field -->
-							<div style="display: table-row">
-								<div style="display: table-cell;" id="menu-item-create-allergens-label-cell">
-									<div style="margin-left: 5vw;">Allergen 1</div>
-								</div>
-								<div style="display: table-cell;" id="menu-item-create-allergens-cell">
-									<input style="width: 25vw;" type="text" required name="menu-item-create-allergens-1" />
-								</div>
-							</div>
-
-							<!-- Add New Allergens Button Row -->
+							<!-- Dairy Allergen Checkbox -->
 							<div style="display: table-row">
 								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Dairy</div>
 								</div>
-								<div style="display: table-cell;" id="menu-item-add-allergens-cell" data-numAllergens="1">
-									<p style="color: blue; text-decoration: underline; cursor: pointer;" onclick="createMenuItemAddNewAllergen()">+ Add Allergen</p>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-3" value="dairy" />
+								</div>
+							</div>
+
+							<!-- Gluten Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Gluten</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-4" value="gluten" />
+								</div>
+							</div>
+
+							<!-- Shellfish Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Shellfish</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-5" value="shellfish" />
+								</div>
+							</div>
+
+							<!-- Soy Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Soy</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-6" value="soy" />
+								</div>
+							</div>
+
+							<!-- Fish Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Fish</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-7" value="fish" />
+								</div>
+							</div>
+
+							<!-- Nuts Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Nuts</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-create-allergens-8" value="nuts" />
 								</div>
 							</div>
 
@@ -240,7 +310,7 @@
 								</div>
 							</div>
 
-							<!-- Description input field -->
+							<!-- Category input field -->
 							<div style="display: table-row">
 								<div style="display: table-cell;">
 									<div style="margin-left: 5vw;">Category</div>

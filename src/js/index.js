@@ -19,6 +19,8 @@ function getInventoryList() {
 						"    Name:  " + currItem.name + "\n" + 
 						"    Count: " + currItem.count + "\n\n";
 			}
+
+			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -255,3 +257,48 @@ function createMenuItemSubmit()
 	return false;
 }
 
+
+function loadIngredients()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-view' );
+		
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			var el = document.getElementById( "ingredientLabel" );
+
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var currItem = obj[ i ];
+
+				el.insertAdjacentHTML( 'afterend', 
+					'<div style="display: table-row;"><div style="display: table-cell;"><div style="margin-left: 5vw;">' + 
+					currItem.name + 
+					'</div></div><div style="display: table-cell;"><div style="display: table; table-layout: fixed; width: 25vw; text-align: center;"><div style="display: table-row;"><div style="display: table-cell;"><input style="" type="checkbox" name="menu-item-create-ingredient" value="' + 
+					currItem.name + 
+					'" /></div><div style="display: table-cell;"><input style="" type="checkbox" name="menu-item-create-has-ingredient" value="' + 
+					currItem.name + 
+					'" /></div><div style="display: table-cell;"><input style="" type="number" name="menu-item-create-ingredient-count" value="' + 
+					currItem.name + 
+					'" /></div></div></div></div></div>' );
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
+	xmlHttp.send();
+
+	var el = document.getElementById( "ingredientLabel" );
+	
+}
