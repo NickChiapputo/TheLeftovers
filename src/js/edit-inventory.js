@@ -9,18 +9,24 @@ const hostname = 'localhost';
 const port = 3001;
 
 const server = http.createServer( ( req, res ) => {
-	res.statusCode = 200;
-	res.setHeader( 'Content-Type', 'application/json' );
-	res.setHeader( 'Access-Control-Allow-Origin', '*' );
+	// Display date and action for debugging
+	var date = new Date().toISOString().substr( 11, 8 );
+	console.log( " \n \n \n(" + date  + "): Edit-Inventory Query." );
 
-	var values = url.parse( req.url, true ).query;
+	res.statusCode = 200;									// Set 200 OK status
+	res.setHeader( 'Content-Type', 'application/json' );	// Set response type as JSON
+	res.setHeader( 'Access-Control-Allow-Origin', '*' );	// Allow CORS requests for local work
 
-	const MONGO_USERNAME = 'nick';
-	const MONGO_PASSWORD = '2bbjcdj7';
-	const MONGO_HOSTNAME = '127.0.0.1';
-	const MONGO_PORT = '27017';
-	const MONGO_DB = 'restaurant';
+	var values = url.parse( req.url, true ).query;			// Get key-value parse from URL
+
+	// Create the MONGO database URL
+	const MONGO_USERNAME = 'nick';		// Username
+	const MONGO_PASSWORD = '2bbjcdj7';	// Password
+	const MONGO_HOSTNAME = '127.0.0.1';	// Hostname
+	const MONGO_PORT = '27017';			// Port
+	const MONGO_DB = 'restaurant';		// Database Name
 	
+	// Put the part together for the URL: 'mongodb://<username>:<password>@<hostname>:<port>/<database>?<authorisation'
 	const dburl = 	"mongodb://" + 
 			MONGO_USERNAME + 
 	 		":" + 
@@ -33,26 +39,59 @@ const server = http.createServer( ( req, res ) => {
 	 		MONGO_DB + 
 	 		"?authSource=admin";
 	
+	// Connect to the database
 	MongoClient.connect( dburl, function( err, db ) {
-	 	if( err ) throw err;
+	 	if( err )
+	 	{
+	 		res.statusCode = 500; 								// Internal Server Error
+	 		res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
+	 		throw err;
+	 	}
 
-	 	var dbo = db.db( "restaurant" );
+		// Stringified JSON of updated item
+		let body = '';
 
-		var query = {}
-		query[ "name" ] = values.name;
+		// Asynchronous. Keep appending data until all data is read
+		req.on( 'data', ( chunk ) => { body += chunk } );
+
+		// Data is finished being read. Edit item
+		req.on( 'end', () => {
+			// Parse JSON string into obj
+			var obj = JSON.parse( body );
+
+			// Create object with original name
+			var query = {}
+			query[ "name" ] = obj.name;
+
+			// Create updated item with updated count
+			var updatedQuery = {}
+			updatedQuery[ "name" ] = obj.name;
+			updatedQuery[ "count" ] = obj.count;
+
+			// Display update for debugging
+			console.log( "Attempting to update item to:\n  Name: " + updatedQuery.name + "\n  Count: " + updatedQuery.count );
+
+	 		// Find and update the item
+			db.db( "restaurant" ).collection( "inventory" ).findOneAndUpdate( query, { $set: updatedQuery }, { returnOriginal: false, returnNewDocument: true }, function( err, documents ) {
+	 			if( err )
+	 			{
+	 				res.statusCode = 500;								// Internal Server Error
+	 				res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
+	 				throw err;	
+	 			}
 		
-		var updatedQuery = {};
-		updatedQuery[ "name" ] = values.name;
-		updatedQuery[ "count" ] = values.count;
-	 	
-		dbo.collection( "inventory" ).findOneAndUpdate( query, { $set: updatedQuery }, { returnOriginal: false, returnNewDocument: true }, function( err, documents ) {
-			if( err ) throw err;
-			
-			res.end( JSON.stringify( documents.value ) );
-		});
+				// Display updated item for debugging
+		 		console.log( "Updated item: " + JSON.stringify( documents.value ) ); 
+		
+				// Send the updated item back
+				res.end( JSON.stringify( documents.value ) );
+			});
+		} );
 	});
 } );
 
 server.listen( port, hostname, () => {
-	console.log( `Server running at http://${hostname}:${port}/` );
+	// Display start debugging
+	var date = new Date().toISOString().substr( 11, 8 );
+	console.log( " \n \n \n(" + date  + "): Edit-Inventory started.\n \n" );
 } );
