@@ -9,6 +9,10 @@ const hostname = 'localhost';
 const port = 3005;
 
 const server = http.createServer( ( req, res ) =>  {
+	var date = new Date().toISOString().substr( 11, 8 );
+	console.log( " \n \n \n(" + date  + "): " );
+
+
 	res.statusCode = 200;
 	res.setHeader( 'Content-Type', 'application/json' );
 	res.setHeader( 'Access-Control-Allow-Origin', '*' );
@@ -60,46 +64,162 @@ const server = http.createServer( ( req, res ) =>  {
 	 	}
 	 	else if( path == "/menu/create" )
 	 	{
-			console.log( "Reading Data." );
-	 		// Stringified JSON of updated item
-	 		let body = '';
+			console.log( "Creating New Item" );
+			var form = new formidable.IncomingForm();
+			form.parse( req, function( err, fields, files ) {
+				if( err )
+				{
+					console.log( "Error.\n\n" );
+					throw err;
+				}
 
-	 		// Asynchronous. Keep appending data until all data is read
-	 		// req.on( 'data', ( chunk ) => { body += chunk; } );
+				console.log( " \nInput fields:" );
+				for( var attr in fields )
+					console.log( "    " + attr + ": " + fields[ attr ] );
 
-	 		// Data is finished being read. edit item
-	 		// req.on( 'end', () => { 
-				// console.log( "Body: '" + body + "'\n\n" ); 
-			
-				var form = new formidable.IncomingForm();
-				console.log( "Form created.\n\n" );
-				form.parse( req, function( err, fields, files ) {
+				// Make sure all fields are present and valid
+				if( 	fields[ "menu-item-create-name" ]  === undefined || fields[ "menu-item-create-name" ]  === "" ||
+					fields[ "menu-item-create-price" ] === undefined || isNaN( parseFloat( fields[ "menu-item-create-price" ] ) ) || parseFloat( fields[ "menu-item-create-price" ] ) <= 0 ||
+					fields[ "menu-item-create-calories" ] === undefined || isNaN( parseInt( fields[ "menu-item-create-calories" ] ) ) || parseInt( fields[ "menu-item-create-calories" ] ) <= 0 ||
+					fields[ "menu-item-create-description" ] === undefined || fields[ "menu-item-create-description" ] === "" ||
+					fields[ "menu-item-create-category" ] === undefined || fields[ "menu-item-create-category" ] === "" )
+				{
+					console.log( "Bad fields." );
+					var returnVal = { "success" : "no" };
+					res.statusCode = 400;
+					res.end( JSON.stringify( returnVal ) );
+					return;
+				}
+
+				// Make sure a file is attached
+				if( files[ "fileToUpload" ] === undefined )
+				{
+					console.log( "No file uploaded." );
+					var returnVal = { "success" : "no" };
+					res.statusCode = 400;
+					res.end( JSON.stringify( returnVal ) );
+					return;
+				}
+
+				// Parse the values 
+				var item = {
+					"name" : "",
+					"price" : 0,
+					"calories" : 0,
+					"ingredients" : [],
+					"hasIngredient" : [],
+					"ingredientCount" : [],
+					"allergens" : [],
+					"description" : "",
+					"category" : "",
+					"image" : ""
+				}
+				
+				item.name = fields[ "menu-item-create-name" ];
+				item.price = parseFloat( fields[ "menu-item-create-price" ] );
+				item.calories = parseInt( fields[ "menu-item-create-calories" ] );
+				item.description = fields[ "menu-item-create-description" ];
+				item.category = fields[ "menu-item-create-category" ];
+
+				for( var attr in fields )
+				{
+					if( attr.startsWith( "menu-item-create-ingredient-count-" ) )
+					{
+						// There are 34 characters in 'menu-item-create-ingredient-count-'
+						// Number starts at the 34th space (0-based index)
+						var ingredientNum = parseInt( attr.substring( 34 ) );
+						
+						// If there is not a count value but an ingredient is selected for the count -> bad request
+						if( fields[ attr ] === "" && fields[ "menu-item-create-ingredient-" + ingredientNum ] !== undefined )
+						{
+							console.log( "Ingredient count does not exist, but there is a corresponding ingredient." );
+							var returnVal = { "succes" : "no" };
+							res.statusCode = 400;
+							res.end( JSON.stringify( returnVal ) );
+							return;
+						}
+						else if( fields[ attr ] !== "" && fields[ "menu-item-create-ingredient-" + ingredientNum ] === undefined )
+						{
+							console.log( "Ingredient count exists, but there is no corresponding ingredient." );
+							var returnVal = { "succes" : "no" };
+							res.statusCode = 400;
+							res.end( JSON.stringify( returnVal ) );
+							return;
+						}
+						else if( fields[ attr ] !== "" && fields[ "menu-item-create-ingredient-" + ingredientNum ] !== undefined )
+						{
+							if( isNaN( parseInt( fields[ attr ] ) ) || parseInt( fields[ attr ] ) < 1 )
+							{
+								console.log( "Ingredient count is not a valid value (" + parseInt( fields[ attr ] ) + ")." );
+								var returnVal = { "success" : "no" };
+								res.statusCode = 400; // Bad request - malformed data
+								res.end( JSON.stringfiy( returnVal ) );
+								return;
+							}
+							else
+							{
+								item.ingredientCount.push( parseInt( fields[ attr ], "10" ) );
+								item.ingredients.push( fields[ "menu-item-create-ingredient-" + ingredientNum ] );
+								item.hasIngredient.push( fields[ "menu-item-create-has-ingredient-" + ingredientNum ] == "1" ? 1 : 0 );
+							}
+						}
+						else if( fields[ "menu-item-create-has-ingredient-" + ingredientNum ] !== undefined )
+						{
+							console.log( "There is no count or ingredient, but the ingredient is set as default." );
+							var returnVal = { "succes" : "no" };
+							res.statusCode = 400;
+							res.end( JSON.stringify( returnVal ) );
+							return;
+						}
+						else
+						{
+							// There is an empty count and the ingredient does not exist. Nothing to do.
+						}
+					}
+					else if( attr.startsWith( "menu-item-create-allergens" ) )
+					{
+						item.allergens.push( fields[ attr ] );
+					}
+				}
+
+				// Check if there were any ingredients added
+				if( item.ingredients.length === 0 )
+				{
+					console.log( "There were no ingredients added." );
+					var returnVal = { "succes" : "no" };
+					res.statusCode = 400;
+					res.end( JSON.stringify( returnVal ) );
+					return;
+				}
+
+				// Create file on server
+				var oldpath = files.fileToUpload.path;
+				var newpath = '/var/www/html/img/' + files.fileToUpload.name;
+
+				fs.rename( oldpath, newpath, function( err ) {
 					if( err )
 					{
-						console.log( "Error.\n\n" );
+						var returnVal = { "success" : "no" };
+						res.end( returnVal );
 						throw err;
 					}
-					console.log( "Form Data: " + JSON.stringify( files ) + "\n\n Done.\n\n" );
-					var returnVal = { "success" : "yes" };
-					res.end( JSON.stringify( returnVal ) );
+					
+					item[ "image" ] = "http://64.225.29.130/img/" + files.fileToUpload.name;
+
+					// res.end( JSON.stringify( item ) );
+					createMenuItem( item, collection, res );
 				} );
-				console.log( "Form parse passed.\n\n" );
-				
-				res.end( JSON.stringify( { "success" : "no" } ) ); 
-			// } );
-			// req.on( 'end', () => { editMenuItem( JSON.parse( body ), collection, res ) } );
+			} );
 	 	}
 	 	else if( path == "/menu/delete" )
 	 	{
-	 		// Stringified JSON of updated item
-	 		let body = '';
+			var deleteItem = { "name" : "" };
+			deleteItem.name = url.parse( req.url, true ).query.name;
 
-	 		// Asynchronous. Keep appending data until all data is read
-	 		req.on( 'data', ( chunk ) => { body += chunk; } );
-
-	 		// Data is finished being read. edit item
-	 		req.on( 'end', () => { deleteMenuItem( JSON.parse( body ), collection, res ) } );
-	 	}
+			console.log( "Menu Item Delete Body: '" + JSON.stringify( deleteItem ) + "'" );
+	 		
+			deleteMenuItem( deleteItem, collection, res );
+		}
 		else
 		{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -156,6 +276,10 @@ function createMenuItem( newItem, collection, res )
 		console.log( 	"Item created in menu-item database:\n" + 
 						JSON.stringify( result.ops[ 0 ] ) +
 						"\n\n" );
+
+		console.log( "New Item: " );
+		for( var attr in newItem )
+			console.log( "    " + attr + ": " + newItem[ attr ] );
 
 		// Send item created back
  		res.end( JSON.stringify( result.ops[ 0 ] ) );

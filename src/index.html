@@ -59,44 +59,207 @@
 				</div>
 
 				<!-- Edit Menu Item Form -->
-				<div style="display: table-cell; text-align: left;">
-					<form>
-						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				<div style="width: 45%; display: table-cell; text-align: left;">
+					<form id="editMenuItemForm">
+						<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 							<!-- Name input field -->
 							<div style="display: table-row">
 								<div style="display: table-cell;">
 									<div style="margin-left: 5vw;">Name</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="text" required name="name-menu-edit" />
+									<input style="width: 25vw;" type="text" required name="menu-item-edit-name" />
 								</div>
 							</div>
 
 							<!-- Price input field -->
 							<div style="display: table-row">
-								<div style="display: table-cell; width: 12.5vw;">
+								<div style="display: table-cell;">
 									<div style="margin-left: 5vw;">Price</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="number" name="count-menu-edit" />
+									<input style="width: 25vw;" type="number" required min="0" value="0" step="0.01" name="menu-item-edit-price" />
 								</div>
 							</div>
 
-							<!-- Price input field -->
+							<!-- Calories input field -->
 							<div style="display: table-row">
-								<div style="display: table-cell; width: 12.5vw;">
-									<div style="margin-left: 5vw;">Price</div>
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Calories</div>
 								</div>
 								<div style="display: table-cell;">
-									<input style="width: 25vw;" type="number" name="count-menu-edit" />
+									<input style="width: 25vw;" type="number" required name="menu-item-edit-calories" />
 								</div>
 							</div>
 
-							<!-- Save button -->
+							<!-- Ingredient Row -->
+							<div style="display: table-row;" id="ingredientLabel-edit">
+								<!-- Ingredient -->
+								<div style="display: table-cell;">
+									<div style="display: table; text-align: left;">
+										<!-- Ingredient Header -->
+										<div style="display: table-row;">
+											<div style="display: table-cell;">
+												<div style="margin-left: 5vw; margin-top: 1vw;">
+													Ingredient
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Included, Default, and Count -->
+								<div style="display: table-cell;">
+									<div style="display: table;  width: 25vw; text-align: center;">
+										<!-- Labels for Included, Default, and Count -->
+										<div style="display: table-row;">
+
+											<!-- Included Label -->
+											<div style="display: table-cell; width: 33%;">
+												<div style="">
+													Included
+												</div>
+											</div>
+
+											<!-- Default Label -->
+											<div style="display: table-cell; width: 33%;">
+												<div style="">
+													Default
+												</div>
+											</div>
+
+											<!-- Count Label -->
+											<div style="display: table-cell; width: 33%;">
+												<div style="">
+													Count
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Ham Allergen Checkbox -->
+							<div style="display: table-row;">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw; margin-top: 5vh;">Ham</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-1" value="ham" />
+								</div>
+							</div>
+
+							<!-- Meat Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Meat</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-2" value="meat" />
+								</div>
+							</div>
+
+							<!-- Dairy Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Dairy</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-3" value="dairy" />
+								</div>
+							</div>
+
+							<!-- Gluten Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Gluten</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-4" value="gluten" />
+								</div>
+							</div>
+
+							<!-- Shellfish Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Shellfish</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-5" value="shellfish" />
+								</div>
+							</div>
+
+							<!-- Soy Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Soy</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-6" value="soy" />
+								</div>
+							</div>
+
+							<!-- Fish Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Fish</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-7" value="fish" />
+								</div>
+							</div>
+
+							<!-- Nuts Allergen Checkbox -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Nuts</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-8" value="nuts" />
+								</div>
+							</div>
+
+							<!-- Description input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Description</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="menu-item-edit-description" />
+								</div>
+							</div>
+
+							<!-- Category input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Category</div>
+								</div>
+								<div style="display: table-cell;">
+									<select name="menu-item-edit-category">
+										<option value="appetizer">Appetizer</option>
+										<option value="entree">Entree</option>
+										<option value="drink">Drink</option>
+										<option value="dessert">Dessert</option>
+									</select>
+								</div>
+							</div>
+
+							<!-- File input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div style="margin-left: 5vw;">Picture</div>
+								</div>
+								<div style="display: table-cell;">
+									<input type="file" required id="menu-item-edit-picture">
+								</div>
+							</div>
+
+							<!-- Save button field -->
 							<div style="display: table-row">
 								<div style="display: table-cell;"></div>
-								<div style="display: table-cell; text-align: center;">
-									<button style="width: 12.5vw;" type="button" onclick="editMenuItemSubmit()">Save</button>
+								<div style="display: table-cell;">
+									<button style="width: 12.5vw;" type="button" onclick="editMenuItemSubmit()">Create</button>
 								</div>
 							</div>
 						</div>
@@ -348,7 +511,7 @@
 
 				<!-- Delete Menu Item Form -->
 				<div style="width: 45%; display: table-cell; text-align: left;">
-					<form>
+					<form id="menuItemDeleteForm">
 						<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 							<!-- Name input field -->
 							<div style="display: table-row">
@@ -444,7 +607,7 @@
 							<div style="display: table-row">
 								<div style="display: table-cell;"></div>
 								<div style="display: table-cell; text-align: center;">
-									<button style="width: 12.5vw;" type="button" onclick="deleteFormSubmit()">Delete</button>
+									<button style="width: 12.5vw;" type="button" onclick="deleteMenuItemFormSubmit()">Delete</button>
 								</div>
 							</div>
 						</div>
