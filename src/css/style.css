@@ -51,6 +51,11 @@
     text-align: center;
 }
 
+.menu-box-image {
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
 .item-large-image {
     color: white;
     margin: 1vw 1vw;
