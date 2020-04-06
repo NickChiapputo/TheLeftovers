@@ -11,7 +11,7 @@ function getMenu()
 			
 			var numItems = Object.keys( obj ).length;
       
-			doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
+	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
 			var i;
 			for( i = 0; i < numItems; i++ )
@@ -32,9 +32,16 @@ function getMenu()
 					{
 
 					}
+					else if(attr === "image")
+					{
+						doc.innerHTML += "    "+ attr + ":<img style=\"width:70px; height:70px \" src=\""+ currItem[ attr ] +"\">\n"
+					}
 					else
+					{
 						doc.innerHTML += "    " + attr + ": " + currItem[ attr ] + "\n";
+					}
 				}
+				doc.innerHTML +="<div></div>";
 			}
 
 			// var i;
