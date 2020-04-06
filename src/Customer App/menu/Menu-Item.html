@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <title>Hello, world!</title>
+  </head>
+
+  
+  <body class="page" onload="clock()">
+    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Header bar -->
+    <div id="header" class="container-fluid"> 
+      <div class="row h-100" style="padding: 1vw;">
+        <div class="col-1" style="margin:auto;">
+          <a href="Entrees.html">
+            <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
+          </a>
+        </div>
+        <div class="col-1" style="margin:auto;">
+          <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
+        </div>
+        <div class="col-1" style="margin:auto;">
+          <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
+        </div>
+        <div class="col-9" style="margin: auto;">
+          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+          <script src="../../js/get-time.js"> </script> 
+        </div>
+      </div>
+    </div>
+
+    <!-- Page contents-->
+    <!-- Title bar -->
+    <div class="container-fluid row title-bar">
+        <div class="col-6 menu-box">
+          <h1 class="menu-text">Greek Burger</h1>
+        </div>
+
+
+        <!-- Special request js -->
+        <script src="../../js/special-requests.js"></script>
+
+        <!-- Special request modal button -->
+        <button type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#special-request" style="background-color:cyan; color: black">
+          <h1 class="menu-text-small">Special Request</h1>
+        </button>
+
+        <!-- Confirm choice modal window -->
+        <div class="modal fade" id="special-request" tabindex="-1" role="dialog" aria-labelledby="special-requests" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirm-request">Special request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form action="/action_page.php">
+                <br>
+                <ul id="list" style="text-align: left;">
+                </ul>
+                <input type="text" id="request" style="width: 90%;"><br><br>
+                <div>
+                  <input type="button" class="btn btn-primary" value="Add request" onclick="add()">
+                  <input type="button" class="btn btn-secondary" value="Remove last request" onclick="remove()"> <br><br>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-danger" onclick="clearList()" data-dismiss="modal">Clear Requests</button>
+                  <button type="button" class="btn btn-outline-success">Confirm Requests</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>        
+
+        <!-- Add item modal button -->
+        <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color:rgb(0, 247, 41); color: black;">
+          <h1 class="menu-text-small">Add Item</h1>
+        </button>
+
+        <!-- Confirm choice modal window -->
+        <div class="modal fade" id="confirm-order" tabindex="-1" role="dialog" aria-labelledby="confirm-order" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirm-order">Add item to order?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Greek Burger <text>$3</text>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-outline-success" onclick="window.location.href='../View Order/View-Order.html';">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Menu item -->
+    <div class="container-fluid">
+        <div class="row" style="min-height: 70vh; max-height: 70vh;">
+            <div class="col-5 item-large-image" style="background-image: url(../../Images/greek-burgers-for-submission.png);">
+            </div>
+            <div class="col-3">
+                <div class="text-box" style="width: 100%; max-height: 100%;">
+                    This burger is Greek. It has Greek qualities. When you eat it you'll say "mmmm... Greece." Again, this burger is Greek. It has Greek qualities. When you eat it you'll say "mmmm... Greece."
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="text-box" style="max-height: 40vh;">
+                    <input type="checkbox" id="topping_1" name="topping_1" value="topping_1">
+                    <label for="topping_1"> lettuce </label><br>
+                    <input type="checkbox" id="topping_2" name="topping_2" value="topping_2">
+                    <label for="topping_2"> pickles </label><br>
+                    <input type="checkbox" id="topping_3" name="topping_3" value="topping_3">
+                    <label for="topping_3"> tomatoes </label><br>
+                    <input type="checkbox" id="topping_4" name="topping_4" value="topping_4">
+                    <label for="topping_4"> buns </label><br>
+                    <input type="checkbox" id="topping_5" name="topping_5" value="topping_5">
+                    <label for="topping_5"> mustard </label><br>
+                    <input type="checkbox" id="topping_6" name="topping_6" value="topping_6">
+                    <label for="topping_6"> bacon </label><br>
+                    <input type="checkbox" id="topping_7" name="topping_7" value="topping_7">
+                    <label for="topping_7"> turtle meat </label><br>
+                    <input type="checkbox" id="topping_3" name="topping_3" value="topping_3">
+                    <label for="topping_3"> tomatoes </label><br>
+                    <input type="checkbox" id="topping_4" name="topping_4" value="topping_4">
+                    <label for="topping_4"> buns </label><br>
+                    <input type="checkbox" id="topping_5" name="topping_5" value="topping_5">
+                    <label for="topping_5"> mustard </label><br>
+                    <input type="checkbox" id="topping_6" name="topping_6" value="topping_6">
+                    <label for="topping_6"> bacon </label><br>
+                    <input type="checkbox" id="topping_7" name="topping_7" value="topping_7">
+                    <label for="topping_7"> turtle meat </label><br>
+                </div>
+                <div class="text-box" style="max-height: 10vh;">
+                    Kcal = 200
+                </div>
+                <div class="text-box" style="max-height: 15vh;">
+                    Allergens: wheat, dairy 
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
