@@ -163,18 +163,46 @@ function getMenu()
 			var obj = JSON.parse( this.responseText );
 			
 			var numItems = Object.keys( obj ).length;
-			doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
+	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
-			doc.innerHTML = this.responseText;
+	//		doc.innerHTML = this.responseText;
+			doc.innerHTML+="<link rel=\"stylesheet\" href=\"../css/style.css\"> <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"><div class=\"container-fluid center-div\">";
+			 var i;
+			 for( i = 0; i < numItems; i++ )
+			 {				  
+				 var currItem = obj[ i ];
+				 if(currItem.image[0]!='h'&&currItem.image[1]!='t'&&currItem.image[2]!='t'&&currItem.image[3]!='p')
+					 currItem.image= "http://"+currItem.image;
 
-			// var i;
-			// for( i = 0; i < numItems; i++ )
-			// {
-			// 	var currItem = obj[ i ];
-			// 	doc.innerHTML += 	"Item " + ( i + 1 ) + "\n" + 
-			// 						"    Name:  " + currItem.name + "\n" + 
-			// 						"    Count: " + currItem.count + "\n\n";
-			// }
+				
+				var img = 
+				document.createElement("img");
+				img.setAttribute("src",currItem.image);
+				img.setAttribute("width","200");
+				img.setAttribute("height","200");
+				img.setAttribute("alt", "food");
+				img.setAttribute("id","imgh")
+
+				doc.appendChild(img);
+				doc.innerHTML+=currItem.name;
+
+					doc.innerHTML += 	"\n    mItem " + ( i + 1 ) + "\n" + 
+										"    mName: " + currItem.name + "\n" + 
+										"    mPrice: " + currItem.price + "\n"+
+										"    mingredients: ";
+										for(j = 0; j < currItem.ingredients.length; j++)
+										{
+											doc.innerHTML+=currItem.ingredients[j];
+											if(j!=currItem.ingredients.length-1)
+												doc.innerHTML+=",";
+										}
+										doc.innerHTML+="\n"
+										+"<p id='imgh'>    mcalories: "+currItem.calories+"</p>\n"
+										+"    mallergens: "+currItem.allergens+"\n"
+										+"    mcategory: "+currItem.category+"</div>\n\n";
+									   					
+			 }
+			 doc.innerHTML+="</div>"
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
