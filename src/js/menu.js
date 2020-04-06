@@ -20,7 +20,7 @@ function getMenu()
 			// 	var currItem = obj[ i ];
 			// 	doc.innerHTML += 	"Item " + ( i + 1 ) + "\n" + 
 			// 						"    Name:  " + currItem.name + "\n" + 
-			// 						"    Count: " + currItem.count + "\n\n";
+			// 						"    Price: " + currItem.price + "\n\n";
 			// }
 		}
 		else if( this.readyState == 4 && this.status != 200 )

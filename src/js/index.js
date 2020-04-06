@@ -165,6 +165,7 @@ function getMenu()
 			var obj = JSON.parse( this.responseText );
 			
 			var numItems = Object.keys( obj ).length;
+      
 			doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
 			var i;
