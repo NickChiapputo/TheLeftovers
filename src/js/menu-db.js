@@ -153,7 +153,7 @@ const server = http.createServer( ( req, res ) =>  {
 								console.log( "Ingredient count is not a valid value (" + parseInt( fields[ attr ] ) + ")." );
 								var returnVal = { "success" : "no" };
 								res.statusCode = 400; // Bad request - malformed data
-								res.end( JSON.stringfiy( returnVal ) );
+								res.end( JSON.stringify( returnVal ) );
 								return;
 							}
 							else
@@ -271,7 +271,13 @@ function editMenuItem( updatedQuery, collection, res )
 function createMenuItem( newItem, collection, res )
 {
 	collection.insertOne( newItem, function( err, result ) {
- 		if( err ) throw err;
+ 		if( err )
+		{
+			console.log( "Error inserting new item." );
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "success" : "no" } ) );
+			throw err;
+		}
 
 		console.log( 	"Item created in menu-item database:\n" + 
 						JSON.stringify( result.ops[ 0 ] ) +
