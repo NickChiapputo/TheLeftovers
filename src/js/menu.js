@@ -34,7 +34,7 @@ function getMenu()
 					}
 					else if(attr === "image")
 					{
-						doc.innerHTML += "    "+ attr + ":<img style=\"width:70px; height:70px \" src=\""+ currItem[ attr ] +"\">\n"
+						doc.innerHTML += "    "+ attr + ":<button class=\"menu-box\"><img style=\"width:100px; height:100px; border-radius:50% \" src=\""+ currItem[ attr ] +"\"<button>\n"
 					}
 					else
 					{
