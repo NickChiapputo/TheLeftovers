@@ -52,6 +52,9 @@ const server = http.createServer( ( req, res ) =>  {
 		var deleteItem = {};
 		deleteItem[ "name" ] = values.name;
 
+		// Display item to be deleted for debugging
+		console.log( "Attempting to delete item '" + deleteItem.name + "'." );
+
 		// Delete one item
 	 	db.db( "restaurant" ).collection( "inventory" ).deleteOne( deleteItem, function( err, result ) {
 	 		if( err )

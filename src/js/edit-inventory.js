@@ -48,30 +48,45 @@ const server = http.createServer( ( req, res ) => {
 	 		throw err;
 	 	}
 
-	 	// Get name of item to update
-		var query = {}
-		query[ "name" ] = values.name;
-		
-		// Create object for updated item
-		var updatedQuery = {};
-		updatedQuery[ "name" ] = values.name;
-		updatedQuery[ "count" ] = values.count;
-	 	
-	 	// Find and update the item
-		db.db( "restaurant" ).collection( "inventory" ).findOneAndUpdate( query, { $set: updatedQuery }, { returnOriginal: false, returnNewDocument: true }, function( err, documents ) {
-	 		if( err )
-	 		{
-	 			res.statusCode = 500;								// Internal Server Error
-	 			res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
-	 			throw err;	
-	 		}
+		// Stringified JSON of updated item
+		let body = '';
 
-	 		// Display updated item for debugging
-	 		console.log( "Updated item: " + documents.value ); 
-			
-			// Send the updated item back
-			res.end( JSON.stringify( documents.value ) );
-		});
+		// Asynchronous. Keep appending data until all data is read
+		req.on( 'data', ( chunk ) => { body += chunk } );
+
+		// Data is finished being read. Edit item
+		req.on( 'end', () => {
+			// Parse JSON string into obj
+			var obj = JSON.parse( body );
+
+			// Create object with original name
+			var query = {}
+			query[ "name" ] = obj.name;
+
+			// Create updated item with updated count
+			var updatedQuery = {}
+			updatedQuery[ "name" ] = obj.name;
+			updatedQuery[ "count" ] = obj.count;
+
+			// Display update for debugging
+			console.log( "Attempting to update item to:\n  Name: " + updatedQuery.name + "\n  Count: " + updatedQuery.count );
+
+	 		// Find and update the item
+			db.db( "restaurant" ).collection( "inventory" ).findOneAndUpdate( query, { $set: updatedQuery }, { returnOriginal: false, returnNewDocument: true }, function( err, documents ) {
+	 			if( err )
+	 			{
+	 				res.statusCode = 500;								// Internal Server Error
+	 				res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
+	 				throw err;	
+	 			}
+		
+				// Display updated item for debugging
+		 		console.log( "Updated item: " + JSON.stringify( documents.value ) ); 
+		
+				// Send the updated item back
+				res.end( JSON.stringify( documents.value ) );
+			});
+		} );
 	});
 } );
 
