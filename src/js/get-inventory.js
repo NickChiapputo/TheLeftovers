@@ -9,17 +9,22 @@ const hostname = 'localhost';
 const port = 3002;
 
 const server = http.createServer( ( req, res ) =>  {
- 	console.log( "Server created." );
-	res.statusCode = 200;
-	res.setHeader( 'Content-Type', 'application/json' );
-	res.setHeader( 'Access-Control-Allow-Origin', '*' );
+	// Display date and action for debugging
+	var date = new Date().toISOString().substr( 11, 8 );
+	console.log( " \n \n \n(" + date  + "): Get-Inventory Query." );
 
-	const MONGO_USERNAME = 'nick';
-	const MONGO_PASSWORD = '2bbjcdj7';
-	const MONGO_HOSTNAME = '127.0.0.1';
-	const MONGO_PORT = '27017';
-	const MONGO_DB = 'restaurant';
+	res.statusCode = 200;									// Set 200 OK status
+	res.setHeader( 'Content-Type', 'application/json' );	// Set response type as JSON
+	res.setHeader( 'Access-Control-Allow-Origin', '*' );	// Allow CORS requests for local work
+
+	// Create the MONGO database URL
+	const MONGO_USERNAME = 'nick';		// Username
+	const MONGO_PASSWORD = '2bbjcdj7';	// Password
+	const MONGO_HOSTNAME = '127.0.0.1';	// Hostname
+	const MONGO_PORT = '27017';			// Port
+	const MONGO_DB = 'restaurant';		// Database Name
 	
+	// Put the part together for the URL: 'mongodb://<username>:<password>@<hostname>:<port>/<database>?<authorisation'
 	const dburl = 	"mongodb://" + 
 			MONGO_USERNAME + 
 	 		":" + 
@@ -32,19 +37,35 @@ const server = http.createServer( ( req, res ) =>  {
 	 		MONGO_DB + 
 	 		"?authSource=admin";
 	
+	// Connect to the database
 	MongoClient.connect( dburl, function( err, db ) {
-	 	if( err ) throw err;
+	 	if( err )
+	 	{
+	 		res.statusCode = 500; 								// Internal Server Error
+	 		res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
+	 		throw err;
+	 	}
 
-	 	var dbo = db.db( "restaurant" );
-	 	dbo.collection( "inventory" ).find( {} ).toArray( function( err, result ) {
-	 		if( err ) throw err;
-			console.log( "Found: " + JSON.stringify( result ) );		
+	 	db.db( "restaurant" ).collection( "inventory" ).find( {} ).toArray( function( err, result ) {
+	 		if( err )
+	 		{
+	 			res.statusCode = 500;								// Internal Server Error
+	 			res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
+	 			throw err;	
+	 		} 
+
+	 		// Display result to log file
+			console.log( "Found: " + JSON.stringify( result ) + " \n \n" );		
+
+			// Send JSON string back
 	 		res.end( JSON.stringify( result ) );
 	 	});
 	});
 } );
 
 server.listen( port, hostname, () => {
-	console.log( "Mongodb Server Listening.\n" );
+	// Display start debugging
+	var date = new Date().toISOString().substr( 11, 8 );
+	console.log( " \n \n \n(" + date  + "): Get-Inventory started.\n \n" );
 });
 
