@@ -11,40 +11,13 @@ function getMenu()
 			
 			var numItems = Object.keys( obj ).length;
       
-			doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
+	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
 			var i;
-			for( i = 0; i < numItems; i++ )
-			{
-				var currItem = obj[ i ];
-				doc.innerHTML += "\nItem " + ( i + 1 ) + "\n";
-				for( var attr in currItem )
-				{
-					if( attr === "ingredients" )
-					{
-						doc.innerHTML += "    Ingredients:    " + ( currItem.hasIngredient[ 0 ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ 0 ] + " - Uses " + currItem.ingredientCount[ 0 ] + "\n";
+			obj.forEach(function(d) {
+				doc.innerHTML+= d.name+"    "+"<button id=\"food\" class=\"menu-box\" onclick=\"displayInfo('"+d.name+"');\"><img style=\"width:120px; height:120px; border-radius:50% \" src=\""+d.image+"\"<button>\n";
+			});
 
-						var j;
-						for( j = 1; j < Object.keys( currItem.ingredients ).length; j++ )
-							doc.innerHTML += "                    " + ( currItem.hasIngredient[ j ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ j ] + " - Uses " + currItem.ingredientCount[ j ] + "\n";
-					}
-					else if( attr === "hasIngredient" || attr === "ingredientCount" || attr === "_id" )
-					{
-
-					}
-					else
-						doc.innerHTML += "    " + attr + ": " + currItem[ attr ] + "\n";
-				}
-			}
-
-			// var i;
-			// for( i = 0; i < numItems; i++ )
-			// {
-			// 	var currItem = obj[ i ];
-			// 	doc.innerHTML += 	"Item " + ( i + 1 ) + "\n" + 
-			// 						"    Name:  " + currItem.name + "\n" + 
-			// 						"    Count: " + currItem.count + "\n\n";
-			// }
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -57,6 +30,12 @@ function getMenu()
 	xmlHttp.send();
 }
 
+function displayInfo(name)
+{
+	localStorage.setItem('food-Item',name);
+	window.document.location="./viewfood.html";
+
+}
 
 function createMenuItem()
 {
