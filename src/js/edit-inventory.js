@@ -59,6 +59,26 @@ const server = http.createServer( ( req, res ) => {
 			// Parse JSON string into obj
 			var obj = JSON.parse( body );
 
+		 	// Test if name is valid
+		 	if( obj.name === "" || obj.name === undefined )
+		 	{
+		 		console.log( "Name is invalid ('" + obj.name + "')." );
+				var returnVal = { "success" : "no" };
+				res.statusCode = 400;
+				res.end( JSON.stringify( returnVal ) );
+				return;
+		 	}
+
+		 	// Test if count is valid
+		 	if( obj.count === "" || obj.count === undefined || isNaN( parseInt( obj.count ) ) || parseInt( obj.count ) <= 0 )
+		 	{
+		 		console.log( "Count is invalid ('" + obj.count + "')." );
+				var returnVal = { "success" : "no" };
+				res.statusCode = 400;
+				res.end( JSON.stringify( returnVal ) );
+				return;
+		 	}
+
 			// Create object with original name
 			var query = {}
 			query[ "name" ] = obj.name;
