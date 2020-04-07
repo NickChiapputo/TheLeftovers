@@ -15,7 +15,7 @@ function getMenu()
 
 			var i;
 			obj.forEach(function(d) {
-				doc.innerHTML+= d.name+"    "+"<button id=\"food\" class=\"menu-box\" onclick=\"displayInfo('"+d.name+"');\"><img style=\"width:120px; height:120px; border-radius:50% \" src=\""+d.image+"\"<button>\n";
+				doc.innerHTML+= d.name+"    "+"<button class=\"menu-box\" id=\"food\" onclick=\"displayInfo('"+d.name+"');\"><img style=\"width:120px; height:120px; border-radius:50% \" src=\""+d.image+"\"<button>\n";
 			});
 
 		}
@@ -28,6 +28,7 @@ function getMenu()
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
 	xmlHttp.send();
+	var x = setTimeout(getInventoryList, 1000);
 }
 
 function displayInfo(name)

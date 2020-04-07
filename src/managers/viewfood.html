@@ -44,16 +44,30 @@
     </div>
 
     <!-- Page contents -->
-    <div class="container-fluid center-div">
+    <div class="container-fluid">
       <div class="row title-bar">
-        <div class="col menu-box">
-          <h1 id="food-name"class="menu-text"></h1>
-        </div>
+        <div class="col-6 menu-box" id="food-name">
       </div>
-      <div class = "row menu-row">
-        <p id="textarea-menu-view"></p>
+      <div class="col menu-box" id="food-category"></div>
       </div>
-      <p id="textarea-food-view"></p>
-    </div>
+      <div class="row" style="min-height: 70vh; max-height: 70vh;">
+          <div id="food-picture" class="col-5" style="background-image: url(../../Images/greek-burgers-for-submission.png);">
+          </div>
+          <div class="col-3">
+              <div id="food-description"class="text-box" style="width: 100%; max-height: 100%;">
+              </div>
+          </div>
+          <div class="col-3">
+              <div id="food-ingredients" class="text-box" style="max-height: 40vh;">
+              </div>
+              <div id="food-kcal" class="text-box" style="max-height: 10vh;">
+              </div>
+              <div id="food-allergens" class="text-box" style="max-height: 15vh;">
+              </div>
+              <div id="food-price" class="text-box" style="max-height: 15vh;">
+              </div>
+          </div>
+      </div>
+  </div>
   </body>
 </html>
