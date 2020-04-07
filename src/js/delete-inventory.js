@@ -47,6 +47,16 @@ const server = http.createServer( ( req, res ) =>  {
 	 		res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
 	 		throw err;
 	 	}
+
+	 	// Test if name is valid
+	 	if( values.name === "" || values.name === undefined )
+	 	{
+	 		console.log( "Name is invalid ('" + values.name + "')." );
+			var returnVal = { "success" : "no" };
+			res.statusCode = 400;
+			res.end( JSON.stringify( returnVal ) );
+			return;
+	 	}
 		
 		// Create item with name for deletion
 		var deleteItem = {};
