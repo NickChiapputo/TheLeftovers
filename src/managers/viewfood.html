@@ -15,7 +15,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock();getMenu()">
+  <body class="page" onload="clock();">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -25,7 +25,7 @@
     <div id="header" class="container-fluid"> 
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
-          <a href="editmenu.html">
+          <a href="entrees.html">
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
@@ -47,12 +47,8 @@
     <div class="container-fluid center-div">
       <div class="row title-bar">
         <div class="col menu-box">
-          <h1 class="menu-text">Entrees</h1>
-        </div>
-        <div class="col menu-box" style="background-color: black;">
-          <a href="">
-            <h1 class="menu-text">Add Entree</h1>
-          </a>
+          <h1 id="food-name"class="menu-text"></h1>
+          <p id="food-name"></p>
         </div>
       </div>
       <div class = "row menu-row">

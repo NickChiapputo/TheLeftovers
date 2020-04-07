@@ -14,44 +14,10 @@ function getMenu()
 	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
 			var i;
-			for( i = 0; i < numItems; i++ )
-			{
-				var currItem = obj[ i ];
-				doc.innerHTML += "\nItem " + ( i + 1 ) + "\n";
-				for( var attr in currItem )
-				{
-					if( attr === "ingredients" )
-					{
-						doc.innerHTML += "    Ingredients:    " + ( currItem.hasIngredient[ 0 ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ 0 ] + " - Uses " + currItem.ingredientCount[ 0 ] + "\n";
+			obj.forEach(function(d) {
+				doc.innerHTML+= d.name+"    "+"<button class=\"menu-box\" onclick=\"displayInfo('"+d.name+"');\"><img style=\"width:120px; height:120px; border-radius:50% \" src=\""+d.image+"\"<button>\n";
+			});
 
-						var j;
-						for( j = 1; j < Object.keys( currItem.ingredients ).length; j++ )
-							doc.innerHTML += "                    " + ( currItem.hasIngredient[ j ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ j ] + " - Uses " + currItem.ingredientCount[ j ] + "\n";
-					}
-					else if( attr === "hasIngredient" || attr === "ingredientCount" || attr === "_id" )
-					{
-
-					}
-					else if(attr === "image")
-					{
-						doc.innerHTML += "    "+ attr + ":<button class=\"menu-box\"><img style=\"width:100px; height:100px; border-radius:50% \" src=\""+ currItem[ attr ] +"\"<button>\n"
-					}
-					else
-					{
-						doc.innerHTML += "    " + attr + ": " + currItem[ attr ] + "\n";
-					}
-				}
-				doc.innerHTML +="<div></div>";
-			}
-
-			// var i;
-			// for( i = 0; i < numItems; i++ )
-			// {
-			// 	var currItem = obj[ i ];
-			// 	doc.innerHTML += 	"Item " + ( i + 1 ) + "\n" + 
-			// 						"    Name:  " + currItem.name + "\n" + 
-			// 						"    Count: " + currItem.count + "\n\n";
-			// }
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -64,6 +30,43 @@ function getMenu()
 	xmlHttp.send();
 }
 
+function displayInfo(name)
+{
+	alert(name);
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-menu-view' );
+			document=window.location("viewfood.html");
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+      
+	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
+
+
+			var i;
+			obj.forEach(function(d) {
+				if(name==d.name)
+				{
+					document.getElementById("textarea-menu-view").innerHTML+=d.name;
+				}
+			});
+
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
+	xmlHttp.send();
+
+}
 
 function createMenuItem()
 {
