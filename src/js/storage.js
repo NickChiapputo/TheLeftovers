@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function()
 
 function deleteMenuItem()
 {
-	var params = "name=" + document.getElementsByName( "name-menu-delete" )[ 0 ].value;
+	var params = "name=" + localStorage.getItem('food-item');
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -84,12 +84,13 @@ function deleteMenuItem()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Create inventory item status response: " + this.status );
+			document.getElementById( 'textarea-menu-delete' ).innerHTML = "Delete menu item status response: " + this.status;
+			console.log( "Delete menu item status response: " + this.status );
 		}
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete?" + params, true );
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete", true );
 	xmlHttp.send( params );
 }
 
