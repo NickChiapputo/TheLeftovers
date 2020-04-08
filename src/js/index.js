@@ -256,7 +256,8 @@ function createMenuItemSubmit()
 
 function deleteMenuItem()
 {
-	var params = "name=" + document.getElementsByName( "name-menu-delete" )[ 0 ].value;
+	var params = {};
+	params[ "name" ] =  document.getElementsByName( "name-menu-delete" )[ 0 ].value;
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -282,7 +283,8 @@ function deleteMenuItem()
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete", true );
-	xmlHttp.send( params );
+	console.log( "Sending: " + JSON.stringify( params ) );
+	xmlHttp.send( JSON.stringify( params ) ); 
 }
 
 function deleteMenuItemFormSubmit()

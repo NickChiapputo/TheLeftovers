@@ -138,6 +138,10 @@ const server = http.createServer( ( req, res ) =>  {
 							res.end( JSON.stringify( returnVal ) );
 							return;
 						}
+						else if( fields[ attr ] !== "" && parseInt( fields[ attr ] ) === 0 )
+						{
+							console.log( "Ingredient count is 0. Not adding " + fields[ "menu-item-create-ingredient-" + ingredientNum ] + " to ingredient list." );
+						}
 						else if( fields[ attr ] !== "" && fields[ "menu-item-create-ingredient-" + ingredientNum ] === undefined )
 						{
 							console.log( "Ingredient count exists, but there is no corresponding ingredient." );
@@ -213,12 +217,17 @@ const server = http.createServer( ( req, res ) =>  {
 	 	}
 	 	else if( path == "/menu/delete" )
 	 	{
-			var deleteItem = { "name" : "" };
-			deleteItem.name = url.parse( req.url, true ).query.name;
+	 		// Stringified JSON of updated item
+	 		let body = '';
 
-			console.log( "Menu Item Delete Body: '" + JSON.stringify( deleteItem ) + "'" );
-	 		
-			deleteMenuItem( deleteItem, collection, res );
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+				console.log( "Menu Item Delete Body: '" + JSON.stringify( body ) + "'" );
+				deleteMenuItem( JSON.parse( body ), collection, res ) 
+			});
 		}
 		else
 		{

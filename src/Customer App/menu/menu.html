@@ -12,6 +12,12 @@
     <!-- Original CSS -->
     <link rel="stylesheet" href="../../css/style.css">
 
+    <!-- Original js -->
+    <script src="../../js/load-menu.js"></script>
+
+    <!-- Javascript Cookie -->
+    <script src="../../js/js.cookie.js" type="text/javascript"></script>
+
     <title>Hello, world!</title>
   </head>
 
@@ -45,18 +51,18 @@
     <!-- Page contents-->
     <div class="container-fluid center-div">
       <div class="row menu-row">
-          <a href="Entrees.html" class="col menu-box">
+          <a href="Items.html" class="col menu-box" onclick="setType('entree')"> 
             <h1 class="menu-text">Entrees</h1>
-          </a>
-          <a href="" class="col menu-box"> 
-            <h1 class="menu-text">Sides</h1>
+          </button>
+          <a href="Items.html" class="col menu-box" onclick="setType('appetizer')"> 
+            <h1 class="menu-text">Appetizers</h1>
           </a>
       </div>
       <div class="row menu-row">
-          <a href="" class="col menu-box">
+          <a href="Items.html" class="col menu-box" onclick="setType('drink')">
             <h1 class="menu-text">Drinks</h1>
           </a>
-          <a href="" class="col menu-box">
+          <a  href="Items.html" class="col menu-box" onclick="setType('dessert')">
             <h1 class="menu-text">Desserts</h1>
           </a>
       </div>
