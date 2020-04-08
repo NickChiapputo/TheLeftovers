@@ -25,7 +25,7 @@
     <div id="header" class="container-fluid"> 
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
-          <a href="entrees.html">
+          <a href="editmenu.html">
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
@@ -48,10 +48,11 @@
       <div class="row title-bar">
         <div class="col-6 menu-box" id="food-name">
       </div>
-      <div class="col menu-box" id="food-category"></div>
+        <button class="menu-box" style="background-color: green;" onclick="alert('Edit Selected')">Edit</button>
+        <button class="menu-box" style="background-color: red;" onclick="deleteMenuItemFormSubmit()">Remove</button>
       </div>
-      <div class="row" style="min-height: 70vh; max-height: 70vh;">
-          <div id="food-picture" class="col-5" style="background-image: url(../../Images/greek-burgers-for-submission.png);">
+      <div class="row" style="min-height: 70vh; max-height: 70vh; margin-top: 6vh;">
+          <div id="food-picture" class="col-5">
           </div>
           <div class="col-3">
               <div id="food-description"class="text-box" style="width: 100%; max-height: 100%;">
@@ -67,6 +68,7 @@
               <div id="food-price" class="text-box" style="max-height: 15vh;">
               </div>
           </div>
+          <p id='textarea-menu-delete'></p>
       </div>
   </div>
   </body>
