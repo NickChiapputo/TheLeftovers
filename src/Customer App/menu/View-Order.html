@@ -12,10 +12,10 @@
     <!-- Original CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/index.js"></script>
+    <script src="../../js/cookies.js"></script>
 
     <title>Hello, world!</title>
   </head>
-
   
   <body class="page" onload="clock()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
@@ -77,7 +77,7 @@
               </a>
 
               <!-- Edit item modal button -->
-              <button type="button" onclick="loadCookie()" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#edit-food" style="min-width: 100%; min-height: 20%; background-color:white; color: black;">
+              <button type="button" onclick="loadCookie('cokies')" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#edit-food" style="min-width: 100%; min-height: 20%; background-color:white; color: black;">
                 <h1 class="menu-text">Edit food</h1>
               </button>
               <!-- Edit item modal window -->
@@ -91,36 +91,7 @@
                       </button>
                     </div>
                     <div class="modal-body">    
-                      <script>
-                        function saveCookie() {
-                          var date = new Date();
-                          if (date.getMinutes() < 59) {
-                            date.setMinutes(date.getMinutes() + 1);
-                          }
-                          else {
-                            date.setHours(date.getHours() + 1);
-                            date.setMinutes(0);
-                          }
-                          str = document.getElementById("cook").value;
-                          str = str.concat("; expires=", date.toUTCString());
-                          document.cookie = str;
-                          loadCookie();
-                        }
-
-                        function loadCookie() {
-                          document.getElementById("cokies").innerText = document.cookie;
-                        }
-
-                        function clearCookies() {
-                          var str = document.cookie.split(';');
-                          var date = new Date();
-                          for (i=0; i < document.cookie.length; i++) {
-                            document.cookie = ''.concat((str.split('='))[0],"=; expires=",date.toUTCString());
-                          }
-                        }
-                        
-                      </script>  
-                      <form id="myForm" onclick="saveCookie()">
+                      <form id="myForm" onclick="saveCookie('cook', 1)">
                         <input type="text" id="cook">
                         <input type="submit">
                         <p id="cokies">fd</p>
