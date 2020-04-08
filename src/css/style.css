@@ -139,9 +139,8 @@ a:hover, a:active {
     border-width: 0.5vw;
     border-style: solid;
     border-radius: 1rem;
-    font-size: 2vw;
+    font-size: 1.7vw;
     text-align: left;
-    overflow: scroll;
     width: 100%;
 }
 
