@@ -13,11 +13,16 @@
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/index.js"></script>
     <script src="../../js/cookies.js"></script>
+    <script type="text/javascript" src="../../js/special-requests.js"></script>
+    <script type="text/javascript" src="../../js/load-menu.js"></script>
+
+    <!-- Cookies library -->
+    <script src="../../js/js.cookie.js"></script>
 
     <title>Hello, world!</title>
   </head>
   
-  <body class="page" onload="clock()">
+  <body class="page" onload="clock(); loadOrderItems()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -48,7 +53,7 @@
     <!-- Title bar -->
     <div class="container-fluid row title-bar">
       <div class="col menu-box">
-        <h1 class="menu-text">Table <text>7</text></h1>
+        <h1 id="humbug" class="menu-text">Table <text id="tableNum">7</text></h1>
       </div>
     </div>
 
@@ -56,50 +61,123 @@
     <div class="container-fluid">
         <div class="row" style="min-height: 70vh; max-height: 70vh;">
             <div class="col-6">
-                <div class="text-box" style="width: 100%; min-height: 100%; max-height: 100%;">
+                <div class="text-box" style="overflow-y: scroll; width: 100%; min-height: 100%; max-height: 50vh;">
                   <h1 style="font-weight: bold;">Order</h1>
-                  <ol>
-                    <li>Greek Burger
-                      <ul>
-                        <li>Add lettuce</li>
-                        <li>No bun</li>
-                      </ul>
-                    </li>
-                  </ol>
+                  <p style="font-size: 1.75vw" id="itemList" >Go to "Place Order" to order food </p>
                 </div>
             </div>
             <div class="col-5">
               <!-- Add item button -->
               <a href="../menu/menu.html">
-                <div class="col menu-box" style="min-width: 100%; min-height: 20%;">
+                <div class="col menu-box" style="min-width: 100%; min-height: 15%; background-color: white; color: black;">
                   <h1 class="menu-text">Add item</h1>
                 </div>
               </a>
 
               <!-- Edit item modal button -->
-              <button type="button" onclick="loadCookie('cokies')" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#edit-food" style="min-width: 100%; min-height: 20%; background-color:white; color: black;">
-                <h1 class="menu-text">Edit food</h1>
+              <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#edit-food" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
+                <h1 class="menu-text">Edit item</h1>
               </button>
               <!-- Edit item modal window -->
               <div class="modal fade" id="edit-food" tabindex="-1" role="dialog" aria-labelledby="edit-food" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="confirm-order">Add item to order?</h5>
+                      <h5 class="modal-title">Enter item number and press submit</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">    
-                      <form id="myForm" onclick="saveCookie('cook', 1)">
-                        <input type="text" id="cook">
-                        <input type="submit">
-                        <p id="cokies">fd</p>
+                      <form id="myForm">
+                        <input type="text" autocomplete="off" id="edit-choice" value="">
+                        <button type="reset" class="btn btn-primary" onclick="editRemoveItem(1)">Edit</button>
+                        <p id="cokies" style="display: none;">as</p>
                       </form>          
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Remove item modal button -->
+              <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#remove-food" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
+                <h1 class="menu-text">Remove food</h1>
+              </button>
+              <!-- Remove item modal window -->
+              <div class="modal fade" id="remove-food" tabindex="-1" role="dialog" aria-labelledby="remove-food" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Enter item number and press submit</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">    
+                      <form id="myForm">
+                        <input type="text" autocomplete="off" id="remove-choice">
+                        <button type="reset" class="btn btn-primary" onclick="editRemoveItem(0); loadOrderItems()">Remove</button>
+                        <p id="coookies"></p>
+                      </form>          
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- Special request modal button -->
+              <button type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#special-request" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
+                <h1 class="menu-text">Special Request</h1>
+              </button>
+              <!-- Special request modal window -->
+              <div class="modal fade" id="special-request" tabindex="-1" role="dialog" aria-labelledby="special-requests" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Special request</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form>
+                      <br>
+                      <ol id="list" style="text-align: left;">
+                      </ol>
+                      <input type="text" autocomplete="off" id="request" style="width: 90%;"><br><br>
+                      <div>
+                        <button type="button" class="btn btn-primary" value="Add request" onclick="add()">Add request</button>
+                        <button type="button" class="btn btn-secondary" value="Remove last request" onclick="remove()">Remove last request</button> <br><br>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" onclick="clearList()" data-dismiss="modal">Clear Requests</button>
+                        <button type="button" class="btn btn-outline-success" onclick="submitList(0)" data-dismiss="modal">Confirm Requests</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>     
+
+              <!-- Send order modal button -->
+              <button onclick="" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color:rgb(0, 247, 41); min-width: 100%; min-height: 20%; color: black;">
+                <h1 class="menu-text">Send Order</h1>
+              </button>
+
+              <!-- Confirm choice modal window -->
+              <div class="modal fade" id="confirm-order" tabindex="-1" role="dialog" aria-labelledby="confirm-order" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirm-order">Send order to kitchen?</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <text>After an order is sent, it can't be modified</text>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
-                      <button type="button" class="btn btn-outline-success" onclick="window.location.href='../View Order/View-Order.html';">Yes</button>
+                      <button type="button" class="btn btn-outline-success" onclick="sendOrder()">Yes</button>
                     </div>
                   </div>
                 </div>
