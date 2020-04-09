@@ -20,10 +20,7 @@ function getMenu()
       
 	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
-			var aCount;
-			var eCount;
-			var dkCount;
-			var dCount;
+
 			obj.forEach(function(d) {
 				if(d.category=="appetizer")
 				{

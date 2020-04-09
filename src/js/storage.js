@@ -22,6 +22,13 @@ const init = function (e)
 			obj.forEach(function(d) {
                 if(d.name==localStorage.getItem('food-Item'))
                 {
+					localStorage.setItem('food-Item-d',d.description);
+					localStorage.setItem('food-Item-n',d.name);
+					localStorage.setItem('food-Item-i',JSON.stringify(d.ingredients));
+					localStorage.setItem('food-Item-cal',d.calories);
+					localStorage.setItem('food-Item-a',d.allergens);
+					localStorage.setItem('food-Item-p',d.price);
+					localStorage.setItem('food-Item-pic',d.image);
 					name.innerHTML+=d.name;
 					description.innerHTML+=d.description;
 					pic.innerHTML+="<div class=\"item-large-image\" style=\"background-image: url("+d.image+");max-height:70vh;min-height:70vh\"></div>";
@@ -63,9 +70,78 @@ document.addEventListener('DOMContentLoaded', function()
 });
 
 
+function loadIngredients()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			var el = document.getElementById( "ingredientLabel" );
+	//		var elEdit = document.getElementById( "ingredientLabel-edit" );
+
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var currItem = obj[ i ];
+
+				var ingredientSrc = 
+					'<div class="ingredientArea" style="display: table-row;">' + 
+						'<div style="display: table-cell;">' + 
+							'<div class="labelIngredient" style="">' + 
+								currItem.name + 
+							'</div>' + 
+						'</div>' + 
+						'<div style="display: table-cell;">' + 
+							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
+								'<div style="display: table-row;">' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-create-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-create-has-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											'1' + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="number" size="5" maxlength="3" name="menu-item-create-ingredient-count-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>';
+
+				el.insertAdjacentHTML( 'afterend', ingredientSrc );
+
+			//	elEdit.insertAdjacentHTML( 'afterend', ingredientSrc );
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
+	xmlHttp.send();
+}
+
 function deleteMenuItem()
 {
-	window.document.location="./editmenu.html"
 	var params = {};
 	params[ "name" ] = localStorage.getItem('food-Item');
 
@@ -100,10 +176,11 @@ function deleteMenuItem()
 function deleteMenuItemFormSubmit()
 {
 	deleteMenuItem();
-
+	window.document.location="./editmenu.html";
 	return false;
 }
 
+/*
 function editMenu()
 {
 	var name = document.querySelector("#food-name");
@@ -338,5 +415,59 @@ function gatherIngredients()
 function editSubmit()
 {
 	alert(document.getElementsByName("menu-item-edit-name")[0].value);
-	alert(document.getElementsByName("menu-item-edit-ingredient-")[0].value)
+}
+*/
+
+function createMenuItem()
+{
+	if(document.getElementsByName("menu-item-create-name").value==undefined)
+	{
+		document.getElementsByName("menu-item-create-name").value=localStorage.getItem('food-Item-n');
+
+	}
+	if(document.getElementsByName("menu-item-create-description").value==undefined)
+	{
+		document.getElementsByName("menu-item-create-description").value=localStorage.getItem('food-Item-d');
+	}
+	if(document.getElementsByName("menu-item-create-calories").value==undefined)
+	{
+		document.getElementsByName("menu-item-create-calories").value=localStorage.getItem('food-Item-cal');
+	}
+	if(document.getElementsByName("menu-item-create-price").value==undefined)
+	{
+		document.getElementsByName("menu-item-create-price").value=localStorage.getItem('food-Item-p');
+		alert(document.getElementsByName("menu-item-create-price").value);
+	}
+
+	var formData = new FormData( createMenuItemForm );
+	formData.append( "fileToUpload", document.getElementById( "menu-item-create-picture" ).files[ 0 ] );
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			var obj = JSON.parse( this.responseText );
+			var el = document.getElementById( "textarea-menu-create" );
+
+			el.innerHTML = "Item Created:\n";
+			for( var attr in obj )
+				el.innerHTML += "    " + attr + ": " + obj[ attr ] + "\n";
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Create menu item status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/menu/create
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/create" );
+	xmlHttp.send( formData );
+}
+
+function createMenuItemSubmit()
+{
+//	deleteMenuItem();
+	createMenuItem();
+	return false;
 }
