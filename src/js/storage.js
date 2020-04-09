@@ -65,7 +65,9 @@ document.addEventListener('DOMContentLoaded', function()
 
 function deleteMenuItem()
 {
-	var params = "name=" + localStorage.getItem('food-item');
+	window.document.location="./editmenu.html"
+	var params = {};
+	params[ "name" ] = localStorage.getItem('food-Item');
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -91,7 +93,8 @@ function deleteMenuItem()
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete", true );
-	xmlHttp.send( params );
+	console.log( "Sending: " + JSON.stringify( params ) );
+	xmlHttp.send( JSON.stringify( params ) ); 
 }
 
 function deleteMenuItemFormSubmit()
@@ -99,4 +102,241 @@ function deleteMenuItemFormSubmit()
 	deleteMenuItem();
 
 	return false;
+}
+
+function editMenu()
+{
+	var name = document.querySelector("#food-name");
+	var description = document.querySelector("#food-description");
+	var pic = document.querySelector("#food-picture");
+	var kcal = document.querySelector("#food-kcal");
+	var allergens = document.querySelector("#food-allergens");
+	var price = document.querySelector("#food-price");
+
+		name.innerHTML = "";
+		description.innerHTML="";
+		pic.innerHTML="";
+		kcal.innerHTML="";
+		allergens.innerHTML="";
+		price.innerHTML="";
+
+    var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+      
+	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
+			obj.forEach(function(d) {
+                if(d.name==localStorage.getItem('food-Item'))
+                {
+					name.innerHTML+="<input name=\"menu-item-edit-name\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\""+d.name+"\">";
+					description.innerHTML+="<input name=\"menu-item-edit-description\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\""+d.description+"\">";
+					pic.innerHTML+="<div id=\"menu-item-edit-picture\" style=\"display:table-cell;\"><input type=\"file\" required id=\"menu-item-create-picture\"></div><div class=\"item-large-image\" style=\"background-image: url("+d.image+");max-height:70vh;min-height:70vh\"></div>";
+					kcal.innerHTML+="<input  name=\"menu-item-edit-calories\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\"Cal="+d.calories+"\">";
+					price.innerHTML+="<input name=\"menu-item-edit-price\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\"Price="+d.price+"\">";
+					gatherIngredients();
+					allergens.innerHTML+="<div style=\"display: table-row;\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"margin-top: 5vh;\">Ham</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-1\" value=\"ham\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Meat</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-2\" value=\"meat\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Dairy</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-3\" value=\"dairy\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Gluten</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-4\" value=\"gluten\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Shellfish</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-5\" value=\"shellfish\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Soy</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-6\" value=\"soy\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Fish</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-7\" value=\"fish\" />"
+					  +"</div>"
+					+"</div>"
+
+					+"<div style=\"display: table-row\">"
+					  +"<div style=\"display: table-cell;\">"
+						+"<div class=\"label\" style=\"\">Nuts</div>"
+					  +"</div>"
+					  +"<div style=\"display: table-cell;\">"
+						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-8\" value=\"nuts\" />"
+					  +"</div>"
+					+"</div>"
+				+"</div>";
+                }
+			});
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
+	xmlHttp.send();
+};
+
+function gatherIngredients()
+{
+	var ingredients = document.querySelector("#food-ingredients");
+	ingredients.innerHTML="";
+	ingredients.innerHTML+="<div id=\"ingredientLabel-edit\" class=\"ingredientArea\" style=\"display: table-row;\" id=\"ingredientLabel\">"
+	  +"<div style=\"display: table-cell;\">"
+		+"<div style=\"display: table; text-align: left;\">"
+		  +"<div style=\"display: table-row;\">"
+			+"<div style=\"display: table-cell;\">"
+			  +"<div class=\"label\" style=\"margin-top: 1vw;\">"
+				+"Ingredient"
+			  +"</div>"
+			+"</div>"
+		  +"</div>"
+		+"</div>"
+	  +"</div>"
+
+	  +"<div style=\"display: table-cell;\">"
+		+"<div style=\"display: table;  width: 25vw; text-align: center;\">"
+		  +"<div style=\"display: table-row;\">"
+
+			+"<div style=\"display: table-cell; width: 33%;\">"
+			  +"<div style=\"\">"
+				+"Included"
+			  +"</div>"
+			+"</div>"
+
+			+"<div style=\"display: table-cell; width: 33%;\">"
+			  +"<div style=\"\">"
+				+"Default"
+			  +"</div>"
+			+"</div>"
+
+			+"<div style=\"display: table-cell; width: 33%;\">"
+			  +"<div style=\"\">"
+				+"Count"
+			  +"</div>"
+			+"</div>"
+
+		  +"</div>"
+		+"</div>"
+	  +"</div>"
+	+"</div>";
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+	//		var el = document.getElementById( "ingredientLabel" );
+			var elEdit = document.getElementById( "ingredientLabel-edit" );
+
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var currItem = obj[ i ];
+
+				var ingredientSrc = 
+					'<div class="ingredientArea" style="display: table-row;">' + 
+						'<div style="display: table-cell;">' + 
+							'<div class="labelIngredient" style="">' + 
+								currItem.name + 
+							'</div>' + 
+						'</div>' + 
+						'<div style="display: table-cell;">' + 
+							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
+								'<div style="display: table-row;">' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-has-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											'1' + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="number" size="5" maxlength="3" name="menu-item-edit-ingredient-count-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>';
+
+				//el.insertAdjacentHTML( 'afterend', ingredientSrc );
+
+				elEdit.insertAdjacentHTML( 'afterend', ingredientSrc );
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
+	xmlHttp.send();
+}
+
+function editSubmit()
+{
+	alert(document.getElementsByName("menu-item-edit-name")[0].value);
+	alert(document.getElementsByName("menu-item-edit-ingredient-")[0].value)
 }
