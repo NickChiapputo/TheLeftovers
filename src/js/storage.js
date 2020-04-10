@@ -37,7 +37,7 @@ const init = function (e)
 						if(d.hasIngredient[i]>0)
 						{
 							ingredients.innerHTML+="<input type=\"checkbox\" id=\"topping\" name=\"topping\" value=\"topping\" checked>";
-							ingredients.innerHTML+="<label for=\"topping\">"+d.ingredients[i]+":"+d.hasIngredient[i]+"</label><br>";
+							ingredients.innerHTML+="<label for=\"topping\">"+d.ingredients[i]+":"+d.ingredientCount[i]+"</label><br>";
 						}
 						else
 						{
@@ -142,6 +142,7 @@ function loadIngredients()
 
 function deleteMenuItem()
 {
+	window.document.location="./editmenu.html";
 	var params = {};
 	params[ "name" ] = localStorage.getItem('food-Item');
 
@@ -176,7 +177,6 @@ function deleteMenuItem()
 function deleteMenuItemFormSubmit()
 {
 	deleteMenuItem();
-	window.document.location="./editmenu.html";
 	return false;
 }
 
@@ -436,10 +436,29 @@ function createMenuItem()
 	if(document.getElementsByName("menu-item-create-price").value==undefined)
 	{
 		document.getElementsByName("menu-item-create-price").value=localStorage.getItem('food-Item-p');
-		alert(document.getElementsByName("menu-item-create-price").value);
+		//alert(document.getElementsByName("menu-item-create-price").value);
 	}
 
 	var formData = new FormData( createMenuItemForm );
+
+	if(formData.get("menu-item-create-name")=="")
+	{
+		formData.set("menu-item-create-name",localStorage.getItem('food-Item-n'));
+
+	}
+	if(formData.get("menu-item-create-description")=="")
+	{
+		formData.set("menu-item-create-description",localStorage.getItem('food-Item-d'));
+	}
+	if(formData.get("menu-item-create-calories")=="")
+	{
+		formData.set("menu-item-create-calories",localStorage.getItem('food-Item-cal'));
+	}
+	if(formData.get("menu-item-create-price")=="")
+	{
+		formData.set("menu-item-create-price",localStorage.getItem('food-Item-p'));
+		//alert(document.getElementsByName("menu-item-create-price").value);
+	}
 	formData.append( "fileToUpload", document.getElementById( "menu-item-create-picture" ).files[ 0 ] );
 
 	var xmlHttp = new XMLHttpRequest();
@@ -467,7 +486,7 @@ function createMenuItem()
 
 function createMenuItemSubmit()
 {
-//	deleteMenuItem();
+	deleteMenuItem();
 	createMenuItem();
 	return false;
 }

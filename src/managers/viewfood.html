@@ -48,12 +48,12 @@
       <div class="row title-bar">
         <div class="menu-box" id="food-name">
       </div>
-      <ul class="col nav nav-pills">
+      <ul class="nav nav-pills">
         <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="loadIngredients()">Edit</a></li>
       </ul>
-        <button class="col menu-box" style="background-color: red;" onclick="deleteMenuItemFormSubmit()">Remove</button>
+        <button class="menu-box" style="background-color: red;" onclick="deleteMenuItemFormSubmit()">Remove</button>
       </div>
-      <div class="row" style="min-height: 70vh; max-height: 70vh; margin-top: 6vh;">
+      <div class="row" style="min-height: 70vh; max-height: 70vh; margin-top: 10vh;">
           <div id="food-picture" class="col-5">
           </div>
           <div class="col-3">
@@ -73,7 +73,7 @@
           <p id='textarea-menu-delete'></p>
       </div>
       <div id="edit" class="tab-pane fade">
-        <p style="color: yellow;">All Areas must be filled.</p>
+        <p style="color: yellow;">Image file and Ingredients fields are required</p>
         <div class="container-fluid">
         <form id="createMenuItemForm">
           <div class="row title-bar">
