@@ -71,51 +71,172 @@ function getCookieByName(name) {
 }
 
 function load_item() {
+    suppressEnter();
     $(document).ready(function() {
         var obj=Cookies.getJSON('current_item');
-
-        document.getElementById("confirm-choice").innerText = obj.name.concat(" $", obj.price);
-
         document.getElementById("item-name").innerText = obj.name;
         document.getElementById("descrip").innerText = obj.description;
         document.getElementById("food_pic").style.backgroundImage = "url(".concat(obj.image,")");
         var ingArr = obj.ingredients;
-        //document.getElementById("top1").innerText = ingArr[0];
-        //var currIng;
+        var hasIng = obj.hasIngredient;
         for (i=0; i < ingArr.length; i++) {
-            //currIng = document.getElementById("topping_".concat(i+1));
             currLab = document.getElementById("top".concat(i+1));
             currLab.innerText = ingArr[i];
             currLab.style.visibility = "visible";
             currBox = document.getElementById("topping_".concat(i+1));
             currBox.style.visibility = "visible";
-            //currIng.name = ingArr[i];
-            //currIng.value = ingArr[i];
+            if (hasIng[i] == 1) {
+                currBox.checked = true;
+            }
         }
+        var allergens = document.getElementById('allerg');
+        for (i=0; i < obj.allergens.length; i++) {
+            if (i > 0) {
+                allergens.innerText = allergens.innerText.concat(', ', obj.allergens[i]);
+            }
+            else {
+                allergens.innerText = "Allergens: ".concat(obj.allergens[i]);
+            }
+        }
+        document.getElementById('Kcal').innerText  = "Calories: ".concat(obj.calories);
     });
 }
 
-//current_item={"_id":"5e8cc064bf8f1f486fef28d4",
-//  "name":"BBQ Burger",
-//  "price":3,
-//  "calories":255,
-//  "ingredients":["Patty","Bun","Onion","Cheese"],
-//  "hasIngredient":[1,1,1,0],
-//  "ingredientCount":[1,1,1,1],
-//  "allergens":["meat","dairy","gluten"],
-//  "description":"its a BBQ burger",
-//  "category":"entree",
-//  "image":"http://64.225.29.130/img/bbq-bacon-cheeseburger-recipe-kc-masterpiece-1.jpg"}
+function load_ingredients() {
+        var obj=Cookies.getJSON('current_item');
+        var ingArr = obj.ingredients;
+        var hasIng = obj.hasIngredient;
+        var str = obj.name.concat(" $", obj.price, '\n', "Ingredients: ");
+
+        for (i=0; i < ingArr.length; i++) {
+            obj.hasIngredient[i] = 0;
+            currLab = document.getElementById("top".concat(i+1));
+            currLab.innerText = ingArr[i];
+            currBox = document.getElementById("topping_".concat(i+1));
+            currBox.style.visibility = "visible";
+            if (currBox.checked == true) {
+                str = str.concat(currLab.innerText, ', ');
+                obj.hasIngredient[i] = 1;
+            }
+        }
+        str = str.slice(0, -2);
+        document.getElementById("confirm-choice").innerText = str;
+        return(obj);
+}
+
+function loadOrderItems() {
+    // supressing enter key
+    suppressEnter();
+    $(document).ready(function() {
+        var order;
+        // replace with real values later
+        var id=Math.random().toString(36);
+        var table = Cookies.get('table-num');
+        if (table == undefined) {
+            table = 0;
+        }
+        document.getElementById('tableNum').innerText = table;
+        // replace with real rewards num
+        var rewards = 'rewardsNum';
+
+        if (Cookies.get('current_order') == undefined) {
+            Cookies.set('current_order', {"_id":id,
+            "table":table,
+            "rewards":rewards,
+            "status":"ordered"}, {path: '/', sameSite: 'strict'});
+            order = Cookies.getJSON('current_order');
+        }
+        else {
+            order = Cookies.getJSON('current_order')
+        }
+        if (Cookies.get('new_item') == 1) {
+            var newItem = Cookies.getJSON('current_item');
+            if (order.items == undefined) {
+                order['items'] = [newItem];
+            }
+            else {
+                order.items.push(newItem);
+            }
+            Cookies.set('new_item', 0, {path: '/', sameSite: 'strict'});
+        }
+        Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+
+        var output = "";
+        var total = 0;
+        for (i=0; i < order.items.length; i++) {
+            total += order.items[i].price;
+            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price,'\n')
+            for (j=0; j < order.items[i].ingredients.length; j++) {
+                if (order.items[i].hasIngredient[j] == '1') {
+                    output = output.concat('----', order.items[i].ingredients[j], '\n');
+                }
+            }
+            output = output.concat('\n');
+        }
+        output = output.concat('___________________________________________\n');
+        output = output.concat('Total: $', total,'\n');
+        document.getElementById('itemList').innerText = output;
+    });
+}
+
+function addToOrder(obj) {
+    Cookies.set("current_item", JSON.stringify(obj), { path: '/', sameSite: 'strict' });
+    Cookies.set("new_item", '1', {path: '/', sameSite: 'strict'});
+    window.location.href='View-Order.html';
+}
 
 function saveChoice(num) {
     var obj = document.getElementById("food".concat(num));
     var str = "current_item="
     str = str.concat(obj.name);
     //document.cookie = str.concat(";");
-    Cookies.set("current_item", obj.name, { path: '/' });
+    Cookies.set("current_item", obj.name, {path: '/', sameSite: 'strict'});
 }
 
 function setType(type) {
-    Cookies.set("type", type, {path: '/'});
+    Cookies.set("type", type, {path: '/', sameSite: 'strict'});
     //document.cookie = "type=".concat(type,";path=/Customer%20App/menu;");
+}
+
+function editRemoveItem(edRom) {
+    if (edRom == 1) {
+        var item = document.getElementById('edit-choice');
+    }
+    else {
+        var item = document.getElementById('remove-choice');
+    }
+    var selection = item.value - 1;
+    if (selection >= 0 && selection < (Cookies.getJSON('current_order')).items.length) {
+        Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/', sameSite: 'strict'});
+        var temp = Cookies.getJSON('current_order');
+        temp.items.splice(selection, 1);
+        Cookies.set('current_order', temp, {path: '/', sameSite: 'strict'});
+        if (edRom == 1) {
+            window.location.href='Menu-Item.html';
+        }
+    }
+    else {
+        if (edRom == 1) {
+            var err = document.getElementById('cokies');
+        }
+        else {
+            var err = document.getElementById('coookies');
+        }
+        err.innerText = "\nError: item with this number does not exist";
+        err.style.color = "red";
+        err.style.display = "unset";
+    }
+}
+
+function sendOrder() {
+
+}
+
+function suppressEnter() {
+    $('form input').keydown(function (enter) {
+        if (enter.keyCode == 13) {
+          enter.preventDefault();
+          return false;
+        }
+    });
 }
