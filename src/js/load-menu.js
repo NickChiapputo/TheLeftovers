@@ -143,7 +143,7 @@ function loadOrderItems() {
             Cookies.set('current_order', {"_id":id,
             "table":table,
             "rewards":rewards,
-            "status":"in progress"}, {path: '/', sameSite: 'strict'});
+            "status":"ordered"}, {path: '/', sameSite: 'strict'});
             order = Cookies.getJSON('current_order');
         }
         else {
@@ -162,8 +162,10 @@ function loadOrderItems() {
         Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
 
         var output = "";
+        var total = 0;
         for (i=0; i < order.items.length; i++) {
-            output = output.concat(i+1, ". ", order.items[i].name, '\n')
+            total += order.items[i].price;
+            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price,'\n')
             for (j=0; j < order.items[i].ingredients.length; j++) {
                 if (order.items[i].hasIngredient[j] == '1') {
                     output = output.concat('----', order.items[i].ingredients[j], '\n');
@@ -171,6 +173,8 @@ function loadOrderItems() {
             }
             output = output.concat('\n');
         }
+        output = output.concat('___________________________________________\n');
+        output = output.concat('Total: $', total,'\n');
         document.getElementById('itemList').innerText = output;
     });
 }
