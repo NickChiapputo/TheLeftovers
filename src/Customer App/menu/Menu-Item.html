@@ -17,6 +17,7 @@
 
     <!-- Original js -->
     <script type="text/javascript" src="../../js/load-menu.js"></script>
+    <script type="text/javascript" src="../../js/special-requests.js"></script>
 
     <title>Hello, world!</title>
   </head>
@@ -75,18 +76,18 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form action="/action_page.php">
+              <form>
                 <br>
-                <ul id="list" style="text-align: left;">
-                </ul>
-                <input type="text" id="request" style="width: 90%;"><br><br>
+                <ol id="list" style="text-align: left;">
+                </ol>
+                <input type="text" autocomplete="off" id="request" style="width: 90%;"><br><br>
                 <div>
-                  <input type="button" class="btn btn-primary" value="Add request" onclick="add()">
-                  <input type="button" class="btn btn-secondary" value="Remove last request" onclick="remove()"> <br><br>
+                  <button type="button" class="btn btn-primary" value="Add request" onclick="add()">Add request</button>
+                  <button type="button" class="btn btn-secondary" value="Remove last request" onclick="remove()">Remove last request</button> <br><br>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-danger" onclick="clearList()" data-dismiss="modal">Clear Requests</button>
-                  <button type="button" class="btn btn-outline-success">Confirm Requests</button>
+                  <button type="button" class="btn btn-outline-success" onclick="submitList(1)" data-dismiss="modal">Confirm Requests</button>
                 </div>
               </form>
             </div>
@@ -94,7 +95,7 @@
         </div>        
 
         <!-- Add item modal button -->
-        <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color:rgb(0, 247, 41); color: black;">
+        <button onclick="load_ingredients()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color:rgb(0, 247, 41); color: black;">
           <h1 class="menu-text-small">Add Item</h1>
         </button>
 
@@ -113,7 +114,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
-                <button type="button" class="btn btn-outline-success" onclick="window.location.href='View-Order.html';">Yes</button>
+                <button type="button" class="btn btn-outline-success" onclick="addToOrder(load_ingredients())">Yes</button>
               </div>
             </div>
           </div>
@@ -131,7 +132,7 @@
                 </div>
             </div>
             <div class="col-3">
-                <div class="text-box" style="max-height: 42vh;">
+                <div class="text-box" style="max-height: 48vh;">
                     <input type="checkbox" id="topping_1" name="topping_1" value="topping_1" style="visibility: hidden;">
                     <label id="top1" for="topping_1" style="visibility: hidden;"></label><br>
                     <input type="checkbox" id="topping_2" name="topping_2" value="topping_2" style="visibility: hidden;">
@@ -150,10 +151,10 @@
                     <label id="top8" for="topping_8" style="visibility: hidden;"></label><br>
                 </div>
                 <div class="text-box" style="max-height: 10vh;">
-                    Kcal = 200
+                    <text id="Kcal">Kcal = NO CALORIES!!!</text>
                 </div>
                 <div class="text-box" style="max-height: 15vh;">
-                    Allergens: wheat, dairy 
+                    <text id="allerg">Allergens: (none)</text>
                 </div>
             </div>
         </div>
