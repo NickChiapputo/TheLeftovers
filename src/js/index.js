@@ -1,3 +1,5 @@
+/*******************************************/
+/*           Inventory Functions           */
 function getInventoryList() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -155,8 +157,10 @@ function deleteFormSubmit()
 	// Function must return false to prevent reloading of page
 	return false;
 }
+/*******************************************/
 
-
+/*******************************************/
+/*             Menu Functions              */
 function getMenu()
 {
 	var xmlHttp = new XMLHttpRequest();
@@ -216,7 +220,6 @@ function getMenu()
 	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
 	xmlHttp.send();
 }
-
 
 function createMenuItem()
 {
@@ -365,7 +368,10 @@ function loadIngredients()
 	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
 }
+/*******************************************/
 
+/*******************************************/
+/*        Rewards Account Functions        */
 function getRewardsAccounts()
 {
 	var xmlHttp = new XMLHttpRequest();
@@ -396,8 +402,8 @@ function getRewardsAccounts()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			document.getElementById( 'textarea-rewards-accounts-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
-			console.log( "Rewards accounts inventory status response: " + this.status );
+			document.getElementById( 'textarea-rewards-accounts-view' ).innerHTML = "Rewards accounts status response: " + this.status;
+			console.log( "Rewards accounts status response: " + this.status );
 		}
 	};
 
@@ -481,3 +487,88 @@ function deleteRewardsAccountSubmit()
 	// Function must return false to prevent reloading of page
 	return false;
 }
+/*******************************************/
+
+/*******************************************/
+/*             Order Functions             */
+function getOrders()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-orders-view' );
+
+			console.log( this.responseText );
+		
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			// doc.innerHTML = "Number of Rewards Accounts: " + numItems + "\n";
+
+			doc.innerHTML = "";
+
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var currOrder = obj[ i ];
+				if( currOrder !== undefined )
+				{
+					doc.innerHTML += "Order " + ( i + 1 ) + ":\n"
+					console.log( "Order " + ( i + 1 ) + ": " + JSON.stringify( currOrder ) );
+					for( var attr in currOrder )
+					{
+						if( attr === "items" )
+						{
+							doc.innerHTML += "    " + attr + ":\n"; 
+							var numItems = Object.keys( currOrder[ attr ] ).length;
+							var j;
+							for( j = 0; j < numItems; j++ )
+							{
+								doc.innerHTML += "          Item " + ( j + 1 ) + ":\n"
+								var currItem = currOrder[ attr ][ j ];
+								for( var itemAttr in currItem )
+								{
+									if( itemAttr === "ingredients" )
+										doc.innerHTML += "              " + itemAttr + " (" + Object.keys( currItem[ itemAttr ] ).length + "): " + currItem[ itemAttr ] + "\n";
+									else
+										doc.innerHTML += "              " + itemAttr + ": " + currItem[ itemAttr ] + "\n";
+								}
+								doc.innerHTML += "\n";
+							}
+
+							doc.innerHTML += "\n";
+						}
+						else
+							doc.innerHTML += "    " + attr + ": " + currOrder[ attr ] + "\n";
+					}
+				}
+			}
+
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-orders-view' ).innerHTML = "Orders status response: " + this.status;
+			console.log( "Orders status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
+	xmlHttp.send();
+}
+
+function createOrder()
+{
+
+}
+
+function createOrderSubmit()
+{
+
+}
+
+
+/*******************************************/

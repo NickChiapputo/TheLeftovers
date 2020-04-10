@@ -124,16 +124,20 @@
 				outline: none;
 			}
 
+			*::-moz-focus-inner {
+				border: 0;
+			}
+
 			.headerLabel {
 				cursor: default;
 			}
 
 			.label {
-				margin-left: 1vw;
+				margin-left: 4vw;
 			}
 
 			.labelIngredient {
-				margin-left: 2vw;
+				margin-left: 5vw;
 			}
 
 			/* Navigation bar */
@@ -143,6 +147,7 @@
 				padding: 0;
 				overflow: hidden;
 				background-color: #212121;
+				font-size: 16px;
 				position: -webkit-sticky;
 				position: sticky;
 				top: 0;
@@ -163,6 +168,20 @@
 				padding: 14px 16px;
 				text-decoration: none;
 			}
+ 
+			.active {
+				display: inline-block;
+				padding: 14px 16px;
+				text-decoration: none;
+
+				background-color: #303f9f;
+				border-right: none;
+			}
+
+			.active:hover {
+				background-color: #3f51b5;
+				border-right: none;
+			}
 
 			li:last-child {
 				border-right: none;
@@ -171,15 +190,39 @@
 			li a:hover {
 				background-color: #424242;
 			}
- 
-			.active {
-				background-color: #303f9f;
+
+			.dropdown:hover .active {
+				background-color: #3f51b5;
 				border-right: none;
 			}
 
-			.active:hover {
-				background-color: #3f51b5;
-				border-right: none;
+			li.dropdown {
+				display: inline-block;
+			}
+
+			.pageNavigation-content {
+				display: none;
+				position: absolute;
+				background-color: #323232;
+				min-width: 80px;
+				box-shadow: 0px 8px 16px 0px rgba( 0, 0, 0, 0.2 );
+				z-index: 1;
+			}
+
+			.pageNavigation-content a {
+				color: #e6e6e6;
+				padding: 12px 16px;
+				text-decoration: none;
+				display: block;
+				text-align: left;
+			}
+
+			.pageNavigation-content a:hover {
+				background-color: #424242;
+			}
+
+			.dropdown:hover .dropdown-content {
+				display: block;
 			}
 		</style>
 
@@ -192,19 +235,114 @@
 		</div>
 
 		<ul>
-			<li><a class="active" href="index.html">Home</a></li>
+			<li class="dropdown">
+				<a class="active" href="index.html">Home</a>
+				<div class="pageNavigation-content">
+					<a class="active-navigation" href="#orders">Orders</a>
+					<a href="#rewards">Rewards</a>
+					<a href="#view-menu">View Menu</a>
+					<a href="#create-menu-item">Create Menu Item</a>
+					<a href="#inventory">Inventory</a>
+				</div>
+			</li>
 			<li><a href="managers/manager1.html">Manager</a></li>
 			<li><a href="servers/server_login.html">Server</a></li>
 			<li><a href="Customer App/index.html">Customer</a></li>
 			<li><a href="index.html">Kitchen</a></li>
 		</ul>
 
+		<!-- <ul class="websiteNavigationUL">
+			<li class="websiteNavigation"><a class="active" href="index.html">Home</a></li>
+			<li class="websiteNavigation"><a href="managers/manager1.html">Manager</a></li>
+			<li class="websiteNavigation"><a href="servers/server_login.html">Server</a></li>
+			<li class="websiteNavigation"><a href="Customer App/index.html">Customer</a></li>
+			<li class="websiteNavigation"><a href="index.html">Kitchen</a></li>
+		</ul> -->
+
+		<hr style="border-width: 0.5vh;" id="orders">
+
+		<!-- ORDERS -->
+
+		<!-- Show list of orders and create new order -->
+		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+			
+			<!-- Headers rewards query and create rewards -->
+			<div style="display: table-row; text-align: center;">
+				<!-- Header for rewards query -->
+				<div class="headerLabel" style="display: table-cell; width: 50vw;">
+					<h3>Get Orders</h3>
+				</div>
+
+				<!-- Header for edit menu item -->
+				<div class="headerLabel" style="display: table-cell; width: 50vw;">
+					<h3>Create Order</h3>
+				</div>
+			</div>
+
+			<!-- Control buttons and fields -->
+			<div style="display: table-row;">
+
+				<!-- Request Orders Button -->
+				<div style="display: table-cell; text-align: center;">
+					<button style="" class="button" type="button" onclick="getOrders();">Retrieve Order List</button>
+				</div>
+
+				<!-- Create Order Form -->
+				<div style="display: table-cell; text-align: left;">
+					<form id="createOrderForm">
+						<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Name input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="">Table Number</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" required min="1" max="20" step="1" name="create-order-table-number" />
+								</div>
+							</div>
+
+							<!-- Phone Number input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="">Rewards Number</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" name="create-order-account-number" pattern="[0-9]{10}" />
+								</div>
+							</div>
+
+							<!-- Save button field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell;">
+									<button style="width: 25vw;" class="button" type="button" onclick="createOrderSubmit()">Create Order</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Text areas -->
+			<div style="display: table-row;">
+				<!-- Inventory list textarea -->
+				<div style="display: table-cell; vertical-align: top;">
+					<textarea readonly id="textarea-orders-view"></textarea>
+				</div>
+
+				<!-- Edit item textarea -->
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea-order-create"></textarea>
+				</div>
+			</div>
+		</div>
+
 		<hr style="border-width: 0.5vh;">
 
 		<!-- REWARDS ACCOUNTS -->
 
 		<!-- Show list of rewards accounts and create new rewards account -->
-		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;" id="rewards">
 			
 			<!-- Headers rewards query and create rewards -->
 			<div style="display: table-row; text-align: center;">
@@ -333,7 +471,7 @@
 		<!-- MENU ITEM -->
 
 		<!-- Get menu item list and edit menu item -->
-		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;" id="view-menu">
 			
 			<!-- Headers for menu query and edit menu item -->
 			<div style="display: table-row; text-align: center;">
@@ -583,7 +721,7 @@
 		</div>
 
 		<!-- Create and delete menu item -->
-		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw; margin-top: 5vh;">
+		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw; margin-top: 5vh;" id="create-menu-item">
 			
 			<!-- Headers for create menu item and delete menu item -->
 			<div style="display: table-row; text-align: center;">
@@ -849,7 +987,7 @@
 		<!-- INVENTORY ITEM -->
 
 		<!-- Get inventory list and edit item -->
-		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;" id="inventory">
 			
 			<!-- Headers for inventory query and edit item -->
 			<div style="display: table-row; text-align: center;">
