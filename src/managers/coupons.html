@@ -34,22 +34,35 @@
 		</div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/generate-coupons.js"></script>
         </div>
       </div>
     </div>
-
+    <ul class="col nav nav-pills">
+      <li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getCouponList()">View</a></li>
+    </ul>
     <!-- Page contents-->
 	<div class="container-fluid center-div">
-		<form>
+    <div class="tab-content">
+		<form id="add" class="tab-pane fade">
 			<label for="txt">Text:</label>
-			<input type="text" id="txt" name="txt"><br><br>
+			<input type="text" id="txt" name="name"/><br><br>
 			<label for="discount">Discount%:</label>
-			<input type="text" id="discount" name="discount"><br><br>
+			<input type="text" id="discount" name="discount"/><br><br>
 			<label for="expiration">Expiration Date:</label>
-			<input type="date" id="expiration" name="expiration"><br><br>
-			<input type="submit" value="Submit">
-		</form>
+      <input type="text" id="expiration" name="expiration"/><br><br>
+      <label for="rewards">Rewards</label>
+      <input type="rewards" id="rewards" name="rewards"/><br><br>
+      <input type="button" onclick="createFormSubmit()" value="Submit">
+    </form>
+    <div id="remove" class="tab-pane fade">content</div>
+    <div id="view" class="tab-pane fade">view content</div>
+    </div>
+    
+    <p id="textarea-create"></p>
 	</div>
   </body>
 </html>
