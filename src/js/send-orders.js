@@ -1,5 +1,12 @@
 function send_order(jsonOrder)
 {
+	// deleting unimportant variables
+	for (ord in jsonOrder) {
+		if (ord.happy_hour != undefined) {
+			delete ord.happy_hour;
+		}
+	}
+
 	var xmlHttp = new XMLHttpRequest();
 
 	xmlHttp.onreadystatechange = function() {

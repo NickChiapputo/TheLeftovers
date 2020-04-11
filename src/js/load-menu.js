@@ -130,7 +130,7 @@ function loadOrderItems() {
     $(document).ready(function() {
         var order;
         // replace with real values later
-        var id=Math.random().toString(36);
+        var id=null;
         var table = Cookies.get('table-num');
         if (table == undefined) {
             table = 0;
@@ -143,7 +143,7 @@ function loadOrderItems() {
             Cookies.set('current_order', {"_id":id,
             "table":table,
             "rewards":rewards,
-            "status":"ordered"}, {path: '/', sameSite: 'strict'});
+            "status":"ordered"}, {path: '/Customer%20App', sameSite: 'strict'});
             order = Cookies.getJSON('current_order');
         }
         else {
@@ -157,15 +157,30 @@ function loadOrderItems() {
             else {
                 order.items.push(newItem);
             }
-            Cookies.set('new_item', 0, {path: '/', sameSite: 'strict'});
+            Cookies.set('new_item', 0, {path: '/Customer%20App', sameSite: 'strict'});
         }
-        Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+        Cookies.set('current_order', order, {path: '/Customer%20App', sameSite: 'strict'});
 
         var output = "";
         var total = 0;
         for (i=0; i < order.items.length; i++) {
+
+            // adding happy hour discount
+            var date = new Date();
+            if (order.items[i].category == 'dessert' && order.items[i]['happy_hour'] == undefined && date.getHours() >= 0 && date.getHours() <= 19) {
+                order.items[i]['happy_hour'] = true;
+                order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
+            }
+
             total += order.items[i].price;
-            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price,'\n')
+
+            // printing name, price, discount
+            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price);
+            if (order.items[i].happy_hour != undefined) {
+                output = output.concat(' (happy hour discount!)');
+            }
+            
+            output = output.concat('\n');
             for (j=0; j < order.items[i].ingredients.length; j++) {
                 if (order.items[i].hasIngredient[j] == '1') {
                     output = output.concat('----', order.items[i].ingredients[j], '\n');
@@ -173,6 +188,7 @@ function loadOrderItems() {
             }
             output = output.concat('\n');
         }
+        total = Number(total.toFixed(2));
         output = output.concat('___________________________________________\n');
         output = output.concat('Total: $', total,'\n');
         document.getElementById('itemList').innerText = output;
@@ -180,8 +196,8 @@ function loadOrderItems() {
 }
 
 function addToOrder(obj) {
-    Cookies.set("current_item", JSON.stringify(obj), { path: '/', sameSite: 'strict' });
-    Cookies.set("new_item", '1', {path: '/', sameSite: 'strict'});
+    Cookies.set("current_item", JSON.stringify(obj), { path: '/Customer%20App', sameSite: 'strict' });
+    Cookies.set("new_item", '1', {path: '/Customer%20App', sameSite: 'strict'});
     window.location.href='View-Order.html';
 }
 
@@ -190,11 +206,11 @@ function saveChoice(num) {
     var str = "current_item="
     str = str.concat(obj.name);
     //document.cookie = str.concat(";");
-    Cookies.set("current_item", obj.name, {path: '/', sameSite: 'strict'});
+    Cookies.set("current_item", obj.name, {path: '/Customer%20App', sameSite: 'strict'});
 }
 
 function setType(type) {
-    Cookies.set("type", type, {path: '/', sameSite: 'strict'});
+    Cookies.set("type", type, {path: '/Customer%20App', sameSite: 'strict'});
     //document.cookie = "type=".concat(type,";path=/Customer%20App/menu;");
 }
 
@@ -207,10 +223,10 @@ function editRemoveItem(edRom) {
     }
     var selection = item.value - 1;
     if (selection >= 0 && selection < (Cookies.getJSON('current_order')).items.length) {
-        Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/', sameSite: 'strict'});
+        Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/Customer%20App', sameSite: 'strict'});
         var temp = Cookies.getJSON('current_order');
         temp.items.splice(selection, 1);
-        Cookies.set('current_order', temp, {path: '/', sameSite: 'strict'});
+        Cookies.set('current_order', temp, {path: '/Customer%20App', sameSite: 'strict'});
         if (edRom == 1) {
             window.location.href='Menu-Item.html';
         }
