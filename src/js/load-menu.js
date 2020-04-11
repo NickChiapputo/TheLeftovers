@@ -138,7 +138,8 @@ function loadOrderItems() {
         }
         document.getElementById('tableNum').innerText = table;
         // replace with real rewards num
-        var rewards = 'rewardsNum';
+        // default is 0
+        var rewards = 0;
 
         if (Cookies.get('current_order') == undefined) {
             Cookies.set('current_order', {"_id":id,
@@ -161,6 +162,12 @@ function loadOrderItems() {
             Cookies.set('new_item', 0, {path: '/', sameSite: 'strict'});
         }
         Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+
+        // handling empty order
+        if (order.items.length == 0) {
+            document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
+            return;
+        }
 
         var output = "";
         var total = 0;
@@ -189,11 +196,34 @@ function loadOrderItems() {
             }
             output = output.concat('\n');
         }
-        total = Number(total.toFixed(2));
+        //total = Number(total.toFixed(2));
+        total = Number((total));
+        var tax = Number((total * 0.0825));
+        output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');
+        output = output.concat('Tax: $', addTrailingZeros(tax),'\n');
         output = output.concat('___________________________________________\n');
-        output = output.concat('Total: $', total,'\n');
+        output = output.concat('Total: $', addTrailingZeros(total + tax),'\n');
         document.getElementById('itemList').innerText = output;
     });
+}
+
+function addTrailingZeros(num) {
+    var str = (Number(num.toFixed(2))).toString();
+    var length = str.length;
+    var dot = str.length;
+    for (i=0; i < length; i++) {
+        if (str[i] == '.') {
+            dot = i;
+        }
+    }
+    if (dot == length) {
+        str = str.concat('.00');
+        dot = length - 3;
+    }
+    while (length - dot < 3) {
+        str.concat('0'); 
+    }
+    return str;
 }
 
 function addToOrder(obj) {
@@ -242,6 +272,9 @@ function editRemoveItem(edRom) {
         err.innerText = "\nError: item with this number does not exist";
         err.style.color = "red";
         err.style.display = "unset";
+    }
+    if (edRom == 0) {
+        loadOrderItems();
     }
 }
 
