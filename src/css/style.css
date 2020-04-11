@@ -40,6 +40,35 @@
     text-align: center;
 }
 
+.rewardstext-box {
+    background-color: white;
+    color: black;
+    margin: auto;
+    border: gray;
+    border-width: 0.3vw;
+    border-style: solid;
+    font-size: 3vw;
+    text-align: left;
+    display: flex;
+    align-self: flex-end;
+}
+
+input::-webkit-input-placeholder {
+    color: black;
+  }
+
+input:-moz-placeholder {
+    color: black;
+  }
+
+input::-moz-placeholder {
+    color: black;
+  }
+
+input:-ms-input-placeholder {
+    color: black;
+  }
+
 .tab-box{
     background-color: mediumslateblue;
     color: black;
