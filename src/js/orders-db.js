@@ -127,7 +127,7 @@ const server = http.createServer( ( req, res ) =>  {
 
 				console.log( "Data: " + body );
 				
-				payOrder( obj, collection, res );
+				payOrder( obj, db.db( "restaurant" ).collection( "tables" ), collection, res );
 			});
 		}
 	 	else
@@ -225,7 +225,7 @@ function deleteOrder( deleteItem, collection, res )
 	} );
 }
 
-function payOrder( input, collection, res )
+function payOrder( input, tableCollection, collection, res )
 {
 	console.log( "Beginning pay for order ID " + input[ "_id" ] );
 
@@ -289,6 +289,63 @@ function payOrder( input, collection, res )
 			// Display updated order for debugging
 			console.log( "Updated order: " + JSON.stringify( updatedResult.value ) );
 
+			// Update table
+			var table = {};
+			table[ "table" ] = updatedResult.value[ "table" ];
+			
+			var updatedQuery = {};
+			if( updatedResult.value[ "total" ] == 0 )
+			{
+				updatedQuery[ "status" ] = "paid";
+			}
+			else
+			{
+				updatedQuery[ "status" ] = "partially paid";
+			}
+
+			console.log( "Updated Query Status: '" + updatedQuery[ "status" ] + "' for table " + table[ "table" ] + "." ); 
+
+			tableCollection.findOneAndUpdate( table, { $set : updatedQuery }, { returnOriginal : false, returnNewDocument : true }, function( err, updatedTable ) {
+				if( err )
+				{
+					console.log( "Unable to update table " + table[ "table" ] + " status." );
+					res.statusCode = 500;
+					res.end( JSON.stringify( { "response" : "unable to update table stats" } ) );
+					throw err;
+					return;
+				}
+			
+				var newTable = updatedTable.value;
+
+				console.log( "Updated Table: " + JSON.stringify( newTable ) );
+
+				if( newTable === null )
+				{
+					console.log( "Could not find table " + table[ "table" ] + "." );
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "could not find table" } ) );
+					return;
+				}
+
+				if( newTable == null )
+				{
+					console.log( "Could not find table " + table[ "table" ] + "." );
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "could not find table" } ) );
+					return;
+				}
+
+				if( newTable === undefined )
+				{
+					console.log( "Could not find table " + table[ "table" ] + "." );
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "could not find table" } ) );
+					return;
+				}
+
+				console.log( "Updated status for table " + table[ "table" ] + " to '" + newTable[ "status" ] + "'." );
+			});
+
 			// Check if receipt method is e-mail
 			if( input[ "receipt" ] === "email" )
 			{
@@ -316,8 +373,6 @@ function payOrder( input, collection, res )
 				var subject = "Receipt for Order #" + input[ "_id" ] + " - The Leftovers";
 
 				// Create body text for e-mail
-				// var mailBody = "Receipt for Order #" + input[ "_id" ] + "\n\n"
-				// 		+ "Items:\n";
 
 				// Add document headers and CSS styling
 				mailBody = "<!doctype html><html><head><meta charset='utf-8'><title>A simple, clean, and responsive HTML invoice template</title><style>.invoice-box{max-width:800px;margin:auto;padding:30px;border:1px solid #eee;box-shadow:0 0 10px rgba(0, 0, 0, .15);font-size:16px;line-height:24px;font-family:'Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;color:#555}.invoice-box table{width:100%;line-height:inherit;text-align:left}.invoice-box table td{padding:5px;vertical-align:top}.invoice-box table tr td:nth-child(2){text-align:right}.invoice-box table tr.top table td{padding-bottom:20px}.invoice-box table tr.top table td.title{font-size:45px;line-height:45px;color:#333}.invoice-box table tr.information table td{padding-bottom:40px}.invoice-box table tr.heading td{background:#eee;border-bottom:1px solid #ddd;font-weight:bold}.invoice-box table tr.details td{padding-bottom:20px}.invoice-box table tr.item td{border-bottom:1px solid #eee}.invoice-box table tr.item.last td{border-bottom:none}.invoice-box table tr.total td:nth-child(2){border-top:2px solid #eee;font-weight:bold}@media only screen and (max-width: 600px){.invoice-box table tr.top table td{width:100%;display:block;text-align:center}.invoice-box table tr.information table td{width:100%;display:block;text-align:center}}.rtl{direction:rtl;font-family:Tahoma,'Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif}.rtl table{text-align:right}.rtl table tr td:nth-child(2){text-align:left}</style></head><body>";
@@ -369,23 +424,12 @@ function payOrder( input, collection, res )
 				mailBody += "</table></div></body></html>";
 
 
-				console.log( "Message Body: \n" + mailBody + "\n" );
-
-				// mailBody +=	+ "\n"
-				// 		+ "Subtotal: $" + newResult[ "subtotal" ] + "\n"
-				// 		+ "Tax: $" + newResult[ "tax" ] + "\n"
-				// 		+ "Total: $" + previousTotal + "\n"
-				// 		+ "     - $" + input[ "amount" ] + "\n"
-				//		+ "New Total: $" + newResult[ "total" ] + "\n";
-
 				// Create e-mail data
 				var mailOptions = {
 					from: 'theleftovers.csce3444@gmail.com',
 					to: input[ "email" ],
 					subject: subject,
 					html: mailBody,
-					// text: mailBody,
-					// text: JSON.stringify( result.value )
 				};
 
 				// Send e-mail
