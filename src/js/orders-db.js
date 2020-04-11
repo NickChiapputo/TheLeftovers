@@ -261,7 +261,8 @@ function payOrder( input, collection, res )
 		{
 			result[ "total" ] -= input[ "amount" ];
 			result[ "total" ] = Math.round( ( result[ "total" ] + 0.00001 ) * 100 ) / 100;
-			
+			result[ "status" ] = "partially paid";
+
 			console.log( "Applied payment of $" + input[ "amount" ] + ".\n" 
 					+ "Old Total: $" + previousTotal + "\n"
 					+ "New Total: $" + result[ "total" ] );
@@ -269,6 +270,7 @@ function payOrder( input, collection, res )
 		else
 		{
 			result[ "total" ] = 0;
+			result[ "status" ] = "paid";
 
 			console.log( "Applied payment of $" + previousTotal + ".\n"
 					+ "Old Total: $" + previousTotal + "\n"
