@@ -1,4 +1,39 @@
 /*******************************************/
+/*       Collapsible Area Functions        */
+function collapse( buttonID, elementID )
+{
+	// Change button to active class
+	document.getElementById( buttonID ).classList.toggle( "active" );
+
+	// Get div document
+	var el = document.getElementById( elementID );
+
+
+/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
+	// Toggle between open ("block") and closed ("none")
+	// if( el.style.display === "block" )
+	// {
+	// 	el.style.display = "none";
+	// }
+	// else
+	// {
+	// 	el.style.display = "block";
+	// }
+
+
+/********* USE THIS FOR ANIMATED COLLAPSING *****/
+	// Animate sliding
+	if( el.style.maxHeight )
+	{
+		el.style.maxHeight = null;
+	}
+	else
+	{
+		el.style.maxHeight = el.scrollHeight + "px";
+	}
+}
+/*******************************************/
+/*******************************************/
 /*           Inventory Functions           */
 function getInventoryList() {
 	var xmlHttp = new XMLHttpRequest();
