@@ -22,7 +22,7 @@ function clearList() {
     }
     var obj=Cookies.getJSON('current_order');
     obj['notes'] = '';
-    Cookies.set('current_order', JSON.stringify(obj), { path: '/Customer%20App', sameSite: 'strict'});
+    Cookies.set('current_order', JSON.stringify(obj), { path: '/src/Customer%20App', sameSite: 'strict'});
 }
 
 function submitList(ordItem) {
@@ -41,11 +41,11 @@ function submitList(ordItem) {
     if (ordItem == 1) {
       var obj=Cookies.getJSON('current_item');
       obj['notes'] = specRequest;
-      Cookies.set('current_item', JSON.stringify(obj), { path: '/Customer%20App', sameSite: 'strict'});
+      Cookies.set('current_item', JSON.stringify(obj), { path: '/src/Customer%20App', sameSite: 'strict'});
     }
     else {
       var obj=Cookies.getJSON('current_order');
       obj['notes'] = specRequest;
-      Cookies.set('current_order', JSON.stringify(obj), { path: '/Customer%20App', sameSite: 'strict'});
+      Cookies.set('current_order', JSON.stringify(obj), { path: '/src/Customer%20App', sameSite: 'strict'});
     }
 }
