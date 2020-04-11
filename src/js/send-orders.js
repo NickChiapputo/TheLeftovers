@@ -23,6 +23,6 @@ function send_order(jsonOrder)
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/test?" + jsonOrder, true );
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
 	xmlHttp.send( jsonOrder );
 }

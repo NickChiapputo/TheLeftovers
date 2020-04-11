@@ -1,4 +1,5 @@
 const MongoClient = require( 'mongodb' ).MongoClient;
+const mongo = require( 'mongodb' );
 
 const http = require( 'http' );
 const url = require( 'url' );
@@ -11,7 +12,7 @@ const port = 3007;
 const server = http.createServer( ( req, res ) =>  {
 	// Display date and action for debugging
 	var date = new Date().toISOString().substr( 11, 8 );
-	console.log( " \n \n \n(" + date  + "): Rewards Accounts Query." );
+	console.log( " \n \n \n(" + date  + "): Orders Query." );
 
 
 	res.statusCode = 200;
@@ -60,11 +61,6 @@ const server = http.createServer( ( req, res ) =>  {
 	 	}
 	 	else if( path == "/orders/create" )
 	 	{
-	 		console.log( "Create orders is not implemented yet!" );
-	 		res.statusCode = 501;
-	 		res.end( JSON.stringify( { "success" : "no" } ) );
-	 		return;
-
 	 		// Stringified JSON of new account values
 	 		let body = '';
 
@@ -73,41 +69,66 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 		// Data is finished being read. edit item
 	 		req.on( 'end', () => { 
-	 			var obj = JSON.parse( body );
-
-	 			// Check if data is valid
-	 			if( obj.phone === "" || obj.phone === undefined || obj.phone.length != 10 )
-	 			{
-			 		console.log( "Phone number is invalid ('" + obj.phone + "')." );
-					var returnVal = { "success" : "no" };
-					res.statusCode = 400;
-					res.end( JSON.stringify( returnVal ) );
-					return;
-	 			}
-
-			 	// Test if name is valid
-			 	if( obj.name === "" || obj.name === undefined )
-			 	{
-			 		console.log( "Name is invalid ('" + obj.name + "')." );
-					var returnVal = { "success" : "no" };
-					res.statusCode = 400;
-					res.end( JSON.stringify( returnVal ) );
-					return;
-			 	}
-
-			 	var newAccount = { "lastMeal" : null };
-			 	newAccount[ "_id" ] = obj.phone;
-			 	newAccount[ "name" ] = obj.name;
-
-	 			createNewAccount( newAccount, collection, res );
-	 		});
+				console.log( "Received: \n" + body + "\n" ); 
+				createOrder( JSON.parse( body ), collection, res ); 
+			});
 	 	}
 	 	else if( path == "/orders/delete" )
 	 	{
-	 		console.log( "Delete orders is not implemented yet!" );
-	 		res.statusCode = 501;
-	 		res.end( JSON.stringify( { "success" : "no" } ) );
-	 	}
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. Delete item
+	 		req.on( 'end', () => { 
+				console.log( "Received: \n" + body + "\n" ); 
+				
+				var obj = JSON.parse( body );
+
+				var deleteItem = {}
+				deleteItem[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
+
+				deleteOrder( deleteItem, collection, res ); 
+			});
+		}
+		else if( path == "/orders/pay" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+			// Data is finished being read. Pay order
+			req.on( 'end', () => {
+				// Get JSON object sent from user
+				var obj = JSON.parse( body );
+
+				// Make sure all fields are not empty
+				if( 	obj[ "_id" ] === undefined || obj[ "_id" ] === "" ||
+					obj[ "method" ] === undefined || obj[ "method" ] === "" || 
+					( obj[ "method" ] !== "card" && obj[ "method" ] !== "cash" ) ||
+					obj[ "amount" ] === undefined || obj[ "amount" ] === "" ||
+					isNaN( parseFloat( obj[ "amount" ] ) ) || parseFloat( obj[ "amount" ] ) < 0 ||
+					obj[ "tip" ] === undefined || obj[ "tip" ] === "" ||
+					isNaN( parseFloat( obj[ "tip" ] ) ) || parseFloat( obj[ "tip" ] ) < 0 ||
+					obj[ "receipt" ] === undefined || obj[ "receipt" ] === "" ||
+					( obj[ "receipt" ] !== "print" && obj[ "receipt" ] !== "email" ) )
+				{
+					console.log( "Incorrect input format." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "success" : "no" } ) );
+					return;
+				}
+
+				console.log( "Data: " + body );
+				
+				payOrder( JSON.parse( body ), collection, res );
+			});
+		}
 	 	else
 	 	{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -148,7 +169,21 @@ function viewOrders( collection, res )
 
 function createOrder( order, collection, res )
 {
-	collection.insertOne( newAccount, function( err, result ) {
+	// Get subtotal from order
+	var subtotal = 0.0;
+	var items = order[ "items" ];
+	for( attr in items )
+	{
+		currItem = items[ attr ];
+		console.log( currItem + ": $" + currItem[ "price" ] );
+		subtotal += currItem[ "price" ];
+	}
+
+	order[ "subtotal" ] = subtotal;
+	order[ "tax" ] = subtotal * 0.0825;
+	order[ "total" ] = order[ "subtotal" ] + order[ "tax" ];
+
+	collection.insertOne( order, function( err, result ) {
  		if( err )
  		{
  			console.log( "Error inserting." );
@@ -167,6 +202,8 @@ function createOrder( order, collection, res )
 
 function deleteOrder( deleteItem, collection, res )
 {
+	console.log( "Attempting to delete object: " + JSON.stringify( deleteItem ) );
+
 	collection.deleteOne( deleteItem, function( err, result ) {
 		if( err )
 		{
@@ -183,3 +220,70 @@ function deleteOrder( deleteItem, collection, res )
  		res.end( JSON.stringify( result.result ) );
 	} );
 }
+
+function payOrder( input, collection, res )
+{
+	console.log( "Beginning pay for order ID " + input[ "_id" ] );
+
+	// Create item with unique _id to search for order
+	var searchItem = {}
+	searchItem[ "_id" ] = new mongo.ObjectId( input[ "_id" ] );
+
+	// Search for order with given _id value
+	collection.findOne( searchItem, function( err, result ) {
+		if( err )
+		{
+			console.log( "Could not find order." );
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "response" : "Could not find order." } ) );
+			throw err;
+		}
+
+		// Result is null if the item is not found
+		if( result === null )
+		{
+			console.log( "Did not find order." );
+			res.statusCode = 400;
+			res.end( "Did not find order." );
+			return;
+		}
+
+		// If amount to pay is less than amount owed, update tota
+		// Otherwise, clear total
+		if( input[ "amount" ] < result[ "total" ] )
+		{
+			var previousTotal = result[ "total" ];
+			result[ "total" ] -= input[ "amount" ];
+			
+			console.log( "Applied payment of $" + input[ "amount" ] + ".\n" 
+					+ "Old Total: $" + previousTotal + "\n"
+					+ "New Total: $" + result[ "total" ] );
+		}
+		else
+		{
+			var previousTotal = result[ "total" ];
+			result[ "total" ] = 0;
+
+			console.log( "Applied payment of $" + previousTotal + ".\n"
+					+ "Old Total: $" + previousTotal + "\n"
+					+ "New Total: $" + result[ "total " ] );
+		}
+
+		// Update order
+		collection.findOneAndUpdate( searchItem, { $set : result }, { returnOriginal : false, returnNewDocument : true }, function( err, result ) {
+			if( err )
+			{
+				res.statusCode = 500;
+				res.end( JSON.stringify( { "success" : "no" } ) );
+				throw err;
+			}
+
+			// Display updated order for debugging
+			console.log( "Updated order: " + JSON.stringify( result.value ) );
+
+			// Send the updated item back
+			res.end( JSON.stringify( result.value ) );
+		});
+	});
+}
+

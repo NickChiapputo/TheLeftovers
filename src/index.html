@@ -337,7 +337,155 @@
 			</div>
 		</div>
 
+		<!-- Delete and Pay Order -->
+		<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+			
+			<!-- Header delete rewards account -->
+			<div style="display: table-row; text-align: center;">
+				<!-- Header for rewards query -->
+				<div class="headerLabel" style="display: table-cell; width: 50vw;">
+					<h3>Delete Order</h3>
+				</div>
+				<div class="headerLabel" style="display: table-cell; width: 50vw;">
+					<h3>Process Payment</h3>
+				</div>
+			</div>
+
+			<!-- Control buttons and fields -->
+			<div style="display: table-row;">
+
+				<!-- Delete Order Form -->
+				<div style="display: table-cell; text-align: left;">
+					<form id="deleteOrderForm">
+						<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Order ID input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="margin-left: 4vw;">Order ID</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="order-delete-id" />
+								</div>
+							</div>
+
+							<!-- Delete button field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell;">
+									<button style="width: 25vw;" class="button" type="button" onclick="deleteOrderSubmit()">Delete Order</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<!-- Order Pay Form -->
+				<div style="display: table-cell; text-align: left;">
+					<form id="payOrderForm">
+						<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+							<!-- Order ID field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="margin-left: 4vw;">Order ID</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="order-pay-id" />
+								</div>
+							</div>
+
+							<!-- Payment Amount field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="margin-left: 4vw;">Amount</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" required min="0.01" step="0.01" name="order-pay-amount" />
+								</div>
+							</div>
+
+
+							<!-- Payment method input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="">Payment Method</div>
+								</div>
+								<div style="display: table-cell;">
+									<select name="order-pay-method">
+										<option value="card">Card</option>
+										<option value="cash">Cash</option>
+									</select>
+								</div>
+							</div>
+							
+							<!-- Receipt method input field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="">Payment Method</div>
+								</div>
+								<div style="display: table-cell;">
+									<select name="order-pay-receipt-method">
+										<option value="print">Print</option>
+										<option value="email">E-Mail</option>
+									</select>
+								</div>
+							</div>
+							
+							<!-- Tip Amount field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="margin-left: 4vw;">Tip Amount</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="number" required min="0.00" step="0.01" name="order-pay-tip-amount" />
+								</div>
+							</div>
+
+							<!-- Server feedback field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="margin-left: 4vw;">Feedback</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="order-pay-feedback" />
+								</div>
+							</div>
+
+							<!-- E-mail address field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;">
+									<div class="label" style="margin-left: 4vw;">E-mail Address</div>
+								</div>
+								<div style="display: table-cell;">
+									<input style="width: 25vw;" type="text" required name="order-pay-email-address" />
+								</div>
+							</div>
+
+							<!-- Save button field -->
+							<div style="display: table-row">
+								<div style="display: table-cell;"></div>
+								<div style="display: table-cell;">
+									<button style="width: 25vw;" class="button" type="button" onclick="payOrderSubmit()">Processment Payment</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Text areas -->
+			<div style="display: table-row;">
+				<!-- Inventory list textarea -->
+				<div style="display: table-cell; vertical-align: top;">
+					<textarea readonly id="textarea-orders-delete"></textarea>
+				</div>
+				<div style="display: table-cell;">
+					<textarea readonly id="textarea-orders-pay"></textarea>
+				</div>
+			</div>
+		</div>
+
 		<hr style="border-width: 0.5vh;">
+
 
 		<!-- REWARDS ACCOUNTS -->
 

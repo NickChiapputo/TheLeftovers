@@ -499,54 +499,52 @@ function getOrders()
 		{
 			var doc = document.getElementById( 'textarea-orders-view' );
 
-			console.log( this.responseText );
-		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			
 			var numItems = Object.keys( obj ).length;
-			// doc.innerHTML = "Number of Rewards Accounts: " + numItems + "\n";
-
-			doc.innerHTML = "";
-
+			doc.value = "Number of Orders: " + numItems + "\n\n";
+		
 			var i;
+			
 			for( i = 0; i < numItems; i++ )
+				doc.value += 	  "Order " + ( i + 1 ) + ": " + obj[ i ][ "_id" ] + "\n"
+						+ "    Subtotal: $" + obj[ i ][ "subtotal" ] + "\n"
+						+ "    Tax:      $" + obj[ i ][ "tax" ] + "\n"
+						+ "    Total:    $" + obj[ i ][ "total" ] + "\n\n";
+			doc.value += "\n";
+
+			/*for( i = 0; i < numItems; i++ )
 			{
 				var currOrder = obj[ i ];
-				if( currOrder !== undefined )
+				doc.value += "Order " + ( i + 1 ) + ":\n";
+				for( var attr in currOrder )
 				{
-					doc.innerHTML += "Order " + ( i + 1 ) + ":\n"
-					console.log( "Order " + ( i + 1 ) + ": " + JSON.stringify( currOrder ) );
-					for( var attr in currOrder )
+					if( attr === "items" )
 					{
-						if( attr === "items" )
+						doc.value += "    " + attr + ":\n"; 
+						var numItems = Object.keys( currOrder[ attr ] ).length;
+						var j;
+						for( j = 0; j < numItems; j++ )
 						{
-							doc.innerHTML += "    " + attr + ":\n"; 
-							var numItems = Object.keys( currOrder[ attr ] ).length;
-							var j;
-							for( j = 0; j < numItems; j++ )
+							doc.value += "          Item " + ( j + 1 ) + ":\n"
+							var currItem = currOrder[ attr ][ j ];
+							for( var itemAttr in currItem )
 							{
-								doc.innerHTML += "          Item " + ( j + 1 ) + ":\n"
-								var currItem = currOrder[ attr ][ j ];
-								for( var itemAttr in currItem )
-								{
-									if( itemAttr === "ingredients" )
-										doc.innerHTML += "              " + itemAttr + " (" + Object.keys( currItem[ itemAttr ] ).length + "): " + currItem[ itemAttr ] + "\n";
-									else
-										doc.innerHTML += "              " + itemAttr + ": " + currItem[ itemAttr ] + "\n";
-								}
-								doc.innerHTML += "\n";
+								if( itemAttr === "ingredients" )
+									doc.value += "              " + itemAttr + " (" + Object.keys( currItem[ itemAttr ] ).length + "): " + currItem[ itemAttr ] + "\n";
+								else
+									doc.value += "              " + itemAttr + ": " + currItem[ itemAttr ] + "\n";
 							}
-
 							doc.innerHTML += "\n";
 						}
-						else
-							doc.innerHTML += "    " + attr + ": " + currOrder[ attr ] + "\n";
-					}
-				}
-			}
 
-			console.log( this.responseText );
+						doc.value += "\n";
+					}
+					else
+						doc.value += "    " + attr + ": " + currOrder[ attr ] + "\n";
+				}
+			}*/
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -562,13 +560,141 @@ function getOrders()
 
 function createOrder()
 {
+	var order = {};
+	order[ "table" ] = document.getElementsByName( "create-order-table-number" )[ 0 ].value;
+	order[ "rewards" ] = document.getElementsByName( "create-order-account-number" )[ 0 ].value;
 
+	// Dummy data
+	order[ "status" ] = "ordered";
+	order[ "items" ] = [
+		{
+			"name" : "First Item",
+			"price" : 3.05,
+			"calories" : 1,
+			"ingredients" : [
+				{ "name" : "First Ingredient" }
+			],
+			"hasIngredient" : [ 1 ],
+			"ingredientCount" : [ 5 ],
+			"allergens" : [ "bad food" ],
+			"description" : "A sentence.",
+			"category" : "food",
+			"image" : "http://64.225.29.130/img/yd7b6zdowsr41.jpg"
+		},
+		{
+			"name" : "Second Item",
+			"price" : 1.07,
+			"calories" : 1,
+			"ingredients" : [
+				{ "name" : "First Ingredient" }
+			],
+			"hasIngredient" : [ 1 ],
+			"ingredientCount" : [ 5 ],
+			"allergens" : [ "bad food" ],
+			"description" : "A sentence.",
+			"category" : "food",
+			"image" : "http://64.225.29.130/img/yd7b6zdowsr41.jpg"
+		}
+	];
+
+	order[ "notes" ] = "A note.";
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-order-create" ).innerHTML = "Created Order:\n";
+			
+			for( var attr in obj )
+				document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-order-create" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( order ) );
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
+	xmlHttp.send( JSON.stringify( order ) );
 }
 
 function createOrderSubmit()
 {
-
+	createOrder();
+	return false;
 }
 
+function deleteOrder()
+{
+	var order = {};
+	order[ "_id" ] = document.getElementsByName( "order-delete-id" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			document.getElementById( "textarea-orders-delete" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-orders-delete" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( order ) );
+
+	// Send a POST request to 64.225.29.130/orders/delete
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/delete" );
+	xmlHttp.send( JSON.stringify( order ) );
+}
+
+function deleteOrderSubmit()
+{
+	deleteOrder();
+	return false;
+}
+
+
+function payOrder()
+{
+	var order = {};
+
+	// Get order payment data
+	order[ "_id" ] = document.getElementsByName( "order-pay-id" )[ 0 ].value;
+	order[ "amount" ] = document.getElementsByName( "order-pay-amount" )[ 0 ].value;
+	order[ "method" ] = document.getElementsByName( "order-pay-method" )[ 0 ].value;
+	order[ "receipt" ] = document.getElementsByName( "order-pay-receipt-method" )[ 0 ].value;
+	order[ "tip" ] = document.getElementsByName( "order-pay-tip-amount" )[ 0 ].value;
+	order[ "feedback" ] = document.getElementsByName( "order-pay-feedback" )[ 0 ].value;
+	order[ "email" ] = document.getElementsByName( "order-pay-email-address" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/orders/pay
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/pay" );
+	xmlHttp.send( JSON.stringify( order ) );
+}
+
+function payOrderSubmit()
+{
+	payOrder();
+	return false;
+}
 
 /*******************************************/
