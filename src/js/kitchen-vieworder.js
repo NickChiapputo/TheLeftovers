@@ -12,9 +12,9 @@ function getOrders()
 			var obj = JSON.parse( this.responseText );
             var numItems = Object.keys( obj ).length;
 
-			var name;
+			var name=[];
 			var allergens;
-			var ingredients
+			var ingredients=[];
 			var i;
 			for( i = 0; i < numItems; i++ )
 			{
@@ -32,13 +32,6 @@ function getOrders()
 				+"</div>"
 				+"</div>"
 				+"</div>";
-				currItem.items.forEach(function (b) {
-					name=b.name;
-					b.ingredients.forEach(function(c){
-						ingredients=c.name;
-					});
-
-				});
 			}
 
 			console.log( this.responseText );
