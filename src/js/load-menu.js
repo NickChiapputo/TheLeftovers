@@ -1,6 +1,7 @@
-function loadMenu(cats)
+function loadMenu()
 {
     $(document).ready(function() {
+        var cats = Cookies.get('type');
         var pageTitle = cats;
         pageTitle = pageTitle.charAt(0).toUpperCase() + pageTitle.substr(1) + 's';
         document.getElementById('category').innerText = pageTitle;
@@ -143,7 +144,7 @@ function loadOrderItems() {
             Cookies.set('current_order', {"_id":id,
             "table":table,
             "rewards":rewards,
-            "status":"ordered"}, {path: '/Customer%20App', sameSite: 'strict'});
+            "status":"ordered"}, {path: '/src/Customer%20App', sameSite: 'strict'});
             order = Cookies.getJSON('current_order');
         }
         else {
@@ -157,9 +158,9 @@ function loadOrderItems() {
             else {
                 order.items.push(newItem);
             }
-            Cookies.set('new_item', 0, {path: '/Customer%20App', sameSite: 'strict'});
+            Cookies.set('new_item', 0, {path: '/src/Customer%20App', sameSite: 'strict'});
         }
-        Cookies.set('current_order', order, {path: '/Customer%20App', sameSite: 'strict'});
+        Cookies.set('current_order', order, {path: '/src/Customer%20App', sameSite: 'strict'});
 
         var output = "";
         var total = 0;
@@ -196,8 +197,8 @@ function loadOrderItems() {
 }
 
 function addToOrder(obj) {
-    Cookies.set("current_item", JSON.stringify(obj), { path: '/Customer%20App', sameSite: 'strict' });
-    Cookies.set("new_item", '1', {path: '/Customer%20App', sameSite: 'strict'});
+    Cookies.set("current_item", JSON.stringify(obj), { path: '/src/Customer%20App', sameSite: 'strict' });
+    Cookies.set("new_item", '1', {path: '/src/Customer%20App', sameSite: 'strict'});
     window.location.href='View-Order.html';
 }
 
@@ -206,11 +207,11 @@ function saveChoice(num) {
     var str = "current_item="
     str = str.concat(obj.name);
     //document.cookie = str.concat(";");
-    Cookies.set("current_item", obj.name, {path: '/Customer%20App', sameSite: 'strict'});
+    Cookies.set("current_item", obj.name, {path: '/src/Customer%20App', sameSite: 'strict'});
 }
 
 function setType(type) {
-    Cookies.set("type", type, {path: '/Customer%20App', sameSite: 'strict'});
+    Cookies.set('type', type, {path: '/src/Customer%20App', sameSite: 'strict'});
     //document.cookie = "type=".concat(type,";path=/Customer%20App/menu;");
 }
 
@@ -223,10 +224,10 @@ function editRemoveItem(edRom) {
     }
     var selection = item.value - 1;
     if (selection >= 0 && selection < (Cookies.getJSON('current_order')).items.length) {
-        Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/Customer%20App', sameSite: 'strict'});
+        Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/src/Customer%20App', sameSite: 'strict'});
         var temp = Cookies.getJSON('current_order');
         temp.items.splice(selection, 1);
-        Cookies.set('current_order', temp, {path: '/Customer%20App', sameSite: 'strict'});
+        Cookies.set('current_order', temp, {path: '/src/Customer%20App', sameSite: 'strict'});
         if (edRom == 1) {
             window.location.href='Menu-Item.html';
         }
