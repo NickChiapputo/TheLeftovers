@@ -1,5 +1,12 @@
 function send_order(jsonOrder)
 {
+	// deleting unimportant variables
+	for (ord in jsonOrder) {
+		if (ord.happy_hour != undefined) {
+			delete ord.happy_hour;
+		}
+	}
+
 	var xmlHttp = new XMLHttpRequest();
 
 	xmlHttp.onreadystatechange = function() {
@@ -23,6 +30,6 @@ function send_order(jsonOrder)
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/test?" + jsonOrder, true );
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
 	xmlHttp.send( jsonOrder );
 }
