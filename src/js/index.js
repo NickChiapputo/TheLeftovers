@@ -9,7 +9,7 @@ function collapse( buttonID, elementID )
 	var el = document.getElementById( elementID );
 
 
-/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
+	/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
 	// Toggle between open ("block") and closed ("none")
 	// if( el.style.display === "block" )
 	// {
@@ -21,7 +21,7 @@ function collapse( buttonID, elementID )
 	// }
 
 
-/********* USE THIS FOR ANIMATED COLLAPSING *****/
+	/********* USE THIS FOR ANIMATED COLLAPSING *****/
 	// Animate sliding
 	if( el.style.maxHeight )
 	{
@@ -33,6 +33,7 @@ function collapse( buttonID, elementID )
 	}
 }
 /*******************************************/
+
 /*******************************************/
 /*           Inventory Functions           */
 function getInventoryList() {
@@ -842,6 +843,134 @@ function updateTableStatus()
 function updateTableStatusSubmit()
 {
 	updateTableStatus();
+
+	return false;
+}
+/*******************************************/
+
+/*******************************************/
+/*            Employee Functions           */
+function getEmployees()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-employees-view' );
+
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.value = "Number of Employees: " + numItems + "\n\n";
+		
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var employee = obj[ i ];
+				
+				doc.value += "Empoyee " + ( i + 1 ) + ":\n";
+
+				for( var attr in employee )
+					doc.value += "    " + attr + " - " + employee[ attr ] + "\n";
+				doc.value += "\n";
+
+				// var fullName = employee[ "first" ] + " " + employee[ "middle" ] + employee[ "last" ];
+				// doc.value += "Employee " + ( i + 1 ) + ": " + fullName + "\n";
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-employees-view' ).innerHTML = "Employees status response: " + this.status;
+			console.log( "Employees status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/employees/view
+	xmlHttp.open( "GET", "http://64.225.29.130/employees/view", true );
+	xmlHttp.send();
+}
+
+function createEmployee()
+{
+	var employee = {};
+
+	// Get employee full name
+	employee[ "first" ] = document.getElementsByName( "create-employee-first-name" )[ 0 ].value;
+	employee[ "middle" ] = document.getElementsByName( "create-employee-middle-name" )[ 0 ].value;
+	employee[ "last" ] = document.getElementsByName( "create-employee-last-name" )[ 0 ].value;
+
+	// Get employee type
+	employee[ "type" ] = document.getElementsByName( "create-employee-type" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-employees-create" ).innerHTML = "New Employee: " + this.responseText;
+			
+			// for( var attr in obj )
+			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-employees-create" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( employee ) );
+
+	// Send a POST request to 64.225.29.130/employees/create
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/create", true );
+	xmlHttp.send( JSON.stringify( employee ) );
+}
+
+function createEmployeeSubmit()
+{
+	createEmployee();
+
+	return false;
+}
+
+function employeeLogin()
+{
+	var employee = {};
+
+	// Get employee full name
+	employee[ "_id" ] = document.getElementsByName( "employee-login-id" )[ 0 ].value;
+	employee[ "pin" ] = document.getElementsByName( "employee-login-pin" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-employees-login" ).innerHTML = "Login result: " + this.responseText;
+			
+			// for( var attr in obj )
+			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-employees-login" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( employee ) );
+
+	// Send a POST request to 64.225.29.130/employees/login
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/login", true );
+	xmlHttp.send( JSON.stringify( employee ) );
+}
+
+function employeeLoginSubmit()
+{
+	employeeLogin();
 
 	return false;
 }
