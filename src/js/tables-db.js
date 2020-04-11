@@ -155,7 +155,7 @@ const server = http.createServer( ( req, res ) =>  {
 	 			tableNum[ "table" ] = obj[ "table" ];
 
 	 			// Update status
-	 			updateTableStatus( table, collection, res );
+	 			updateTableStatus( tableNum, table, collection, res );
 	 		});
 		}
 	 	else
@@ -220,6 +220,8 @@ function createTable( table, collection, res )
 
 function updateTableStatus( table, updatedQuery, collection, res )
 {
+	console.log( "Table: " + JSON.stringify( table ) );
+	console.log( "Updated Query: " + JSON.stringify( updatedQuery ) );
 	// Find and update the item
 	collection.findOneAndUpdate( table, { $set : updatedQuery }, { returnOriginal : false, returnNewDocument : true }, function( err, result ) {
 		if( err )
@@ -227,7 +229,8 @@ function updateTableStatus( table, updatedQuery, collection, res )
 			console.log( "Unable to find and update table status." );
 	 		res.statusCode = 500;																		// Internal Server Error
 	 		res.end( JSON.stringify( { "response" : "Unable to find and update table status." } ) );	// Give error response to client
-	 		return;
+	 		throw err;
+			return;
 		}
 		
 		// Display updated table for debugging
