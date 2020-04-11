@@ -120,12 +120,20 @@
 				color: #fff;
 			}*/
 
+			/* Disable focus boxes in all elements in all browsers (kind of) */
 			*:focus {
 				outline: none;
 			}
 
+			/* Disabled inner focus box in buttons in Firefox */
 			*::-moz-focus-inner {
 				border: 0;
+			}
+
+			/* Disable focus ring on select boxes in Firefox */
+			select:-moz-focusring{
+				color: transparent;
+				text-shadow: 0 0 0 #fff;
 			}
 
 			.headerLabel {
@@ -285,6 +293,146 @@
 			<li class="websiteNavigation"><a href="Customer App/index.html">Customer</a></li>
 			<li class="websiteNavigation"><a href="index.html">Kitchen</a></li>
 		</ul> -->
+
+		<hr style="border-width: 0.5vh;" id="tables">
+
+		<!-- TABLE -->
+		<button type="button" id="tables-collapsible-btn" onclick="collapse( 'tables-collapsible-btn', 'tables-collapsible' )" class="collapsible">Tables</button>
+		<div class="content" id="tables-collapsible">
+
+			<!-- Show list of tables and create new tables -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers tables query and create tables -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for tables query -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Get Tables</h3>
+					</div>
+
+					<!-- Header for create table -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Create Table</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Request Tables Button -->
+					<div style="display: table-cell; text-align: center;">
+						<button style="" class="button" type="button" onclick="getTables();">Retrieve Table List</button>
+					</div>
+
+					<!-- Create Table Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="createTableForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Table Number</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="number" required min="1" max="20" step="1" name="create-table-number" />
+									</div>
+								</div>
+
+								<!-- Create table button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="createTableSubmit()">Create Table</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Inventory list textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-tables-view"></textarea>
+					</div>
+
+					<!-- Edit item textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-tables-create"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Update Table Status -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Header update table status -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for updating table status -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Update Table Status</h3>
+					</div>
+					<div class="headerLabel" style="display: table-cell; width: 50vw;"></div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Update Table Status Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="updateTableStatusForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Table number input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="margin-left: 4vw;">Table Number</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="table-status-number" />
+									</div>
+								</div>
+
+								<!-- Table status input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Table Status</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="table-status-value">
+											<option value="sitting">Sitting</option>
+											<option value="ordered">Ordered</option>
+											<option value="eating">Eating</option>
+											<option value="paid">Paid</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Update status button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="updateTableStatusSubmit()">Update Table Status</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Order Pay Form -->
+					<div style="display: table-cell; text-align: left;"></div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Update table status textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-table-status"></textarea>
+					</div>
+					<div style="display: table-cell;"></div>
+				</div>
+			</div>
+		</div>
 
 		<hr style="border-width: 0.5vh;" id="orders">
 

@@ -543,7 +543,7 @@ function getOrders()
 			var i;
 			
 			for( i = 0; i < numItems; i++ )
-				doc.value += 	  "Order " + ( i + 1 ) + ": " + obj[ i ][ "_id" ] + "\n"
+				doc.value += 	  "Order " + ( i + 1 ) + " (" + obj[ i ][ "status" ] + "): " + obj[ i ][ "_id" ] + "\n"
 						+ "    Subtotal: $" + obj[ i ][ "subtotal" ] + "\n"
 						+ "    Tax:      $" + obj[ i ][ "tax" ] + "\n"
 						+ "    Total:    $" + obj[ i ][ "total" ] + "\n\n";
@@ -732,4 +732,117 @@ function payOrderSubmit()
 	return false;
 }
 
+/*******************************************/
+/*             Table Functions             */
+function getTables()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-tables-view' );
+
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.value = "Number of Tables: " + numItems + "\n\n";
+		
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var table = obj[ i ];
+				doc.value += "Table " + table[ "table" ] + ": " + table[ "status" ] + "\n";
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-tables-view' ).innerHTML = "Tables status response: " + this.status;
+			console.log( "Tables status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/tables/view
+	xmlHttp.open( "GET", "http://64.225.29.130/tables/view", true );
+	xmlHttp.send();
+}
+
+function createTable()
+{
+	var table = {};
+
+	// Get table number
+	table[ "table" ] = document.getElementsByName( "create-table-number" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-tables-create" ).innerHTML = "New Table: " + this.responseText;
+			
+			// for( var attr in obj )
+			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-tables-create" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( table ) );
+
+	// Send a POST request to 64.225.29.130/tables/create
+	xmlHttp.open( "POST", "http://64.225.29.130/tables/create", true );
+	xmlHttp.send( JSON.stringify( table ) );
+}
+
+function createTableSubmit()
+{
+	createTable();
+
+	return false;
+}
+
+function updateTableStatus()
+{
+	var table = {};
+
+	// Get table number
+	table[ "table" ] = document.getElementsByName( "table-status-number" )[ 0 ].value;
+	table[ "status" ] = document.getElementsByName( "table-status-value" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-table-status" ).innerHTML = "Test response: " + this.responseText;
+			
+			// for( var attr in obj )
+			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-table-status" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( table ) );
+
+	// Send a POST request to 64.225.29.130/tables/update
+	xmlHttp.open( "POST", "http://64.225.29.130/tables/update", true );
+	xmlHttp.send( JSON.stringify( table ) );
+}
+
+function updateTableStatusSubmit()
+{
+	updateTableStatus();
+
+	return false;
+}
 /*******************************************/
