@@ -79,8 +79,8 @@ const server = http.createServer( ( req, res ) =>  {
 
 				// Make sure all fields are present and valid
 				if( 	fields[ "menu-item-create-name" ]  === undefined || fields[ "menu-item-create-name" ]  === "" ||
-					fields[ "menu-item-create-price" ] === undefined || isNaN( parseFloat( fields[ "menu-item-create-price" ] ) ) || parseFloat( fields[ "menu-item-create-price" ] ) <= 0 ||
-					fields[ "menu-item-create-calories" ] === undefined || isNaN( parseInt( fields[ "menu-item-create-calories" ] ) ) || parseInt( fields[ "menu-item-create-calories" ] ) <= 0 ||
+					fields[ "menu-item-create-price" ] === undefined || isNaN( parseFloat( fields[ "menu-item-create-price" ] ) ) || parseFloat( fields[ "menu-item-create-price" ] ) < 0 ||
+					fields[ "menu-item-create-calories" ] === undefined || isNaN( parseInt( fields[ "menu-item-create-calories" ] ) ) || parseInt( fields[ "menu-item-create-calories" ] ) < 0 ||
 					fields[ "menu-item-create-description" ] === undefined || fields[ "menu-item-create-description" ] === "" ||
 					fields[ "menu-item-create-category" ] === undefined || fields[ "menu-item-create-category" ] === "" )
 				{

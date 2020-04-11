@@ -67,7 +67,7 @@
 				-webkit-appearance: none;
 			}
 
-			input[ type="number" ] {
+			input[ type="number" ], input[ type="password" ] {
 				-moz-appearance: textfield;
 				margin-bottom: 10px;
 				height: 20px;
@@ -294,6 +294,175 @@
 			<li class="websiteNavigation"><a href="index.html">Kitchen</a></li>
 		</ul> -->
 
+		<hr style="border-width: 0.5vh;" id="employees">
+
+		<!-- EMPLOYEES -->
+		<button type="button" id="employees-collapsible-btn" onclick="collapse( 'employees-collapsible-btn', 'employees-collapsible' )" class="collapsible">Employees</button>
+		<div class="content" id="employees-collapsible">
+
+			<!-- Show list of employees and create new employees -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers employees query and create employees -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for employees query -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Get Employees</h3>
+					</div>
+
+					<!-- Header for create employee -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Create Employee</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Request Employees Button -->
+					<div style="display: table-cell; text-align: center;">
+						<button style="" class="button" type="button" onclick="getEmployees();">Retrieve Employee List</button>
+					</div>
+
+					<!-- Create Employee Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="createEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">First Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="create-employee-first-name" />
+									</div>
+								</div>
+
+								<!-- Middle Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Middle Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="create-employee-middle-name" />
+									</div>
+								</div>
+
+								<!-- Last Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Last Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="create-employee-last-name" />
+									</div>
+								</div>
+
+								<!-- Employee type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee Type</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="create-employee-type">
+											<option value="server">Server</option>
+											<option value="manager">Manager</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Create employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="createEmployeeSubmit()">Create Employee</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Query textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-view"></textarea>
+					</div>
+
+					<!-- Create employee textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-create"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Employee Login -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers employee login -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for employees query -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Employee Login</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;"></div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Employee Login Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="employeeLoginForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-login-id" />
+									</div>
+								</div>
+
+								<!-- PIN input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">PIN</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="employee-login-pin" />
+									</div>
+								</div>
+
+								<!-- Create employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeLoginSubmit()">Login</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div style="display: table-cell; text-align: center;"></div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Login textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-login"></textarea>
+					</div>
+
+					<div style="display: table-cell;"></div>
+				</div>
+			</div>
+		</div>
+
 		<hr style="border-width: 0.5vh;" id="tables">
 
 		<!-- TABLE -->
@@ -352,12 +521,12 @@
 
 				<!-- Text areas -->
 				<div style="display: table-row;">
-					<!-- Inventory list textarea -->
+					<!-- Tables list textarea -->
 					<div style="display: table-cell; vertical-align: top;">
 						<textarea readonly id="textarea-tables-view"></textarea>
 					</div>
 
-					<!-- Edit item textarea -->
+					<!-- Create table textarea -->
 					<div style="display: table-cell;">
 						<textarea readonly id="textarea-tables-create"></textarea>
 					</div>
