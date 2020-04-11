@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Staff</title>
+	<style>
+		table, th, td {
+		  border: 1px solid black;
+		}
+		table#t01 tr {
+			background-color: white;
+		}
+		table#t01 th {
+			background-color: black;
+			color: white;
+		}
+
+	</style>
+
+  </head>
+
+  <body class="page" onload="clock();getInventoryList()">
+    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Header bar -->
+    <div id="header" class="container-fluid">
+      <div class="row h-100" style="padding: 1vw;">
+        <div class="col-1" style="margin:auto;">
+          <a href="server_options.html">
+            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
+          </a>
+        </div>
+    <div class="col-2" style="margin: center-div;margin-top: 3vh;">
+		  <p class="schedule-text" >Options</p>
+		</div>
+        <div class="col-9" style="margin: auto;">
+          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/inventory.js"></script>
+          <script src="../js/server_js/test.js"></script>
+        </div>
+      </div>
+    </div>
+
+  <!-- Page contents-->
+
+  <!--Item Table -->
+  <table id="item-table" style='width:100%; border: 1px solid black;'><tr>
+    <th style=' background-color: black; color: white;'>Count</th>
+    <th style=' background-color: black; color: white;'>Item</th>
+    <th style=' background-color: black; color: white;'>Price</th>
+  </tr>
+  <tr style=' background-color: white; color: black;'>
+    <td style='width:10%;'>1</td>
+    <td style='width:65%;'>BBQ Burger</td>
+    <td style='width:25%;'>8.50</td>
+  </tr>
+  <tr style=' background-color: white; color: black;'>
+    <td>1</td>
+    <td>Soda</td>
+    <td>2.00</td>
+  </tr></table>
+  <script>addDollarSigns();</script>
+
+
+  <!--Total Price Table -->
+  <table id="total-price-table" style='width:100%; border: 1px solid black;'><tr>
+    <th style='width:75%; background-color: black; color: white;'>Total:</th>
+    <th style='width:25%; background-color: white; color: black;'>p</th>
+  </tr></table>
+  <script>calculateTotalPrice();</script>
+
+  <!-- Buttons -->
+  <ul class="col nav nav-pills">
+    <li class="col active menu-box"><a data-toggle="pill" href="#add">Add Item</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#edit">Edit Item</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#remove">Remove Item</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#place">Place Order</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="place" class="tab-pane fade in active">
+      <p id="invtxt"></p>
+    </div>
+    <form id="add" class="tab-pane fade">
+      <label for="item">Item Name:</label>
+      <input type="text" name="item-add"/><br><br>
+      <label for="price">Price:</label>
+      <input type="number" name="price-add"/><br><br>
+      <label for="count">Count:</label>
+      <input type="number" name="count-to-add"/><br><br>
+      <button style="width: 12.5vw;" type="reset" onclick="addToOrder()">Add</button>
+    </form>
+    <form id="edit" class="tab-pane fade">
+      <label for="ingredient">Ingredient:</label>
+      <input type="text" name="name-delete"/><br><br>
+      <button style="width: 12.5vw;" type="reset" onclick="">Edit</button>
+      <br>
+      <p id='textarea-delete'></p>
+    </form>
+      <form id="remove" class="tab-pane fade">
+      <label for="item">Item:</label>
+      <input type="text" name="item-remove"/><br><br>
+      <label for="count">Count:</label>
+      <input type="number" name="count-remove"/><br><br>
+    <button style="width: 12.5vw;" type="reset" onclick="addXs()">Remove</button>
+    <p id='textarea-edit'></p>
+      </form>
+    </div>
+</body>
+</html>

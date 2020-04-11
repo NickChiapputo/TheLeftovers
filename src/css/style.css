@@ -40,6 +40,35 @@
     text-align: center;
 }
 
+.rewardstext-box {
+    background-color: white;
+    color: black;
+    margin: auto;
+    border: gray;
+    border-width: 0.3vw;
+    border-style: solid;
+    font-size: 3vw;
+    text-align: left;
+    display: flex;
+    align-self: flex-end;
+}
+
+input::-webkit-input-placeholder {
+    color: black;
+  }
+
+input:-moz-placeholder {
+    color: black;
+  }
+
+input::-moz-placeholder {
+    color: black;
+  }
+
+input:-ms-input-placeholder {
+    color: black;
+  }
+
 .tab-box{
     background-color: mediumslateblue;
     color: black;
@@ -134,14 +163,14 @@ a:hover, a:active {
     background-color: white;
     color: black;
     margin: 1vw 1vw;
-    padding: 1vw 1vw;
+    padding: 1vh 1vw;
     border: black;
     border-width: 0.5vw;
     border-style: solid;
     border-radius: 1rem;
-    font-size: 2vw;
+    font-size: 3vh;
     text-align: left;
-    overflow: scroll;
+    overflow-y: hidden;
     width: 100%;
 }
 

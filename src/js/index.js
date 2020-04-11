@@ -1,3 +1,40 @@
+/*******************************************/
+/*       Collapsible Area Functions        */
+function collapse( buttonID, elementID )
+{
+	// Change button to active class
+	document.getElementById( buttonID ).classList.toggle( "active" );
+
+	// Get div document
+	var el = document.getElementById( elementID );
+
+
+/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
+	// Toggle between open ("block") and closed ("none")
+	// if( el.style.display === "block" )
+	// {
+	// 	el.style.display = "none";
+	// }
+	// else
+	// {
+	// 	el.style.display = "block";
+	// }
+
+
+/********* USE THIS FOR ANIMATED COLLAPSING *****/
+	// Animate sliding
+	if( el.style.maxHeight )
+	{
+		el.style.maxHeight = null;
+	}
+	else
+	{
+		el.style.maxHeight = el.scrollHeight + "px";
+	}
+}
+/*******************************************/
+/*******************************************/
+/*           Inventory Functions           */
 function getInventoryList() {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -24,6 +61,7 @@ function getInventoryList() {
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
+			document.getElementById( 'textarea-view' ).innerHTML = "Request inventory status response: " + this.status;
 			console.log( "Request inventory status response: " + this.status );
 		}
 	};
@@ -57,7 +95,8 @@ function editInventoryItem()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Edit inventory status response: " + this.status );
+			document.getElementById( 'textarea-edit' ).innerHTML = "Edit inventory item status response: " + this.status;
+			console.log( "Edit inventory item status response: " + this.status );
 		}
 	};
 
@@ -98,6 +137,7 @@ function createInventoryItem()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
+			document.getElementById( 'textarea-create' ).innerHTML = "Create inventory item status response: " + this.status;
 			console.log( "Create inventory item status response: " + this.status );
 		}
 	};
@@ -136,7 +176,8 @@ function deleteInventoryItem()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Create inventory item status response: " + this.status );
+			document.getElementById( 'textarea-delete' ).innerHTML = "Delete inventory item status response: " + this.status;
+			console.log( "Delete inventory item status response: " + this.status );
 		}
 	};
 
@@ -151,8 +192,10 @@ function deleteFormSubmit()
 	// Function must return false to prevent reloading of page
 	return false;
 }
+/*******************************************/
 
-
+/*******************************************/
+/*             Menu Functions              */
 function getMenu()
 {
 	var xmlHttp = new XMLHttpRequest();
@@ -203,7 +246,8 @@ function getMenu()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Request inventory status response: " + this.status );
+			document.getElementById( 'textarea-menu-view' ).innerHTML = "Request menu status response: " + this.status;
+			console.log( "Request menu status response: " + this.status );
 		}
 	};
 
@@ -211,7 +255,6 @@ function getMenu()
 	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
 	xmlHttp.send();
 }
-
 
 function createMenuItem()
 {
@@ -232,6 +275,7 @@ function createMenuItem()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
+			document.getElementById( 'textarea-menu-create' ).innerHTML = "Create menu item status response: " + this.status;
 			console.log( "Create menu item status response: " + this.status );
 		}
 	};
@@ -250,7 +294,8 @@ function createMenuItemSubmit()
 
 function deleteMenuItem()
 {
-	var params = "name=" + document.getElementsByName( "name-menu-delete" )[ 0 ].value;
+	var params = {};
+	params[ "name" ] =  document.getElementsByName( "name-menu-delete" )[ 0 ].value;
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -269,13 +314,15 @@ function deleteMenuItem()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Create inventory item status response: " + this.status );
+			document.getElementById( 'textarea-menu-delete' ).innerHTML = "Delete menu item status response: " + this.status;
+			console.log( "Delete menu item status response: " + this.status );
 		}
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete?" + params, true );
-	xmlHttp.send( params );
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete", true );
+	console.log( "Sending: " + JSON.stringify( params ) );
+	xmlHttp.send( JSON.stringify( params ) ); 
 }
 
 function deleteMenuItemFormSubmit()
@@ -306,21 +353,40 @@ function loadIngredients()
 				var currItem = obj[ i ];
 
 				var ingredientSrc = 
-					'<div style="display: table-row;"><div style="display: table-cell;"><div style="margin-left: 5vw;">' + 
-					currItem.name + 
-					'</div></div><div style="display: table-cell;"><div style="display: table; table-layout: fixed; width: 25vw; text-align: center;"><div style="display: table-row;"><div style="display: table-cell;"><input style="" type="checkbox" name="menu-item-create-ingredient-' + 
-					( i + 1 ) + 
-					'" value="' + 
-					currItem.name + 
-					'" /></div><div style="display: table-cell;"><input style="" type="checkbox" name="menu-item-create-has-ingredient-' + 
-					( i + 1 ) + 
-					'" value="' + 
-					'1' + 
-					'" /></div><div style="display: table-cell;"><input style="" type="number" name="menu-item-create-ingredient-count-' + 
-					( i + 1 ) + 
-					'" value="' + 
-					currItem.name + 
-					'" /></div></div></div></div></div>';
+					'<div class="ingredientArea" style="display: table-row;">' + 
+						'<div style="display: table-cell;">' + 
+							'<div class="labelIngredient" style="">' + 
+								currItem.name + 
+							'</div>' + 
+						'</div>' + 
+						'<div style="display: table-cell;">' + 
+							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
+								'<div style="display: table-row;">' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-create-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-create-has-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											'1' + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="number" size="5" maxlength="3" name="menu-item-create-ingredient-count-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>';
 
 				el.insertAdjacentHTML( 'afterend', ingredientSrc );
 
@@ -337,3 +403,333 @@ function loadIngredients()
 	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
 }
+/*******************************************/
+
+/*******************************************/
+/*        Rewards Account Functions        */
+function getRewardsAccounts()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-rewards-accounts-view' );
+
+			console.log( this.responseText );
+		
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.innerHTML = "Number of Rewards Accounts: " + numItems + "\n";
+
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var currItem = obj[ i ];
+				doc.innerHTML += "Item " + ( i + 1 ) + "\n" + 
+						"    Name:  " + currItem.name + "\n" + 
+						"    Phone Number: " + currItem[ "_id" ] + "\n" + 
+						"    Last Order: " + currItem[ "lastMeal" ] + "\n\n";
+			}
+
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-rewards-accounts-view' ).innerHTML = "Rewards accounts status response: " + this.status;
+			console.log( "Rewards accounts status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/rewards/view", true );
+	xmlHttp.send();
+}
+
+function createRewardsAccount()
+{
+	var params = {};
+	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
+	params[ "name" ] = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			var obj = JSON.parse( this.responseText );
+			document.getElementById( 'textarea-rewards-accounts-create' ).innerHTML = "New Account: \n" + 
+				"    Name" + obj[ "name" ] + "\n" + 
+				"    Phone Number: " + obj[ "_id" ] + "\n" + 
+				"    Last Meal: " + obj[ "lastMeal" ] + "\n";
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-rewards-accounts-create' ).innerHTML = "Create rewards account status response: " + this.status;
+			console.log( "Create rewards account status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/rewards/create with selected parameters
+	xmlHttp.open( "POST", "http://64.225.29.130/rewards/create", true );
+	xmlHttp.send( JSON.stringify( params ) );
+}
+
+function createRewardsAccountSubmit()
+{
+	createRewardsAccount();
+	// Function must return false to prevent reloading of page
+	return false;
+}
+
+function deleteRewardsAccount()
+{
+	var params = {};
+	params[ "phone" ] = document.getElementsByName( "rewards-account-delete-phone" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			if( obj == null || obj.ok != 1 || obj.n != 1 )
+				document.getElementById( 'textarea-rewards-accounts-delete' ).innerHTML = "Unable to delete rewards account.\n";
+			else
+				document.getElementById( 'textarea-rewards-accounts-delete' ).innerHTML = "Deleted rewards account\n";
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-rewards-accounts-delete' ).innerHTML = "Delete rewards account status response: " + this.status;
+			console.log( "Delete rewards account status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/rewards/delete with selected parameters
+	xmlHttp.open( "POST", "http://64.225.29.130/rewards/delete", true );
+	xmlHttp.send( JSON.stringify( params ) );
+}
+
+function deleteRewardsAccountSubmit()
+{
+	deleteRewardsAccount();
+	// Function must return false to prevent reloading of page
+	return false;
+}
+/*******************************************/
+
+/*******************************************/
+/*             Order Functions             */
+function getOrders()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-orders-view' );
+
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.value = "Number of Orders: " + numItems + "\n\n";
+		
+			var i;
+			
+			for( i = 0; i < numItems; i++ )
+				doc.value += 	  "Order " + ( i + 1 ) + ": " + obj[ i ][ "_id" ] + "\n"
+						+ "    Subtotal: $" + obj[ i ][ "subtotal" ] + "\n"
+						+ "    Tax:      $" + obj[ i ][ "tax" ] + "\n"
+						+ "    Total:    $" + obj[ i ][ "total" ] + "\n\n";
+			doc.value += "\n";
+
+			/*for( i = 0; i < numItems; i++ )
+			{
+				var currOrder = obj[ i ];
+				doc.value += "Order " + ( i + 1 ) + ":\n";
+				for( var attr in currOrder )
+				{
+					if( attr === "items" )
+					{
+						doc.value += "    " + attr + ":\n"; 
+						var numItems = Object.keys( currOrder[ attr ] ).length;
+						var j;
+						for( j = 0; j < numItems; j++ )
+						{
+							doc.value += "          Item " + ( j + 1 ) + ":\n"
+							var currItem = currOrder[ attr ][ j ];
+							for( var itemAttr in currItem )
+							{
+								if( itemAttr === "ingredients" )
+									doc.value += "              " + itemAttr + " (" + Object.keys( currItem[ itemAttr ] ).length + "): " + currItem[ itemAttr ] + "\n";
+								else
+									doc.value += "              " + itemAttr + ": " + currItem[ itemAttr ] + "\n";
+							}
+							doc.innerHTML += "\n";
+						}
+
+						doc.value += "\n";
+					}
+					else
+						doc.value += "    " + attr + ": " + currOrder[ attr ] + "\n";
+				}
+			}*/
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-orders-view' ).innerHTML = "Orders status response: " + this.status;
+			console.log( "Orders status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
+	xmlHttp.send();
+}
+
+function createOrder()
+{
+	var order = {};
+	order[ "table" ] = document.getElementsByName( "create-order-table-number" )[ 0 ].value;
+	order[ "rewards" ] = document.getElementsByName( "create-order-account-number" )[ 0 ].value;
+
+	// Dummy data
+	order[ "status" ] = "ordered";
+	order[ "items" ] = [
+		{
+			"name" : "First Item",
+			"price" : 3.05,
+			"calories" : 1,
+			"ingredients" : [
+				{ "name" : "First Ingredient" }
+			],
+			"hasIngredient" : [ 1 ],
+			"ingredientCount" : [ 5 ],
+			"allergens" : [ "bad food" ],
+			"description" : "A sentence.",
+			"category" : "food",
+			"image" : "http://64.225.29.130/img/yd7b6zdowsr41.jpg"
+		},
+		{
+			"name" : "Second Item",
+			"price" : 1.07,
+			"calories" : 1,
+			"ingredients" : [
+				{ "name" : "First Ingredient" }
+			],
+			"hasIngredient" : [ 1 ],
+			"ingredientCount" : [ 5 ],
+			"allergens" : [ "bad food" ],
+			"description" : "A sentence.",
+			"category" : "food",
+			"image" : "http://64.225.29.130/img/yd7b6zdowsr41.jpg"
+		}
+	];
+
+	order[ "notes" ] = "A note.";
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-order-create" ).innerHTML = "Created Order:\n";
+			
+			for( var attr in obj )
+				document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-order-create" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( order ) );
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
+	xmlHttp.send( JSON.stringify( order ) );
+}
+
+function createOrderSubmit()
+{
+	createOrder();
+	return false;
+}
+
+function deleteOrder()
+{
+	var order = {};
+	order[ "_id" ] = document.getElementsByName( "order-delete-id" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			document.getElementById( "textarea-orders-delete" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-orders-delete" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( order ) );
+
+	// Send a POST request to 64.225.29.130/orders/delete
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/delete" );
+	xmlHttp.send( JSON.stringify( order ) );
+}
+
+function deleteOrderSubmit()
+{
+	deleteOrder();
+	return false;
+}
+
+
+function payOrder()
+{
+	var order = {};
+
+	// Get order payment data
+	order[ "_id" ] = document.getElementsByName( "order-pay-id" )[ 0 ].value;
+	order[ "amount" ] = document.getElementsByName( "order-pay-amount" )[ 0 ].value;
+	order[ "method" ] = document.getElementsByName( "order-pay-method" )[ 0 ].value;
+	order[ "receipt" ] = document.getElementsByName( "order-pay-receipt-method" )[ 0 ].value;
+	order[ "tip" ] = document.getElementsByName( "order-pay-tip-amount" )[ 0 ].value;
+	order[ "feedback" ] = document.getElementsByName( "order-pay-feedback" )[ 0 ].value;
+	order[ "email" ] = document.getElementsByName( "order-pay-email-address" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/orders/pay
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/pay" );
+	xmlHttp.send( JSON.stringify( order ) );
+}
+
+function payOrderSubmit()
+{
+	payOrder();
+	return false;
+}
+
+/*******************************************/
