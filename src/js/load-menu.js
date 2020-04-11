@@ -3,7 +3,7 @@ function loadMenu()
     $(document).ready(function() {
         var cats = Cookies.get('type');
         var pageTitle = cats;
-        pageTitle = pageTitle.charAt(0).toUpperCase() + pageTitle.substr(1) + 's';
+        pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
         document.getElementById('category').innerText = pageTitle;
 
         var xmlHttp = new XMLHttpRequest();
