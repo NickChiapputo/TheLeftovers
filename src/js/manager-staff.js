@@ -33,7 +33,7 @@ function createEmployee()
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/employees/create" + true );
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/create" );
 	xmlHttp.send( JSON.stringify(params) );
 }
 

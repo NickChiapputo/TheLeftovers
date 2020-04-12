@@ -23,7 +23,7 @@
     <div id="header" class="container-fluid"> 
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
-          <a href="manager1.html">
+          <a href="">
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
@@ -36,6 +36,7 @@
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script> 
+          <script src="../js/login.js"> </script> 
         </div>
       </div>
     </div>
@@ -43,7 +44,7 @@
     <div class="container-fluid center-div">
       <div class="row menu-row">
           <div class="col menu-box">
-            <a href="server_options.html">
+            <a onclick="login()">
               <h1 class="menu-text" >Clock In</h1>
             </a>
           </div>
@@ -51,12 +52,12 @@
 	</div>
     <div class="container center">
     <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+    <input type="text" placeholder="Enter Username" name="uname" required><br>
 
     <label for="psw"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="psw" required>
      </div>
-    
+    <p id="textarea-login"></p>
     
     
 	</body> 
