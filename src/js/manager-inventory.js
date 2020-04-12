@@ -7,7 +7,7 @@ function getInventoryList() {
 			//var doc = document.getElementById( 'textarea-view' );
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
-			
+			var txt="";
 			var numItems = Object.keys( obj ).length;
 //			<!--doc.innerHTML = "<p>Number of Inventory Items: " + numItems + "</p>";-->
 
