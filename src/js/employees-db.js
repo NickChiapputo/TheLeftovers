@@ -144,18 +144,19 @@ const server = http.createServer( ( req, res ) =>  {
 				console.log( "Received: \n" + body + "\n" ); 
 
 				var obj = JSON.parse( body );
-				var table = {};
-				table[ "table" ] = obj[ "table" ];
 
-				// Check that value is valid
-				if( table[ "table" ] === undefined || table[ "table" ] === "" || isNaN( parseInt( table[ "table" ] ) ) || parseInt( table[ "table" ] ) > 20 || parseInt( table[ "table" ] ) < 1 )
+				// Check that _id is valid
+				if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || obj[ "_id" ].length !== 24 )
 				{
 					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "bad table number format" } ) );
+					res.end( JSON.stringify( { "response" : "bad _id format" } ) );
 					return;
 				}
 
-				deleteOrder( table, collection, res ); 
+				var employee = {};
+				employee[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
+
+				deleteEmployee( employee, collection, res ); 
 			});
 		}
 		else if( path == "/employees/login" )
@@ -206,7 +207,11 @@ const server = http.createServer( ( req, res ) =>  {
 	 	{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
 	 		res.statusCode = 500;
-	 		res.end( JSON.stringify( { "success" : "no" } ) );
+
+			var response = {};
+			response[ "response" ] = "bad path - '" + path + "'";
+
+	 		res.end( JSON.stringify( response ) );
 	 		return;
 	 	}
 	 });
@@ -291,19 +296,19 @@ function findEmployee( employee, collection, res )
 
 function deleteEmployee( deleteItem, collection, res )
 {
-	console.log( "Attempting to delete table: " + JSON.stringify( deleteItem ) );
+	console.log( "Attempting to delete employee: " + JSON.stringify( deleteItem ) );
 
 	collection.deleteOne( deleteItem, function( err, result ) {
 		if( err )
 		{
-			console.log( "Error deleting table." );
-			res.statusCode = 500;													// Internal Server Error
-			res.end( JSON.stringify( { "response" : "error deleting table" } ) );	// Unsuccessful action
+			console.log( "Error deleting employee." );
+			res.statusCode = 500;														// Internal Server Error
+			res.end( JSON.stringify( { "response" : "error deleting employee" } ) );	// Unsuccessful action
 			throw err;
 		}
 
  		// Display deleted result for debugging
- 		console.log( "Deleted Table: " + JSON.stringify( result ) );
+ 		console.log( "Deleted Employee: " + JSON.stringify( result ) );
 
  		// Send deleted result back
  		res.end( JSON.stringify( result.result ) );
