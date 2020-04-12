@@ -5,7 +5,6 @@ function getInventoryList() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
 			//var doc = document.getElementById( 'textarea-view' );
-			var txt ="";
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			
