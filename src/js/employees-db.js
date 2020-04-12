@@ -8,12 +8,12 @@ const formidable = require( 'formidable' );
 const nodemailer = require( 'nodemailer' );
 
 const hostname = 'localhost';
-const port = 3008;
+const port = 3009;
 
 const server = http.createServer( ( req, res ) =>  {
 	// Display date and action for debugging
 	var date = new Date().toISOString().substr( 11, 8 );
-	console.log( " \n \n \n(" + date  + "): Tables Query." );
+	console.log( " \n \n \n(" + date  + "): Employees Query." );
 
 
 	res.statusCode = 200;
@@ -54,13 +54,13 @@ const server = http.createServer( ( req, res ) =>  {
 	 	}
 
 	 	// Select restaurant database and menu-items collection
-	 	var collection = db.db( "restaurant" ).collection( "tables" );
+	 	var collection = db.db( "restaurant" ).collection( "employees" );
 
-	 	if( path == "/tables/view" )
+	 	if( path == "/employees/view" )
 	 	{
-	 		viewTables( collection, res );
+	 		viewEmployees( collection, res );
 	 	}
-	 	else if( path == "/tables/create" )
+	 	else if( path == "/employees/create" )
 	 	{
 	 		// Stringified JSON of new account values
 	 		let body = '';
@@ -72,24 +72,66 @@ const server = http.createServer( ( req, res ) =>  {
 	 		req.on( 'end', () => { 
 				console.log( "Received: \n" + body + "\n" ); 
 
+				// Get JSON object of input data
 				var obj = JSON.parse( body );
-				var table = {};
-				table[ "table" ] = obj[ "table" ];
 
-				// Check that value is valid
-				if( table[ "table" ] === undefined || table[ "table" ] === "" || isNaN( parseInt( table[ "table" ] ) ) || parseInt( table[ "table" ] ) > 20 || parseInt( table[ "table" ] ) < 1 )
+				// Check if first is valid 
+				if( obj[ "first" ] === undefined || obj[ "first" ] === "" )
 				{
-					console.log( "Bad table value: '" + table[ "table" ] + "'." );
+					console.log( "Invalid first name: '" + obj[ "first" ] + "'." );
 
 					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "bad table number format" } ) );
+					res.end( JSON.stringify( { "response" : "invalid first name" } ) );
 					return;
 				}
 
-				createTable( table, collection, res ); 
+				// Check if last is valid
+				if( obj[ "last" ] === undefined || obj[ "last" ] === "" )
+				{
+					cosole.log( "Invalid last name: '" + obj[ "last" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid last name" } ) );
+					return;
+				}
+
+				// Check if type is valid
+				if( obj[ "type" ] === undefined || obj[ "type" ] === "" ||
+					( obj[ "type" ] !== "server" && obj[ "type" ] !== "manager" ) )
+				{
+					cosole.log( "Invalid type: '" + obj[ "type" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid type" } ) );
+					return;
+				}
+
+				// Create JSON object of new employee
+				var employee = {};
+				employee[ "first" ] = obj[ "first" ];
+
+				// Only add middle name if it exists
+				if( obj[ "middle" ] !== undefined & obj[ "middle" ] !== "" )
+					employee[ "middle" ] = obj[  "middle" ];
+
+				employee[ "last" ] = obj[ "last" ];
+
+				// Generate random four digit pin
+				var pin = Math.floor( 10000 + Math.random() * 10000 ).toString().substring( 1 );
+				employee[ "pin" ] = pin;
+
+				employee[ "type" ] = obj[ "type" ];
+
+				employee[ "shifts" ] = [];
+				employee[ "tips" ] = [];
+				employee[ "comps" ] = [];
+
+				console.log( "Employee to create: " + JSON.stringify( employee ) );
+
+				createEmployee( employee, collection, res ); 
 			});
 	 	}
-	 	else if( path == "/tables/delete" )
+	 	else if( path == "/employees/delete" )
 	 	{
 	 		// Stringified JSON of new account values
 	 		let body = '';
@@ -116,7 +158,7 @@ const server = http.createServer( ( req, res ) =>  {
 				deleteOrder( table, collection, res ); 
 			});
 		}
-		else if( path == "/tables/update" )
+		else if( path == "/employees/login" )
 		{
 	 		// Stringified JSON of new account values
 	 		let body = '';
@@ -131,31 +173,33 @@ const server = http.createServer( ( req, res ) =>  {
 	 			var obj = JSON.parse( body );
 
 	 			// Check that status field is valid
-	 			if( obj[ "status" ] === undefined || ( obj[ "status" ] !== "sitting" && obj[ "status" ] !== "ordered" && obj[ "status" ] !== "eating" && obj[ "status" ] !== "paid" ) )
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
 	 			{
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "bad table status format" } ) );
+					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 200;
+					res.end( JSON.stringify( { "success" : "no" } ) );
 					return;
 	 			}
 
-	 			// Check that table number is valid
-				if( obj[ "table" ] === undefined || obj[ "table" ] === "" || isNaN( parseInt( obj[ "table" ] ) ) || parseInt( obj[ "table" ] ) > 20 || parseInt( obj[ "table" ] ) < 1 )
-				{
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "bad table number format" } ) );
+				// Check that pin is valid
+	 			if( obj[ "pin" ] === undefined || obj[ "pin" ] === ""  )
+	 			{
+					console.log( "Invalid pin value '" + obj[ "pin" ] + "'." );
+
+					res.statusCode = 200;
+					res.end( JSON.stringify( { "success" : "no" } ) );
 					return;
-				}
+	 			}
 
-	 			// Ensure JSON object only has status field
-	 			var table = {}
-	 			table[ "status" ] = obj[ "status" ];
 
-	 			// Get JSON object that only has table number
-	 			var tableNum = {};
-	 			tableNum[ "table" ] = obj[ "table" ];
+	 			// Ensure JSON object only has _id and pin fields
+	 			var employee = {}
+	 			employee[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
+				employee[ "pin" ] = obj[ "pin" ];
 
 	 			// Update status
-	 			updateTableStatus( tableNum, table, collection, res );
+	 			findEmployee( employee, collection, res );
 	 		});
 		}
 	 	else
@@ -176,7 +220,7 @@ server.listen( port, hostname, () => {
 	console.log(  "(" + date + "): " ); 
 });
 
-function viewTables( collection, res )
+function viewEmployees( collection, res )
 {
 	collection.find( {} ).toArray( function( err, result ) {
  		if( err )
@@ -187,7 +231,7 @@ function viewTables( collection, res )
  			throw err;	
  		} 
 
-		console.log( 	"Items found in tables database:\n" +
+		console.log( 	"Items found in employee database:\n" +
 						JSON.stringify( result ) +
 						"\n\n" );
 
@@ -196,34 +240,31 @@ function viewTables( collection, res )
 	} );
 }
 
-function createTable( table, collection, res )
+function createEmployee( employee, collection, res )
 {
-	// Set default status to sitting
-	table[ "status" ] = "sitting";
-
-	collection.insertOne( table, function( err, result ) {
+	collection.insertOne( employee, function( err, result ) {
  		if( err )
  		{
- 			console.log( "Error inserting table." );
- 			res.statusCode = 500;													// Internal Server Error
- 			res.end( JSON.stringify( { "response" : "error inserting table" } ) );	// Unsuccessful action
+ 			console.log( "Error inserting employee." );
+ 			res.statusCode = 500;														// Internal Server Error
+ 			res.end( JSON.stringify( { "response" : "error inserting employee" } ) );	// Unsuccessful action
  			throw err;	
  		} 
 
  		// Display new item for debugging
- 		console.log( "Inserted Table: " + JSON.stringify( result.ops[ 0 ] ) );
+ 		console.log( "Inserted Employee: " + JSON.stringify( result.ops[ 0 ] ) );
 
  		// Send the new item back
  		res.end( JSON.stringify( result.ops[ 0 ] ) );
  	} );
 }
 
-function updateTableStatus( table, updatedQuery, collection, res )
+function findEmployee( employee, collection, res )
 {
-	console.log( "Table: " + JSON.stringify( table ) );
-	console.log( "Updated Query: " + JSON.stringify( updatedQuery ) );
+	console.log( "Employee attempting login:\n    _id: " + employee[ "_id" ] + "\n    pin: " + employee[ "pin" ] + "\n" );
+
 	// Find and update the item
-	collection.findOneAndUpdate( table, { $set : updatedQuery }, { returnOriginal : false, returnNewDocument : true }, function( err, result ) {
+	collection.findOne( employee, function( err, result ) {
 		if( err )
 		{
 			console.log( "Unable to find and update table status." );
@@ -232,16 +273,23 @@ function updateTableStatus( table, updatedQuery, collection, res )
 	 		throw err;
 			return;
 		}
+
+		if( result == null )
+		{
+			res.statusCode = 200;
+			res.end( JSON.stringify( { "success" : "no" } ) );
+			return;
+		}
 		
 		// Display updated table for debugging
- 		console.log( "Updated item: " + JSON.stringify( result.value ) ); 
+ 		console.log( "Successful login: " + JSON.stringify( result.value ) ); 
 
 		// Send the updated table back
-		res.end( JSON.stringify( result.value ) );
+		res.end( JSON.stringify( { "success" : "yes" } ) );
 	});
 }
 
-function deleteTable( deleteItem, collection, res )
+function deleteEmployee( deleteItem, collection, res )
 {
 	console.log( "Attempting to delete table: " + JSON.stringify( deleteItem ) );
 
