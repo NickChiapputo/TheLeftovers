@@ -1,63 +1,60 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-		<meta content="utf-8" http-equiv="encoding">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
 
-		<title>The Leftovers</title>
+  <title>The Leftovers</title>
 
-		<!-- Link to css, javascript, etc. here -->
-		<!-- Remember to minify css and javascript before pushing the changes to the site -->
-		<!--<link href="css/table.min.css" rel="stylesheet">-->
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<link rel="stylesheet" href="../css/style.css">
+  <!-- Link to css, javascript, etc. here -->
+  <!-- Remember to minify css and javascript before pushing the changes to the site -->
+  <!--<link href="css/table.min.css" rel="stylesheet">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/style.css">
 
-	</head>
+</head>
 
-	<body class="page" onload="clock()">
-	
-	<!-- Header bar -->
-    <div id="header" class="container-fluid"> 
-      <div class="row h-100" style="padding: 1vw;">
-        <div class="col-1" style="margin:auto;">
-          <a href="manager1.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
-          </a>
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-9" style="margin: auto;">
-          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
-        </div>
+<body class="page" onload="clock()">
+
+  <!-- Header bar -->
+  <div id="header" class="container-fluid">
+    <div class="row h-100" style="padding: 1vw;">
+      <div class="col-1" style="margin:auto;">
+        <a href="manager1.html">
+          <img src="../Icons/Group 17.svg" style="max-width: 73%;">
+        </a>
+      </div>
+      <div class="col-1" style="margin:auto;">
+        <img src="../Icons/Group 18.svg" style="max-width: 100%;">
+      </div>
+      <div class="col-1" style="margin:auto;">
+        <img src="../Icons/Group 19.svg" style="max-width: 100%;">
+      </div>
+      <div class="col-9" style="margin: auto;">
+        <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+        <script src="../js/get-time.js"> </script>
       </div>
     </div>
-	
-    <div class="container-fluid center-div">
-      <div class="row menu-row">
-          <div class="col menu-box">
-            <a href="server_options.html">
-              <h1 class="menu-text" >Clock In</h1>
-            </a>
-          </div>
-      </div>
-	</div>
-    <div class="container center">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+  </div>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-     </div>
-    
-    
-    
-	</body> 
+  <div class="container-fluid center-div">
+    <div class="row menu-row">
+      <div class="col menu-box">
+        <a href="server_options.html">
+          <h1 class="menu-text">Clock In</h1>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="container center">
+    <label for="uname"><b>Employee ID</b></label>
+    <input type="text" placeholder="Enter ID" name="uname" required>
+  </div>
+
+
+
+</body>
 </html>
