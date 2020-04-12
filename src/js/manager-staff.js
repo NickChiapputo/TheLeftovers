@@ -111,7 +111,7 @@ function getEmployeeList() {
                 }
                 if(currItem.shifts=="")
                 {
-                    currItem.shifts=0;
+                    shifts.push(0);
 				}
 				else
 				{

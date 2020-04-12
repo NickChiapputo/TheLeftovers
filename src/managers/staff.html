@@ -50,6 +50,7 @@
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
 		  <script src="../js/get-time.js"> </script> 
 		  <script src="../js/manager-staff.js"></script>
+		  <script src="../js/manager-shifts.js"></script>
         </div>
       </div>
     </div>
@@ -63,25 +64,56 @@
 		<li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
 	  </ul>
 	  <div class="tab-content">
-		<form id="add" class="tab-pane fade">
-			<label for="fst" >First Name:</label>
-			<input type="fst" name="first" placeholder="Required"/><br><br>
-			<label for="lst">Last Name:</label>
-            <input type="lst" name="last" placeholder=""/><br><br>
-            <label for="m">Middle Name</label>
-            <input type="m" name="middle" placeholder="Required"/><br><br>
-            <lable for="typ">Type</lable>
-            <input type="typ" name="type" placeholder="Required:manager or server"><br><br>
-		   <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
+		<div id="add" class="tab-pane fade">
+		<form>
+			<label >First Name:</label>
+			<input type="text" name="first" placeholder="Required"/><br><br>
+			<label >Middle Name:</label>
+            <input type="text" name="middle" placeholder=""/><br><br>
+			<label >Last Name:</label>
+            <input type="text" name="last" placeholder="Required"/><br><br>
+            <lable >Type:</lable>
+            <input type="text" name="type" placeholder="Required:manager or server"><br><br>
+		   <input type="button" onclick="createEmployeeFormSubmit()" value="Create-Employee">
 		   <p id="textarea-create"></p>
 		</form>
-		<form id="remove" class="tab-pane fade active">
+		<hr style="background-color: coral; height: 3vh;">
+		<form id="createShiftForm">
+			<label>EmpID:</label>
+			<input type="text" required name="employee-create-shift-id"/><br><br>
+			<label>Date:</label>
+			<input type="date" required name="employee-create-shift-date"/><br><br>
+			<label>Start Time:</label>
+			<input type="time" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+			<label>End Time:</label>
+			<input type="time" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+			<input type="button" onclick="employeeCreateShiftSubmit( true )" value="Create-Shift"/>
+			<p id="textarea-employees-create-shift"></p>
+		</form>
+		</div>
+		<div id="remove" class="tab-pane fade active">
+		<form>
 			<label for="eid" >EmpID:</label>
 			<input type="eid" name="eid" placeholder="Required"/><br><br>
 			<input type="button" onclick="deleteEmployeeFormSubmit()" value="Delete">
 			<p id="textarea-delete"></p>
 		</form>
-		<form id="edit" class="tab-pane fade">
+		<hr style="background-color: coral; height: 3vh;">
+		<form id="removeShiftForm">
+			<label>EmpID:</label>
+			<input type="text" required name="employee-create-shift-id"/><br><br>
+			<label>Date:</label>
+			<input type="date" required name="employee-create-shift-date"/><br><br>
+			<label>Start Time:</label>
+			<input type="time" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+			<label>End Time:</label>
+			<input type="time" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+			<input type="button" onclick="employeeCreateShiftSubmit( false )" value="Remove-Shift"/>
+			<p id="textarea-employees-remove-shift"></p>
+		</form>
+		</div>
+		<div id="edit" class="tab-pane fade">
+		<form>
 			<label for="fst" >First Name:</label>
 			<input type="fst" name="first" placeholder="Required"/><br><br>
 			<label for="lst">Last Name:</label>
@@ -93,9 +125,10 @@
 		   <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
 		   <p id="textarea-edit"></p>
 		</form>
-		<form id="view" class="tab-pane fade">
+		</div>
+		<div id="view" class="tab-pane fade">
 			<p id="emptxt"></p>
-		</form>
+		</div>
 		</div>
   </body>
 </html>
