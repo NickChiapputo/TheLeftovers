@@ -1,5 +1,42 @@
 /*******************************************/
 /*       Collapsible Area Functions        */
+function uploadFile()
+{
+	var formData = new FormData();
+	formData.append( "fileToUpload", document.getElementById( "file-upload-input" ).files[ 0 ] );
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			var obj = JSON.parse( this.responseText );
+			var el = document.getElementById( "textarea-file-upload" );
+
+			el.innerHTML = "File uploaded to " + obj[ "location" ];
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-file-upload' ).innerHTML = "Upload file status response: " + this.status;
+			console.log( "Upload file status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/files/upload
+	xmlHttp.open( "POST", "http://64.225.29.130/files/upload" );
+	xmlHttp.send( formData );
+}
+
+function fileUploadSubmit()
+{
+	uploadFile();
+
+	return false;
+}
+/*******************************************/
+
+/*******************************************/
+/*       Collapsible Area Functions        */
 function collapse( buttonID, elementID )
 {
 	// Change button to active class
@@ -36,7 +73,8 @@ function collapse( buttonID, elementID )
 
 /*******************************************/
 /*           Inventory Functions           */
-function getInventoryList() {
+function getInventoryList()
+{
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
@@ -971,6 +1009,45 @@ function employeeLogin()
 function employeeLoginSubmit()
 {
 	employeeLogin();
+
+	return false;
+}
+
+function deleteEmployee()
+{
+	var params = {};
+	params[ "_id" ] = document.getElementsByName( "employee-delete-id" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			if( obj == null || obj.ok != 1 || obj.n != 1 )
+				document.getElementById( 'textarea-employees-delete' ).innerHTML = "Unable to delete employee.\n";
+			else
+				document.getElementById( 'textarea-employees-delete' ).innerHTML = "Deleted Employee\n";
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-employees-delete' ).innerHTML = "Delete employee status response: " + this.status;
+			console.log( "Delete employee status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/delete", true );
+	xmlHttp.send( JSON.stringify( params ) );
+}
+
+function employeeDeleteSubmit()
+{
+	deleteEmployee();
 
 	return false;
 }

@@ -397,7 +397,7 @@
 				</div>
 			</div>
 
-			<!-- Employee Login -->
+			<!-- Employee Login and Delete Employee -->
 			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 				
 				<!-- Headers employee login -->
@@ -407,7 +407,9 @@
 						<h3>Employee Login</h3>
 					</div>
 
-					<div class="headerLabel" style="display: table-cell; width: 50vw;"></div>
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Delete Employee</h3>
+					</div>
 				</div>
 
 				<!-- Control buttons and fields -->
@@ -437,11 +439,36 @@
 									</div>
 								</div>
 
-								<!-- Create employee button field -->
+								<!-- Employee login button field -->
 								<div style="display: table-row">
 									<div style="display: table-cell;"></div>
 									<div style="display: table-cell;">
 										<button style="width: 25vw;" class="button" type="button" onclick="employeeLoginSubmit()">Login</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Employee Login Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="deleteEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-delete-id" />
+									</div>
+								</div>
+
+								<!-- Delete employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeDeleteSubmit()">Remove Employee</button>
 									</div>
 								</div>
 							</div>
@@ -458,7 +485,10 @@
 						<textarea readonly id="textarea-employees-login"></textarea>
 					</div>
 
-					<div style="display: table-cell;"></div>
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-delete"></textarea>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1669,6 +1699,51 @@
 						</textarea>
 					</div>
 				</div>	
+			</div>
+		</div>
+
+		<hr style="border-width: 0.5vh;">
+
+		<!-- FILE UPLOAD -->
+		<button type="button" id="file-upload-collapsible-btn" onclick="collapse( 'file-upload-collapsible-btn', 'file-upload-collapsible' )" class="collapsible">File Upload</button>
+		<div class="content" id="file-upload-collapsible">
+
+			<!-- Create and delete menu item -->
+			<div style="display: table; border-collapse: separate; margin-top: 2vw; border-spacing: 0vw 0vw; text-align: center; width: 100vw;" id="file-upload">
+
+				<!-- Form for file upload -->
+				<div style="display: table-row; text-align: center;">
+
+					<!-- File Upload Form -->
+					<div style="width: 45vw; display: table-cell;">
+						<form id="fileUploadForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- File input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell; text-align: center;">
+										<label for="file-upload">Upload File</label>
+										<input type="file" required id="file-upload-input">
+									</div>
+								</div>
+
+								<!-- Save button field -->
+								<div style="display: table-row;">
+									<div style="display: table-cell; text-align: center;">
+										<button style="width: 40vw;" class="button" type="button" onclick="fileUploadSubmit()">Upload</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Inventory list textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly style="width: 40vw;" id="textarea-file-upload"></textarea>
+					</div>
+				</div>
 			</div>
 		</div>
 
