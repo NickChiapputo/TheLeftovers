@@ -12,10 +12,16 @@
     <!-- Original CSS -->
     <link rel="stylesheet" href="../../css/style.css">
 
-    <title>Videos</title>
+    <!-- Original js -->
+    <script src="../../js/load-menu.js"></script>
+
+    <script type="text/javascript" src="../../js/js.cookie.js"></script>
+    
+    <title>CBS</title>
   </head>
 
-  <body class="page" onload="clock()">
+
+  <body class="page" onload="clock(); loadMenu()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -25,14 +31,14 @@
     <div id="header" class="container-fluid"> 
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
-            <a href="../index.html">
+          <a href="videos.html">
             <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
         <div class="col-1" style="margin:auto;">
           <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
         </div>
-        <div class="col-" style="margin:auto;">
+        <div class="col-1" style="margin:auto;">
           <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
         </div>
         <div class="col-9" style="margin: auto;">
@@ -43,63 +49,17 @@
     </div>
 
     <!-- Page contents-->
-    <div class="container-fluid center-div">
-      
-      <div class="row title-bar">
-        <div class="col menu-box">
-          <h1 style="text-align: left; font-size: 5vw;"> Media</h1>
-        </div>
-      </div>
+    <body>
+        <div>
+            <iframe width="1440" height="777" src="https://www.youtube.com/embed/0Jw6rIyMjgA?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>    
+    </body>
 
 
-      <div class="row menu-row">
-          
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text"> NBC Sports </h1>
-          </a>
-        </div>
+   
 
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text">CBS</h1>
-          </a>
-        </div>
 
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text">FOX 4</h1>
-          </a>
-        </div>
 
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text">Nick</h1>
-          </a>
-        </div>
-      </div>
 
-      <div class="row menu-row" >
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text">Discovery</h1>
-          </a>
-        </div>
-
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text">media</h1>
-          </a>
-        </div>
-
-        <div class="col menu-box">
-          <a href="">
-            <h1 class="menu-text">media</h1>
-          </a>
-        </div>
-
-        
-      </div>
-    </div>
   </body>
 </html>

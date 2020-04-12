@@ -12,7 +12,7 @@
     <!-- Original CSS -->
     <link rel="stylesheet" href="../css/style.css">
 
-    <title>Hello, world!</title>
+    <title>Coupons</title>
   </head>
 
   <body class="page" onload="clock()">
@@ -29,55 +29,33 @@
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
-        </div>
+		<div class="col-1" style="margin: center-div;">
+		  <h1 class="menu-text">Add Employee</h1>
+		</div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/manager-staff.js"></script>
         </div>
       </div>
     </div>
 
     <!-- Page contents-->
-    <div class="container-fluid center-div">
-      <div class="row menu-row">
-          <div class="col menu-box">
-            <a href="editmenu.html">
-              <h1 class="menu-text" >Menu</h1>
-            </a>
-          </div>
-        <div class="col menu-box">
-          <a href="schedule.html">
-            <h1 class="menu-text">Schedule</h1>
-          </a>
-        </div>
-        <div class="col menu-box">
-          <a href="stats.html">
-            <h1 class="menu-text">Stats</h1>
-          </a>
-        </div>
-      </div>
-      <div class="row menu-row">
-        <div class="col menu-box">
-          <a href="inventory.html">
-            <h1 class="menu-text">Inventory</h1>
-          </a>
-        </div>
-        <div class="col menu-box">
-          <a href="staff.html">
-            <h1 class="menu-text">Staff</h1>
-          </a>
-        </div>
-        <div class="col menu-box">
-          <a href="coupons.html">
-            <h1 class="menu-text">Coupons</h1>
-          </a>
-        </div>
-      </div>
-    </div>
+	<div class="container-fluid center-div">
+
+		<form id="add" >
+			<label for="fst" >First Name:</label>
+			<input type="fst" name="first" placeholder="Required"/><br><br>
+			<label for="lst">Last Name:</label>
+            <input type="lst" name="last" placeholder="Required"/><br><br>
+            <label for="m">Middle Name</label>
+            <input type="m" name="middle" placeholder=""/><br><br>
+            <lable for="typ">Type</lable>
+            <input type="typ" name="type" placeholder="Required: manager, server"><br><br>
+           <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
+        </form>
+    
+    <p id="textarea-create"></p>
+	</div>
   </body>
 </html>

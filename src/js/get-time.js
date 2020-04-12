@@ -24,7 +24,7 @@
                   num = "0" + num;
                 }
                 return num;
-              }
+            }
             function week(){
               let date = new Date();
               let currentweek = (date.getMonth()+1)+'/'+(date.getDate()-date.getDay())+'/'+date.getFullYear();
