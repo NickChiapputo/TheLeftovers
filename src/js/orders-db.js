@@ -70,8 +70,8 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 		// Data is finished being read. edit item
 	 		req.on( 'end', () => { 
-				console.log( "Received: \n" + body + "\n" ); 
-				createOrder( JSON.parse( body ), collection, res ); 
+				console.log( "Received: \n" + body + "\n \n " ); 
+				createOrder( JSON.parse( body ), db, res ); 
 			});
 	 	}
 	 	else if( path == "/orders/delete" )
@@ -168,17 +168,50 @@ function viewOrders( collection, res )
 	} );
 }
 
-function createOrder( order, collection, res )
+async function createOrder( order, db, res )
 {
-	// Get subtotal from order
+	var orderCollection = db.db( "restaurant" ).collection( "orders" );
+	var statsCollection = db.db( "restaurant" ).collection( "menu-item-stats" );
+
+	// Get subtotal from order and update order counts for items
+	var date = new Date().toISOString().substring( 0, 10 );
+	console.log( "Date: " + date );
 	var subtotal = 0.0;
 	var items = order[ "items" ];
 	for( attr in items )
 	{
 		currItem = items[ attr ];
-		console.log( currItem + ": $" + currItem[ "price" ] );
+		console.log( currItem[ "name" ] + ": $" + currItem[ "price" ] );
 		subtotal += currItem[ "price" ];
+
+		// Update order count for each item in this day
+		var statsItem = {}
+		statsItem[ "name" ] = currItem[ "name" ];
+
+		// Get stats item
+		let stats = await getItem( statsItem, statsCollection );
+
+		// If stats item exists
+		if( stats )
+		{
+			var query = {};
+			query[ "name" ] = currItem[ "name" ];
+
+			var update = {};
+			update[ "$inc" ] = {};
+			update[ "$inc"][ date ] = 1;
+
+			let incrementResult = await incrementStatsItem( query, update, statsCollection );
+			console.log( "Increment Result: " + JSON.stringify( incrementResult ) );
+		}
+		else
+		{
+			console.log( currItem[ "name" ] + " does not exist in stats." );
+		}
 	}
+
+	// Separate logs for easier viewing
+	console.log( "\n " );
 
 	order[ "subtotal" ] = Math.round( ( subtotal + 0.00001 ) * 100 ) / 100;
 	order[ "tax" ] = Math.round( ( subtotal * 0.0825 + 0.00001 ) * 100 ) / 100;
@@ -187,7 +220,7 @@ function createOrder( order, collection, res )
 	// Remove _id tag if added previously
 	delete order[ "_id" ];
 
-	collection.insertOne( order, function( err, result ) {
+	orderCollection.insertOne( order, function( err, result ) {
  		if( err )
  		{
  			console.log( "Error inserting." );
@@ -202,6 +235,22 @@ function createOrder( order, collection, res )
  		// Send the new item back
  		res.end( JSON.stringify( result.ops[ 0 ] ) );
  	} );
+}
+
+async function getItem( query, collection )
+{
+	return collection.findOne( query );
+}
+
+async function addNewOrderStat( itemName, newOrderStat, collection )
+{
+	return collection.findOneAndUpdate( itemName, { $addToSet : { "orders" : newOrderStat } }, { returnOriginal : false, returnNewDocument : true } );
+}
+
+async function incrementStatsItem( query, update, collection )
+{
+	var options = { "upsert" : true };
+	return collection.updateOne( query, update, options );
 }
 
 function deleteOrder( deleteItem, collection, res )
