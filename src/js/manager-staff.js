@@ -99,7 +99,8 @@ function getEmployeeList() {
 			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>EID</th><th style=' background-color: black; color: white;'>First</th><th style=' background-color: black; color: white;'>Middle</th><th style=' background-color: black; color: white;'>Last</th><th style=' background-color: black; color: white;'>Pin</th><th style=' background-color: black; color: white;'>Type</th><th style=' background-color: black; color: white;'>Shifts</th><th style=' background-color: black; color: white;'>Tips</th><th style=' background-color: black; color: white;'>Comps</th>"
 			for( i = 0; i < numItems; i++ )
 			{
-                var currItem = obj[ i ];
+				var currItem = obj[ i ];
+				var shifts = [];
                 if(currItem.middle===undefined)
                 {
                     currItem.middle="N/A";
@@ -111,7 +112,14 @@ function getEmployeeList() {
                 if(currItem.shifts=="")
                 {
                     currItem.shifts=0;
-                }
+				}
+				else
+				{
+					currItem.shifts.forEach(function (shift) {
+						shifts.push(" "+shift.date+" "+shift.start+" to "+shift.end);
+					});
+
+				}
                 if(currItem.comps=="")
                 {
                     currItem.comps=0;
@@ -123,9 +131,9 @@ function getEmployeeList() {
                         +currItem.last +"</td></td><td style=' background-color: white; color: black;'>"
                         +currItem.pin +"</td><td style=' background-color: white; color: black;'>"
                         +currItem.type+"</td><td style=' background-color: white; color: black;'>"
-                        +currItem.shifts+"</td><td style=' background-color: white; color: black;'>"
+                        +shifts.join(",")+"</td><td style=' background-color: white; color: black;'>"
                         +currItem.tips+"</td><td style=' background-color: white; color: black;'>"
-                        +currItem.comps+"</td><td style=' background-color: white; color: black;'></tr>";
+                        +currItem.comps+"</td></tr>";
 			}
 			txt += "</table>"
 			document.getElementById('emptxt').innerHTML = txt;
