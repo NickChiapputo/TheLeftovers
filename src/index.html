@@ -63,11 +63,15 @@
 				text-decoration: none;
 			}
 
+			input:valid {
+				border: green;
+			}
+
 			input::-webkit-outer-spin-button {
 				-webkit-appearance: none;
 			}
 
-			input[ type="number" ], input[ type="password" ] {
+			input[ type="number" ], input[ type="password" ], input[ type="date" ], input[ type="datetime-local" ] {
 				-moz-appearance: textfield;
 				margin-bottom: 10px;
 				height: 20px;
@@ -397,10 +401,10 @@
 				</div>
 			</div>
 
-			<!-- Employee Login and Delete Employee -->
+			<!-- Employee Login and Create Shift -->
 			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 				
-				<!-- Headers employee login -->
+				<!-- Headers employee login and create shift -->
 				<div style="display: table-row; text-align: center;">
 					<!-- Header for employees query -->
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
@@ -408,7 +412,7 @@
 					</div>
 
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Delete Employee</h3>
+						<h3>Create Shift</h3>
 					</div>
 				</div>
 
@@ -450,7 +454,95 @@
 						</form>
 					</div>
 
-					<!-- Employee Login Form -->
+					<!-- Create Shift Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="createShiftForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Employee ID field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-create-shift-id" />
+									</div>
+								</div>
+
+								<!-- Date input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Date</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="date" required name="employee-create-shift-date" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Start Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">End Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Create shift button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeCreateShiftSubmit( true )">Create Shift</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Login textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-login"></textarea>
+					</div>
+
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-create-shift"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Delete Employee -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers delete employee -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for delete employee -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Delete Employee</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Remove Shift</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Delete Employee Form -->
 					<div style="display: table-cell; text-align: left;">
 						<form id="deleteEmployeeForm">
 							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
@@ -475,19 +567,74 @@
 						</form>
 					</div>
 
+					<!-- Remove Shift Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="removeShiftForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Employee ID field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-create-shift-id" />
+									</div>
+								</div>
+
+								<!-- Date input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Date</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="date" required name="employee-create-shift-date" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Start Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">End Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Remove shift button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeCreateShiftSubmit( false )">Remove Shift</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
 					<div style="display: table-cell; text-align: center;"></div>
 				</div>
 
 				<!-- Text areas -->
 				<div style="display: table-row;">
-					<!-- Employees Login textarea -->
-					<div style="display: table-cell; vertical-align: top;">
-						<textarea readonly id="textarea-employees-login"></textarea>
-					</div>
 
 					<!-- Delete Employees textarea -->
 					<div style="display: table-cell;">
 						<textarea readonly id="textarea-employees-delete"></textarea>
+					</div>
+
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-remove-shift"></textarea>
 					</div>
 				</div>
 			</div>

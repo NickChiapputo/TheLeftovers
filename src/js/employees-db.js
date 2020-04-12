@@ -173,12 +173,12 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 			var obj = JSON.parse( body );
 
-	 			// Check that status field is valid
+	 			// Check that _id field is valid
 	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
 	 			{
 					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
 
-					res.statusCode = 200;
+					res.statusCode = 400;
 					res.end( JSON.stringify( { "success" : "no" } ) );
 					return;
 	 			}
@@ -188,7 +188,7 @@ const server = http.createServer( ( req, res ) =>  {
 	 			{
 					console.log( "Invalid pin value '" + obj[ "pin" ] + "'." );
 
-					res.statusCode = 200;
+					res.statusCode = 400;
 					res.end( JSON.stringify( { "success" : "no" } ) );
 					return;
 	 			}
@@ -201,6 +201,140 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 			// Update status
 	 			findEmployee( employee, collection, res );
+	 		});
+		}
+		else if( path == "/employees/shift/create" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. Update table status
+	 		req.on( 'end', () => {
+	 			console.log( "Received: \n" + body + "\n" );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Check that _id field is valid
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			{
+					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid _id" } ) );
+					return;
+	 			}
+
+	 			// Check that date is valid
+	 			if( obj[ "date" ] === undefined || obj[ "date" ] === "" || 
+	 				!( /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test( obj[ "date" ] ) ) )
+	 			{
+	 				console.log( "Invalid date value '" + obj[ "date" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid date" } ) );
+					return;
+	 			}
+
+	 			// Check that start time is valid
+	 			if( obj[ "start" ] === undefined || obj[ "start" ] === "" || 
+	 				!( /[0-9]{2}:[0-9]{2}/.test( obj[ "start" ] ) ) )
+	 			{
+	 				console.log( "Invalid start time value '" + obj[ "start" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid start time" } ) );
+					return;
+	 			}
+
+	 			// Check that end time is valid
+	 			if( obj[ "end" ] === undefined || obj[ "end" ] === "" || 
+	 				!( /[0-9]{2}:[0-9]{2}/.test( obj[ "end" ] ) ) )
+	 			{
+	 				console.log( "Invalid end time value '" + obj[ "end" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid end time" } ) );
+					return;
+	 			}
+
+	 			// Create shift object
+	 			shift = {};
+	 			shift[ "date" ] = obj[ "date" ];
+	 			shift[ "start" ] = obj[ "start" ];
+	 			shift[ "end" ] = obj[ "end" ];
+
+	 			// Call function to add shift given employee ID and shift object
+	 			addShift( { "_id" : new mongo.ObjectId( obj[ "_id" ] ) }, shift, collection, res );
+	 		});
+		}
+		else if( path == "/employees/shift/remove" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. Update table status
+	 		req.on( 'end', () => {
+	 			console.log( "Received: \n" + body + "\n" );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Check that _id field is valid
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			{
+					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid _id" } ) );
+					return;
+	 			}
+
+	 			// Check that date is valid
+	 			if( obj[ "date" ] === undefined || obj[ "date" ] === "" || 
+	 				!( /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test( obj[ "date" ] ) ) )
+	 			{
+	 				console.log( "Invalid date value '" + obj[ "date" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid date" } ) );
+					return;
+	 			}
+
+	 			// Check that start time is valid
+	 			if( obj[ "start" ] === undefined || obj[ "start" ] === "" || 
+	 				!( /[0-9]{2}:[0-9]{2}/.test( obj[ "start" ] ) ) )
+	 			{
+	 				console.log( "Invalid start time value '" + obj[ "start" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid start time" } ) );
+					return;
+	 			}
+
+	 			// Check that end time is valid
+	 			if( obj[ "end" ] === undefined || obj[ "end" ] === "" || 
+	 				!( /[0-9]{2}:[0-9]{2}/.test( obj[ "end" ] ) ) )
+	 			{
+	 				console.log( "Invalid end time value '" + obj[ "end" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid end time" } ) );
+					return;
+	 			}
+
+	 			// Create shift object
+	 			shift = {};
+	 			shift[ "date" ] = obj[ "date" ];
+	 			shift[ "start" ] = obj[ "start" ];
+	 			shift[ "end" ] = obj[ "end" ];
+
+	 			// Call function to remove shift given employee ID and shift object
+	 			removeShift( { "_id" : new mongo.ObjectId( obj[ "_id" ] ) }, shift, collection, res );
 	 		});
 		}
 	 	else
@@ -313,5 +447,47 @@ function deleteEmployee( deleteItem, collection, res )
  		// Send deleted result back
  		res.end( JSON.stringify( result.result ) );
 	} );
+}
+
+function addShift( employeeID, shift, collection, res )
+{
+	collection.findOneAndUpdate( employeeID, { $addToSet : { "shifts" : shift } }, { returnOriginal: false, returnNewDocument: true }, function( err, result ) {
+		if( err )
+		{
+			console.log( "Unable to add shift to employee " + employeeID[ "_id" ] + "." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "response" : "unable to add shift" } ) );
+			throw err;
+			return;
+		}
+		
+		// Display updated item for debugging
+ 		console.log( "Updated employee: " + JSON.stringify( result.value ) ); 
+
+		// Send the updated item back
+		res.end( JSON.stringify( result.value ) );
+	});
+}
+
+function removeShift( employeeID, shift, collection, res )
+{
+	collection.findOneAndUpdate( employeeID, { $pull : { "shifts" : shift } }, { returnOriginal: false, returnNewDocument: true }, function( err, result ) {
+		if( err )
+		{
+			console.log( "Unable to remove shift from employee " + employeeID[ "_id" ] + "." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "response" : "unable to remove shift" } ) );
+			throw err;
+			return;
+		}
+		
+		// Display updated item for debugging
+ 		console.log( "Updated employee: " + JSON.stringify( result.value ) ); 
+
+		// Send the updated item back
+		res.end( JSON.stringify( result.value ) );
+	});
 }
 

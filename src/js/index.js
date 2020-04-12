@@ -151,7 +151,6 @@ function editFormSubmit()
 	return false;
 }
 
-
 function createInventoryItem()
 {
 	var params = "name=" + document.getElementsByName( "name-create" )[ 0 ].value + 
@@ -192,7 +191,6 @@ function createFormSubmit()
 	// Function must return false to prevent reloading of page
 	return false;
 }
-
 
 function deleteInventoryItem()
 {
@@ -734,7 +732,6 @@ function deleteOrderSubmit()
 	return false;
 }
 
-
 function payOrder()
 {
 	var order = {};
@@ -910,11 +907,32 @@ function getEmployees()
 				doc.value += "Empoyee " + ( i + 1 ) + ":\n";
 
 				for( var attr in employee )
-					doc.value += "    " + attr + " - " + employee[ attr ] + "\n";
-				doc.value += "\n";
+				{
+					if( attr === "shifts" )
+					{
+						// doc.value += "    " + attr + " -\n";
+						doc.value += String( "            " + attr + " -" ).slice( -13 ) + "\n";
 
-				// var fullName = employee[ "first" ] + " " + employee[ "middle" ] + employee[ "last" ];
-				// doc.value += "Employee " + ( i + 1 ) + ": " + fullName + "\n";
+						shiftList = employee[ attr ];
+						var numShifts = Object.keys( shiftList ).length;
+						var j;
+						for( j = 0; j < numShifts; j++ )
+						{
+							var currShift = shiftList[ j ];
+							
+							var totalTime = ( parseFloat( currShift[ "end" ].toString().substring( 0, 2 ) ) + ( parseFloat( currShift[ "end" ].toString().substring( 3 ) ) / parseFloat( 60 ) ) ) - 
+									( parseFloat( currShift[ "start" ].toString().substring( 0, 2 ) ) + ( parseFloat( currShift[ "start" ].toString().substring( 3 ) ) / parseFloat( 60 ) ) );
+							
+							doc.value += "               " + currShift[ "date" ] + " " + currShift[ "start" ] + " to " + currShift[ "end" ] + " (" + totalTime + " hours)\n";
+						}
+					}
+					else
+					{
+						// doc.value += "    " + attr + " - " + employee[ attr ] + "\n";
+						doc.value += String( "            " + attr + " -" ).slice( -13 ) + "  " + employee[ attr ] + "\n";
+					}
+				}				
+				doc.value += "\n";
 			}
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -977,7 +995,7 @@ function employeeLogin()
 {
 	var employee = {};
 
-	// Get employee full name
+	// Get employee information
 	employee[ "_id" ] = document.getElementsByName( "employee-login-id" )[ 0 ].value;
 	employee[ "pin" ] = document.getElementsByName( "employee-login-pin" )[ 0 ].value;
 
@@ -985,13 +1003,7 @@ function employeeLogin()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			// var obj = JSON.parse( this.responseText );
-
 			document.getElementById( "textarea-employees-login" ).innerHTML = "Login result: " + this.responseText;
-			
-			// for( var attr in obj )
-			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
-		
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -1048,6 +1060,56 @@ function deleteEmployee()
 function employeeDeleteSubmit()
 {
 	deleteEmployee();
+
+	return false;
+}
+
+function employeeChangeShift( create )
+{
+	// Check if form is valid
+	if( document.getElementById( "createShiftForm" ).checkValidity() )
+	{
+		var shift = {};
+
+		// Get employee ID
+		shift[ "_id" ] = document.getElementsByName( "employee-create-shift-id" )[ 0 ].value;
+
+		// Get shift date
+		shift[ "date" ] = document.getElementsByName( "employee-create-shift-date" )[ 0 ].value;
+		
+		// Get start time
+		shift[ "start" ] = document.getElementsByName( "employee-create-shift-start-time" )[ 0 ].value
+		
+		// Get end time
+		shift[ "end" ] = document.getElementsByName( "employee-create-shift-end-time" )[ 0 ].value
+
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() {
+			if( this.readyState == 4 && this.status == 200 ) 
+			{
+				document.getElementById( "textarea-employees-" + ( create ? "create" : "remove" ) + "-shift" ).innerHTML = "Shift result: " + this.responseText;
+			}
+			else if( this.readyState == 4 && this.status != 200 )
+			{
+				document.getElementById( "textarea-employees-" + ( create ? "create" : "remove" ) + "-shift" ).innerHTML = "Status return: " + this.status; + "\n";
+			}
+		};
+
+		console.log( "Sending: " + JSON.stringify( shift ) );
+
+		// Send a POST request to 64.225.29.130/employees/shift/create or remove based on source call
+		xmlHttp.open( "POST", "http://64.225.29.130/employees/shift/" + ( create ? "create" : "remove" ), true );
+		xmlHttp.send( JSON.stringify( shift ) );
+	}
+	else
+	{
+		document.getElementById( "textarea-employees-" + ( create ? "create" : "remove" ) + "-shift" ).innerHTML = "Invalid input.";
+	}
+}
+
+function employeeCreateShiftSubmit( create )
+{
+	employeeChangeShift( create );
 
 	return false;
 }
