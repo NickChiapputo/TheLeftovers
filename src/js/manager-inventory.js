@@ -5,7 +5,6 @@ function getInventoryList() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
 			//var doc = document.getElementById( 'textarea-view' );
-			var txt ="";
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			
@@ -33,7 +32,6 @@ function getInventoryList() {
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
-	var x = setTimeout(getInventoryList, 1000);
 }
 
 function getInventoryNames() {
