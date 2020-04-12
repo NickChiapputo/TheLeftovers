@@ -46,10 +46,8 @@ function createEmployeeFormSubmit()
 function deleteEmployee()
 {
 	var params = {};
-    params["first"] = document.getElementsByName( "first" )[ 0 ].value;
-    params["middle"] = document.getElementsByName("middle")[0].value;
-	params["last"] = document.getElementsByName( "last" )[ 0 ].value;
-    params["type"] = document.getElementsByName("type")[0].value;
+    params["_id"] = document.getElementsByName( "eid" )[ 0 ].value;
+
 
 
 	var xmlHttp = new XMLHttpRequest();
@@ -66,10 +64,7 @@ function deleteEmployee()
 			 	document.getElementById( 'textarea-create' ).innerHTML = "Unable to create item.\n";
 			else
 			 	document.getElementById( 'textarea-create' ).innerHTML = "Created Item: \n" + 
-                     "     First:  " + obj.first+
-                     "     Middle: " + obj.middle+
-					 "     Last: " + obj.last+
-                     "     Type: "+obj.type;
+                     "     Eid:  " + obj._id;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -78,7 +73,7 @@ function deleteEmployee()
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/employees/create" + true );
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/delete");
 	xmlHttp.send( JSON.stringify(params) );
 }
 
