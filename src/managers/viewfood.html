@@ -38,22 +38,21 @@
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
-          <script src="../js/storage.js"></script> 
+          <script src="../js/manager-storage.js"></script> 
         </div>
       </div>
     </div>
-
     <!-- Page contents -->
-    <div class="container-fluid">
+    <div class="container-fluid scrollable">
       <div class="row title-bar">
         <div class="menu-box" id="food-name">
       </div>
       <ul class="nav nav-pills">
-        <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="loadIngredients()">Edit</a></li>
+        <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="loadIngredients()">Load Edit Form</a></li>
       </ul>
         <button class="menu-box" style="background-color: red;" onclick="deleteMenuItemFormSubmit()">Remove</button>
       </div>
-      <div class="row" style="min-height: 70vh; max-height: 70vh; margin-top: 10vh;">
+      <div class="row" style="min-height: 70vh; max-height: 70vh; margin-top: 29vh;">
           <div id="food-picture" class="col-5">
           </div>
           <div class="col-3">

@@ -48,50 +48,54 @@
 		</div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+		  <script src="../js/get-time.js"> </script> 
+		  <script src="../js/manager-staff.js"></script>
         </div>
       </div>
     </div>
 
+
     <!-- Page contents-->
-	<div class="container-fluid">
-		<div class="row menu-row">
-          <div class="col menu-box">
-            <a href="">
-              <h1 class="menu-text" >Add Employee</h1>
-			</a>
-          </div>
-		  <div class="col menu-box">
-            <a href="">
-              <h1 class="menu-text" >Remove Employee</h1>
-			</a>
-          </div>
+	<ul class="col nav nav-pills">
+		<li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+		<li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
+		<li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getEmployeeList()">View</a></li>
+		<li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
+	  </ul>
+	  <div class="tab-content">
+		<form id="add" class="tab-pane fade">
+			<label for="fst" >First Name:</label>
+			<input type="fst" name="first" placeholder="Required"/><br><br>
+			<label for="lst">Last Name:</label>
+            <input type="lst" name="last" placeholder=""/><br><br>
+            <label for="m">Middle Name</label>
+            <input type="m" name="middle" placeholder="Required"/><br><br>
+            <lable for="typ">Type</lable>
+            <input type="typ" name="type" placeholder="Required:manager or server"><br><br>
+		   <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
+		   <p id="textarea-create"></p>
+		</form>
+		<form id="remove" class="tab-pane fade active">
+			<label for="eid" >EmpID:</label>
+			<input type="eid" name="eid" placeholder="Required"/><br><br>
+			<input type="button" onclick="deleteEmployeeFormSubmit()" value="Delete">
+			<p id="textarea-delete"></p>
+		</form>
+		<form id="edit" class="tab-pane fade">
+			<label for="fst" >First Name:</label>
+			<input type="fst" name="first" placeholder="Required"/><br><br>
+			<label for="lst">Last Name:</label>
+            <input type="lst" name="last" placeholder=""/><br><br>
+            <label for="m">Middle Name</label>
+            <input type="m" name="middle" placeholder="Required"/><br><br>
+            <lable for="typ">Type</lable>
+            <input type="typ" name="type" placeholder="Required: manager, server"><br><br>
+		   <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
+		   <p id="textarea-edit"></p>
+		</form>
+		<form id="view" class="tab-pane fade">
+			<p id="emptxt"></p>
+		</form>
 		</div>
-	</div>
-	<div class="container-fluid">
-		<table style="width:100%" id="t01">
-		  <tr>
-			<th>Employee ID</th>
-			<th>Name</th>
-			<th>Hours Worked</th>
-			<th>Tips</th>
-			<th>Comps</th>
-		  </tr>
-		  <tr>
-			<td>76465333</td>
-			<td>John Smith</td>
-			<td>50</td>
-			<td>93.71</td>
-			<td>5</td>
-		  </tr>
-		  <tr>
-			<td>76575333</td>
-			<td>Jon Smith</td>
-			<td>40</td>
-			<td>53.71</td>
-			<td>2</td>
-		  </tr>
-		</table>
-	</div>
   </body>
 </html>

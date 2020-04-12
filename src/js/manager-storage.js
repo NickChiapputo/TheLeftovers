@@ -81,6 +81,7 @@ function loadIngredients()
 			
 			var numItems = Object.keys( obj ).length;
 			var el = document.getElementById( "ingredientLabel" );
+			
 	//		var elEdit = document.getElementById( "ingredientLabel-edit" );
 
 			var i;

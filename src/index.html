@@ -63,11 +63,15 @@
 				text-decoration: none;
 			}
 
+			input:valid {
+				border: green;
+			}
+
 			input::-webkit-outer-spin-button {
 				-webkit-appearance: none;
 			}
 
-			input[ type="number" ], input[ type="password" ] {
+			input[ type="number" ], input[ type="password" ], input[ type="date" ], input[ type="datetime-local" ] {
 				-moz-appearance: textfield;
 				margin-bottom: 10px;
 				height: 20px;
@@ -397,17 +401,19 @@
 				</div>
 			</div>
 
-			<!-- Employee Login -->
+			<!-- Employee Login and Create Shift -->
 			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 				
-				<!-- Headers employee login -->
+				<!-- Headers employee login and create shift -->
 				<div style="display: table-row; text-align: center;">
 					<!-- Header for employees query -->
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
 						<h3>Employee Login</h3>
 					</div>
 
-					<div class="headerLabel" style="display: table-cell; width: 50vw;"></div>
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Create Shift</h3>
+					</div>
 				</div>
 
 				<!-- Control buttons and fields -->
@@ -437,11 +443,179 @@
 									</div>
 								</div>
 
-								<!-- Create employee button field -->
+								<!-- Employee login button field -->
 								<div style="display: table-row">
 									<div style="display: table-cell;"></div>
 									<div style="display: table-cell;">
 										<button style="width: 25vw;" class="button" type="button" onclick="employeeLoginSubmit()">Login</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Create Shift Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="createShiftForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Employee ID field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-create-shift-id" />
+									</div>
+								</div>
+
+								<!-- Date input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Date</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="date" required name="employee-create-shift-date" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Start Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">End Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Create shift button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeCreateShiftSubmit( true )">Create Shift</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Login textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-login"></textarea>
+					</div>
+
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-create-shift"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Delete Employee -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers delete employee -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for delete employee -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Delete Employee</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Remove Shift</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Delete Employee Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="deleteEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-delete-id" />
+									</div>
+								</div>
+
+								<!-- Delete employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeDeleteSubmit()">Remove Employee</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Remove Shift Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="removeShiftForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Employee ID field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-create-shift-id" />
+									</div>
+								</div>
+
+								<!-- Date input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Date</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="date" required name="employee-create-shift-date" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Start Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Start time input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">End Time</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="datetime-local" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" />
+									</div>
+								</div>
+
+								<!-- Remove shift button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeCreateShiftSubmit( false )">Remove Shift</button>
 									</div>
 								</div>
 							</div>
@@ -453,12 +627,15 @@
 
 				<!-- Text areas -->
 				<div style="display: table-row;">
-					<!-- Employees Login textarea -->
-					<div style="display: table-cell; vertical-align: top;">
-						<textarea readonly id="textarea-employees-login"></textarea>
+
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-delete"></textarea>
 					</div>
 
-					<div style="display: table-cell;"></div>
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-remove-shift"></textarea>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1669,6 +1846,51 @@
 						</textarea>
 					</div>
 				</div>	
+			</div>
+		</div>
+
+		<hr style="border-width: 0.5vh;">
+
+		<!-- FILE UPLOAD -->
+		<button type="button" id="file-upload-collapsible-btn" onclick="collapse( 'file-upload-collapsible-btn', 'file-upload-collapsible' )" class="collapsible">File Upload</button>
+		<div class="content" id="file-upload-collapsible">
+
+			<!-- Create and delete menu item -->
+			<div style="display: table; border-collapse: separate; margin-top: 2vw; border-spacing: 0vw 0vw; text-align: center; width: 100vw;" id="file-upload">
+
+				<!-- Form for file upload -->
+				<div style="display: table-row; text-align: center;">
+
+					<!-- File Upload Form -->
+					<div style="width: 45vw; display: table-cell;">
+						<form id="fileUploadForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- File input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell; text-align: center;">
+										<label for="file-upload">Upload File</label>
+										<input type="file" required id="file-upload-input">
+									</div>
+								</div>
+
+								<!-- Save button field -->
+								<div style="display: table-row;">
+									<div style="display: table-cell; text-align: center;">
+										<button style="width: 40vw;" class="button" type="button" onclick="fileUploadSubmit()">Upload</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Inventory list textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly style="width: 40vw;" id="textarea-file-upload"></textarea>
+					</div>
+				</div>
 			</div>
 		</div>
 
