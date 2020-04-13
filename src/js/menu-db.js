@@ -52,7 +52,11 @@ const server = http.createServer( ( req, res ) =>  {
 	 		viewMenuItems( collection, res );
 	 	}
 	 	else if( path == "/menu/edit" )
-	 	{
+	 	{	
+	 		res.statusCode = 501;
+	 		res.end( JSON.stringify( { "response" : "not implemented yet!" } ) );
+	 		return;
+
 	 		// Stringified JSON of updated item
 	 		let body = '';
 
@@ -211,7 +215,7 @@ const server = http.createServer( ( req, res ) =>  {
 					item[ "image" ] = "http://64.225.29.130/img/" + files.fileToUpload.name;
 
 					// res.end( JSON.stringify( item ) );
-					createMenuItem( item, collection, res );
+					createMenuItem( item, db, res );
 				} );
 			} );
 	 	}
@@ -228,6 +232,61 @@ const server = http.createServer( ( req, res ) =>  {
 				console.log( "Menu Item Delete Body: '" + JSON.stringify( body ) + "'" );
 				deleteMenuItem( JSON.parse( body ), collection, res ) 
 			});
+		}
+		else if( path == "/menu/search" )
+		{
+	 		// Stringified JSON of updated item
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+	 			console.log( "Search Data Received: " + body );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Verify that name is correct
+	 			if( obj[ "name" ] === undefined || obj[ "name" ] === "" )
+	 			{
+	 				res.statusCode = 400;
+	 				res.end( JSON.stringify( { "response" : "bad name" } ) );
+	 			}
+
+	 			var item = {}
+	 			item[ "name" ] = obj[ "name" ];
+
+	 			findMenuItem( JSON.parse( body ), collection, res ) 
+	 		});
+		}
+		else if( path == "/menu/stats" )
+		{
+	 		// Stringified JSON of updated item
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+	 			console.log( "Statistics Search Data Received: " + body );
+	 			
+				var obj = JSON.parse( body );
+
+	 			// Verify that name is correct
+	 			if( obj[ "name" ] === undefined || obj[ "name" ] === "" )
+	 			{
+	 				res.statusCode = 400;
+	 				res.end( JSON.stringify( { "response" : "bad name" } ) );
+	 			}
+
+	 			var item = {}
+	 			item[ "name" ] = obj[ "name" ];
+				
+				// Look for matching item in stats table
+	 			findMenuItem( JSON.parse( body ), db.db( "restaurant" ).collection( "menu-item-stats" ), res ) 
+	 		});
 		}
 		else
 		{
@@ -277,9 +336,42 @@ function editMenuItem( updatedQuery, collection, res )
 	);
 }
 
-function createMenuItem( newItem, collection, res )
+async function createMenuItem( menuItem, db, res )
 {
-	collection.insertOne( newItem, function( err, result ) {
+	var menuCollection = db.db( "restaurant" ).collection( "menu-items" );
+	var statCollection = db.db( "restaurant" ).collection( "menu-item-stats" );
+
+	var statItem = {};
+	statItem[ "name" ] = menuItem[ "name" ];
+
+	try
+	{
+		let menuInsertResult = await insertItem( menuItem, menuCollection );
+		let statInsertResult = await insertItem( statItem, statCollection );
+	}
+	catch( e )
+	{
+		console.log( "Unable to complete menu insert or stat insert.\nError log: " + e.message );
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "unable to complete insertion" } ) );
+		return;
+	}
+
+	console.log( "Menu Item Insert Result: " + JSON.stringify( menuInsertResult ) );
+	console.log( "Stat Item Insert Result: " + JSON.stringify( statInsertResult ) );
+
+	if( menuInsertResult && statInsertResult )
+	{
+		res.statusCode = 200;
+		res.end( JSON.stringify( menuInsertResult ) );
+	}
+	else
+	{
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "insert for menu or stat item is null" } ) );
+	}
+
+	/*menuCollection.insertOne( newItem, function( err, result ) {
  		if( err )
 		{
 			console.log( "Error inserting new item." );
@@ -290,7 +382,7 @@ function createMenuItem( newItem, collection, res )
 
 		console.log( 	"Item created in menu-item database:\n" + 
 						JSON.stringify( result.ops[ 0 ] ) +
-						"\n\n" );
+					"\n\n" );
 
 		console.log( "New Item: " );
 		for( var attr in newItem )
@@ -298,7 +390,12 @@ function createMenuItem( newItem, collection, res )
 
 		// Send item created back
  		res.end( JSON.stringify( result.ops[ 0 ] ) );
- 	} );
+ 	} );*/
+}
+
+async function insertItem( item, collection )
+{
+	return collection.insertOne( item );
 }
 
 function deleteMenuItem( query, collection, res )
@@ -319,3 +416,41 @@ function deleteMenuItem( query, collection, res )
  		res.end( JSON.stringify( result.result ) + "\n" );
  	} );
 }
+
+
+function findMenuItem( name, collection, res )
+{
+	collection.findOne( name, function( err, result ) {
+		if( err ) 
+		{
+			console.log( "Error searching collection." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "result" : "error searching collection" } ) );
+			throw err;
+			return;
+		}
+
+		if( result === null )
+		{
+			console.log( "Item not found in table." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "result" : "could not find item" } ) );
+			return;
+		}
+
+		console.log( 	"Items found in menu-item database:\n" +
+						JSON.stringify( result ) +
+						"\n\n" );
+
+		// Send item back
+		res.end( JSON.stringify( result ) );
+	} );
+}
+
+function getStats( name, collection, res )
+{
+
+}
+
