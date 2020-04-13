@@ -51,30 +51,27 @@ function employeeCreateShiftSubmit( create )
 function displayShifts()
 {
 	let date = new Date();
-	var month = date.getMonth()+1;
-	var daten = date.getDate
-	if(parseInt(date.getDate())<10)
+	let year = date.getFullYear();
+	let month = date.getMonth()+1
+	dt = date.getDate();
+
+	if(dt < 10)
 	{
-		date.getDate()="0"+date.getDate();
+		dt = '0' + dt;
 	}
-	if(parseInt(month<10))
+	if(month < 10)
 	{
-		month=date.getMonth()+1;
-		month="0"+month;
+		month = '0' + month;
 	}
-//	if(parseInt((date.getDate()-date.getDay()))<10)
-//	{
-//		date.getDate="0"+date.getDate();
-//	}
-	let day0= (date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay()));
-		day0 = new LocalDate(day0);
-	let day1 = date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay());
-	let day2 = date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay());
-	let day3 = date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay());
-	let day4 = date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay());
-	let day5 = date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay());
-	let day6 = date.getFullYear()+'-'+month+'-'+(date.getDate()-date.getDay());
-	alert(day0);
+
+	let day0= (year+'-'+month+'-'+(dt-date.getDay()));
+	let day1 = (year+'-'+month+'-'+(dt+1-date.getDay()));
+	let day2 = (year+'-'+month+'-'+(dt+2-date.getDay()));
+	let day3 = (year+'-'+month+'-'+(dt+3-date.getDay()));
+	let day4 = (year+'-'+month+'-'+(dt+4-date.getDay()));
+	let day5 = (year+'-'+month+'-'+(dt+5-date.getDay()));
+	let day6 = (year+'-'+month+'-'+(dt+6-date.getDay()));
+
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 

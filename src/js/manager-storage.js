@@ -37,7 +37,6 @@ const init = function (e)
 					ingredients.innerHTML+="<label>"+obj.ingredients[i]+":"+obj.ingredientCount[i]+"</label><br>";
 				}
 			}
-			
 
 			console.log( this.responseText );
 		}
