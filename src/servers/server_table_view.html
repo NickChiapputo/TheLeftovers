@@ -1,67 +1,96 @@
-<!DOCTYPE html>
-<html>
-  <head>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-		<meta content="utf-8" http-equiv="encoding">
+<!doctype html>
+<html lang="en">
 
-		<title>The Leftovers</title>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<!-- Link to css, javascript, etc. here -->
-		<!-- Remember to minify css and javascript before pushing the changes to the site -->
-		<!--<link href="css/table.min.css" rel="stylesheet">-->
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<link rel="stylesheet" href="../css/style.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-	</head>
+  <!-- Original CSS -->
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/server_js/table.js"></script>
 
-	<body class="page" onload="clock()">
+  <!-- Cookies library -->
+  <script src="../js/js.cookie.js"></script>
+  <script src="../js/cookies.js"></script>
 
-	<!-- Header bar -->
-    <div id="header" class="container-fluid">
-      <div class="row h-100" style="padding: 1vw;">
-        <div class="col-1" style="margin:auto;">
-          <a href="server_options.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
-          </a>
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-9" style="margin: auto;">
-          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script>
+  <title>Hello, world!</title>
+</head>
+
+<body class="page" onload="clock(); getTableList();">
+  <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!-- Header bar -->
+  <div id="header" class="container-fluid">
+    <div class="row h-100" style="padding: 1vw;">
+      <div class="col-1" style="margin:auto;">
+        <a href="server_options.html">
+          <img src="../Icons/Group 17.svg" style="max-width: 73%;">
+        </a>
+      </div>
+      <div class="col-1" style="margin:auto;">
+        <img src="../Icons/Group 18.svg" style="max-width: 100%;">
+      </div>
+      <div class="col-1" style="margin:auto;">
+        <img src="../Icons/Group 19.svg" style="max-width: 100%;">
+      </div>
+      <div class="col-9" style="margin: auto;">
+        <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+        <script src="../js/get-time.js"> </script>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page contents-->
+
+  <!-- Table Table -->
+  <div class="container-fluid">
+    <table id="table-table" style='width:100%; border: 1px solid black;'><tr>
+      <th style='width:25%; background-color: black; color: white;'>Sitting</th>
+      <th style='width:25%; background-color: black; color: white;'>Ordered</th>
+      <th style='width:25%; background-color: black; color: white;'>Eating</th>
+      <th style='width:25%; background-color: black; color: white;'>Paid</th>
+    </tr>
+    <tr style=' background-color: lavender; color: black;'>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table>
+
+
+    <!-- Edit item modal window -->
+    <div class="modal fade" id="table" tabindex="-1" role="dialog" aria-labelledby="table" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">View table's order or bill?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="myForm">
+              <a href="serverOrder/View-Order.html">
+                <button type="button" class="btn btn-primary" onclick="">View Order</button>
+              </a>
+              <a href="server_bill_view.html">
+                <button type="button" class="btn btn-primary" onclick="">View Bill</button>
+              </a>
+            </form>
+          </div>
         </div>
       </div>
     </div>
 
-		<div>
-		<!--<textarea readonly disabled id="textarea" style="height: 50px; width: 200px">Ordered</textarea> -->
-    <h2>Ordered:
-    <a href="serverOrder/View-Order.html">
-      <button type="button" style="height: 100px; width: 100px;">Table 9</button>
-    </a>
-    <button type="button" style="height: 100px; width: 100px;">Table 8</button>
-    </h2>
-    </div>
-    <div>
-    <h2>Eating:
-    <!--<textarea readonly disabled id="textarea" style="height: 50px; width: 20px0">Eating</textarea> -->
-    <button type="button" style="height: 100px; width: 100px;">Table 3</button>
-    </h2>
-    </div>
-    <div>
-    <h2>Paid:
-    <!--<textarea readonly disabled id="textarea" style="height: 50px; width: 20px0">Paid</textarea> -->
-    <button type="button" style="height:100px; width: 100px;">Table 6</button>
-    </h2>
-    </div>
-
-
-
-	</body>
+  </div>
+</div>
+</div>
+</body>
 </html>

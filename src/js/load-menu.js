@@ -8,15 +8,15 @@ function loadMenu()
 
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if( this.readyState == 4 && this.status == 200 ) 
+            if( this.readyState == 4 && this.status == 200 )
             {
                 //var doc = document.getElementById( 'textarea-menu-view' );
-            
+
                 // Response is a JSON array of items
                 var obj = JSON.parse( this.responseText );
-                
+
                 var numItems = Object.keys( obj ).length;
-        
+
                 //doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
                 var i;
@@ -43,7 +43,7 @@ function loadMenu()
                         item.style.visibility = "visible";
                         item.name = JSON.stringify(currItem);
                     }
-                    
+
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -59,7 +59,7 @@ function loadMenu()
 }
 
 function getCookieByName(name) {
-    
+
     var cook = document.cookie.split(';');
     var temp;
     for (var i=0; i< cook.length; i++) {
@@ -138,7 +138,8 @@ function loadOrderItems() {
         }
         document.getElementById('tableNum').innerText = table;
         // replace with real rewards num
-        var rewards = 'rewardsNum';
+        // default is 0
+        var rewards = 0;
 
         if (Cookies.get('current_order') == undefined) {
             Cookies.set('current_order', {"_id":id,
@@ -162,6 +163,12 @@ function loadOrderItems() {
         }
         Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
 
+        // handling empty order
+        if (order.items.length == 0) {
+            document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
+            return;
+        }
+
         var output = "";
         var total = 0;
         for (i=0; i < order.items.length; i++) {
@@ -180,7 +187,7 @@ function loadOrderItems() {
             if (order.items[i].happy_hour != undefined) {
                 output = output.concat(' (happy hour discount!)');
             }
-            
+
             output = output.concat('\n');
             for (j=0; j < order.items[i].ingredients.length; j++) {
                 if (order.items[i].hasIngredient[j] == '1') {
@@ -189,11 +196,35 @@ function loadOrderItems() {
             }
             output = output.concat('\n');
         }
-        total = Number(total.toFixed(2));
+        //total = Number(total.toFixed(2));
+        total = Number((total));
+        var tax = Number((total * 0.0825));
+        output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');
+        output = output.concat('Tax: $', addTrailingZeros(tax),'\n');
         output = output.concat('___________________________________________\n');
-        output = output.concat('Total: $', total,'\n');
+        output = output.concat('Total: $', addTrailingZeros(total + tax),'\n');
         document.getElementById('itemList').innerText = output;
     });
+}
+
+function addTrailingZeros(num) {
+    var str = (Number(num.toFixed(2))).toString();
+    var length = str.length;
+    var dot = str.length;
+    for (i=0; i < length; i++) {
+        if (str[i] == '.') {
+            dot = i;
+        }
+    }
+    if (dot == length) {
+        str = str.concat('.00');
+        dot = length - 3;
+    }
+    while (length - dot < 3) {
+        str = str.concat('0');
+        dot--;
+    }
+    return str;
 }
 
 function addToOrder(obj) {
@@ -242,6 +273,9 @@ function editRemoveItem(edRom) {
         err.innerText = "\nError: item with this number does not exist";
         err.style.color = "red";
         err.style.display = "unset";
+    }
+    if (edRom == 0) {
+        loadOrderItems();
     }
 }
 
