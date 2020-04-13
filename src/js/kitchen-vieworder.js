@@ -39,7 +39,7 @@ function getOrders()
 			}
 			
 			console.log( this.responseText );
-			doc.innerHTML+=txt;
+			doc.innerHTML=txt;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -51,7 +51,6 @@ function getOrders()
 	// Send a GET request to 64.225.29.130/inventory/view
     xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
 	xmlHttp.send();
-
 }
 
 function sendMessage(tableid)
