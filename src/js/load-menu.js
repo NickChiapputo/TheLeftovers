@@ -221,7 +221,8 @@ function addTrailingZeros(num) {
         dot = length - 3;
     }
     while (length - dot < 3) {
-        str.concat('0'); 
+        str = str.concat('0'); 
+        dot--;
     }
     return str;
 }
