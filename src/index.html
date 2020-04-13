@@ -298,6 +298,189 @@
 			<li class="websiteNavigation"><a href="index.html">Kitchen</a></li>
 		</ul> -->
 
+		<hr style="border-width: 0.5vh;" id="coupons">
+
+		<!-- COUPONS -->
+		<button type="button" id="coupons-collapsible-btn" onclick="collapse( 'coupons-collapsible-btn', 'coupons-collapsible' )" class="collapsible">Coupons</button>
+		<div class="content" id="coupons-collapsible">
+
+			<!-- Show list of coupons and create new coupons -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers coupons query and create coupons -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for coupons query -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Get Coupons</h3>
+					</div>
+
+					<!-- Header for create coupon -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Create Coupon</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Request Coupons Button -->
+					<div style="display: table-cell; text-align: center;">
+						<button style="" class="button" type="button" onclick="getCoupons();">Retrieve Coupons</button>
+					</div>
+
+					<!-- Create Coupon Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="createCouponForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Coupon Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Coupon Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="create-coupon-name" />
+									</div>
+								</div>
+
+								<!-- Discount % input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Discount Amount (%)</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="number" required min="0" max="100" step="0.01" name="create-coupon-discount" />
+									</div>
+								</div>
+
+								<!-- Expiration date input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Expiration Date</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="date" required name="create-coupon-expiration" />
+									</div>
+								</div>
+
+								<!-- Description input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Description</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="create-coupon-description" />
+									</div>
+								</div>
+
+								<!-- Create coupon button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="createCouponSubmit()">Create Coupon</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Coupons Query textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-coupons-view"></textarea>
+					</div>
+
+					<!-- Create coupon textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-coupons-create"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Coupon verification and delete coupon -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers verify and delete coupon -->
+				<div style="display: table-row; text-align: center;">
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Verify Coupon</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Delete Coupon</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Coupon Verification Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="couponVerificationForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Coupon ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Coupon ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="coupon-verification-id" />
+									</div>
+								</div>
+
+								<!-- Coupon verification button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="couponVerificationSubmit()">Verify</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Delete Coupon Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="deleteCouponForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Coupon ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Coupon ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="coupon-delete-id" />
+									</div>
+								</div>
+
+								<!-- Delete coupon button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="couponDeleteSubmit()">Remove Coupon</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Login textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-coupon-verification"></textarea>
+					</div>
+
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-coupon-delete"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<hr style="border-width: 0.5vh;" id="employees">
 
 		<!-- EMPLOYEES -->
@@ -369,6 +552,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="create-employee-type">
+											<option value="" selected="selected"></option>
 											<option value="server">Server</option>
 											<option value="manager">Manager</option>
 										</select>
@@ -746,6 +930,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="table-status-value">
+											<option value="" selected="selected"></option>
 											<option value="sitting">Sitting</option>
 											<option value="ordered">Ordered</option>
 											<option value="eating">Eating</option>
@@ -934,6 +1119,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="order-pay-method">
+											<option value="" selected="selected"></option>
 											<option value="card">Card</option>
 											<option value="cash">Cash</option>
 										</select>
@@ -947,6 +1133,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="order-pay-receipt-method">
+											<option value="" selected="selected"></option>
 											<option value="print">Print</option>
 											<option value="email">E-Mail</option>
 										</select>
@@ -1410,6 +1597,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="menu-item-create-category">
+											<option value="" selected="selected"></option>
 											<option value="appetizer">Appetizer</option>
 											<option value="entree">Entree</option>
 											<option value="drink">Drink</option>
@@ -1444,13 +1632,23 @@
 					<div style="display: table-cell; text-align: left;">
 						<form id="editMenuItemForm">
 							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Item ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="menu-item-edit-id" pattern="[0-9a-z]{24}" />
+									</div>
+								</div>
+
 								<!-- Name input field -->
 								<div style="display: table-row">
 									<div style="display: table-cell;">
 										<div class="label" style="">Name</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="text" required name="menu-item-edit-name" />
+										<input style="width: 25vw;" type="text" name="menu-item-edit-name" />
 									</div>
 								</div>
 
@@ -1460,7 +1658,7 @@
 										<div class="label" style="">Price ($)</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="number" required min="0.01" value="" step="0.01" name="menu-item-edit-price" />
+										<input style="width: 25vw;" type="number" min="0.01" value="" step="0.01" name="menu-item-edit-price" />
 									</div>
 								</div>
 
@@ -1470,7 +1668,7 @@
 										<div class="label" style="">Calories</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="number" required name="menu-item-edit-calories" />
+										<input style="width: 25vw;" type="number" name="menu-item-edit-calories" />
 									</div>
 								</div>
 
@@ -1608,7 +1806,7 @@
 										<div class="label" style="">Description</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="text" required name="menu-item-edit-description" />
+										<input style="width: 25vw;" type="text" name="menu-item-edit-description" />
 									</div>
 								</div>
 
@@ -1619,6 +1817,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="menu-item-edit-category">
+											<option value="" selected="selected"></option>
 											<option value="appetizer">Appetizer</option>
 											<option value="entree">Entree</option>
 											<option value="drink">Drink</option>
@@ -1633,7 +1832,7 @@
 										<div class="label" style="">Picture</div>
 									</div>
 									<div style="display: table-cell;">
-										<input type="file" required id="menu-item-edit-picture">
+										<input type="file" id="menu-item-edit-picture">
 									</div>
 								</div>
 

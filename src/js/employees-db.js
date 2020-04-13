@@ -203,6 +203,54 @@ const server = http.createServer( ( req, res ) =>  {
 	 			findEmployee( employee, collection, res );
 	 		});
 		}
+		else if( path == "/employees/logout" )
+		{
+			res.statusCode = 501;
+			res.end( JSON.stringify( { "response" : "not implemented yet!" } ) );
+			return;
+
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. Update table status
+	 		req.on( 'end', () => {
+	 			console.log( "Received: \n" + body + "\n" );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Check that _id field is valid
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			{
+					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "success" : "no" } ) );
+					return;
+	 			}
+
+				// Check that pin is valid
+	 			if( obj[ "pin" ] === undefined || obj[ "pin" ] === ""  )
+	 			{
+					console.log( "Invalid pin value '" + obj[ "pin" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "success" : "no" } ) );
+					return;
+	 			}
+
+
+	 			// Ensure JSON object only has _id and pin fields
+	 			var employee = {}
+	 			employee[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
+				employee[ "pin" ] = obj[ "pin" ];
+
+	 			// Update status
+	 			findEmployee( employee, collection, res );
+	 		});
+		}
 		else if( path == "/employees/shift/create" )
 		{
 	 		// Stringified JSON of new account values
@@ -351,8 +399,6 @@ const server = http.createServer( ( req, res ) =>  {
 	 });
 });
 
-
-
 server.listen( port, hostname, () => {
 	// Display time to log for debugging
 	var date = new Date().toISOString().substr( 11, 8 );
@@ -368,11 +414,11 @@ function viewEmployees( collection, res )
  			res.statusCode = 500;														// Internal Server Error
  			res.end( JSON.stringify( { "response" : "error querying database" } ) );	// Unsuccessful action
  			throw err;	
+ 			return;
  		} 
 
-		console.log( 	"Items found in employee database:\n" +
-						JSON.stringify( result ) +
-						"\n\n" );
+ 		// Display debugging output
+		console.log( "Items found in employee database:\n" + JSON.stringify( result ) + "\n\n" );
 
 		// Send list of items back
 		res.end( JSON.stringify( result ) );
@@ -388,6 +434,7 @@ function createEmployee( employee, collection, res )
  			res.statusCode = 500;														// Internal Server Error
  			res.end( JSON.stringify( { "response" : "error inserting employee" } ) );	// Unsuccessful action
  			throw err;	
+ 			return;
  		} 
 
  		// Display new item for debugging
@@ -406,9 +453,9 @@ function findEmployee( employee, collection, res )
 	collection.findOne( employee, function( err, result ) {
 		if( err )
 		{
-			console.log( "Unable to find and update table status." );
-	 		res.statusCode = 500;																		// Internal Server Error
-	 		res.end( JSON.stringify( { "response" : "Unable to find and update table status." } ) );	// Give error response to client
+			console.log( "Unable to verify employee." );
+	 		res.statusCode = 500;															// Internal Server Error
+	 		res.end( JSON.stringify( { "response" : "unable to verify employee" } ) );		// Give error response to client
 	 		throw err;
 			return;
 		}
@@ -423,7 +470,7 @@ function findEmployee( employee, collection, res )
 		// Display updated table for debugging
  		console.log( "Successful login: " + JSON.stringify( result.value ) ); 
 
-		// Send the updated table back
+		// Send a positive result back
 		res.end( JSON.stringify( { "success" : "yes" } ) );
 	});
 }
