@@ -24,6 +24,12 @@ const init = function (e)
 			pic.innerHTML = "<div class=\"item-large-image\" style=\"background-image: url("+obj.image+");max-height:70vh;min-height:70vh\"></div>";
 			allergens.innerHTML="Allergens="+obj.allergens;
 			price.innerHTML="Price=$"+obj.price;
+			localStorage.setItem('food-item-name',obj.name);
+			localStorage.setItem('food-item-description',obj.description);
+			localStorage.setItem('food-item-calories',obj.calories);
+			localStorage.setItem('food-item-price',obj.price);
+			localStorage.setItem('food-item-id',obj._id)
+			localStorage.setItem('food-item-category',obj.category);
 			for(i=0; i< obj.ingredients.length; i++)
 			{
 				if(obj.hasIngredient[i]!=0)
@@ -167,7 +173,7 @@ function deleteMenuItemFormSubmit()
 	return false;
 }
 
-/*
+
 function editMenu()
 {
 	var name = document.querySelector("#food-name");
@@ -401,10 +407,77 @@ function gatherIngredients()
 
 function editSubmit()
 {
-	alert(document.getElementsByName("menu-item-edit-name")[0].value);
-}
-*/
+	var formData = new FormData(editMenuItemForm)
+	alert(formData.get("menu-item-edit-name"))
+	formData.set("menu-item-edit-id",localStorage.getItem('food-item-id'))
+	if(formData.get("menu-item-edit-name")==null)
+	{
+		formData.set("menu-item-edit-name",localStorage.getItem('food-item-name'));
 
+	}
+	if(formData.get("menu-item-edit-description")==null)
+	{
+		formData.set("menu-item-edit-description",localStorage.getItem('food-item-description'));
+	}
+	if(formData.get("menu-item-edit-calories")==null)
+	{
+		formData.set("menu-item-edit-calories",localStorage.getItem('food-item-calories'));
+	}
+	if(formData.get("menu-item-edit-price")==null)
+	{
+		formData.set("menu-item-edit-price",localStorage.getItem('food-item-price'));
+	}
+
+	var params = {}
+		params['_id'] = localStorage.getItem('food-item-id');
+
+
+		if(document.getElementsByName("menu-item-edit-name")[0].value=="")
+		{
+			params['name']=localStorage.getItem('food-item-name');
+
+		}
+		if(document.getElementsByName("menu-item-edit-description")[0].value=="")
+		{
+			params['description']=localStorage.getItem('food-item-description');
+		}
+		if(document.getElementsByName("menu-item-edit-calories")[0].value=="")
+		{
+			params['calories']=localStorage.getItem('food-item-calories');
+		}
+		if(document.getElementsByName("menu-item-edit-price")[0].value=="")
+		{
+			params['price']=localStorage.getItem('food-item-price');
+		}
+
+
+		var xmlHttp = new XMLHttpRequest();
+
+		xmlHttp.onreadystatechange = function() {
+			if(this.readyState == 4 && this.status == 200)
+			{
+				console.log(this.responseText);
+				var obj = JSON.parse(this.responseText);
+
+				if( obj == null || obj.ok != 1 || obj.n != 1 )
+				{
+					document.getElementById('textarea-edit').innerHTML = "Edit Successful";
+				}
+				else
+				{
+					document.getElementById('textarea-edit').innerHTML = "Edit failed make sure the Ingredients area is filled"
+				}
+			}
+			else if( this.readyState == 4 && this.status != 200)
+			{
+				console.log("Edit menu item respone: " + this.status);
+			}
+		};
+		xmlHttp.open( "POST", "http://64.225.29.130/menu/edit");
+		xmlHttp.send( formData );
+}
+
+/*
 function createMenuItem()
 {
 	if(document.getElementsByName("menu-item-create-name").value==undefined)
@@ -473,7 +546,8 @@ function createMenuItem()
 
 function createMenuItemSubmit()
 {
-	deleteMenuItem();
+	//deleteMenuItem();
 	createMenuItem();
 	return false;
 }
+*/

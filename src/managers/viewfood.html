@@ -15,7 +15,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock();">
+  <body class="page" onload="clock();loadIngredients()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -45,12 +45,14 @@
     <!-- Page contents -->
     <div class="container-fluid scrollable">
       <div class="row title-bar">
+        <form id="editMenuItemForm">
         <div class="menu-box" id="food-name">
       </div>
       <ul class="nav nav-pills">
-        <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="loadIngredients()">Load Edit Form</a></li>
+        <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="editMenu()">Load Edit Form</a></li>
       </ul>
         <button class="menu-box" style="background-color: red;" onclick="deleteMenuItemFormSubmit()">Remove</button>
+        <button style="background-color: orange;" class="button col menu-box" type="button" onclick="editSubmit()">Submit</button>
       </div>
       <div class="row" style="min-height: 70vh; max-height: 70vh; margin-top: 29vh;">
           <div id="food-picture" class="col-5">
@@ -70,10 +72,11 @@
               </div>
           </div>
           <p id='textarea-menu-delete'></p>
+          <p id='textarea-edit'></p>
       </div>
       <br><br>
       <div class="tab-content">
-      <div id="edit" class="tab-pane fade">
+      <div id="" class="tab-pane fade">
         <p style="color: yellow;">Image file and Ingredients fields are required</p>
         <div class="container-fluid">
         <form id="createMenuItemForm">
@@ -248,6 +251,7 @@
               </div>
           </div>
           </form>
+      </div>
       </div>
       </div>
       </div>
