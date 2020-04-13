@@ -15,7 +15,7 @@
     <title>Coupons</title>
   </head>
 
-  <body class="page" onload="clock()">
+  <body class="page" onload="clock();getCoupons()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -35,14 +35,14 @@
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
-          <script src="../js/generate-coupons.js"></script>
+          <script src="../js/manager-coupons.js"></script>
         </div>
       </div>
     </div>
     <ul class="col nav nav-pills">
-      <li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
       <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getCouponList()">View</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="">View</a></li>
     </ul>
     <!-- Page contents-->
 	<div class="container-fluid center-div">
@@ -53,13 +53,21 @@
 			<label for="discount">Discount%:</label>
 			<input type="text" id="discount" name="discount"/><br><br>
 			<label for="expiration">Expiration Date:</label>
-      <input type="text" id="expiration" name="expiration"/><br><br>
+      <input type="date" id="expiration" name="expiration"/><br><br>
       <label for="rewards">Rewards</label>
       <input type="rewards" id="rewards" name="rewards"/><br><br>
-      <input type="button" onclick="createFormSubmit()" value="Submit">
+      <input type="button" onclick="createCouponSubmit()" value="Submit"/>
     </form>
-    <div id="remove" class="tab-pane fade">content</div>
-    <div id="view" class="tab-pane fade">view content</div>
+    <form id="remove" class="tab-pane fade">
+      <label>CouponID</label>
+      <input type="text" id="coupon-delete-id"/><br><br>
+      <input type="button" onclick="couponDeleteSubmit()" value="Submit"/>
+    </form>
+    <div id="view" class="tab-pane fade">
+      <p id="textarea-coupons-view">
+
+      </p>
+    </div>
     </div>
     
     <p id="textarea-create"></p>
