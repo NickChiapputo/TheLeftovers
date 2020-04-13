@@ -263,7 +263,7 @@ function getMenu()
 						for( j = 1; j < Object.keys( currItem.ingredients ).length; j++ )
 							doc.innerHTML += "                    " + ( currItem.hasIngredient[ j ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ j ] + " - Uses " + currItem.ingredientCount[ j ] + "\n";
 					}
-					else if( attr === "hasIngredient" || attr === "ingredientCount" || attr === "_id" )
+					else if( attr === "hasIngredient" || attr === "ingredientCount" )
 					{
 
 					}
@@ -271,15 +271,6 @@ function getMenu()
 						doc.innerHTML += "    " + attr + ": " + currItem[ attr ] + "\n";
 				}
 			}
-
-			// var i;
-			// for( i = 0; i < numItems; i++ )
-			// {
-			// 	var currItem = obj[ i ];
-			// 	doc.innerHTML += 	"Item " + ( i + 1 ) + "\n" + 
-			// 						"    Name:  " + currItem.name + "\n" + 
-			// 						"    Count: " + currItem.count + "\n\n";
-			// }
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -291,6 +282,56 @@ function getMenu()
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
 	xmlHttp.send();
+}
+
+function searchForMenuItemSubmit()
+{
+	var params = {};
+	params[ "name" ] =  document.getElementsByName( "menu-item-search-name" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			var doc = document.getElementById( 'textarea-menu-search' );
+
+			var currItem = obj;
+			doc.innerHTML = "";
+			for( var attr in currItem )
+			{
+				if( attr === "ingredients" )
+				{
+					doc.innerHTML += "    " + attr + ":    " + ( currItem.hasIngredient[ 0 ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ 0 ] + " - Uses " + currItem.ingredientCount[ 0 ] + "\n";
+
+					var j;
+					for( j = 1; j < Object.keys( currItem.ingredients ).length; j++ )
+						doc.innerHTML += "                    " + ( currItem.hasIngredient[ j ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ j ] + " - Uses " + currItem.ingredientCount[ j ] + "\n";
+				}
+				else if( attr === "hasIngredient" || attr === "ingredientCount" || attr === "_id" )
+				{
+
+				}
+				else
+					doc.innerHTML += "    " + attr + ": " + currItem[ attr ] + "\n";
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-menu-search' ).innerHTML = "Search for menu item status response: " + this.status;
+			console.log( "Search for menu item status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/search", true );
+	console.log( "Sending: " + JSON.stringify( params ) );
+	xmlHttp.send( JSON.stringify( params ) ); 
 }
 
 function createMenuItem()
@@ -325,6 +366,50 @@ function createMenuItem()
 function createMenuItemSubmit()
 {
 	createMenuItem();
+
+	return false;
+}
+
+function editMenuItem()
+{
+	if( document.getElementById( "editMenuItemForm" ).checkValidity() )
+	{
+		var formData = new FormData( editMenuItemForm );
+		formData.append( "fileToUpload", document.getElementById( "menu-item-edit-picture" ).files[ 0 ] );
+
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() {
+			if( this.readyState == 4 && this.status == 200 )
+			{
+				var obj = JSON.parse( this.responseText );
+				var el = document.getElementById( "textarea-menu-edit" );
+
+				el.innerHTML = "Item Edited:\n";
+				for( var attr in obj )
+					el.innerHTML += "    " + attr + ": " + obj[ attr ] + "\n";
+				console.log( this.responseText );
+			}
+			else if( this.readyState == 4 && this.status != 200 )
+			{
+				document.getElementById( 'textarea-menu-edit' ).innerHTML = "Edit menu item status response: " + this.status;
+				document.getElementById( 'textarea-menu-edit' ).innerHTML += "\n\n" + this.responseText;
+				console.log( "Edit menu item status response: " + this.status );
+			}
+		};
+
+		// Send a POST request to 64.225.29.130/menu/edit
+		xmlHttp.open( "POST", "http://64.225.29.130/menu/edit" );
+		xmlHttp.send( formData );
+	}
+	else
+	{
+		document.getElementById( 'textarea-menu-edit' ).innerHTML = "Invalid Input. ID is required.";
+	}
+}
+
+function editMenuItemSubmit()
+{
+	editMenuItem();
 
 	return false;
 }
@@ -367,6 +452,51 @@ function deleteMenuItemFormSubmit()
 	deleteMenuItem();
 
 	return false;
+}
+
+function searchForMenuItemStats()
+{
+	var params = {};
+	params[ "name" ] =  document.getElementsByName( "menu-item-search-stats-name" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			var doc = document.getElementById( 'textarea-menu-search-stats' );
+
+			// Response is a JSON object
+			var item = JSON.parse( this.responseText );
+
+			for( var attr in item )
+			{
+				if( attr === "name" )
+				{
+					// Get number of different days item has been ordered on
+					// Each date is a key, there are 2 extra keys (_id and name)
+					var numDates = Object.keys( item ).length - 2;
+					doc.innerHTML = item[ "name" ] + ":\n    Ordered on " + numDates + " different days.\n";
+				}
+				else
+				{
+					doc.innerHTML += "        " + attr + ": " + item[ attr ] + "\n";
+				}
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-menu-search-stats' ).innerHTML = "Search for menu item stats status response: " + this.status;
+			console.log( "Search for menu item stats status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/stats", true );
+	console.log( "Sending: " + JSON.stringify( params ) );
+	xmlHttp.send( JSON.stringify( params ) ); 
 }
 
 function loadIngredients()
@@ -425,9 +555,45 @@ function loadIngredients()
 						'</div>' + 
 					'</div>';
 
+				var ingredientEditSrc = 
+					'<div class="ingredientArea" style="display: table-row;">' + 
+						'<div style="display: table-cell;">' + 
+							'<div class="labelIngredient" style="">' + 
+								currItem.name + 
+							'</div>' + 
+						'</div>' + 
+						'<div style="display: table-cell;">' + 
+							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
+								'<div style="display: table-row;">' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-has-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											'1' + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="number" size="5" maxlength="3" name="menu-item-edit-ingredient-count-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>';
+
 				el.insertAdjacentHTML( 'afterend', ingredientSrc );
 
-				elEdit.insertAdjacentHTML( 'afterend', ingredientSrc );
+				elEdit.insertAdjacentHTML( 'afterend', ingredientEditSrc );
 			}
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -450,7 +616,7 @@ function getRewardsAccounts()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			var doc = document.getElementById( 'textarea-rewards-accounts-view' );
+			var doc = document.getElementById( 'rewardsNum' );
 
 			console.log( this.responseText );
 		
@@ -487,8 +653,8 @@ function getRewardsAccounts()
 function createRewardsAccount()
 {
 	var params = {};
-	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
-	params[ "name" ] = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
+	params[ "phone" ] = document.getElementsByName( "rewardsPhone" )[ 0 ].value;
+	params[ "name" ] = document.getElementsByName( "rewardsName" )[ 0 ].value;
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -640,7 +806,7 @@ function createOrder()
 	order[ "status" ] = "ordered";
 	order[ "items" ] = [
 		{
-			"name" : "First Item",
+			"name" : "Banana Split",
 			"price" : 3.05,
 			"calories" : 1,
 			"ingredients" : [
@@ -1067,21 +1233,21 @@ function employeeDeleteSubmit()
 function employeeChangeShift( create )
 {
 	// Check if form is valid
-	if( document.getElementById( "createShiftForm" ).checkValidity() )
+	if( document.getElementById( ( create ? "create" : "remove" ) + "ShiftForm" ).checkValidity() )
 	{
 		var shift = {};
 
 		// Get employee ID
-		shift[ "_id" ] = document.getElementsByName( "employee-create-shift-id" )[ 0 ].value;
+		shift[ "_id" ] = document.getElementsByName( "employee-" + ( create ? "create" : "remove" ) + "-shift-id" )[ 0 ].value;
 
 		// Get shift date
-		shift[ "date" ] = document.getElementsByName( "employee-create-shift-date" )[ 0 ].value;
+		shift[ "date" ] = document.getElementsByName( "employee-" + ( create ? "create" : "remove" ) + "-shift-date" )[ 0 ].value;
 		
 		// Get start time
-		shift[ "start" ] = document.getElementsByName( "employee-create-shift-start-time" )[ 0 ].value
+		shift[ "start" ] = document.getElementsByName( "employee-" + ( create ? "create" : "remove" ) + "-shift-start-time" )[ 0 ].value
 		
 		// Get end time
-		shift[ "end" ] = document.getElementsByName( "employee-create-shift-end-time" )[ 0 ].value
+		shift[ "end" ] = document.getElementsByName( "employee-" + ( create ? "create" : "remove" ) + "-shift-end-time" )[ 0 ].value
 
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
@@ -1112,5 +1278,137 @@ function employeeCreateShiftSubmit( create )
 	employeeChangeShift( create );
 
 	return false;
+}
+/*******************************************/
+
+/*******************************************/
+/*            Employee Functions           */
+function getCoupons()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-coupons-view' );
+
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.value = "Number of Coupons: " + numItems + "\n\n";
+		
+			var i;
+			for( i = 0; i < numItems; i++ )
+			{
+				var coupon = obj[ i ];
+				doc.value += 	"Coupon " + ( i + 1 ) + ":\n";
+
+				for( var attr in coupon )
+					doc.value += "    " + attr + " - " + coupon[ attr ] + "\n";
+			}
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-coupons-view' ).innerHTML = "Coupon query response: " + this.status;
+			console.log( "Coupon query response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/coupons/view
+	xmlHttp.open( "GET", "http://64.225.29.130/coupons/view", true );
+	xmlHttp.send();
+}
+
+function createCouponSubmit()
+{
+	var coupon = {};
+
+	// Get coupon data
+	coupon[ "name" ] = document.getElementsByName( "create-coupon-name" )[ 0 ].value;
+	coupon[ "discount" ] = document.getElementsByName( "create-coupon-discount" )[ 0 ].value;
+	coupon[ "expiration" ] = document.getElementsByName( "create-coupon-expiration" )[ 0 ].value;
+	coupon[ "rewards" ] = document.getElementsByName( "create-coupon-description" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-coupons-create" ).innerHTML = "New Coupon: " + this.responseText;
+			
+			// for( var attr in obj )
+			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-coupons-create" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( coupon ) );
+
+	// Send a POST request to 64.225.29.130/employees/create
+	xmlHttp.open( "POST", "http://64.225.29.130/coupons/create", true );
+	xmlHttp.send( JSON.stringify( coupon ) );
+}
+
+function couponVerificationSubmit()
+{
+	var coupon = {};
+
+	// Get coupon information
+	coupon[ "_id" ] = document.getElementsByName( "coupon-verification-id" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			document.getElementById( "textarea-coupon-verification" ).innerHTML = "Verification result: " + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-coupon-verification" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( coupon ) );
+
+	// Send a POST request to 64.225.29.130/coupon/verify
+	xmlHttp.open( "POST", "http://64.225.29.130/coupons/verify", true );
+	xmlHttp.send( JSON.stringify( coupon ) );
+}
+
+function couponDeleteSubmit()
+{
+	var params = {};
+	params[ "_id" ] = document.getElementsByName( "coupon-delete-id" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			if( obj == null || obj.ok != 1 || obj.n != 1 )
+				document.getElementById( 'textarea-coupon-delete' ).innerHTML = "Unable to delete coupon.\n";
+			else
+				document.getElementById( 'textarea-coupon-delete' ).innerHTML = "Deleted Coupon\n";
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-coupon-delete' ).innerHTML = "Delete coupon status response: " + this.status;
+			console.log( "Delete coupon status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/coupons/delete
+	xmlHttp.open( "POST", "http://64.225.29.130/coupons/delete", true );
+	xmlHttp.send( JSON.stringify( params ) );
 }
 /*******************************************/

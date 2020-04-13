@@ -56,7 +56,7 @@ function placeTable(tableNum, status){
   if (table.rows.length < 22){
     for (var i = table.rows.length; i < 22; i++){
       var r = table.insertRow(table.rows.length);
-      r.style.backgroundColor = "crimson";
+      r.style.backgroundColor = "lavender";
       r.style.color = "white";
       for (var j = 0; j < 4; j++){
         var c = r.insertCell(j);
@@ -85,7 +85,7 @@ function placeTable(tableNum, status){
   //place table button in table
   for (var i = 1; i < table.rows.length; i++){
     if (table.rows[i].cells[col].innerHTML == "") {
-      table.rows[i].cells[col].innerHTML = '<button type="button" class="col btn btn-primary menu-box" data-toggle="modal" data-target="#table" style="height: 200px; width: 200px;">' + tableNum + '</button></td>';
+      table.rows[i].cells[col].innerHTML = '<button type="button" class="col btn btn-primary menu-box" value="' +  tableNum  + '" onclick="store(this.value)" data-toggle="modal" data-target="#table" style="height: 200px; width: 200px;">' + tableNum + '</button></td>';
       //alert(table.rows[i].cells[col].innerHTML);
       break;
     }
@@ -95,4 +95,9 @@ function placeTable(tableNum, status){
 
 
 
+}
+
+function store(value){
+	Cookies.set('table-num', value, {path: '/', sameSite: 'strict'});
+	//alert(Cookies.get('table-num'));
 }
