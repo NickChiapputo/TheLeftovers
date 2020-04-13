@@ -29,7 +29,7 @@
 	
   </head>
 
-  <body class="page" onload="clock();getInventoryList()">
+  <body class="page" onload="clock();">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -49,17 +49,17 @@
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
-          <script src="../js/inventory.js"></script>
+          <script src="../js/manager-inventory.js"></script>
         </div>
       </div>
     </div>
 
     <!-- Page contents-->
   <ul class="col nav nav-pills">
-    <li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
-    <li class="col menu-box"><a data-toggle="pill" href="#view">View</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getInventoryList()">View</a></li>
   </ul>
   
   <div class="tab-content">
@@ -72,6 +72,7 @@
         <label for="count">Count:</label>
         <input type="number" name="count-create"/><br><br>
         <button style="width: 12.5vw;" type="reset" onclick="createFormSubmit()">Create</button>
+        <p id='textarea-create'></p>
       </form>
       <form id="remove" class="tab-pane fade">
         <label for="ingredient">Ingredient:</label>

@@ -1,4 +1,5 @@
 const MongoClient = require( 'mongodb' ).MongoClient;
+const mongo = require( 'mongodb' );
 
 const http = require( 'http' );
 const url = require( 'url' );
@@ -52,15 +53,188 @@ const server = http.createServer( ( req, res ) =>  {
 	 		viewMenuItems( collection, res );
 	 	}
 	 	else if( path == "/menu/edit" )
-	 	{
-	 		// Stringified JSON of updated item
-	 		let body = '';
+	 	{	
+	 		// res.statusCode = 501;
+	 		// res.end( JSON.stringify( { "response" : "not implemented yet!" } ) );
+	 		// return;
 
-	 		// Asynchronous. Keep appending data until all data is read
-	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+			console.log( "Editing Menu Item" );
+			var form = new formidable.IncomingForm();
+			form.parse( req, function( err, fields, files ) {
+				if( err )
+				{
+					console.log( "Unable to parse form." );
 
-	 		// Data is finished being read. edit item
-	 		req.on( 'end', () => { editMenuItem( JSON.parse( body ), collection, res ) } );
+					res.statusCode = 500;
+					res.end( JSON.stringify( { "response" : "unable to parse form" } ) );
+
+					throw err;
+					return;
+				}
+
+				console.log( " \nInput fields:" );
+				for( var attr in fields )
+					console.log( "    " + attr + ": " + fields[ attr ] );
+
+				// Make sure name is present and valid
+				if( fields[ "menu-item-edit-id" ]  === undefined || fields[ "menu-item-edit-id" ] === "" || fields[ "menu-item-edit-id" ].length !== 24 )
+				{
+					console.log( "Invalid ID." );
+					var returnVal = { "response" : "invalid _id" };
+					res.statusCode = 400;
+					res.end( JSON.stringify( returnVal ) );
+					return;
+				}
+
+				// Make sure that ingredients are listed
+
+
+				// Add the ID 
+				var item = {}
+				item[ "_id" ] = new mongo.ObjectId( fields[ "menu-item-edit-id" ] )
+				
+				// Add ingredients arrays
+				item[ "ingredients" ] = [];
+				item[ "hasIngredient" ] = [];
+				item[ "ingredientCount" ] = [];
+
+				// Add allergens array
+				item[ "allergens" ] = [];
+
+				// Only add fields if they are non-empty
+				if( fields[ "menu-item-edit-name" ] !== undefined && fields[ "menu-item-edit-name" ] !== "" )
+				{
+					console.log( "Editing name." );
+					item[ "name" ] = fields[ "menu-item-edit-name" ];
+				}
+
+				if( fields[ "menu-item-edit-price" ] !== undefined && fields[ "menu-item-edit-price" ] !== "" && 
+					!isNaN( parseFloat( fields[ "menu-item-edit-price" ] ) ) && parseFloat( fields[ "menu-item-edit-price" ] ) >= 0 )
+				{
+					console.log( "Editing price." );
+					item[ "price" ] = parseFloat( fields[ "menu-item-edit-price" ] );
+				}
+
+				if( fields[ "menu-item-edit-calories" ] !== undefined && fields[ "menu-item-edit-calories" ] !== "" && 
+					!isNaN( parseInt( fields[ "menu-item-edit-calories" ] ) ) && parseInt( fields[ "menu-item-edit-calories" ] ) >= 0 )
+				{
+					console.log( "Editing calories." );
+					item.calories = parseInt( fields[ "menu-item-edit-calories" ] );
+				}
+
+				if( fields[ "menu-item-edit-description" ] !== undefined && fields[ "menu-item-edit-description" ] !== "" )
+				{
+					console.log( "Editing description." );
+					item.description = fields[ "menu-item-edit-description" ];
+				}
+				
+				if( fields[ "menu-item-edit-category" ] !== undefined && fields[ "menu-item-edit-category" ] !== "" )
+				{
+					console.log( "Editing category." );
+					item.category = fields[ "menu-item-edit-category" ];
+				}
+
+				for( var attr in fields )
+				{
+					if( attr.startsWith( "menu-item-edit-ingredient-count-" ) )
+					{
+						// There are 32 characters in 'menu-item-edit-ingredient-count-'
+						// Number starts at the 32th space (0-based index)
+						var ingredientNum = parseInt( attr.substring( 32 ) );
+						
+						// If there is not a count value but an ingredient is selected for the count -> bad request
+						if( fields[ attr ] === "" && fields[ "menu-item-edit-ingredient-" + ingredientNum ] !== undefined )
+						{
+							console.log( "Ingredient count does not exist, but there is a corresponding ingredient." );
+							var returnVal = { "response" : "missing ingredient count" };
+							res.statusCode = 400;
+							res.end( JSON.stringify( returnVal ) );
+							return;
+						}
+						else if( fields[ attr ] !== "" && parseInt( fields[ attr ] ) === 0 )
+						{
+							console.log( "Ingredient count is 0. Not adding " + fields[ "menu-item-edit-ingredient-" + ingredientNum ] + " to ingredient list." );
+						}
+						else if( fields[ attr ] !== "" && fields[ "menu-item-edit-ingredient-" + ingredientNum ] === undefined )
+						{
+							console.log( "Ingredient count exists, but there is no corresponding ingredient. (" + ingredientNum + "." );
+							var returnVal = { "response" : "missing ingredient for count" };
+							res.statusCode = 400;
+							res.end( JSON.stringify( returnVal ) );
+							return;
+						}
+						else if( fields[ attr ] !== "" && fields[ "menu-item-edit-ingredient-" + ingredientNum ] !== undefined )
+						{
+							if( isNaN( parseInt( fields[ attr ] ) ) || parseInt( fields[ attr ] ) < 1 )
+							{
+								console.log( "Ingredient count is not a valid value (" + parseInt( fields[ attr ] ) + ")." );
+								var returnVal = { "response" : "invalid ingredient number" };
+								res.statusCode = 400; // Bad request - malformed data
+								res.end( JSON.stringify( returnVal ) );
+								return;
+							}
+							else
+							{
+								console.log( "Adding " + parseInt( fields[ attr ], "10" ) + " of " + fields[ "menu-item-edit-ingredient-" + ingredientNum ] + " (" + 
+										fields[ "menu-item-edit-has-ingredient-" + ingredientNum ] == "1" ? 1 : 0 );
+								item.ingredientCount.push( parseInt( fields[ attr ], "10" ) );
+								item.ingredients.push( fields[ "menu-item-edit-ingredient-" + ingredientNum ] );
+								item.hasIngredient.push( fields[ "menu-item-edit-has-ingredient-" + ingredientNum ] == "1" ? 1 : 0 );
+							}
+						}
+						else if( fields[ "menu-item-edit-has-ingredient-" + ingredientNum ] !== undefined )
+						{
+							console.log( "There is no count or ingredient, but the ingredient is set as default." );
+							var returnVal = { "response" : "missing ingredient marked as default" };
+							res.statusCode = 400;
+							res.end( JSON.stringify( returnVal ) );
+							return;
+						}
+						else
+						{
+							// There is an empty count and the ingredient does not exist. Nothing to do.
+						}
+					}
+					else if( attr.startsWith( "menu-item-edit-allergens" ) )
+					{
+						item.allergens.push( fields[ attr ] );
+					}
+				}
+
+				// Check if there were any ingredients added
+				if( item.ingredients === undefined || item.ingredients.length === 0 )
+				{
+					console.log( "There were no ingredients added." );
+					var returnVal = { "response" : "no ingredients" };
+					res.statusCode = 400;
+					res.end( JSON.stringify( returnVal ) );
+					return;
+				}
+
+
+				// If file is attached, upload it to the server and add it to the item
+				if( files[ "fileToUpload" ] !== undefined )
+				{
+					// Create file on server
+					var oldpath = files.fileToUpload.path;
+					var newpath = '/var/www/html/img/' + files.fileToUpload.name;
+
+					item[ "image" ] = "http://64.225.29.130/img/" + files.fileToUpload.name;
+
+					fs.rename( oldpath, newpath, function( err ) {
+						if( err )
+						{
+							var returnVal = { "response" : "error uploading file" };
+							res.end( returnVal );
+							throw err;
+						}
+
+						console.log( "File uploaded to " + newpath + "." );
+					} );
+				}
+
+				editMenuItem( item, db, res );
+			} );
 	 	}
 	 	else if( path == "/menu/create" )
 	 	{
@@ -79,8 +253,8 @@ const server = http.createServer( ( req, res ) =>  {
 
 				// Make sure all fields are present and valid
 				if( 	fields[ "menu-item-create-name" ]  === undefined || fields[ "menu-item-create-name" ]  === "" ||
-					fields[ "menu-item-create-price" ] === undefined || isNaN( parseFloat( fields[ "menu-item-create-price" ] ) ) || parseFloat( fields[ "menu-item-create-price" ] ) <= 0 ||
-					fields[ "menu-item-create-calories" ] === undefined || isNaN( parseInt( fields[ "menu-item-create-calories" ] ) ) || parseInt( fields[ "menu-item-create-calories" ] ) <= 0 ||
+					fields[ "menu-item-create-price" ] === undefined || isNaN( parseFloat( fields[ "menu-item-create-price" ] ) ) || parseFloat( fields[ "menu-item-create-price" ] ) < 0 ||
+					fields[ "menu-item-create-calories" ] === undefined || isNaN( parseInt( fields[ "menu-item-create-calories" ] ) ) || parseInt( fields[ "menu-item-create-calories" ] ) < 0 ||
 					fields[ "menu-item-create-description" ] === undefined || fields[ "menu-item-create-description" ] === "" ||
 					fields[ "menu-item-create-category" ] === undefined || fields[ "menu-item-create-category" ] === "" )
 				{
@@ -211,7 +385,7 @@ const server = http.createServer( ( req, res ) =>  {
 					item[ "image" ] = "http://64.225.29.130/img/" + files.fileToUpload.name;
 
 					// res.end( JSON.stringify( item ) );
-					createMenuItem( item, collection, res );
+					createMenuItem( item, db, res );
 				} );
 			} );
 	 	}
@@ -226,8 +400,63 @@ const server = http.createServer( ( req, res ) =>  {
 	 		// Data is finished being read. edit item
 	 		req.on( 'end', () => { 
 				console.log( "Menu Item Delete Body: '" + JSON.stringify( body ) + "'" );
-				deleteMenuItem( JSON.parse( body ), collection, res ) 
+				deleteMenuItem( JSON.parse( body ), db, res ) 
 			});
+		}
+		else if( path == "/menu/search" )
+		{
+	 		// Stringified JSON of updated item
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+	 			console.log( "Search Data Received: " + body );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Verify that name is correct
+	 			if( obj[ "name" ] === undefined || obj[ "name" ] === "" )
+	 			{
+	 				res.statusCode = 400;
+	 				res.end( JSON.stringify( { "response" : "bad name" } ) );
+	 			}
+
+	 			var item = {}
+	 			item[ "name" ] = obj[ "name" ];
+
+	 			findMenuItem( JSON.parse( body ), collection, res ) 
+	 		});
+		}
+		else if( path == "/menu/stats" )
+		{
+	 		// Stringified JSON of updated item
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+	 			console.log( "Statistics Search Data Received: " + body );
+	 			
+				var obj = JSON.parse( body );
+
+	 			// Verify that name is correct
+	 			if( obj[ "name" ] === undefined || obj[ "name" ] === "" )
+	 			{
+	 				res.statusCode = 400;
+	 				res.end( JSON.stringify( { "response" : "bad name" } ) );
+	 			}
+
+	 			var item = {}
+	 			item[ "name" ] = obj[ "name" ];
+				
+				// Look for matching item in stats table
+	 			findMenuItem( JSON.parse( body ), db.db( "restaurant" ).collection( "menu-item-stats" ), res ) 
+	 		});
 		}
 		else
 		{
@@ -242,6 +471,8 @@ server.listen( port, hostname, () => {
 	var date = new Date().toISOString().substr( 11, 8 );
 	console.log(  "(" + date + "): " ); 
 });
+
+
 
 function viewMenuItems( collection, res )
 {
@@ -258,64 +489,241 @@ function viewMenuItems( collection, res )
 }
 
 
-function editMenuItem( updatedQuery, collection, res )
+async function editMenuItem( updatedQuery, db, res )
 {
+	var menuCollection = db.db( "restaurant" ).collection( "menu-items" );
+	var statCollection = db.db( "restaurant" ).collection( "menu-item-stats" );
+
 	var query = {};
-	query[ "name" ] = updatedQuery.name;
+	query[ "_id" ] = updatedQuery[ "_id" ];
+	console.log( "Attempting to edit menu item with _id '" + query[ "_id" ] + "'." );
 
-	collection.findOneAndUpdate( query, { $set: updatedQuery }, { returnOriginal: false, returnNewDocument: true }, 
-		function( err, result ) {
-			if( err ) throw err;
+	var action = { $set : updatedQuery };
+	var options = { returnOriginal: false, returnNewDocument: true };
 
-			console.log( 	"Item edited in menu-item database:\n" + 
-				JSON.stringify( result.value ) +
-				"\n\n" );
+	// Update name in stats item if name is being changed
+	var updateStats = updatedQuery[ "name" ] !== undefined && updatedQuery[ "name" ] !== "";
+	var statQuery;
+	var statAction;
 
-			// Send updated value back
-			res.end( JSON.stringify( result.value ) );
-		}
-	);
-}
-
-function createMenuItem( newItem, collection, res )
-{
-	collection.insertOne( newItem, function( err, result ) {
- 		if( err )
+	if( updateStats )
+	{
+		// Get original name by _id
+		var originalMenuItem;
+		
+		try
 		{
-			console.log( "Error inserting new item." );
+			originalMenuItem = await getItem( query, menuCollection );
+			if( originalMenuItem === null )
+			{
+				console.log( "null response when searching for original stats item" );
+
+				res.statusCode = 500;
+				res.end( JSON.stringify( { "response" : "unable to find stats item" } ) );
+				return;
+			}
+		}
+		catch( e )
+		{
+			console.log( "Error searching for original item.\nError log: " + e.message );
+
 			res.statusCode = 500;
-			res.end( JSON.stringify( { "success" : "no" } ) );
-			throw err;
+			res.end( JSON.stringify( { "response" : "fatal error searching for stats item" } ) );
+			return;
 		}
 
-		console.log( 	"Item created in menu-item database:\n" + 
-						JSON.stringify( result.ops[ 0 ] ) +
-						"\n\n" );
+		console.log( "Attempting to change name of item from '" + originalMenuItem[ "name" ] + "' to '" + updatedQuery[ "name" ] + "'." );
 
-		console.log( "New Item: " );
-		for( var attr in newItem )
-			console.log( "    " + attr + ": " + newItem[ attr ] );
+		// Query to search for during update
+		statQuery = {};
+		statQuery[ "name" ] = originalMenuItem[ "name" ];
 
-		// Send item created back
- 		res.end( JSON.stringify( result.ops[ 0 ] ) );
- 	} );
+		var statUpdateQuery = {};
+		statUpdateQuery[ "name" ] = updatedQuery[ "name" ];
+
+		// Action to perform (set name) during update
+		statAction = { $set : statUpdateQuery };
+	}
+
+
+	var menuEditResult;
+	var statEditResult;
+
+	try
+	{
+		menuEditResult = await updateItem( query, action, menuCollection, options );
+
+		if( updateStats )
+			statEditResult = await updateItem( statQuery, statAction, statCollection, options )
+	}
+	catch( e )
+	{
+		console.log( "Unable to complete menu edit or stat edit.\nError log: " + e.message + "\n \n " );
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "unable to complete edit" } ) );
+		return;
+	}
+
+	if( menuEditResult.value === null )
+	{
+		console.log( "Did not find menu item." );
+
+		res.statusCode = 400;
+		res.end( JSON.stringify( { "response" : "unable to find menu item" } ) );
+		return;
+	}
+
+	if( updateStats && statEditResult.value === null )
+	{
+		console.log( "Did not find menu item stats." );
+
+		res.statusCode = 400;
+		res.end( JSON.stringify( { "response" : "unable to find menu item stats" } ) );
+		return;
+	}
+
+	console.log( "Item edited in menu-item database:\n" + JSON.stringify( menuEditResult ) +"\n\n" );
+
+	if( updateStats )
+		console.log( "Item edited in menu-item database:\n" + JSON.stringify( statEditResult ) +"\n\n" );
+
+	// Send updated value back
+	res.end( JSON.stringify( menuEditResult.value ) );
 }
 
-function deleteMenuItem( query, collection, res )
+async function updateItem( query, action, collection, options )
 {
-	var deleteItem = {};
-	deleteItem[ "name" ] = query.name;
+	return collection.findOneAndUpdate( query, action, options );
+}
+
+async function getItem( query, collection )
+{
+	return collection.findOne( query );
+}
+
+async function createMenuItem( menuItem, db, res )
+{
+	var menuCollection = db.db( "restaurant" ).collection( "menu-items" );
+	var statCollection = db.db( "restaurant" ).collection( "menu-item-stats" );
+
+	var statItem = {};
+	statItem[ "name" ] = menuItem[ "name" ];
+
+	var menuInsertResult;
+	var statInsertResult;
+
+	try
+	{
+		menuInsertResult = await insertItem( menuItem, menuCollection );
+		statInsertResult = await insertItem( statItem, statCollection );
+	}
+	catch( e )
+	{
+		console.log( "Unable to complete menu insert or stat insert.\nError log: " + e.message );
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "unable to complete insertion" } ) );
+		return;
+	}
+
+	console.log( "Menu Item Insert Result: " + JSON.stringify( menuInsertResult ) );
+	console.log( "Stat Item Insert Result: " + JSON.stringify( statInsertResult ) );
+
+	if( menuInsertResult && statInsertResult )
+	{
+		res.statusCode = 200;
+		res.end( JSON.stringify( menuInsertResult ) );
+	}
+	else
+	{
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "insert for menu or stat item is null" } ) );
+	}
+}
+
+async function insertItem( item, collection )
+{
+	return collection.insertOne( item );
+}
+
+async function deleteMenuItem( query, db, res )
+{
+	var menuCollection = db.db( "restaurant" ).collection( "menu-items" );
+	var statCollection = db.db( "restaurant" ).collection( "menu-item-stats" );
+
+	var item = {};
+	item[ "name" ] = query.name;
 
 	console.log( "Attempting to delete item with name: '" + deleteItem.name + "'.\n" );
 
-		collection.deleteOne( deleteItem, function( err, result ) {
- 		if( err ) throw err;
+	var menuDeleteResult;
+	var statDeleteResult;
 
-			console.log( 	"Result of removing item from menu-item database:\n" +
-				JSON.stringify( result.result ) + 
-				"\n\n" );
+	try
+	{
+		menuDeleteResult = await deleteItem( item, menuCollection );
+		statDeleteResult = await deleteItem( item, statCollection );
+	}
+	catch( e )
+	{
+		console.log( "Unable to complete menu item delete or stat delete.\nError log: " + e.message );
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "unable to complete deletion" } ) );
+		return;
+	}
 
-			// Send status of removing item back
- 		res.end( JSON.stringify( result.result ) + "\n" );
- 	} );
+	console.log( "Menu Item Delete Result: " + JSON.stringify( menuDeleteResult ) );
+	console.log( "Stat Item Delete Result: " + JSON.stringify( statDeleteResult ) );
+
+	if( menuDeleteResult && statDeleteResult )
+	{
+		res.statusCode = 200;
+		res.end( JSON.stringify( menuDeleteResult ) );
+	}
+	else
+	{
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "delete for menu or stat item is null" } ) );
+	}
 }
+
+async function deleteItem( item, collection )
+{
+	return collection.deleteOne( item );
+}
+
+function findMenuItem( name, collection, res )
+{
+	collection.findOne( name, function( err, result ) {
+		if( err ) 
+		{
+			console.log( "Error searching collection." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "result" : "error searching collection" } ) );
+			throw err;
+			return;
+		}
+
+		if( result === null )
+		{
+			console.log( "Item not found in table." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "result" : "could not find item" } ) );
+			return;
+		}
+
+		console.log( 	"Items found in menu-item database:\n" +
+						JSON.stringify( result ) +
+						"\n\n" );
+
+		// Send item back
+		res.end( JSON.stringify( result ) );
+	} );
+}
+
+function getStats( name, collection, res )
+{
+
+}
+

@@ -29,7 +29,7 @@
 	
   </head>
 
-  <body class="page" onload="clock();loadIngredients();">
+  <body class="page" onload="clock();loadIngredients()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -49,14 +49,14 @@
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
-          <script src="../js/menu.js"></script>
+          <script src="../js/manager-menu.js"></script>
         </div>
       </div>
     </div>
 
     <!-- Page contents-->
   <ul class="col nav nav-pills">
-    <li class="col active menu-box"><a data-toggle="pill" href="#app" onclick="getMenu()">Appetizer</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#app" onclick="getMenu()">Appetizer</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#entree" onclick="getMenu()">Entree</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#drink" onclick="getMenu()">Drink</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#desserts" onclick="getMenu()">Dessert</a></li>

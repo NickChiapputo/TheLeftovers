@@ -1,8 +1,9 @@
-function loadMenu(cats)
+function loadMenu()
 {
     $(document).ready(function() {
+        var cats = Cookies.get('type');
         var pageTitle = cats;
-        pageTitle = pageTitle.charAt(0).toUpperCase() + pageTitle.substr(1) + 's';
+        pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
         document.getElementById('category').innerText = pageTitle;
 
         var xmlHttp = new XMLHttpRequest();
@@ -130,14 +131,15 @@ function loadOrderItems() {
     $(document).ready(function() {
         var order;
         // replace with real values later
-        var id=Math.random().toString(36);
+        var id=null;
         var table = Cookies.get('table-num');
         if (table == undefined) {
             table = 0;
         }
         document.getElementById('tableNum').innerText = table;
         // replace with real rewards num
-        var rewards = 'rewardsNum';
+        // default is 0
+        var rewards = 0;
 
         if (Cookies.get('current_order') == undefined) {
             Cookies.set('current_order', {"_id":id,
@@ -161,11 +163,32 @@ function loadOrderItems() {
         }
         Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
 
+        // handling empty order
+        if (order.items.length == 0) {
+            document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
+            return;
+        }
+
         var output = "";
         var total = 0;
         for (i=0; i < order.items.length; i++) {
+
+            // adding happy hour discount
+            var date = new Date();
+            if (order.items[i].category == 'dessert' && order.items[i]['happy_hour'] == undefined && date.getHours() >= 0 && date.getHours() <= 19) {
+                order.items[i]['happy_hour'] = true;
+                order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
+            }
+
             total += order.items[i].price;
-            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price,'\n')
+
+            // printing name, price, discount
+            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price);
+            if (order.items[i].happy_hour != undefined) {
+                output = output.concat(' (happy hour discount!)');
+            }
+            
+            output = output.concat('\n');
             for (j=0; j < order.items[i].ingredients.length; j++) {
                 if (order.items[i].hasIngredient[j] == '1') {
                     output = output.concat('----', order.items[i].ingredients[j], '\n');
@@ -173,10 +196,35 @@ function loadOrderItems() {
             }
             output = output.concat('\n');
         }
+        //total = Number(total.toFixed(2));
+        total = Number((total));
+        var tax = Number((total * 0.0825));
+        output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');
+        output = output.concat('Tax: $', addTrailingZeros(tax),'\n');
         output = output.concat('___________________________________________\n');
-        output = output.concat('Total: $', total,'\n');
+        output = output.concat('Total: $', addTrailingZeros(total + tax),'\n');
         document.getElementById('itemList').innerText = output;
     });
+}
+
+function addTrailingZeros(num) {
+    var str = (Number(num.toFixed(2))).toString();
+    var length = str.length;
+    var dot = str.length;
+    for (i=0; i < length; i++) {
+        if (str[i] == '.') {
+            dot = i;
+        }
+    }
+    if (dot == length) {
+        str = str.concat('.00');
+        dot = length - 3;
+    }
+    while (length - dot < 3) {
+        str = str.concat('0'); 
+        dot--;
+    }
+    return str;
 }
 
 function addToOrder(obj) {
@@ -194,7 +242,7 @@ function saveChoice(num) {
 }
 
 function setType(type) {
-    Cookies.set("type", type, {path: '/', sameSite: 'strict'});
+    Cookies.set('type', type, {path: '/', sameSite: 'strict'});
     //document.cookie = "type=".concat(type,";path=/Customer%20App/menu;");
 }
 
@@ -225,6 +273,9 @@ function editRemoveItem(edRom) {
         err.innerText = "\nError: item with this number does not exist";
         err.style.color = "red";
         err.style.display = "unset";
+    }
+    if (edRom == 0) {
+        loadOrderItems();
     }
 }
 
