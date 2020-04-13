@@ -4,36 +4,32 @@ function getOrders()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			var doc = document.getElementById( 'textarea-orders-view' );
+			var doc = document.getElementById( 'order-view-area' );
 
 			console.log( this.responseText );
 		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
             var numItems = Object.keys( obj ).length;
-
-			var name=[];
-			var allergens;
-			var ingredients=[];
-			var i;
-			for( i = 0; i < numItems; i++ )
+			for(i=0; i<numItems; i++)
 			{
-				var currItem = obj[ i ];
-				doc.innerHTML +="<div class=\"row menu-box\">"
-				+"<div class=\"col menu-box\" style=\"border:transparent; border-spacing: 15px; border-collapse: separate; \">Table: "
-				+currItem.table
-				+"<div class=\"row\">"
-				+"<div class=\"col text-box\"  style=\"border: transparent; max-height: 40vh; max-width: 40vh;\">"
-				+"<div>Name:"+name+"</div>"
-				+"<div>Ingredients:"+ingredients+"</div>"
-				+"<div>Notes:"+currItem.notes+"</div>"
-				+"</div>"
-				+"<button style=\"height:min-content;\" onclick=\"gdelete("+currItem.table+")\">Send</button>"
-				+"</div>"
-				+"</div>"
-				+"</div>";
-			}
+				var currItem = obj[i];
+				var name=[];
+				var allergens;
 
+				txt+="<div class=\"col menu-box\">";
+				txt+="H</div>";
+				/*currItem.items.forEach(function (food) {
+					var ingredients=[];
+					doc.innerHTML+="<p>Name:"+food.name+"</p>";
+					food.ingredients.forEach(function (ingredient){
+						ingredients.push(ingredient.name);
+					});
+					doc.innerHTML+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+				});
+				doc.innerHTML+="Note:"+currItem.notes;*/
+			}
+			
 			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -47,23 +43,43 @@ function getOrders()
     xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
 	xmlHttp.send();
 }
+
 /*Contributed from https://www.w3schools.com/howto/howto_js_collapsible.asp*/
 var coll = document.getElementsByClassName("collapsible");
 var i;
 
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
-
-function gdelete(name)
+/*******************************************/
+/*       Collapsible Area Functions        */
+function collapse( buttonID, elementID )
 {
-	alert(name);
+	// Change button to active class
+	document.getElementById( buttonID ).classList.toggle( "active" );
+
+	// Get div document
+	var el = document.getElementById( elementID );
+
+
+	/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
+	// Toggle between open ("block") and closed ("none")
+	// if( el.style.display === "block" )
+	// {
+	// 	el.style.display = "none";
+	// }
+	// else
+	// {
+	// 	el.style.display = "block";
+	// }
+
+
+	/********* USE THIS FOR ANIMATED COLLAPSING *****/
+	// Animate sliding
+	if( el.style.maxHeight )
+	{
+		el.style.maxHeight = null;
+	}
+	else
+	{
+		el.style.maxHeight = el.scrollHeight + "px";
+	}
 }
+/*******************************************/

@@ -8,15 +8,15 @@ function loadMenu()
 
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if( this.readyState == 4 && this.status == 200 ) 
+            if( this.readyState == 4 && this.status == 200 )
             {
                 //var doc = document.getElementById( 'textarea-menu-view' );
-            
+
                 // Response is a JSON array of items
                 var obj = JSON.parse( this.responseText );
-                
+
                 var numItems = Object.keys( obj ).length;
-        
+
                 //doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
                 var i;
@@ -42,7 +42,7 @@ function loadMenu()
                         item.style.visibility = "visible";
                         item.name = JSON.stringify(currItem);
                     }
-                    
+
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -58,7 +58,7 @@ function loadMenu()
 }
 
 function getCookieByName(name) {
-    
+
     var cook = document.cookie.split(';');
     var temp;
     for (var i=0; i< cook.length; i++) {
@@ -252,7 +252,7 @@ function addTrailingZeros(num) {
         dot = length - 3;
     }
     while (length - dot < 3) {
-        str = str.concat('0'); 
+        str = str.concat('0');
         dot--;
     }
     return str;

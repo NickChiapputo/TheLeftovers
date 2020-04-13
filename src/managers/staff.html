@@ -43,7 +43,7 @@
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-		<div class="col-1" style="margin: center-div;">
+		<div class="col-2" style="margin: center-div;">
 		  <h1 class="menu-text">Staff</h1>
 		</div>
         <div class="col-9" style="margin: auto;">
@@ -57,45 +57,55 @@
 
     <!-- Page contents-->
 	<ul class="col nav nav-pills">
-		<li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+		<li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
 		<li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
 		<li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getEmployeeList()">View</a></li>
 		<li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
 	  </ul>
 	  <div class="tab-content">
-		<form id="add" class="tab-pane fade">
-			<label for="fst" >First Name:</label>
-			<input type="fst" name="first" placeholder="Required"/><br><br>
-			<label for="lst">Last Name:</label>
-            <input type="lst" name="last" placeholder=""/><br><br>
-            <label for="m">Middle Name</label>
-            <input type="m" name="middle" placeholder="Required"/><br><br>
-            <lable for="typ">Type</lable>
-            <input type="typ" name="type" placeholder="Required:manager or server"><br><br>
-		   <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
+		<div id="add" class="tab-pane fade">
+		<form>
+			<label >First Name:</label>
+			<input type="text" name="first" placeholder="Required"/><br><br>
+			<label >Middle Name:</label>
+            <input type="text" name="middle" placeholder=""/><br><br>
+			<label >Last Name:</label>
+            <input type="text" name="last" placeholder="Required"/><br><br>
+            <lable >Type:</lable>
+            <input type="text" name="type" placeholder="Required:manager or server"><br><br>
+		   <input type="button" onclick="createEmployeeFormSubmit()" value="Create-Employee">
 		   <p id="textarea-create"></p>
 		</form>
-		<form id="remove" class="tab-pane fade active">
+
+		</div>
+		<div id="remove" class="tab-pane fade active">
+		<form>
 			<label for="eid" >EmpID:</label>
 			<input type="eid" name="eid" placeholder="Required"/><br><br>
 			<input type="button" onclick="deleteEmployeeFormSubmit()" value="Delete">
 			<p id="textarea-delete"></p>
 		</form>
-		<form id="edit" class="tab-pane fade">
+
+		</div>
+		<div id="edit" class="tab-pane fade">
+		<form>
+			<label>EID</label>
+			<input name="EID" placeholder="ID"/><br><br>
 			<label for="fst" >First Name:</label>
-			<input type="fst" name="first" placeholder="Required"/><br><br>
-			<label for="lst">Last Name:</label>
-            <input type="lst" name="last" placeholder=""/><br><br>
+			<input type="fst" name="first"/><br><br>
             <label for="m">Middle Name</label>
-            <input type="m" name="middle" placeholder="Required"/><br><br>
+			<input type="m" name="middle"/><br><br>
+			<label for="lst">Last Name:</label>
+            <input type="lst" name="last"/><br><br>
             <lable for="typ">Type</lable>
-            <input type="typ" name="type" placeholder="Required: manager, server"><br><br>
-		   <input type="button" onclick="createEmployeeFormSubmit()" value="Submit">
+            <input type="typ" name="type" placeholder="manager, server"><br><br>
+		   <input type="button" onclick="editEmployeeFormSubmit()" value="Submit">
 		   <p id="textarea-edit"></p>
 		</form>
-		<form id="view" class="tab-pane fade">
+		</div>
+		<div id="view" class="tab-pane fade">
 			<p id="emptxt"></p>
-		</form>
+		</div>
 		</div>
   </body>
 </html>
