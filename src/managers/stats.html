@@ -15,7 +15,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock()">
+  <body class="page" onload="clock(); viewStats()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -37,36 +37,13 @@
         </div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/manager-stats.js"></script> 
         </div>
       </div>
     </div>
+    <p id="textarea-menu-search-stats"></p>
 
     <!-- Page contents -->
-    <div class="container-fluid center-div">
-      <div class="row title-bar">
-        <div class="split">
-            <div class=" split left">
-          <li class="active tab-box" ><a data-toggle="tab" href="#home">Today</a></li>
-            </div>
-            <div class=" split right">
-          <li class="tab-box"><a data-toggle="tab" href="#menu1">This Month</a></li>
-          </div>
-        </div>
-      </div>
-      <div class = "row menu-row">
-      </div>
-      <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
-          <h3>HOME</h3>
-          <p>Some content.</p>
-        </div>
-        <div id="menu1" class="tab-pane fade">
-          <h3>Menu 1</h3>
-          <p>Some content in menu 1.</p>
-        </div>
-        </div>
-      </div>
-      
-    </div>
+
       

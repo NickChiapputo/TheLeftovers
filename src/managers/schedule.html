@@ -15,7 +15,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock(); week();">
+  <body class="page" onload="clock(); week(); displayShifts()">
     <!-- Bootstrap: jQuery, Popper.js, and Bosotstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -38,77 +38,62 @@
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script> 
+          <script src="../js/manager-shifts.js"></script>
         </div>
       </div>
     </div>
 
-    <ul class="col nav nav-pills">
-      <li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getInventoryList()">View</a></li>
-    </ul>
-    
     <!-- Page contents -->
-    <div class="tab-content">
-      <div class="tab-pane fade" id="view">
       <div class="row title-bar">
         <div class="col menu-box">
           <h1 class="menu-text">Schedule</h1>
         </div>
-        <div class="col schuedule-box" style="background-color: black;">
-          <a href="">
-            <h1 class="menu-text" style="text-align: left; font-size: 6vw; top: 3vw;" >Week</h1>
-            <p style="text-align: right; color: tomato;">Change Week</p>
+        <div class="col schedule-box" style="background-color: white;">
+            <h1 class="col menu-text" style="text-align: left; font-size: 6vw; top: 4vw;" >Week</h1>
             <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="date"></p>
-          </a>
         </div>
       </div>
       <div class = "row schedule-row">
-        <div class="col schedule-box">
+        <div class="col schedule-box " id="monday" style="background-color: mediumaquamarine;">
+          <h1 class="schedule-text" style="color: black;">Mon</h1>
+          <br>
+        </div>
+        <div class="col schedule-box" id="tuesday" style="background-color: mediumaquamarine;">
           <a href="">
-            <h1 class="schedule-text" style="color: black;">Mon</h1>
-            <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
+            <h1 class="schedule-text"  style="color: black;">Tues</h1>
+            <br>
           </a>
         </div>
-        <div class="col schedule-box">
+        <div class="col schedule-box" id="wednesday" style="background-color: mediumaquamarine;">
           <a href="">
-            <h1 class="schedule-text" style="color: black;">Tues</h1>
-            <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
+            <h1 class="schedule-text"  style="color: black;">Wed</h1>
+            <br>
           </a>
         </div>
-        <div class="col schedule-box">
-          <a href="">
-            <h1 class="schedule-text" style="color: black;">Wed</h1>
-            <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
-          </a>
-        </div>
-        <div class="col schedule-box">
+        <div class="col schedule-box" id="thursday"  style="background-color: mediumaquamarine;">
             <a href="">
               <h1 class="schedule-text" style="color: black;">Thurs</h1>
-              <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
+              <br>
             </a>
         </div>
-        <div class="col schedule-box">
+        <div class="col schedule-box" id="friday"  style="background-color: mediumaquamarine;">
          <a href="">
              <h1 class="schedule-text" style="color: black;">Fri</h1>
-             <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
+             <br>
          </a>
         </div>
-        <div class="col schedule-box">
+        <div class="col schedule-box" id="saturday" style="background-color: mediumaquamarine;">
             <a href="">
-              <h1 class="schedule-text" style="color: black;">Sat</h1>
-              <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
+              <h1 class="schedule-text"   style="color: black;">Sat</h1>
+              <br>
             </a>
         </div>
-        <div class="col schedule-box">
+        <div class="col schedule-box" id="sunday" style="background-color: mediumaquamarine;">
             <a href="">
-              <h1 class="schedule-text" style="color: black;">Sun </h1>
-              <p style="color:black; margin-top: 50vw; font-size: 2vw; background-color: turquoise;">Edit</p>
+              <h1 class="schedule-text"style="color: black; ">Sun </h1>
+              <br>
             </a>
         </div>
       </div>
-      </div>
-    </div>
   </body>
 </html>

@@ -8,61 +8,47 @@ const init = function (e)
 	var allergens = document.querySelector("#food-allergens");
 	var price = document.querySelector("#food-price");
 
+	var params = {};
+ 		params['name']=localStorage.getItem('food-Item');
 
-    var xmlHttp = new XMLHttpRequest();
+
+	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) 
+		if( this.readyState == 4 && this.status == 200 )
 		{
-			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
-			
-			var numItems = Object.keys( obj ).length;
-      
-	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
-			obj.forEach(function(d) {
-                if(d.name==localStorage.getItem('food-Item'))
-                {
-					localStorage.setItem('food-Item-d',d.description);
-					localStorage.setItem('food-Item-n',d.name);
-					localStorage.setItem('food-Item-i',JSON.stringify(d.ingredients));
-					localStorage.setItem('food-Item-cal',d.calories);
-					localStorage.setItem('food-Item-a',d.allergens);
-					localStorage.setItem('food-Item-p',d.price);
-					localStorage.setItem('food-Item-pic',d.image);
-					name.innerHTML+=d.name;
-					description.innerHTML+=d.description;
-					pic.innerHTML+="<div class=\"item-large-image\" style=\"background-image: url("+d.image+");max-height:70vh;min-height:70vh\"></div>";
-					for(i=0; i< d.ingredients.length; i++)
-					{
-						if(d.hasIngredient[i]>0)
-						{
-							ingredients.innerHTML+="<input type=\"checkbox\" id=\"topping\" name=\"topping\" value=\"topping\" checked>";
-							ingredients.innerHTML+="<label for=\"topping\">"+d.ingredients[i]+":"+d.ingredientCount[i]+"</label><br>";
-						}
-						else
-						{
-							ingredients.innerHTML+="<input type=\"checkbox\" id=\"topping\" name=\"topping\" value=\"topping\">";
-							ingredients.innerHTML+="<label for=\"topping\">"+d.ingredients[i]+"</label><br>";
-						}
-					}
-					kcal.innerHTML+="Cal="+d.calories;
-					allergens.innerHTML+="Allergens="+d.allergens;
-					price.innerHTML+="Price=$"+d.price;
+			var el = document.getElementById( "textarea-menu-create" );
+			name.innerHTML = obj.name;
+			description.innerHTML = obj.description;
+			kcal.innerHTML="Cal=" +obj.calories;
+			pic.innerHTML = "<div class=\"item-large-image\" style=\"background-image: url("+obj.image+");max-height:70vh;min-height:70vh\"></div>";
+			allergens.innerHTML="Allergens="+obj.allergens;
+			price.innerHTML="Price=$"+obj.price;
+			for(i=0; i< obj.ingredients.length; i++)
+			{
+				if(obj.hasIngredient[i]!=0)
+				{
+					ingredients.innerHTML+="<input type=\"checkbox\" id=\"topping\" name=\"topping\" value=\"topping\" checked readOnly>";
+					ingredients.innerHTML+="<label>"+obj.ingredients[i]+":"+obj.ingredientCount[i]+"</label><br>";
+				}
+				else
+				{
+					ingredients.innerHTML+="<input type=\"checkbox\" id=\"topping\" name=\"topping\" value=\"topping\"readOnly>";
+					ingredients.innerHTML+="<label>"+obj.ingredients[i]+":"+obj.ingredientCount[i]+"</label><br>";
+				}
+			}
 
-					
-					
-
-                }
-			});
+			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Request inventory status response: " + this.status );
+			console.log( "Create menu item status response: " + this.status );
 		}
 	};
-	// Send a GET request to 64.225.29.130/inventory/view
-	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
-	xmlHttp.send();
+
+	// Send a POST request to 64.225.29.130/menu/create
+	xmlHttp.open( "POST", "http://64.225.29.130/menu/search",true );
+	xmlHttp.send( JSON.stringify(params) );
 };
 document.addEventListener('DOMContentLoaded', function()
 {
