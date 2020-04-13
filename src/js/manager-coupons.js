@@ -13,10 +13,10 @@ function getCoupons()
 			
 			var numItems = Object.keys( obj ).length;
 			
-		
+			
 			var i;
 			var txt="";
-			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>CID</th><th style=' background-color: black; color: white;'>Text</th><th style=' background-color: black; color: white;'>Discount%</th><th style=' background-color: black; color: white;'>ExpirationDate</th><th style=' background-color: black; color: white;'>Rewards</th></tr>";
+			txt += "<tr><table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>CID</th><th style=' background-color: black; color: white;'>Text</th><th style=' background-color: black; color: white;'>Discount%</th><th style=' background-color: black; color: white;'>ExpirationDate</th><th style=' background-color: black; color: white;'>Rewards</th></tr>";
 			for( i = 0; i < numItems; i++ )
 			{
 				var coupon = obj[ i ];
@@ -26,7 +26,7 @@ function getCoupons()
 				+coupon.expiration + "</td><td style=' background-color: white; color: black;'>"
 				+coupon.rewards + "</td></tr>";
 			}
-			doc.innerHTML +=txt;
+			doc.innerHTML =txt;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
