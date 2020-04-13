@@ -616,7 +616,7 @@ function getRewardsAccounts()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			var doc = document.getElementById( 'textarea-rewards-accounts-view' );
+			var doc = document.getElementById( 'rewardsNum' );
 
 			console.log( this.responseText );
 		
@@ -653,8 +653,8 @@ function getRewardsAccounts()
 function createRewardsAccount()
 {
 	var params = {};
-	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
-	params[ "name" ] = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
+	params[ "phone" ] = document.getElementsByName( "rewardsPhone" )[ 0 ].value;
+	params[ "name" ] = document.getElementsByName( "rewardsName" )[ 0 ].value;
 
 	var xmlHttp = new XMLHttpRequest();
 
