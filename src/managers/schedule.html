@@ -43,7 +43,45 @@
       </div>
     </div>
 
+
+
     <!-- Page contents -->
+    <ul class="col nav nav-pills">
+      <li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#view" >Weekly Schedule</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="remove" class="tab-pane fade active">
+        <form id="removeShiftForm">
+          <label>EmpID:</label>
+          <input type="text" required name="employee-create-shift-id"/><br><br>
+          <label>Date:</label>
+          <input type="date" required name="employee-create-shift-date"/><br><br>
+          <label>Start Time:</label>
+          <input type="" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+          <label>End Time:</label>
+          <input type="" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+          <input type="button" onclick="employeeCreateShiftSubmit( false )" value="Remove-Shift"/>
+          <p id="textarea-employees-remove-shift"></p>
+        </form>
+      </div>
+      <div id="add" class="tab-pane fade">
+        <form id="createShiftForm">
+          <label>EmpID:</label>
+          <input type="text" required name="employee-create-shift-id"/><br><br>
+          <label>Date:</label>
+          <input type="date" required name="employee-create-shift-date"/><br><br>
+          <label>Start Time:</label>
+          <input type="" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+          <label>End Time:</label>
+          <input type="" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+          <input type="button" onclick="employeeCreateShiftSubmit( true )" value="Create-Shift"/>
+          <p id="textarea-employees-create-shift"></p>
+        </form>
+      </div>
+      <div id="view" class="tab-pane fade">
       <div class="row title-bar">
         <div class="col menu-box">
           <h1 class="menu-text">Schedule</h1>
@@ -94,6 +132,8 @@
               <br>
             </a>
         </div>
+      </div>
+      </div>
       </div>
   </body>
 </html>
