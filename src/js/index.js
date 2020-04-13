@@ -263,7 +263,7 @@ function getMenu()
 						for( j = 1; j < Object.keys( currItem.ingredients ).length; j++ )
 							doc.innerHTML += "                    " + ( currItem.hasIngredient[ j ] === 1 ? "(default) " : "          " ) + currItem[ attr ][ j ] + " - Uses " + currItem.ingredientCount[ j ] + "\n";
 					}
-					else if( attr === "hasIngredient" || attr === "ingredientCount" || attr === "_id" )
+					else if( attr === "hasIngredient" || attr === "ingredientCount" )
 					{
 
 					}
@@ -271,15 +271,6 @@ function getMenu()
 						doc.innerHTML += "    " + attr + ": " + currItem[ attr ] + "\n";
 				}
 			}
-
-			// var i;
-			// for( i = 0; i < numItems; i++ )
-			// {
-			// 	var currItem = obj[ i ];
-			// 	doc.innerHTML += 	"Item " + ( i + 1 ) + "\n" + 
-			// 						"    Name:  " + currItem.name + "\n" + 
-			// 						"    Count: " + currItem.count + "\n\n";
-			// }
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -375,6 +366,50 @@ function createMenuItem()
 function createMenuItemSubmit()
 {
 	createMenuItem();
+
+	return false;
+}
+
+function editMenuItem()
+{
+	if( document.getElementById( "editMenuItemForm" ).checkValidity() )
+	{
+		var formData = new FormData( editMenuItemForm );
+		formData.append( "fileToUpload", document.getElementById( "menu-item-edit-picture" ).files[ 0 ] );
+
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() {
+			if( this.readyState == 4 && this.status == 200 )
+			{
+				var obj = JSON.parse( this.responseText );
+				var el = document.getElementById( "textarea-menu-edit" );
+
+				el.innerHTML = "Item Edited:\n";
+				for( var attr in obj )
+					el.innerHTML += "    " + attr + ": " + obj[ attr ] + "\n";
+				console.log( this.responseText );
+			}
+			else if( this.readyState == 4 && this.status != 200 )
+			{
+				document.getElementById( 'textarea-menu-edit' ).innerHTML = "Edit menu item status response: " + this.status;
+				document.getElementById( 'textarea-menu-edit' ).innerHTML += "\n\n" + this.responseText;
+				console.log( "Edit menu item status response: " + this.status );
+			}
+		};
+
+		// Send a POST request to 64.225.29.130/menu/edit
+		xmlHttp.open( "POST", "http://64.225.29.130/menu/edit" );
+		xmlHttp.send( formData );
+	}
+	else
+	{
+		document.getElementById( 'textarea-menu-edit' ).innerHTML = "Invalid Input. ID is required.";
+	}
+}
+
+function editMenuItemSubmit()
+{
+	editMenuItem();
 
 	return false;
 }
@@ -520,9 +555,45 @@ function loadIngredients()
 						'</div>' + 
 					'</div>';
 
+				var ingredientEditSrc = 
+					'<div class="ingredientArea" style="display: table-row;">' + 
+						'<div style="display: table-cell;">' + 
+							'<div class="labelIngredient" style="">' + 
+								currItem.name + 
+							'</div>' + 
+						'</div>' + 
+						'<div style="display: table-cell;">' + 
+							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
+								'<div style="display: table-row;">' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-has-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											'1' + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="number" size="5" maxlength="3" name="menu-item-edit-ingredient-count-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>';
+
 				el.insertAdjacentHTML( 'afterend', ingredientSrc );
 
-				elEdit.insertAdjacentHTML( 'afterend', ingredientSrc );
+				elEdit.insertAdjacentHTML( 'afterend', ingredientEditSrc );
 			}
 		}
 		else if( this.readyState == 4 && this.status != 200 )

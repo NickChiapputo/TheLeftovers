@@ -369,6 +369,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="create-employee-type">
+											<option value="" selected="selected"></option>
 											<option value="server">Server</option>
 											<option value="manager">Manager</option>
 										</select>
@@ -746,6 +747,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="table-status-value">
+											<option value="" selected="selected"></option>
 											<option value="sitting">Sitting</option>
 											<option value="ordered">Ordered</option>
 											<option value="eating">Eating</option>
@@ -934,6 +936,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="order-pay-method">
+											<option value="" selected="selected"></option>
 											<option value="card">Card</option>
 											<option value="cash">Cash</option>
 										</select>
@@ -947,6 +950,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="order-pay-receipt-method">
+											<option value="" selected="selected"></option>
 											<option value="print">Print</option>
 											<option value="email">E-Mail</option>
 										</select>
@@ -1410,6 +1414,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="menu-item-create-category">
+											<option value="" selected="selected"></option>
 											<option value="appetizer">Appetizer</option>
 											<option value="entree">Entree</option>
 											<option value="drink">Drink</option>
@@ -1444,13 +1449,23 @@
 					<div style="display: table-cell; text-align: left;">
 						<form id="editMenuItemForm">
 							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Item ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="menu-item-edit-id" pattern="[0-9a-z]{24}" />
+									</div>
+								</div>
+
 								<!-- Name input field -->
 								<div style="display: table-row">
 									<div style="display: table-cell;">
 										<div class="label" style="">Name</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="text" required name="menu-item-edit-name" />
+										<input style="width: 25vw;" type="text" name="menu-item-edit-name" />
 									</div>
 								</div>
 
@@ -1460,7 +1475,7 @@
 										<div class="label" style="">Price ($)</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="number" required min="0.01" value="" step="0.01" name="menu-item-edit-price" />
+										<input style="width: 25vw;" type="number" min="0.01" value="" step="0.01" name="menu-item-edit-price" />
 									</div>
 								</div>
 
@@ -1470,7 +1485,7 @@
 										<div class="label" style="">Calories</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="number" required name="menu-item-edit-calories" />
+										<input style="width: 25vw;" type="number" name="menu-item-edit-calories" />
 									</div>
 								</div>
 
@@ -1608,7 +1623,7 @@
 										<div class="label" style="">Description</div>
 									</div>
 									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="text" required name="menu-item-edit-description" />
+										<input style="width: 25vw;" type="text" name="menu-item-edit-description" />
 									</div>
 								</div>
 
@@ -1619,6 +1634,7 @@
 									</div>
 									<div style="display: table-cell;">
 										<select name="menu-item-edit-category">
+											<option value="" selected="selected"></option>
 											<option value="appetizer">Appetizer</option>
 											<option value="entree">Entree</option>
 											<option value="drink">Drink</option>
@@ -1633,7 +1649,7 @@
 										<div class="label" style="">Picture</div>
 									</div>
 									<div style="display: table-cell;">
-										<input type="file" required id="menu-item-edit-picture">
+										<input type="file" id="menu-item-edit-picture">
 									</div>
 								</div>
 
