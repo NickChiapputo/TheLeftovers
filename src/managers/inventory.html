@@ -56,7 +56,7 @@
 
     <!-- Page contents-->
   <ul class="col nav nav-pills">
-    <li class="col active menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
+    <li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getInventoryList()">View</a></li>
@@ -72,6 +72,7 @@
         <label for="count">Count:</label>
         <input type="number" name="count-create"/><br><br>
         <button style="width: 12.5vw;" type="reset" onclick="createFormSubmit()">Create</button>
+        <p id='textarea-create'></p>
       </form>
       <form id="remove" class="tab-pane fade">
         <label for="ingredient">Ingredient:</label>
