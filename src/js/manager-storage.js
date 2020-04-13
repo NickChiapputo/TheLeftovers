@@ -68,13 +68,14 @@ function loadIngredients()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
+			var doc = document.getElementById( 'textarea-view' );
+		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			
 			var numItems = Object.keys( obj ).length;
-			var el = document.getElementById( "ingredientLabel" );
-			
-	//		var elEdit = document.getElementById( "ingredientLabel-edit" );
+		//	var el = document.getElementById( "ingredientLabel" );
+			var elEdit = document.getElementById( "ingredientLabel-edit" );
 
 			var i;
 			for( i = 0; i < numItems; i++ )
@@ -117,9 +118,45 @@ function loadIngredients()
 						'</div>' + 
 					'</div>';
 
-				el.insertAdjacentHTML( 'afterend', ingredientSrc );
+				var ingredientEditSrc = 
+					'<div class="ingredientArea" style="display: table-row;">' + 
+						'<div style="display: table-cell;">' + 
+							'<div class="labelIngredient" style="">' + 
+								currItem.name + 
+							'</div>' + 
+						'</div>' + 
+						'<div style="display: table-cell;">' + 
+							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
+								'<div style="display: table-row;">' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="checkbox" name="menu-item-edit-has-ingredient-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											'1' + 
+										'" />' + 
+									'</div>' + 
+									'<div style="display: table-cell;">' + 
+										'<input style="" type="number" size="5" maxlength="3" name="menu-item-edit-ingredient-count-' + 
+											( i + 1 ) + 
+											'" value="' + 
+											currItem.name + 
+										'" />' + 
+									'</div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>' + 
+					'</div>';
 
-			//	elEdit.insertAdjacentHTML( 'afterend', ingredientSrc );
+		//		el.insertAdjacentHTML( 'afterend', ingredientSrc );
+
+				elEdit.insertAdjacentHTML( 'afterend', ingredientEditSrc );
 			}
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -131,6 +168,69 @@ function loadIngredients()
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
+}
+
+function editMenuItem()
+{
+	var formData = new FormData( editMenuItemForm );
+	formData.set("menu-item-edit-id",localStorage.getItem('food-item-id'));
+	document.getElementsByName("menu-item-edit-id")[0].value=localStorage.getItem('food-item-id');
+	if(formData.get("menu-item-edit-name")=="")
+	{
+		formData.set("menu-item-edit-name",localStorage.getItem('food-item-name'));
+	}
+	if(formData.get("menu-item-edit-price")=="")
+	{
+		formData.set("menu-item-edit-price",localStorage.getItem('food-item-price'));
+	}
+	if(formData.get("menu-item-edit-calories")=="")
+	{
+		formData.set("menu-item-edit-calories",localStorage.getItem('food-item-calories'));
+	}
+	if(formData.get("menu-item-edit-description")=="")
+	{
+		formData.set("menu-item-edit-description",localStorage.getItem('food-item-description'));
+	}
+	
+	if( document.getElementById( "editMenuItemForm" ).checkValidity() )
+	{
+		formData.append( "fileToUpload", document.getElementById( "menu-item-edit-picture" ).files[ 0 ] );
+
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() {
+			if( this.readyState == 4 && this.status == 200 )
+			{
+				var obj = JSON.parse( this.responseText );
+				var el = document.getElementById( "textarea-menu-edit" );
+
+				el.innerHTML = "Item Edited:\n";
+				for( var attr in obj )
+					el.innerHTML += "    " + attr + ": " + obj[ attr ] + "\n";
+				console.log( this.responseText );
+			}
+			else if( this.readyState == 4 && this.status != 200 )
+			{
+				document.getElementById( 'textarea-menu-edit' ).innerHTML = "Edit menu item status response: " + this.status;
+				document.getElementById( 'textarea-menu-edit' ).innerHTML += "\n\n" + this.responseText;
+				console.log( "Edit menu item status response: " + this.status );
+			}
+		};
+
+		// Send a POST request to 64.225.29.130/menu/edit
+		xmlHttp.open( "POST", "http://64.225.29.130/menu/edit" );
+		xmlHttp.send( formData );
+	}
+	else
+	{
+		document.getElementById( 'textarea-menu-edit' ).innerHTML = "Invalid Input. ID is required.";
+	}
+}
+
+function editMenuItemSubmit()
+{
+	editMenuItem();
+
+	return false;
 }
 
 function deleteMenuItem()
@@ -173,7 +273,7 @@ function deleteMenuItemFormSubmit()
 	return false;
 }
 
-
+/*
 function editMenu()
 {
 	var name = document.querySelector("#food-name");
@@ -182,6 +282,7 @@ function editMenu()
 	var kcal = document.querySelector("#food-kcal");
 	var allergens = document.querySelector("#food-allergens");
 	var price = document.querySelector("#food-price");
+	var category = document.querySelector("#food-category");
 
 		name.innerHTML = "";
 		description.innerHTML="";
@@ -189,6 +290,7 @@ function editMenu()
 		kcal.innerHTML="";
 		allergens.innerHTML="";
 		price.innerHTML="";
+		category.innerHTML="";
 
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -209,6 +311,13 @@ function editMenu()
 					kcal.innerHTML+="<input  name=\"menu-item-edit-calories\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\"Cal="+d.calories+"\">";
 					price.innerHTML+="<input name=\"menu-item-edit-price\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\"Price="+d.price+"\">";
 					gatherIngredients();
+					category.innerHTML+= "<select name=\"menu-item-edit-category\">"+
+                    					"<option value=\"appetizer\">Appetizer</option>"+
+                    					"<option value=\"entree\">Entree</option>"+
+                    					"<option value=\"drink\">Drink</option>"+
+                    					"<option value=\"dessert\">Dessert</option>"+
+                  						"</select>";
+
 					allergens.innerHTML+="<div style=\"display: table-row;\">"
 					  +"<div style=\"display: table-cell;\">"
 						+"<div class=\"label\" style=\"margin-top: 5vh;\">Ham</div>"
@@ -404,53 +513,38 @@ function gatherIngredients()
 	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
 }
-
+*/
+/*
 function editSubmit()
 {
 	var formData = new FormData(editMenuItemForm)
-	alert(formData.get("menu-item-edit-name"))
-	formData.set("menu-item-edit-id",localStorage.getItem('food-item-id'))
-	if(formData.get("menu-item-edit-name")==null)
-	{
-		formData.set("menu-item-edit-name",localStorage.getItem('food-item-name'));
-
-	}
-	if(formData.get("menu-item-edit-description")==null)
-	{
-		formData.set("menu-item-edit-description",localStorage.getItem('food-item-description'));
-	}
-	if(formData.get("menu-item-edit-calories")==null)
-	{
-		formData.set("menu-item-edit-calories",localStorage.getItem('food-item-calories'));
-	}
-	if(formData.get("menu-item-edit-price")==null)
-	{
-		formData.set("menu-item-edit-price",localStorage.getItem('food-item-price'));
-	}
+	
 
 	var params = {}
 		params['_id'] = localStorage.getItem('food-item-id');
 
+		formData.set("menu-item-edit-id",localStorage.getItem('menu-item-id'));
 
 		if(document.getElementsByName("menu-item-edit-name")[0].value=="")
 		{
-			params['name']=localStorage.getItem('food-item-name');
+			formData.set("menu-item-edit-name",localStorage.getItem('food-item-name'));
 
 		}
 		if(document.getElementsByName("menu-item-edit-description")[0].value=="")
 		{
-			params['description']=localStorage.getItem('food-item-description');
+			formData.set("menu-item-edit-description",localStorage.getItem('food-item-description'));
 		}
 		if(document.getElementsByName("menu-item-edit-calories")[0].value=="")
 		{
-			params['calories']=localStorage.getItem('food-item-calories');
+			formData.set("menu-item-edit-calories",localStorage.getItem('food-item-calories'));
 		}
 		if(document.getElementsByName("menu-item-edit-price")[0].value=="")
 		{
-			params['price']=localStorage.getItem('food-item-price');
+			formData.set("menu-item-edit-price",localStorage.getItem('food-item-price'));
 		}
-
-
+		for(var value of formData.values()){
+			alert(value);
+		}
 		var xmlHttp = new XMLHttpRequest();
 
 		xmlHttp.onreadystatechange = function() {
@@ -476,7 +570,7 @@ function editSubmit()
 		xmlHttp.open( "POST", "http://64.225.29.130/menu/edit");
 		xmlHttp.send( formData );
 }
-
+*/
 /*
 function createMenuItem()
 {

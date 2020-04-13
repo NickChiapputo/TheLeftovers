@@ -45,11 +45,10 @@
     <!-- Page contents -->
     <div class="container-fluid scrollable">
       <div class="row title-bar">
-        <form id="editMenuItemForm">
         <div class="menu-box" id="food-name">
       </div>
       <ul class="nav nav-pills">
-        <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="editMenu()">Load Edit Form</a></li>
+        <li class="active menu-box" style="background-color: green;"><a data-toggle="pill" href="#edit" onclick="">Load Edit Form</a></li>
       </ul>
         <button class="menu-box" style="background-color: red;" onclick="deleteMenuItemFormSubmit()">Remove</button>
         <button style="background-color: orange;" class="button col menu-box" type="button" onclick="editSubmit()">Submit</button>
@@ -70,191 +69,135 @@
               </div>
               <div id="food-price" class="text-box" style="max-height:40vh;max-width:50vh;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
               </div>
+              <div id="food-category"></div>
           </div>
           <p id='textarea-menu-delete'></p>
-          <p id='textarea-edit'></p>
       </div>
       <br><br>
       <div class="tab-content">
-      <div id="" class="tab-pane fade">
-        <p style="color: yellow;">Image file and Ingredients fields are required</p>
+      <div id="edit" class="tab-pane fade">
         <div class="container-fluid">
-        <form id="createMenuItemForm">
-          <div class="row title-bar">
-            <input class="col-6 menu-box" required name="menu-item-create-name" placeholder="Type name"/>
-            <button style="background-color: orange;" class="button col menu-box" type="button" onclick="createMenuItemSubmit()">Submit</button>
-          </div>
-          <div class=" row" style="min-height: 70vh; max-height: 70vh; margin-top: 6vh;">
-              <div class="col-5">
-                <div style="display: table-row">
-                  <div style="display: table-cell;">
-                    <div class="label" style="">Picture</div>
-                  </div>
-                  <div style="display: table-cell;">
-                    <input type="file" required id="menu-item-create-picture">
+        <form id="editMenuItemForm">
+              <div class="label" style="">Item ID</div>
+              <input style="width: 25vw;" type="text" required name="menu-item-edit-id" pattern="[0-9a-z]{24}" placeholder="Not Required" />
+
+            <!-- Name input field -->
+                <div class="label" style="">Name</div>
+                <input style="width: 25vw;" type="text" name="menu-item-edit-name" />
+
+            <!-- Price input field -->
+                <div class="label" style="">Price ($)</div>
+                <input style="width: 25vw;" type="number" min="0.01" value="" step="0.01" name="menu-item-edit-price" />
+
+            <!-- Calories input field -->
+                <div class="label" style="">Calories</div>
+                <input style="width: 25vw;" type="number" name="menu-item-edit-calories" />
+
+            <!-- Ingredient Row -->
+            <div class="ingredientArea" style="display: table-row;" id="ingredientLabel-edit">
+              <!-- Ingredient -->
+              <div style="display: table-cell;">
+                <div style="display: table; text-align: left;">
+                  <!-- Ingredient Header -->
+                  <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                      <div class="label" style="margin-top: 1vw;">
+                        Ingredient
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-                  <input required name="menu-item-create-description" class="text-box" style="width: 100%; max-height: 100%;" placeholder="Food description...">
-              <div class="col-6">
-                <div class="text-box" style="height: 40vh;">
-                <p id="textarea-menu-create"></p>
-                </div>
-                <div style="display: table-cell;">
-                  <div class="label" style="">Category</div>
-                </div>
-                <div style="display: table-cell;">
-                  <select name="menu-item-create-category">
-                    <option value="appetizer">Appetizer</option>
-                    <option value="entree">Entree</option>
-                    <option value="drink">Drink</option>
-                    <option value="dessert">Dessert</option>
-                  </select>
-                </div>
-                </div>
-              <div class="col-3"style="left:15%">
-                <div class="text-box"style="height:40vh;width:50vh;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-                              
-                      <!-- Ingredient Row -->
-                      <div class="ingredientArea" style="display: table-row;" id="ingredientLabel">
-                        <!-- Ingredient -->
-                        <div style="display: table-cell;">
-                          <div style="display: table; text-align: left;">
-                            <!-- Ingredient Header -->
-                            <div style="display: table-row;">
-                              <div style="display: table-cell;">
-                                <div class="label" style="margin-top: 1vw;">
-                                  Ingredient
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
 
-                        <!-- Included, Default, and Count -->
-                        <div style="display: table-cell;">
-                          <div style="display: table;  width: 25vw; text-align: center;">
-                            <!-- Labels for Included, Default, and Count -->
-                            <div style="display: table-row;">
+              <!-- Included, Default, and Count -->
+              <div style="display: table-cell;">
+                <div style="display: table;  width: 25vw; text-align: center;">
+                  <!-- Labels for Included, Default, and Count -->
+                  <div style="display: table-row;">
 
-                              <!-- Included Label -->
-                              <div style="display: table-cell; width: 33%;">
-                                <div style="">
-                                  Included
-                                </div>
-                              </div>
-
-                              <!-- Default Label -->
-                              <div style="display: table-cell; width: 33%;">
-                                <div style="">
-                                  Default
-                                </div>
-                              </div>
-
-                              <!-- Count Label -->
-                              <div style="display: table-cell; width: 33%;">
-                                <div style="">
-                                  Count
-                                </div>
-                              </div>
-
-                            </div>
-                          </div>
-                        </div>
+                    <!-- Included Label -->
+                    <div style="display: table-cell; width: 33%;">
+                      <div style="">
+                        Included
                       </div>
+                    </div>
+
+                    <!-- Default Label -->
+                    <div style="display: table-cell; width: 33%;">
+                      <div style="">
+                        Default
+                      </div>
+                    </div>
+
+                    <!-- Count Label -->
+                    <div style="display: table-cell; width: 33%;">
+                      <div style="">
+                        Count
+                      </div>
+                    </div>
 
                   </div>
-                  <input required name="menu-item-create-calories" required min="0.00" value="" type="number" step=".01" type="number" class="text-box" style="max-height: 10vh;" placeholder="Insert Calorie Number"/>
-                  <div class="text-box" style="max-height:20vh;max-width:40vh;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-                    
-                      <!-- Ham Allergen Checkbox -->
-                      <div style="display: table-row;">
-                        <div style="display: table-cell;">
-                          <div class="label" style="margin-top: 5vh;">Ham</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-1" value="ham" />
-                        </div>
-                      </div>
-
-                      <!-- Meat Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Meat</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-2" value="meat" />
-                        </div>
-                      </div>
-
-                      <!-- Dairy Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Dairy</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-3" value="dairy" />
-                        </div>
-                      </div>
-
-                      <!-- Gluten Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Gluten</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-4" value="gluten" />
-                        </div>
-                      </div>
-
-                      <!-- Shellfish Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Shellfish</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-5" value="shellfish" />
-                        </div>
-                      </div>
-
-                      <!-- Soy Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Soy</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-6" value="soy" />
-                        </div>
-                      </div>
-
-                      <!-- Fish Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Fish</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-7" value="fish" />
-                        </div>
-                      </div>
-
-                      <!-- Nuts Allergen Checkbox -->
-                      <div style="display: table-row">
-                        <div style="display: table-cell;">
-                          <div class="label" style="">Nuts</div>
-                        </div>
-                        <div style="display: table-cell;">
-                          <input style="width: 5vw;" type="checkbox" name="menu-item-create-allergens-8" value="nuts" />
-                        </div>
-                      </div>
-                  </div>
-                  <input name="menu-item-create-price" required min="0.00" value="" type="number" step=".01" class="text-box" style="max-height: 15vh;" placeholder="Insert Price x.xx"/>
+                </div>
               </div>
-          </div>
-          </form>
+            </div>
+
+            <!-- Ham Allergen Checkbox -->
+                <div class="label" style="margin-top: 5vh;">Ham</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-1" value="ham" />
+
+            <!-- Meat Allergen Checkbox -->
+                <div class="label" style="">Meat</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-2" value="meat" />
+
+            <!-- Dairy Allergen Checkbox -->
+                <div class="label" style="">Dairy</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-3" value="dairy" />
+
+            <!-- Gluten Allergen Checkbox -->
+                <div class="label" style="">Gluten</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-4" value="gluten" />
+
+            <!-- Shellfish Allergen Checkbox -->
+                <div class="label" style="">Shellfish</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-5" value="shellfish" />
+
+            <!-- Soy Allergen Checkbox -->
+                <div class="label" style="">Soy</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-6" value="soy" />
+
+            <!-- Fish Allergen Checkbox -->
+                <div class="label" style="">Fish</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-7" value="fish" />
+
+            <!-- Nuts Allergen Checkbox -->
+                <div class="label" style="">Nuts</div>
+                <input style="width: 25vw;" type="checkbox" name="menu-item-edit-allergens-8" value="nuts" />
+
+            <!-- Description input field -->
+                <div class="label" style="">Description</div>
+                <input style="width: 25vw;" type="text" name="menu-item-edit-description" />
+
+            <!-- Category input field -->
+                <div class="label" style="">Category</div>
+                <select name="menu-item-edit-category">
+                  <option value="" selected="selected"></option>
+                  <option value="appetizer">Appetizer</option>
+                  <option value="entree">Entree</option>
+                  <option value="drink">Drink</option>
+                  <option value="dessert">Dessert</option>
+                </select>
+
+            <!-- File input field -->
+                <div class="label" style="">Picture</div>
+                <input type="file" id="menu-item-edit-picture">
+
+            <!-- Save button field -->
+                <button style="" class="button" type="button" onclick="editMenuItemSubmit()">Edit</button>
+        </form>
+        <p id="textarea-menu-edit"></p>
       </div>
       </div>
       </div>
       </div>
-  </div>
   </body>
 </html>
