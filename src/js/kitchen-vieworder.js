@@ -10,27 +10,36 @@ function getOrders()
 		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
-            var numItems = Object.keys( obj ).length;
+			var numItems = Object.keys( obj ).length;
+			var txt="";
 			for(i=0; i<numItems; i++)
 			{
 				var currItem = obj[i];
 				var name=[];
 				var allergens;
-
-				txt+="<div class=\"col menu-box\">";
-				txt+="H</div>";
-				/*currItem.items.forEach(function (food) {
+				var y=i+1;
+				txt+="<button type=\"button\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
+				txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
+				txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
+				currItem.items.forEach(function (food) {
 					var ingredients=[];
-					doc.innerHTML+="<p>Name:"+food.name+"</p>";
+					txt+="<p>Name:"+food.name+"</p>";
 					food.ingredients.forEach(function (ingredient){
-						ingredients.push(ingredient.name);
+							ingredients.push(ingredient);
 					});
-					doc.innerHTML+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+
+					if(ingredients.length!=0)
+					{
+						txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+					}
 				});
-				doc.innerHTML+="Note:"+currItem.notes;*/
+				if(currItem.notes!=undefined)
+					txt+="Note:"+currItem.notes;
+				txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"alert()\">Notify Server</button></div><div style=\"background-color:black;font-size:3px\">-</div> ";
 			}
 			
 			console.log( this.responseText );
+			doc.innerHTML+=txt;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -48,38 +57,4 @@ function getOrders()
 var coll = document.getElementsByClassName("collapsible");
 var i;
 
-/*******************************************/
-/*       Collapsible Area Functions        */
-function collapse( buttonID, elementID )
-{
-	// Change button to active class
-	document.getElementById( buttonID ).classList.toggle( "active" );
 
-	// Get div document
-	var el = document.getElementById( elementID );
-
-
-	/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
-	// Toggle between open ("block") and closed ("none")
-	// if( el.style.display === "block" )
-	// {
-	// 	el.style.display = "none";
-	// }
-	// else
-	// {
-	// 	el.style.display = "block";
-	// }
-
-
-	/********* USE THIS FOR ANIMATED COLLAPSING *****/
-	// Animate sliding
-	if( el.style.maxHeight )
-	{
-		el.style.maxHeight = null;
-	}
-	else
-	{
-		el.style.maxHeight = el.scrollHeight + "px";
-	}
-}
-/*******************************************/
