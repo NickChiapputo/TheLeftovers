@@ -15,7 +15,7 @@
     <title>Coupons</title>
   </head>
 
-  <body class="page" onload="clock();getCoupons()">
+  <body class="page" onload="clock();">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -42,7 +42,7 @@
     <ul class="col nav nav-pills">
       <li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
       <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="">View</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getCoupons()">View</a></li>
     </ul>
     <!-- Page contents-->
 	<div class="container-fluid center-div">
@@ -57,11 +57,13 @@
       <label for="rewards">Rewards</label>
       <input type="rewards" id="rewards" name="rewards"/><br><br>
       <input type="button" onclick="createCouponSubmit()" value="Submit"/>
+      <p id="textarea-create"></p>
     </form>
     <form id="remove" class="tab-pane fade">
       <label>CouponID</label>
-      <input type="text" id="coupon-delete-id"/><br><br>
+      <input type="text" name="coupon-delete-id"/><br><br>
       <input type="button" onclick="couponDeleteSubmit()" value="Submit"/>
+      <p id="textarea-coupon-delete"></p>
     </form>
     <div id="view" class="tab-pane fade">
       <p id="textarea-coupons-view">
@@ -69,8 +71,6 @@
       </p>
     </div>
     </div>
-    
-    <p id="textarea-create"></p>
 	</div>
   </body>
 </html>

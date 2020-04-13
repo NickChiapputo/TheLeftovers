@@ -4,7 +4,7 @@ function getOrders()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			var doc = document.getElementById( 'textarea-orders-view' );
+			var doc = document.getElementById( 'order-view-area' );
 
 			console.log( this.responseText );
 		
@@ -16,95 +16,20 @@ function getOrders()
 				var currItem = obj[i];
 				var name=[];
 				var allergens;
-				var ingredients=[];
-				if(currItem.table==1)
-				{
 
-				}
-				else if(currItem.table==2)
-				{
-
-				}
-				else if(currItem.table==3)
-				{
-
-				}
-				else if(currItem.table==4)
-				{
-
-				}
-				else if(currItem.table==5)
-				{
-
-				}
-				else if(currItem.table==6)
-				{
-
-				}
-				else if(currItem.table==7)
-				{
-
-				}
-				else if(currItem.table==8)
-				{
-
-				}
-				else if(currItem.table==9)
-				{
-
-				}
-				else if(currItem.table==10)
-				{
-					currItem.items.forEach(function (food) {
-						doc.innerHTML+="<p>Name:"+food.name+"</p>"
-						food.ingredients.forEach(function (ingredient){
-							doc.innerHTML+="<p>Ingredients:"+ingredient.name+"</p>"
-						});
+				txt+="<div class=\"col menu-box\">";
+				txt+="H</div>";
+				/*currItem.items.forEach(function (food) {
+					var ingredients=[];
+					doc.innerHTML+="<p>Name:"+food.name+"</p>";
+					food.ingredients.forEach(function (ingredient){
+						ingredients.push(ingredient.name);
 					});
-
-				}
-				else if(currItem.table==11)
-				{
-
-				}
-				else if(currItem.table==12)
-				{
-
-				}
-				else if(currItem.table==13)
-				{
-
-				}
-				else if(currItem.table==14)
-				{
-
-				}
-				else if(currItem.table==15)
-				{
-
-				}
-				else if(currItem.table==16)
-				{
-
-				}
-				else if(currItem.table==17)
-				{
-
-				}
-				else if(currItem.table==18)
-				{
-
-				}
-				else if(currItem.table==19)
-				{
-
-				}
-				else if(currItem.table==20)
-				{
-
-				}
+					doc.innerHTML+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+				});
+				doc.innerHTML+="Note:"+currItem.notes;*/
 			}
-
+			
 			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
