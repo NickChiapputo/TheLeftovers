@@ -142,25 +142,25 @@
               </div>
 
               <!-- Choose payment type -->
-              <div class="dropdown col-2" style="min-width: 100%; min-height: 15%;">
-                <select name="order-pay-method" class="btn btn-secondary dropdown-toggle menu-box-dropdown menu-text-dropdown" style="min-width: 100%; max-height: 100%;" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                  <option style="font-size: xx-large; font-style: italic;" value="" selected="selected">*Choose payment method</option>
+              <div class="dropdown col-2" style="min-width: 100%; min-height: 13%;">
+                <select name="order-pay-method" class="btn btn-secondary dropdown-toggle menu-box-dropdown menu-text-dropdown" style="min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
+                  <option style="font-size: xx-large; font-style: italic;" value="N/A" selected="selected">*Choose payment method</option>
                   <option style="font-size: xx-large;" value="card">Card</option>
-                  <option onclick="dropD('payment', 'cash')" style="font-size: xx-large;" value="cash">Cash</option>
+                  <option style="font-size: xx-large;" value="cash">Cash</option>
                 </select>
               </div>
 
               <!-- Choose receipt type -->
               <div class="dropdown col-2" style="min-width: 100%; min-height: 15%;">
-                <select name="order-receipt-method" class="btn btn-secondary dropdown-toggle  menu-box-dropdown menu-text-dropdown" style="min-width: 100%; max-height: 100%;" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                  <option style="font-size: xx-large; font-style: italic;" value="" selected="selected">*Choose receipt method</option>
-                  <option onclick="dropD('receipt', 'email')"  style="font-size: xx-large;" value="email">E-Mail</option>
-                  <option onclick="dropD('receipt', 'print')"  style="font-size: xx-large;" value="print">Print</option>
+                <select name="order-receipt-method" class="btn btn-secondary dropdown-toggle  menu-box-dropdown menu-text-dropdown" style="min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
+                  <option style="font-size: xx-large; font-style: italic;" value="N/A" selected="selected">*Choose receipt method</option>
+                  <option style="font-size: xx-large;" value="email">E-Mail</option>
+                  <option style="font-size: xx-large;" value="print">Print</option>
                 </select>
               </div>
 
               <!-- Pay modal button -->
-              <button onclick="" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#pay-order" style="background-color:rgb(159, 245, 195); min-width: 100%; min-height: 20%; color: black;">
+              <button onclick="getOptions()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#pay-order" style="background-color:rgb(159, 245, 195); min-width: 100%; min-height: 20%; color: black;">
                 <h1 class="menu-text">Pay bill</h1>
               </button>
 
@@ -175,12 +175,12 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <text>Pay for your order in parts or all together</text>
+                      <text id="pay-text"></text>
                     </div>
                     
-                    <div class="modal-footer">
+                    <div class="modal-footer" style="display: none;" id="pay-foot">
                       <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="$('#pay-amount').modal('show');">Pay part of order</button>
-                      <button type="button" class="btn btn-primary" data-dismiss="modal">Pay full order</button>
+                      <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="handlePayment('W')">Pay full order</button>
                     </div>
                   </div>
                 </div>
@@ -198,12 +198,13 @@
                     </div>
                     <div class="modal-body">    
                       <form id="myForm">
-                        <input type="text" autocomplete="off" id="pay-amount">
-                        <p id="coookies"></p>
+                        <text>$</text>
+                        <input type="number" step="any" min="1" autocomplete="off" id="partial-pay-amount">
+                        <p id="partial-pay-comment"></p>
                       </form>          
                     </div>
                     <div class="modal-footer">
-                      <button type="reset" style="width: 100%;" class="btn btn-success" onclick="">Submit</button>
+                      <button type="reset" data-dismiss="modal" style="width: 100%;" class="btn btn-success" onclick="handlePayment('P')">Submit</button>
                     </div>
                   </div>
                 </div>
