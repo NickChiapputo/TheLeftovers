@@ -73,18 +73,19 @@ const server = http.createServer( ( req, res ) =>  {
 				console.log( "Received: \n" + body + "\n" ); 
 
 				var obj = JSON.parse( body );
-				var table = {};
-				table[ "table" ] = obj[ "table" ];
 
 				// Check that value is valid
-				if( table[ "table" ] === undefined || table[ "table" ] === "" || isNaN( parseInt( table[ "table" ] ) ) || parseInt( table[ "table" ] ) > 20 || parseInt( table[ "table" ] ) < 1 )
+				if( obj[ "table" ] === undefined || obj[ "table" ] === "" || isNaN( parseInt( obj[ "table" ] ) ) || parseInt( obj[ "table" ] ) > 20 || parseInt( obj[ "table" ] ) < 1 )
 				{
-					console.log( "Bad table value: '" + table[ "table" ] + "'." );
+					console.log( "Bad table value: '" + obj[ "table" ] + "'." );
 
 					res.statusCode = 400;
 					res.end( JSON.stringify( { "response" : "bad table number format" } ) );
 					return;
 				}
+
+				var table = {};
+				table[ "table" ] = parseInt( obj[ "table" ] );
 
 				createTable( table, collection, res ); 
 			});
