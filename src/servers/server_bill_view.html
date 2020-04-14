@@ -24,7 +24,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock();loadBill();">
+  <body class="page" onload="clock();loadBill();" onbeforeunload="logout()">
 
     <!--<script type="text/javascript">alert(Cookies.get('table-num'));</script>-->
 
@@ -52,6 +52,7 @@
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
           <script src="../js/notify-manager.js"></script>
+          <script src="../js/logout.js"></script>
         </div>
       </div>
     </div>
