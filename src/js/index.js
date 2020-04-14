@@ -616,7 +616,7 @@ function getRewardsAccounts()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			var doc = document.getElementById( 'rewardsNum' );
+			var doc = document.getElementById( 'textarea-rewards-accounts-view' );
 
 			console.log( this.responseText );
 		
@@ -653,8 +653,8 @@ function getRewardsAccounts()
 function createRewardsAccount()
 {
 	var params = {};
-	params[ "phone" ] = document.getElementsByName( "rewardsPhone" )[ 0 ].value;
-	params[ "name" ] = document.getElementsByName( "rewardsName" )[ 0 ].value;
+	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
+	params[ "name" ] = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -724,6 +724,32 @@ function deleteRewardsAccountSubmit()
 	deleteRewardsAccount();
 	// Function must return false to prevent reloading of page
 	return false;
+}
+
+function searchRewardsAccount()
+{
+	var account = {};
+
+	// Get coupon information
+	account[ "phone" ] = document.getElementsByName( "rewards-account-search-phone" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			document.getElementById( "textarea-rewards-account-search" ).innerHTML = "Rewards account search result: " + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-rewards-account-search" ).innerHTML = "Rewards account search status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( account ) );
+
+	// Send a POST request to 64.225.29.130/coupon/verify
+	xmlHttp.open( "POST", "http://64.225.29.130/rewards/search", true );
+	xmlHttp.send( JSON.stringify( account ) );
 }
 /*******************************************/
 
@@ -810,7 +836,8 @@ function createOrder()
 			"price" : 3.05,
 			"calories" : 1,
 			"ingredients" : [
-				{ "name" : "First Ingredient" }
+				"Pine Nuts",
+				"First Ingredient" 
 			],
 			"hasIngredient" : [ 1 ],
 			"ingredientCount" : [ 5 ],
@@ -824,7 +851,7 @@ function createOrder()
 			"price" : 1.07,
 			"calories" : 1,
 			"ingredients" : [
-				{ "name" : "First Ingredient" }
+				"First Ingredient"
 			],
 			"hasIngredient" : [ 1 ],
 			"ingredientCount" : [ 5 ],
@@ -1410,5 +1437,81 @@ function couponDeleteSubmit()
 	// Send a POST request to 64.225.29.130/coupons/delete
 	xmlHttp.open( "POST", "http://64.225.29.130/coupons/delete", true );
 	xmlHttp.send( JSON.stringify( params ) );
+}
+/*******************************************/
+
+/*******************************************/
+/*            Employee Functions           */
+function checkMessages()
+{
+	var messageData = {};
+	messageData[ "destType" ] = document.getElementsByName( "message-get-type" )[ 0 ].value;
+	messageData[ "dest" ] = document.getElementsByName( "message-get-id" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-messages-get' );
+
+			console.log( "Get messages response: " + this.responseText );
+
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.value = "Number of Messages: " + numItems + "\n\n";
+
+			for( var item in obj )
+				doc.value += obj[ item ] + "\n"; 
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-messages-get' ).innerHTML = "Message query response: " + this.status + "\n\n" + this.responseText;
+			console.log( "Message query response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/coupons/view
+	xmlHttp.open( "POST", "http://64.225.29.130/messages/get", true );
+	xmlHttp.send( JSON.stringify( messageData ) );
+}
+
+function sendMessage()
+{
+	var messageData = {};
+	messageData[ "src" ] = document.getElementsByName( "message-send-id" )[ 0 ].value
+	messageData[ "srcType" ] = document.getElementsByName( "message-send-type" )[ 0 ].value;
+	messageData[ "dest" ] = document.getElementsByName( "message-send-receive-id" )[ 0 ].value
+	messageData[ "destType" ] = document.getElementsByName( "message-send-receive-type" )[ 0 ].value
+	messageData[ "request" ] = document.getElementsByName( "message-send-request" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			var doc = document.getElementById( 'textarea-messages-get' );
+
+			console.log( "Get messages response: " + this.responseText );
+
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			
+			var numItems = Object.keys( obj ).length;
+			doc.value = "Number of Messages: " + numItems + "\n\n";
+
+			for( var item in obj )
+				doc.value += obj[ item ] + "\n"; 
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( 'textarea-messages-get' ).innerHTML = "Coupon query response: " + this.status;
+			console.log( "Message query response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/coupons/view
+	xmlHttp.open( "POST", "http://64.225.29.130/messages/send", true );
+	xmlHttp.send( JSON.stringify( messageData ) );
 }
 /*******************************************/

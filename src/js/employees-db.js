@@ -99,7 +99,7 @@ const server = http.createServer( ( req, res ) =>  {
 				if( obj[ "type" ] === undefined || obj[ "type" ] === "" ||
 					( obj[ "type" ] !== "server" && obj[ "type" ] !== "manager" ) )
 				{
-					cosole.log( "Invalid type: '" + obj[ "type" ] + "'." );
+					console.log( "Invalid type: '" + obj[ "type" ] + "'." );
 
 					res.statusCode = 400;
 					res.end( JSON.stringify( { "response" : "invalid type" } ) );
