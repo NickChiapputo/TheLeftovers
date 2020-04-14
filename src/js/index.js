@@ -837,7 +837,6 @@ function createOrder()
 			"calories" : 1,
 			"ingredients" : [
 				"Pine Nuts",
-				"First Ingredient" 
 			],
 			"hasIngredient" : [ 1 ],
 			"ingredientCount" : [ 5 ],
@@ -846,20 +845,6 @@ function createOrder()
 			"category" : "food",
 			"image" : "http://64.225.29.130/img/yd7b6zdowsr41.jpg"
 		},
-		{
-			"name" : "Second Item",
-			"price" : 1.07,
-			"calories" : 1,
-			"ingredients" : [
-				"First Ingredient"
-			],
-			"hasIngredient" : [ 1 ],
-			"ingredientCount" : [ 5 ],
-			"allergens" : [ "bad food" ],
-			"description" : "A sentence.",
-			"category" : "food",
-			"image" : "http://64.225.29.130/img/yd7b6zdowsr41.jpg"
-		}
 	];
 
 	order[ "notes" ] = "A note.";
@@ -1177,6 +1162,46 @@ function createEmployee()
 	xmlHttp.send( JSON.stringify( employee ) );
 }
 
+function editEmployee()
+{
+	var employee = {};
+
+	// Get employee ID
+	employee[ "_id" ] = document.getElementsByName( "edit-employee-id" )[ 0 ].value;
+
+	// Get employee full name
+	employee[ "first" ] = document.getElementsByName( "edit-employee-first-name" )[ 0 ].value;
+	employee[ "middle" ] = document.getElementsByName( "edit-employee-middle-name" )[ 0 ].value;
+	employee[ "last" ] = document.getElementsByName( "edit-employee-last-name" )[ 0 ].value;
+
+	// Get employee type
+	employee[ "type" ] = document.getElementsByName( "edit-employee-type" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			// var obj = JSON.parse( this.responseText );
+
+			document.getElementById( "textarea-employees-edit" ).innerHTML = "New Employee: " + this.responseText;
+			
+			// for( var attr in obj )
+			// 	document.getElementById( "textarea-order-create" ).innerHTML += "    " + attr + ": "  + obj[ attr ];
+		
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-employees-edit" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( employee ) );
+
+	// Send a POST request to 64.225.29.130/employees/create
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/edit", true );
+	xmlHttp.send( JSON.stringify( employee ) );
+}
+
 function createEmployeeSubmit()
 {
 	createEmployee();
@@ -1208,6 +1233,33 @@ function employeeLogin()
 
 	// Send a POST request to 64.225.29.130/employees/login
 	xmlHttp.open( "POST", "http://64.225.29.130/employees/login", true );
+	xmlHttp.send( JSON.stringify( employee ) );
+}
+
+function employeeLogout()
+{
+	var employee = {};
+
+	// Get employee information
+	employee[ "_id" ] = document.getElementsByName( "employee-logout-id" )[ 0 ].value;
+	employee[ "pin" ] = document.getElementsByName( "employee-logout-pin" )[ 0 ].value;
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+			document.getElementById( "textarea-employees-logout" ).innerHTML = "Logout result: " + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-employees-logout" ).innerHTML = "Status return: " + this.status; + "\n";
+		}
+	};
+
+	console.log( "Sending: " + JSON.stringify( employee ) );
+
+	// Send a POST request to 64.225.29.130/employees/login
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/logout", true );
 	xmlHttp.send( JSON.stringify( employee ) );
 }
 
@@ -1309,7 +1361,7 @@ function employeeCreateShiftSubmit( create )
 /*******************************************/
 
 /*******************************************/
-/*            Employee Functions           */
+/*            Coupon Functions           */
 function getCoupons()
 {
 	var xmlHttp = new XMLHttpRequest();
@@ -1441,7 +1493,7 @@ function couponDeleteSubmit()
 /*******************************************/
 
 /*******************************************/
-/*            Employee Functions           */
+/*            Message Functions            */
 function checkMessages()
 {
 	var messageData = {};
@@ -1463,7 +1515,7 @@ function checkMessages()
 			doc.value = "Number of Messages: " + numItems + "\n\n";
 
 			for( var item in obj )
-				doc.value += obj[ item ] + "\n"; 
+				doc.value += JSON.stringify( obj[ item ] ) + "\n"; 
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -1490,22 +1542,11 @@ function sendMessage()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			var doc = document.getElementById( 'textarea-messages-get' );
-
-			console.log( "Get messages response: " + this.responseText );
-
-			// Response is a JSON array of items
-			var obj = JSON.parse( this.responseText );
-			
-			var numItems = Object.keys( obj ).length;
-			doc.value = "Number of Messages: " + numItems + "\n\n";
-
-			for( var item in obj )
-				doc.value += obj[ item ] + "\n"; 
+			var doc = document.getElementById( 'textarea-messages-send' ).value = "Message sent: " + this.responseText;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			document.getElementById( 'textarea-messages-get' ).innerHTML = "Coupon query response: " + this.status;
+			document.getElementById( 'textarea-messages-send' ).innerHTML = "Coupon query response: " + this.status;
 			console.log( "Message query response: " + this.status );
 		}
 	};

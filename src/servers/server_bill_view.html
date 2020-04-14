@@ -24,7 +24,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock();loadBill();">
+  <body class="page" onload="clock();loadBill();" onbeforeunload="logout()">
 
     <!--<script type="text/javascript">alert(Cookies.get('table-num'));</script>-->
 
@@ -45,12 +45,14 @@
         <div class="col-1" style="margin:auto;">
           <img src="../Icons/Group 18.svg" style="max-width: 100%;">
         </div>
-        <div class="col-1" style="margin:auto;">
+        <div onclick="managerSearch()" class="col-1" style="margin:auto;">
           <img src="../Icons/Group 19.svg" style="max-width: 100%;">
         </div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
+          <script src="../js/notify-manager.js"></script>
+          <script src="../js/logout.js"></script>
         </div>
       </div>
     </div>

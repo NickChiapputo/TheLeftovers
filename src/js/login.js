@@ -15,8 +15,9 @@ function login()
 
             if( obj == null || obj.ok != 1 || obj.n != 1 )
             {
-				sessionStorage.setItem('employee-id',params['_id'])
-                document.getElementById( 'textarea-login' ).innerHTML = "Login Successful.\n";
+				sessionStorage.setItem('employee-id',params['_id']);
+				sessionStorage.setItem('employee-pin',params['pin']);
+                document.getElementById( 'textarea-login' ).innerHTML = this.responseText;
                 checkType(params['_id']);
             }
             else
@@ -31,7 +32,7 @@ function login()
 	};
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
-	xmlHttp.open( "POST", "http://64.225.29.130/employees/login");
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/login",true );
 	xmlHttp.send( JSON.stringify(params ));
 }
 //5e924b86ecc95c521190e478
@@ -52,16 +53,19 @@ function checkType(id)
 
 			for( i = 0; i < numItems; i++ )
 			{
-                var currItem = obj[i];
-                if(currItem.type=="manager")
-                {
-                    window.document.location="../managers/manager1.html";
-                }
-                if(currItem.type=="server")
-                {
-                    window.document.location="../servers/server_options.html";
-                }
-        
+				var currItem = obj[i];
+				if(currItem._id==id)
+				{
+					sessionStorage.setItem('employee-type',currItem.type);
+                	if(currItem.type=="manager")
+                	{
+                	    window.document.location="../managers/manager1.html";
+                	}
+                	if(currItem.type=="server")
+                	{
+                	    window.document.location="../servers/server_options.html";
+                	}
+				}
             }
             
         }

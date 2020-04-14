@@ -743,18 +743,18 @@
 				</div>
 			</div>
 
-			<!-- Employee Login and Create Shift -->
+			<!-- Employee Login and Logout -->
 			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 				
 				<!-- Headers employee login and create shift -->
 				<div style="display: table-row; text-align: center;">
-					<!-- Header for employees query -->
+					<!-- Header for employee login -->
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Employee Login</h3>
+						<h3>Employee Log In</h3>
 					</div>
 
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Create Shift</h3>
+						<h3>Employee Log Out</h3>
 					</div>
 				</div>
 
@@ -795,6 +795,74 @@
 							</div>
 						</form>
 					</div>
+
+					<!-- Employee Logout Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="employeeLogoutForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Employee ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-logout-id" />
+									</div>
+								</div>
+
+								<!-- PIN input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">PIN</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="employee-logout-pin" />
+									</div>
+								</div>
+
+								<!-- Employee logout button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeLogout()">Log Out</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Login textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-login"></textarea>
+					</div>
+
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-logout"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Create and Remove Shift -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers create and remove shift -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for create shify -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Create Shift</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Remove Shift</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
 
 					<!-- Create Shift Form -->
 					<div style="display: table-cell; text-align: left;">
@@ -845,64 +913,6 @@
 									<div style="display: table-cell;"></div>
 									<div style="display: table-cell;">
 										<button style="width: 25vw;" class="button" type="button" onclick="employeeCreateShiftSubmit( true )">Create Shift</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-
-				<!-- Text areas -->
-				<div style="display: table-row;">
-					<!-- Employees Login textarea -->
-					<div style="display: table-cell; vertical-align: top;">
-						<textarea readonly id="textarea-employees-login"></textarea>
-					</div>
-
-					<!-- Delete Employees textarea -->
-					<div style="display: table-cell;">
-						<textarea readonly id="textarea-employees-create-shift"></textarea>
-					</div>
-				</div>
-			</div>
-
-			<!-- Delete Employee -->
-			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
-				
-				<!-- Headers delete employee -->
-				<div style="display: table-row; text-align: center;">
-					<!-- Header for delete employee -->
-					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Delete Employee</h3>
-					</div>
-
-					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Remove Shift</h3>
-					</div>
-				</div>
-
-				<!-- Control buttons and fields -->
-				<div style="display: table-row;">
-
-					<!-- Delete Employee Form -->
-					<div style="display: table-cell; text-align: left;">
-						<form id="deleteEmployeeForm">
-							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
-								<!-- First Name input field -->
-								<div style="display: table-row">
-									<div style="display: table-cell;">
-										<div class="label" style="">Employee ID</div>
-									</div>
-									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="text" required name="employee-delete-id" />
-									</div>
-								</div>
-
-								<!-- Delete employee button field -->
-								<div style="display: table-row">
-									<div style="display: table-cell;"></div>
-									<div style="display: table-cell;">
-										<button style="width: 25vw;" class="button" type="button" onclick="employeeDeleteSubmit()">Remove Employee</button>
 									</div>
 								</div>
 							</div>
@@ -963,8 +973,6 @@
 							</div>
 						</form>
 					</div>
-
-					<div style="display: table-cell; text-align: center;"></div>
 				</div>
 
 				<!-- Text areas -->
@@ -972,11 +980,139 @@
 
 					<!-- Delete Employees textarea -->
 					<div style="display: table-cell;">
-						<textarea readonly id="textarea-employees-delete"></textarea>
+						<textarea readonly id="textarea-employees-create-shift"></textarea>
 					</div>
 
 					<div style="display: table-cell; vertical-align: top;">
 						<textarea readonly id="textarea-employees-remove-shift"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Delete and EditEmployee -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers delete employee -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for delete employee -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Edit Employee</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Delete Employee</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Create Employee Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="editEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="edit-employee-id" />
+									</div>
+								</div>
+
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">First Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="edit-employee-first-name" />
+									</div>
+								</div>
+
+								<!-- Middle Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Middle Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="edit-employee-middle-name" />
+									</div>
+								</div>
+
+								<!-- Last Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Last Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="edit-employee-last-name" />
+									</div>
+								</div>
+
+								<!-- Employee type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee Type</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="edit-employee-type">
+											<option value="" selected="selected"></option>
+											<option value="server">Server</option>
+											<option value="manager">Manager</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Create employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="editEmployee()">Edit Employee</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Delete Employee Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="deleteEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-delete-id" />
+									</div>
+								</div>
+
+								<!-- Delete employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeDeleteSubmit()">Remove Employee</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+
+					<!-- Edit Employee textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-edit"></textarea>
+					</div>
+
+					<!-- Delete Employee textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-delete"></textarea>
 					</div>
 				</div>
 			</div>

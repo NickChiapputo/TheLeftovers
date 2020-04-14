@@ -83,7 +83,7 @@ const server = http.createServer( ( req, res ) =>  {
 
 				// Check that identifier is valid
 				if( ( obj[ "destType" ] === "server" || obj[ "destType" ] === "manager" ) &&
-					( obj[ "dest" ] === undefined || obj[ "dest" ] === "" || obj[ "dest" ].length != 24 ) )
+					( obj[ "dest" ] === undefined || obj[ "dest" ] === "" || !( /^[0-9a-fA-F]{24}$/.test( obj[ "dest" ] ) ) ) )
 				{
 					console.log( "Invalid dest '" + obj[ "dest" ] + "'." );
 
@@ -128,7 +128,7 @@ const server = http.createServer( ( req, res ) =>  {
 
 				// Check that applicable identifiers are valid
 				if( ( obj[ "srcType" ] === "server" ) &&
-					( obj[ "src" ] === undefined || obj[ "src" ] === "" || obj[ "src" ].length != 24 ) )
+					( obj[ "src" ] === undefined || obj[ "src" ] === "" || !( /^[0-9a-fA-F]{24}$/.test( obj[ "src" ] ) ) ) )
 				{
 					console.log( "Invalid src '" + obj[ "src" ] + "'." );
 
@@ -159,12 +159,22 @@ const server = http.createServer( ( req, res ) =>  {
 
 				// Check that identifier is valid
 				if( ( obj[ "destType" ] === "server" || obj[ "destType" ] === "manager" ) &&
-					( obj[ "dest" ] === undefined || obj[ "dest" ] === "" || obj[ "dest" ].length != 24 ) )
+					( obj[ "dest" ] === undefined || obj[ "dest" ] === "" || !( /^[0-9a-fA-F]{24}$/.test( obj[ "dest" ] ) ) ) )
 				{
 					console.log( "Invalid dest '" + obj[ "dest" ] + "'." );
 
 					res.statusCode = 400;
 					res.end( JSON.stringify( { "response" : "invalid dest" } ) );
+					return;
+				}
+
+				// Check that request is valid
+				if( obj[ "request" ] === undefined || obj[ "request" ] === "" )
+				{
+					console.log( "Invalid request '" + obj[ "request" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "empty request" } ) );
 					return;
 				}
 
@@ -177,9 +187,10 @@ const server = http.createServer( ( req, res ) =>  {
 				else
 					message[ "src" ] = obj[ "src" ];
 
-				message[ "srcType" ] = obj[ "type" ];
+				message[ "srcType" ] = obj[ "srcType" ];
 				message[ "dest" ] = obj[ "dest" ];
 				message[ "destType" ] = obj[ "destType" ];
+				message[ "request" ] = obj[ "request" ];
 
 				// Return relevant messges
 				sendMessage( message, collection, res );
@@ -212,6 +223,20 @@ async function getMessages( query, collection, res )
 	try
 	{
 		messageList = await searchMessages( query, collection );
+	
+		// Check if message list is null
+		if( messageList === null )
+		{
+			console.log( "No messages found." );
+	
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "response" : "no messages found" } ) );
+			return;
+		}
+		
+		// Delete messages
+		var deleteReturn = await deleteMessages( query, collection );
+		console.log( "Message Delete Return: " + JSON.stringify( deleteReturn ) );
 	}
 	catch( e )
 	{
@@ -222,15 +247,6 @@ async function getMessages( query, collection, res )
 		return;
 	}
 
-	// Check if message list is null
-	if( messageList === null )
-	{
-		console.log( "No messages found." );
-
-		res.statusCode = 500;
-		res.end( JSON.stringify( { "response" : "no messages found" } ) );
-		return;
-	}
 
 	// Messages were found
 	console.log( "Messages found for user " + query[ "destType" ] + " - '" + query[ "dest" ] + "':\n" + JSON.stringify( messageList ) );
@@ -240,6 +256,11 @@ async function getMessages( query, collection, res )
 async function searchMessages( query, collection )
 {
 	return collection.find( query ).toArray();
+}
+
+async function deleteMessages( query, collection )
+{
+	return collection.deleteMany( query )
 }
 
 async function sendMessage( message, collection, res )
@@ -260,7 +281,7 @@ async function sendMessage( message, collection, res )
 	}
 
 	// Message was inserted
-	console.log( "Message inserted:\n" + sendResponse.ops[ 0 ] );
+	console.log( "Message inserted:\n" + JSON.stringify( sendResponse.ops[ 0 ] ) );
 	res.end( JSON.stringify( sendResponse.ops[ 0 ] ) );
 }
 
