@@ -20,29 +20,35 @@ function loadMenu()
                 //doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
                 var i;
-                var j;
-                j = 0;
+                var j = 1;
                 var itemBox;
-                for( i = 0; i < numItems; i++ )
-                {
-                    var currItem = obj[ i ];
-                    if (currItem.category === cats) {
-                        j++;
-                        if (j > 8) {
-                            document.getElementById('row3').style.height = "35vh";
+                var maxloc=-1;
+                maxloc = Cookies.getJSON('max') [cats][0];
+                console.log("Most popular: ", maxloc);
+                if (maxloc >= 0) {
+                    var currItem = obj[maxloc];
+                    itemBox = document.getElementById("foodText".concat(1));
+                    itemBox.innerText = currItem.name;
+                    var item = document.getElementById("food".concat(1));
+                    item.style.backgroundImage = "url(".concat(currItem.image, ")");
+                    item.style.visibility = "visible";
+                    item.name = JSON.stringify(currItem);
+                    for( i = 0; i < numItems; i++ )
+                    {
+                        currItem = obj[ i ];
+                        if (currItem.category === cats && maxloc != i) {
+                            j++;
+                            if (j > 8) {
+                                document.getElementById('row3').style.height = "35vh";
+                            }
+                            itemBox = document.getElementById("foodText".concat(j));
+                            itemBox.innerText = currItem.name;
+                            var item = document.getElementById("food".concat(j));
+                            item.style.backgroundImage = "url(".concat(currItem.image, ")");
+                            item.style.visibility = "visible";
+                            item.name = JSON.stringify(currItem);
                         }
-                        itemBox = document.getElementById("foodText".concat(j));
-                        //doc.innerHTML += "    food:    " + currItem.name;
-                        //doc.innerHTML += "\n    type:" + currItem.category;
-                        //doc.innerHTML += "\n  box id:" + "food".concat(j);
-
-                        itemBox.innerText = currItem.name;
-                        var item = document.getElementById("food".concat(j));
-                        item.style.backgroundImage = "url(".concat(currItem.image, ")");
-                        item.style.visibility = "visible";
-                        item.name = JSON.stringify(currItem);
                     }
-
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -185,7 +191,7 @@ function loadOrderItems() {
             if (document.getElementById('pageTitle').innerText == "View Order" || order.items[i].sent == 'true') {
                 // adding happy hour discount
                 var date = new Date();
-                if (order.items[i].category == 'dessert' && order.items[i]['happy_hour'] == undefined && date.getHours() >= 10 && date.getHours() <= 19) {
+                if (order.items[i].category == 'dessert' && order.items[i]['happy_hour'] == undefined && date.getHours() >= 17 && date.getHours() <= 19) {
                     order.items[i]['happy_hour'] = true;
                     order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
                 }
