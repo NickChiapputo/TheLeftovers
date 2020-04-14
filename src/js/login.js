@@ -15,7 +15,8 @@ function login()
 
             if( obj == null || obj.ok != 1 || obj.n != 1 )
             {
-				sessionStorage.setItem('employee-id',params['_id'])
+				sessionStorage.setItem('employee-id',params['_id']);
+				sessionStorage.setItem('employee-pin',params['pin']);
                 document.getElementById( 'textarea-login' ).innerHTML = this.responseText;
                 checkType(params['_id']);
             }
