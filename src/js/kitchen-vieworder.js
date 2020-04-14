@@ -28,7 +28,6 @@ function getOrders()
 						var ingredients=[];
 						txt+="<p>Name:"+food.name+"</p>";
 						food.ingredients.forEach(function (ingredient){
-							alert(ingredient)
 								ingredients.push(ingredient);
 						});
 
