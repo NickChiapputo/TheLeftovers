@@ -78,3 +78,82 @@ function showBill(obj, orderNo){
 
 
 }
+
+function compBill(compAmt){
+
+    //entire string of bill
+    var billStr = document.getElementById('itemList').innerText;
+    var grandTotal = 0;
+    var totalPlacement = 0;
+    //find actual grand total
+    for (var i = billStr.length - 1; i >= 0; i--){
+
+        if (billStr[i] == "$") {
+            grandTotal = billStr.substring(i + 1);
+            totalPlacement = i;
+            break;
+        }
+    }
+
+    //calculate comp'd amount
+    grandTotal -= +grandTotal * (+compAmt/100);
+
+    //update bill
+    document.getElementById('itemList').innerText = billStr.substring(0, totalPlacement) + grandTotal;
+
+}
+
+function splitBill(splitAmt){
+    //entire string of bill
+    var billStr = document.getElementById('itemList').innerText;
+    var grandTotal = 0;
+    var totalPlacement = 0;
+    //find actual grand total
+    for (var i = billStr.length - 1; i >= 0; i--){
+
+        if (billStr[i] == "$") {
+            grandTotal = billStr.substring(i + 1);
+            totalPlacement = i;
+            break;
+        }
+    }
+
+    //calculate comp'd amount
+    grandTotal = +grandTotal - +splitAmt;
+
+    //update bill
+    document.getElementById('itemList').innerText = billStr.substring(0, totalPlacement) + grandTotal;
+}
+
+function applyCoupon(code){
+
+    //first, get list of coupons
+    var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) {
+			//var doc = document.getElementById( 'textarea-view' );
+			var txt ="";
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+            //get total number of coupons
+			var numCoupons = Object.keys(obj).length;
+
+            //loop through coupons
+            for (var i = 0; i < numCoupons; i++){
+                if (obj[i]._id == code){
+                    alert(obj[i]._id +"\n"+code);
+                    compBill(obj[i].discount);
+                }
+            }
+        }
+
+		else if( this.readyState == 4 && this.status != 200 ){
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/coupons/view", true );
+	xmlHttp.send();
+
+}
