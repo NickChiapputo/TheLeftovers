@@ -112,8 +112,7 @@ function findTable(table)
 			{
 				if(item.table==table)
 				{
-					
-					sendMessage(item._id);
+					sendMessage(item.server);
 					return(false);
 				}
 			});
