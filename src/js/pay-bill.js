@@ -135,10 +135,41 @@ function submitNote() {
     console.log("sent");
 }
 
-function dropD (key, value) {
-    var payment = Cookies.get('payment');
+function getOptions() {
+    var payment = Cookies.getJSON('payment');
+    payment.payment = document.getElementsByName( "order-pay-method" )[ 0 ].value;
+    payment.receipt = document.getElementsByName( "order-receipt-method" )[ 0 ].value;
+    Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
     console.log(payment);
-    console.log(key, ': ', value);
-    payment ['payment'] = value;
+    var payText = document.getElementById('pay-text');
+    payText.style.color = 'red';
+    if (payment.payment == "N/A" && payment.receipt == "N/A") {
+        payText.innerText = 'No payment method selected';
+        payText.innerText = payText.innerText.concat('\nNo receipt method selected');
+    }
+    else if (payment.payment == "N/A") {
+        payText.innerText = 'No payment method selected';
+    }
+    else if (payment.receipt == "N/A") {
+        payText.innerText = 'No receipt method selected';
+    }
+    else {
+        document.getElementById('pay-foot').style.display = 'unset';
+        payText.style.color = "black"
+        payText.innerText = "Pay for your order in parts or all together"
+    }
+    console.log("NaN: ", payment.payment, ", ", payment.receipt);
+}
+
+function handlePartialPayment(frac) {
+    if (frac == 'W') {
+        var payAmount = document.getElementById('partial-pay-amount').value;
+    }
+    else {
+        var pay
+    }
+    console.log("Pay amount: ", payAmount);
+    var payment = Cookies.getJSON('payment');
+    payment.amount = payAmount;
     Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
 }

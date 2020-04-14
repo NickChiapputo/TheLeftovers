@@ -217,9 +217,10 @@ a:hover, a:active {
   }
 
   .menu-box-dropdown {
-    background-color: mediumslateblue;
-    color: white;
-    margin: 1vw 0vw;
+    background-color: white;
+    color: black;
+    margin: 1vw 1vw;
+    padding: 0vw 0vw;
     border: black;
     border-width: 0.5vw;
     border-style: solid;
@@ -227,6 +228,6 @@ a:hover, a:active {
 }
 
 .menu-text-dropdown {
-    font-size: 5vh;
+    font-size: 6vh;
     text-align: center;
 }

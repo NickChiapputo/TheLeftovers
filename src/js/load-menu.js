@@ -160,6 +160,8 @@ function loadOrderItems() {
             order = Cookies.getJSON('current_order')
         }
 
+        order.table = table;
+
         if (document.getElementById('pageTitle').innerText == "View Order") {
             // adding new item
             if (Cookies.get('new_item') == 1) {
@@ -312,8 +314,10 @@ function editRemoveItem(edRom) {
         }
         else {
             temp.items.splice(selection, 1);
-            if (temp.items[temp.items.length - 1].sent == 'true') {
-                temp.status = 'ordered';
+            if (temp.items.length > 0) {
+                if (temp.items[temp.items.length - 1].sent == 'true') {
+                    temp.status = 'ordered';
+                }
             }
             Cookies.set('current_order', temp, {path: '/', sameSite: 'strict'});
             if (edRom == 1) {
