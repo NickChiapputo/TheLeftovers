@@ -15,6 +15,7 @@ function login()
 
             if( obj == null || obj.ok != 1 || obj.n != 1 )
             {
+				sessionStorage.setItem('employee-id',params['_id'])
                 document.getElementById( 'textarea-login' ).innerHTML = "Login Successful.\n";
                 checkType(params['_id']);
             }

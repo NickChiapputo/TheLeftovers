@@ -1,7 +1,7 @@
-function getMessages(serverid)
+function getMessages()
 {
     var params = {};
-    params['dest'] = serverid;
+    params['dest'] = sessionStorage.getItem('employee-id');
     params['destType'] = 'server';    
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {

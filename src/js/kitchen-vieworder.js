@@ -19,7 +19,7 @@ function getOrders()
 				var allergens;
 				var y=i+1;
 				localStorage.setItem('btn'+y,"");
-				if(currItem.status!="complete"||currItem.status!="completed")
+				if(currItem.status!="complete"&&currItem.status!="completed")
 				{
 					txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
 					txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
@@ -39,7 +39,7 @@ function getOrders()
 					if(currItem.notes!=undefined)
 						txt+="Note:"+currItem.notes;
 						var ide = "";
-						localStorage.setItem('btn'+y,currItem._id);
+						sessionStorage.setItem('btn'+y,currItem._id);
 					txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
 				}
 			}
@@ -244,8 +244,8 @@ function help(managerid)
 
 function changeStatus(count)
 {
-	var ide=localStorage.getItem('btn'+count);
-	localStorage.setItem('btn'+count,"");
+	var ide=sessionStorage.getItem('btn'+count);
+	sessionStorage.setItem('btn'+count,"");
 	var params = {};
 		params['_id'] = ide;
 		params ['status'] = 'complete';
