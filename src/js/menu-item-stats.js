@@ -14,7 +14,7 @@ function menuItemStats(name, loc, type, firstCheck)
         tempMax ['appetizer'] = [-1, -1];
         tempMax ['drink'] = [-1, -1];
         tempMax ['dessert'] = [-1, -1];
-        Cookies.set("max", tempMax, {path: '/', sameSite: 'strict'});
+        Cookies.set('tempMax', tempMax, {path: '/', sameSite: 'strict'});
     }
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
@@ -57,10 +57,10 @@ function menuItemStats(name, loc, type, firstCheck)
                 }
             }
             console.log("total                : ", sum);
-            var max = Cookies.getJSON('max');
+            var max = Cookies.getJSON('tempMax');
             if (Number(max [type] [1]) < sum) {
                 max [type] = [loc, sum];
-                Cookies.set("max", max, {path: '/', sameSite: 'strict'});
+                Cookies.set("tempMax", max, {path: '/', sameSite: 'strict'});
             }
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -68,9 +68,7 @@ function menuItemStats(name, loc, type, firstCheck)
 			console.log( "Search for menu item stats status response: " + this.status );
         }
     }
-        
-    xmlHttp.open( "POST", "http://64.225.29.130/menu/stats", true );
-	//console.log( "Sending: " + JSON.stringify( params ) );
+    xmlHttp.open( "POST", "http://64.225.29.130/menu/stats", false );
     xmlHttp.send( JSON.stringify( params ) ); 
     
 }
@@ -100,6 +98,7 @@ function fetchStats()
                     menuItemStats(currItem.name, i, currItem.category, firstCheck);
                     firstCheck = false;
                 }
+                Cookies.set('max', Cookies.getJSON('tempMax'), {path: '/', sameSite: 'strict'});
             }
             else if( this.readyState == 4 && this.status != 200 )
             {
