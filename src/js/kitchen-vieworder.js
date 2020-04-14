@@ -10,27 +10,36 @@ function getOrders()
 		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
-            var numItems = Object.keys( obj ).length;
+			var numItems = Object.keys( obj ).length;
+			var txt="";
 			for(i=0; i<numItems; i++)
 			{
 				var currItem = obj[i];
 				var name=[];
 				var allergens;
-
-				txt+="<div class=\"col menu-box\">";
-				txt+="H</div>";
-				/*currItem.items.forEach(function (food) {
+				var y=i+1;
+				txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
+				txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
+				txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
+				currItem.items.forEach(function (food) {
 					var ingredients=[];
-					doc.innerHTML+="<p>Name:"+food.name+"</p>";
+					txt+="<p>Name:"+food.name+"</p>";
 					food.ingredients.forEach(function (ingredient){
-						ingredients.push(ingredient.name);
+							ingredients.push(ingredient);
 					});
-					doc.innerHTML+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+
+					if(ingredients.length!=0)
+					{
+						txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+					}
 				});
-				doc.innerHTML+="Note:"+currItem.notes;*/
+				if(currItem.notes!=undefined)
+					txt+="Note:"+currItem.notes;
+				txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button></div><div style=\"background-color:black;font-size:3px\">-</div> ";
 			}
 			
 			console.log( this.responseText );
+			doc.innerHTML=txt;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -44,42 +53,185 @@ function getOrders()
 	xmlHttp.send();
 }
 
-/*Contributed from https://www.w3schools.com/howto/howto_js_collapsible.asp*/
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-/*******************************************/
-/*       Collapsible Area Functions        */
-function collapse( buttonID, elementID )
+function sendMessage(tableid)
 {
-	// Change button to active class
-	document.getElementById( buttonID ).classList.toggle( "active" );
+	var params = {};
+	params['srcType']="kitchen";
+	params['dest']=tableid;
+	params['destType']="server";
+	params['request']="help";
 
-	// Get div document
-	var el = document.getElementById( elementID );
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+//			var doc = document.getElementById( 'order-view-area' );
 
+			console.log( this.responseText );
+		
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			var numItems = Object.keys( obj ).length;
 
-	/********* USE THIS FOR STATIC/IMMEDIATE COLLAPSING *****/
-	// Toggle between open ("block") and closed ("none")
-	// if( el.style.display === "block" )
-	// {
-	// 	el.style.display = "none";
-	// }
-	// else
-	// {
-	// 	el.style.display = "block";
-	// }
+			alert("Server "+tableid+" was notified");
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
+			console.log( "Rewards accounts inventory status response: " + this.status );
+		}
+	};
 
+	// Send a GET request to 64.225.29.130/inventory/view
+    xmlHttp.open( "POST", "http://64.225.29.130/messages/send", true );
+	xmlHttp.send(JSON.stringify(params));
+}
 
-	/********* USE THIS FOR ANIMATED COLLAPSING *****/
-	// Animate sliding
-	if( el.style.maxHeight )
+function findTable(table)
+{
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+//			var doc = document.getElementById( 'order-view-area' );
+
+			console.log( this.responseText );
+		
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+			var numItems = Object.keys( obj ).length;
+			obj.forEach(function(item)
+			{
+				if(item.table==table)
+				{
+					
+					sendMessage(item._id);
+					return(false);
+				}
+			});
+			
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
+			console.log( "Rewards accounts inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+    xmlHttp.open( "GET", "http://64.225.29.130/tables/view", true );
+	xmlHttp.send();
+
+	
+}
+
+function changeColor(number)
+{
+	var btn="btn"+number;
+	if(document.getElementById(btn).style.backgroundColor=="green")
 	{
-		el.style.maxHeight = null;
+		document.getElementById(btn).style.backgroundColor="#ffc107";
 	}
 	else
 	{
-		el.style.maxHeight = el.scrollHeight + "px";
+		document.getElementById(btn).style.backgroundColor="green"
 	}
 }
-/*******************************************/
+
+function managerSearch()
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) 
+		{
+//			var doc = document.getElementById( 'order-view-area' );
+
+			console.log( this.responseText );
+		
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+
+			var numItems = Object.keys( obj ).length;
+			let date = new Date();
+			let year = date.getFullYear();
+			let month = date.getMonth()+1
+			dt = date.getDate();
+		
+			if(dt < 10)
+			{
+				dt = '0' + dt;
+			}
+			if(month < 10)
+			{
+				month = '0' + month;
+			}
+		 
+			let today = (year+'-'+month+'-'+(dt+1-date.getDay()));
+
+			obj.forEach(function(employee)
+			{
+				if(employee.type=='manager')
+				{
+					//alert(employee.first+" "+employee.last)
+					employee.shifts.forEach(function (shift){
+						//alert(shift.date);
+						if(shift.date==today)
+						{
+							help(employee._id)
+						}
+					} );
+				}
+			});
+			
+			console.log( this.responseText );
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
+			console.log( "Rewards accounts inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+    xmlHttp.open( "GET", "http://64.225.29.130/employees/view", true );
+	xmlHttp.send();
+}
+
+function help(managerid)
+{
+	var params = {}
+		params['src']="";
+		params['srcType']='kitchen';
+		params['dest']=managerid;
+		params['destType']='manager';
+		params['request']='help';
+
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() {
+			if( this.readyState == 4 && this.status == 200 ) 
+			{
+	//			var doc = document.getElementById( 'order-view-area' );
+	
+				console.log( this.responseText );
+			
+				// Response is a JSON array of items
+				var obj = JSON.parse( this.responseText );
+				var numItems = Object.keys( obj ).length;
+	
+				alert("Manager "+managerid+" was notified");
+				console.log( this.responseText );
+			}
+			else if( this.readyState == 4 && this.status != 200 )
+			{
+	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
+				console.log( "Rewards accounts inventory status response: " + this.status );
+			}
+		};
+	
+		// Send a GET request to 64.225.29.130/inventory/view
+		xmlHttp.open( "POST", "http://64.225.29.130/messages/send", true );
+		xmlHttp.send(JSON.stringify(params));
+}
