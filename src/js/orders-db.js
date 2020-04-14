@@ -70,6 +70,28 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 		// Data is finished being read. edit item
 	 		req.on( 'end', () => { 
+				var obj = JSON.parse( body );
+
+				// Verify that table is valid
+				if( obj[ "table" ] === undefined || obj[ "table" ] === "" || isNaN( parseInt( obj[ "table" ] ) ) || parseInt( obj[ "table" ] ) < 1 || parseInt( obj[ "table" ] ) > 20 )
+				{
+					console.log( "Invalid table number '" + obj[ "table" ] + "'." );
+					
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid table number" } ) );
+					return;
+				}
+
+				// Verify that rewards is valid if applicable
+				if( obj[ "rewards" ] !== undefined && obj[ "rewards" ] !== "" && ( obj[ "rewards" ].length !== 10 || isNaN( parseInt( obj[ "rewards" ] ) ) ) )
+				{
+					console.log( "Invalid rewards number '" + obj[ "rewards" ] + "'." );
+					
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid rewards number" } ) );
+					return;
+				}
+				
 				console.log( "Received: \n" + body + "\n \n " ); 
 				createOrder( JSON.parse( body ), db, res ); 
 			});
@@ -113,7 +135,6 @@ const server = http.createServer( ( req, res ) =>  {
 					( obj[ "method" ] !== "card" && obj[ "method" ] !== "cash" ) ||
 					obj[ "amount" ] === undefined || obj[ "amount" ] === "" ||
 					isNaN( parseFloat( obj[ "amount" ] ) ) || parseFloat( obj[ "amount" ] ) <= 0 ||
-					obj[ "tip" ] === undefined || obj[ "tip" ] === "" ||
 					isNaN( parseFloat( obj[ "tip" ] ) ) || parseFloat( obj[ "tip" ] ) < 0 ||
 					obj[ "receipt" ] === undefined || obj[ "receipt" ] === "" ||
 					( obj[ "receipt" ] !== "print" && obj[ "receipt" ] !== "email" ) )
@@ -127,7 +148,53 @@ const server = http.createServer( ( req, res ) =>  {
 
 				console.log( "Data: " + body );
 				
-				payOrder( obj, db.db( "restaurant" ).collection( "tables" ), collection, res );
+				payOrder( obj, db, res );
+			});
+		}
+		else if( path == "/orders/status" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+			// Data is finished being read. Pay order
+			req.on( 'end', () => {
+				// Get JSON object sent from user
+				var obj = JSON.parse( body );
+
+				// Make sure all fields are not empty
+				if( 	obj[ "_id" ] === undefined || obj[ "_id" ] === "" )
+				{
+					console.log( "Invalid _id '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid _id value" } ) );
+					return;
+				}
+
+				// Verify status update value
+				if( obj[ "status" ] === undefined || obj[ "status" ] === "" || 
+					( obj[ "status" ] !== "in progress" && obj[ "status" ] !== "complete" ) )
+				{
+					console.log( "Invalid status '" + obj[ "status" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid status value" } ) );
+					return;
+				}
+
+				console.log( "Update status query: " + body );
+
+				var query = {}
+				query[ "_id" ] = mongo.ObjectId( obj[ "_id" ] );
+
+				var update = {};
+				update[ "$set" ] = {}
+				update[ "$set" ][ "status" ] = obj[ "status" ];
+				
+				updateStatus( query, update, collection, res );
 			});
 		}
 	 	else
@@ -384,6 +451,50 @@ async function createOrder( order, db, res )
 		console.log( " \n" );
 	}
 
+	try
+	{
+		// Set table status to ordered
+		var tableQuery = {};
+		tableQuery[ "table" ] = parseInt( order[ "table" ] );
+		var tableUpdate = { $set : { "status" : "ordered" } };
+		var tableOptions = { returnOriginal : false, returnNewDocument : true };
+		var tableUpdateResponse = await updateItem( tableQuery, tableUpdate, tableOptions, db.db( "restaurant" ).collection( "tables" ) );
+
+		console.log( "Table Update Response: " + JSON.stringify( tableUpdateResponse ) );
+
+
+		// If rewards value is given, set last ordered meal
+		if( order[ "rewards" ] !== undefined && order[ "rewards" ] !== "" )
+		{
+			var rewardsQuery = {};
+			rewardsQuery[ "_id" ] = order[ "rewards" ];
+			var rewardsUpdate = {};
+			rewardsUpdate[ "$set" ] = {};
+			rewardsUpdate[ "$set" ][ "lastMeal" ] = order[ "items" ];
+			var rewardsOptions = { returnOriginal : false, returnNewDocument : true };
+
+			console.log( "Setting last meal of rewareds account '" + rewardsQuery[ "_id" ] + "' to " + order[ "items" ] );
+
+			var rewardsResponse = await updateItem( rewardsQuery, rewardsUpdate, rewardsOptions, db.db( "restaurant" ).collection( "rewards" ) );
+
+			if( rewardsResponse.value === null )
+			{
+				console.log( "Unable to update rewards last meal." );
+				return;
+			}
+
+			console.log( "Update rewards last meal\n" + JSON.stringify( rewardsResponse.value ) );
+		}
+	}
+	catch( e )
+	{
+		console.log( "Fatal error updating table status.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error updating table status" } ) );
+		return;
+	}
+
 	orderCollection.insertOne( order, function( err, result ) {
  		if( err )
  		{
@@ -394,8 +505,8 @@ async function createOrder( order, db, res )
  		}
 
  		// Display new item for debugging
- 		console.log( "Inserted: " + JSON.stringify( result.ops[ 0 ] ) );
-
+ 		console.log( "Created Order: " + JSON.stringify( result.ops[ 0 ] ) );
+		
  		// Send the new item back
  		res.end( JSON.stringify( result.ops[ 0 ] ) );
  	} );
@@ -443,9 +554,13 @@ function deleteOrder( deleteItem, collection, res )
 	} );
 }
 
-function payOrder( input, tableCollection, collection, res )
+async function payOrder( input, db, res )
 {
 	console.log( "Beginning pay for order ID " + input[ "_id" ] );
+
+	var collection = db.db( "restaurant" ).collection( "orders" );
+	var tableCollection = db.db( "restaurant" ).collection( "tables" );
+	var employeesCollection = db.db( "restaurant" ).collection( "employees" );
 
 	// Create item with unique _id to search for order
 	var searchItem = {}
@@ -509,16 +624,25 @@ function payOrder( input, tableCollection, collection, res )
 
 			// Update table
 			var table = {};
-			table[ "table" ] = updatedResult.value[ "table" ];
+			table[ "table" ] = parseInt( updatedResult.value[ "table" ] );
 			
 			var updatedQuery = {};
 			if( updatedResult.value[ "total" ] == 0 )
 			{
-				updatedQuery[ "status" ] = "paid";
+				// Reset back to initial state
+				updatedQuery[ "status" ] = "sitting";
 			}
 			else
 			{
+				// Still has more left on bill
 				updatedQuery[ "status" ] = "partially paid";
+			}
+
+			// Add tip if applicable
+			var tip = 0.00;
+			if( input[ "tip" ] !== undefined && input[ "tip" ] !== null && !isNaN( parseFloat( input[ "tip" ] ) ) && parseFloat( input[ "tip" ] ) > 0 )
+			{
+				tip = Math.round( ( parseFloat( input[ "tip" ] ) + 0.00001 ) * 100 ) / 100;
 			}
 
 			console.log( "Updated Query Status: '" + updatedQuery[ "status" ] + "' for table " + table[ "table" ] + "." ); 
@@ -545,20 +669,31 @@ function payOrder( input, tableCollection, collection, res )
 					return;
 				}
 
-				if( newTable == null )
+				// Update employee tips if applicable
+				if( tip > 0 )
 				{
-					console.log( "Could not find table " + table[ "table" ] + "." );
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "could not find table" } ) );
-					return;
-				}
+					/*try
+					{
+						var employeeQuery = {};
+						employeeQuery[ "_id" ] = mongo.ObjectId( newTable[ "server" ] );
+						var employeeUpdate = {};
+						employeeUpdate[ "$inc" ] = {};
+						employeeUpdate[ "$inc" ][ "tips" ] = tip;
+						var employeeOptions = { returnOriginal : false, returnNewDocument : true };
 
-				if( newTable === undefined )
-				{
-					console.log( "Could not find table " + table[ "table" ] + "." );
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "could not find table" } ) );
-					return;
+						console.log( "Increasing tips by " + tip + " for server '" + employeeQuery[ "_id" ] + "'." );
+
+						var employeeResult = await updateItem( employeeQuery, employeeUpdate, employeeOptions, employeesCollection );
+
+						if( employeeResult.value === null )
+						{
+							console.log( "Unable to add tip to server." );
+						}
+					}
+					catch( e )
+					{
+						console.log( "Fatal error updating employe tips.\nError log: " + e.message );
+					}*/
 				}
 
 				console.log( "Updated status for table " + table[ "table" ] + " to '" + newTable[ "status" ] + "'." );
@@ -676,3 +811,28 @@ function payOrder( input, tableCollection, collection, res )
 	});
 }
 
+function updateStatus( query, update, collection, res )
+{
+	collection.findOneAndUpdate( query, update, { returnOriginal : false, returnNewDocument : true }, function( err, result ) {
+		if( err )
+		{
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "response" : "fatal error updating status" } ) );
+			throw err;
+			return;
+		}
+
+		if( result === null )
+		{
+			console.log( "Unable to find order '" + query[ "_id" ] + "'." );
+
+			result.statusCode = 400;
+			result.end( JSON.stringify( { "response" : "could not find order" } ) );
+			return;
+		}
+
+		console.log( "Found and updated order with status '" + result.value[ "status" ] + "'." );
+
+		res.end( JSON.stringify( result.value ) );
+	});
+}
