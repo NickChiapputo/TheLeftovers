@@ -126,6 +126,35 @@ const server = http.createServer( ( req, res ) =>  {
 	 			deleteAccount( deleteItem, collection, res );
 	 		});
 	 	}
+	 	else if( path == "/rewards/search" )
+	 	{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+	 			console.log( "Searching for " + body );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Check if data is valid
+	 			if( obj[ "phone" ] === "" || obj[ "phone" ] === undefined || obj[ "phone" ].length != 10 )
+	 			{
+			 		console.log( "Phone number is invalid ('" + obj.phone + "')." );
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "success" : "no" } ) );
+					return;
+	 			}
+
+			 	var account = {};
+			 	account[ "_id" ] = obj[ "phone" ];
+
+	 			getRewardsAccount( account, collection, res );
+	 		});
+	 	}
 	 	else
 	 	{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -147,7 +176,13 @@ server.listen( port, hostname, () => {
 function viewRewardsAccount( collection, res )
 {
 	collection.find( {} ).toArray( function( err, result ) {
-		if( err ) throw err;
+		if( err )
+		{
+			console.log( "Error querying account list." );
+			res.statusCode = 500;								// Internal Server Error
+			res.end( JSON.stringify( { "success" : "no" } ) );	// Unsuccessful action
+			throw err;
+		}
 
 		console.log( 	"Items found in rewards accounts database:\n" +
 						JSON.stringify( result ) +
@@ -194,4 +229,31 @@ function deleteAccount( deleteItem, collection, res )
  		// Send deleted result back
  		res.end( JSON.stringify( result.result ) );
 	} );
+}
+
+function getRewardsAccount( id, collection, res )
+{
+	collection.findOne( id, function( err, result ) {
+		if( err )
+		{
+			console.log( "Error finding account." );
+			res.statusCode = 500;								// Internal Server Error
+			res.end( JSON.stringify( { "success" : "no" } ) );	// Unsuccessful action
+			throw err;
+		}
+
+		if( result === null )
+		{
+			console.log( "Unable to find rewards account '" + id[ "_id" ] + "'." );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "did not find account" } ) );
+			return;
+		}
+
+		console.log( 	"Item found in rewards accounts database:\n" + JSON.stringify( result ) + "\n\n" );
+
+		// Send item back
+		res.end( JSON.stringify( result ) );
+	});
 }
