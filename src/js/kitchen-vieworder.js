@@ -174,7 +174,7 @@ function managerSearch()
 				month = '0' + month;
 			}
 		 
-			let today = (year+'-'+month+'-'+(dt+1-date.getDay()));
+			let today = (year+'-'+month+'-'+(dt))
 
 			obj.forEach(function(employee)
 			{

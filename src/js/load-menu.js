@@ -6,6 +6,13 @@ function loadMenu()
         pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
         document.getElementById('category').innerText = pageTitle;
 
+        var maxloc=-1;
+        maxloc = Cookies.getJSON('max');
+        console.log(maxloc);
+        if (maxloc != undefined) {
+            maxloc = maxloc[cats][0];
+        }
+
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if( this.readyState == 4 && this.status == 200 )
@@ -22,9 +29,6 @@ function loadMenu()
                 var i;
                 var j = 1;
                 var itemBox;
-                var maxloc=-1;
-                maxloc = Cookies.getJSON('max') [cats][0];
-                console.log("Most popular: ", maxloc);
                 if (maxloc >= 0) {
                     var currItem = obj[maxloc];
                     itemBox = document.getElementById("foodText".concat(1));
@@ -136,7 +140,6 @@ function loadOrderItems() {
     $(document).ready(function() {
         var order;
         // replace with real values later
-        var id=null;
         var table = Cookies.get('table-num');
         if (table == undefined) {
             table = 0;
@@ -144,10 +147,10 @@ function loadOrderItems() {
         document.getElementById('tableNum').innerText = table;
         // replace with real rewards num
         // default is 0
-        var rewards = 0;
+        var rewards = '';
 
         if (Cookies.get('current_order') == undefined) {
-            Cookies.set('current_order', {"_id":id,
+            Cookies.set('current_order', {
             "table":table,
             "rewards":rewards,
             "status":"in progress"}, {path: '/', sameSite: 'strict'});
@@ -237,9 +240,9 @@ function loadOrderItems() {
         total = Number((total));
         var tax = Number((total * 0.0825));
         output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');
-        output = output.concat('Tax: $', addTrailingZeros(tax),'\n');
+        output = output.concat('Tax:      $', addTrailingZeros(tax),'\n');
         output = output.concat('___________________________________________\n');
-        output = output.concat('Total: $', addTrailingZeros(total + tax),'\n');
+        output = output.concat('Total:    $', addTrailingZeros(total + tax),'\n');
         document.getElementById('itemList').innerText = output;
     });
 }
