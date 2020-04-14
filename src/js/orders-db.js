@@ -220,6 +220,170 @@ async function createOrder( order, db, res )
 	// Remove _id tag if added previously
 	delete order[ "_id" ];
 
+	// Loop through each menu item and check if all ingredients exist and if there are enough of it 
+	var inventoryCollection = db.db( "restaurant" ).collection( "inventory" );
+	var menuItemCollection = db.db( "restaurant" ).collection( "menu-items" ); 
+	var numItems = Object.keys( order[ "items" ] ).length;
+	var i = 0;
+	for( i = 0; i < numItems; i++ )
+	{
+		var item = order[ "items" ][ i ];
+
+		console.log( "Checking for existence of '" + item[ "name" ] + "'." );
+
+		var menuItemCheckResponse;
+
+		try
+		{
+			var menuItemCheckQuery = {}
+			menuItemCheckQuery[ "name" ] = item[ "name" ];
+
+			menuItemCheckResponse = await getItem( menuItemCheckQuery, menuItemCollection );
+
+			if( menuItemCheckResponse === null )
+			{
+				console.log( "Item '" + item[ "name" ] + "' does not exist." );
+
+				res.statusCode = 400;
+				res.end( JSON.stringify( { "response" : "menu item does not exist" } ) );
+				return;
+			}
+		}
+		catch( e )
+		{
+			console.log( "Fatal error checking menu item." );
+
+			res.statusCode = 500;
+			res.end( JSON.stringify( { "response" : "fatal error checking menu item" } ) );
+			return;
+		}
+
+		var numIngredients = Object.keys( item[ "ingredients" ] ).length;
+		var j = 0;
+
+		// Check that all ingredients exist
+		for( j = 0; j < numIngredients; j++ )
+		{
+			var ingredient = item[ "ingredients" ][ j ];
+
+			if( item[ "hasIngredient" ][ j ] > 0 )
+			{
+				console.log( "    Checking for existence and count of ingredient '" + ingredient + "' that uses " + item[ "ingredientCount" ][ j ] + "." );
+
+				try
+				{
+					// Check if ingredient exists
+					var ingredientQuery = {}
+					ingredientQuery[ "name" ] = ingredient;
+					var ingredientResponse = await getItem( ingredientQuery, inventoryCollection );
+
+					// Fail if ingredient doesn't exist
+					if( ingredientResponse === null )
+					{
+						console.log( "        " + ingredient + " doesn't exist." );
+
+						res.statusCode = 400;
+						res.end( JSON.stringify( { "response" : "ingredient doesn't exist" } ) );
+						return;
+					}
+
+					// Fail if ingredient count is less than current count 
+					if( parseInt( ingredientResponse[ "count" ] ) < item[ "ingredientCount" ][ j ] )
+					{
+						console.log( "        " + ingredient + " only has " + ingredientResponse[ "count" ] + " but order requires " + item[ "ingredientCount" ][ j ] + "." );
+
+						res.statusCode = 400;
+						res.end( JSON.stringify( { "response" : "not enough ingredient remains" } ) );
+						return;
+					}
+
+					console.log( "        Found item: " + JSON.stringify( ingredientResponse ) );
+				}
+				catch( e )
+				{
+					console.log( "        Fatal error checking ingredient.\nError log: " + e.message );
+
+					res.statusCode = 500;
+					res.end( JSON.stringify( { "response" : "fatal error checking ingredients" } ) );
+					return;
+				}
+			}
+		}
+
+		console.log( "    All ingredients exist\n " );
+	}
+
+	// Loop through each menu item and udpate counts. Use error checking again in case of parallel orders causing issues
+	for( i = 0; i < numItems; i++ )
+	{
+		var item = order[ "items" ][ i ];
+
+		console.log( "Updating ingredient counts for item " + ( i + 1 ) + " '" + item[ "name" ] + "'." );
+
+		var numIngredients = Object.keys( item[ "ingredients" ] ).length;
+		var j = 0;
+
+		for( j = 0; j < numIngredients; j++ )
+		{
+			var ingredient = item[ "ingredients" ][ j ];
+
+			if( item[ "hasIngredient" ][ j ] > 0 )
+			{
+				console.log( "    Updating ingredient " + ( j + 1 ) + " '" + ingredient + "' that uses " + item[ "ingredientCount" ][ j ] + "." );
+
+				try
+				{
+					// Check if ingredient exists
+					var ingredientQuery = {}
+					ingredientQuery[ "name" ] = ingredient;
+					var ingredientResponse = await getItem( ingredientQuery, inventoryCollection );
+
+					// Fail if ingredient doesn't exist
+					if( ingredientResponse === null )
+					{
+						console.log( "        Ingredient " + ingredient + " doesn't exist." );
+
+						res.statusCode = 400;
+						res.end( JSON.stringify( { "response" : "ingredient doesn't exist" } ) );
+						return;
+					}
+
+					// Fail if ingredient count is less than current count 
+					if( parseInt( ingredientResponse[ "count" ] ) < item[ "ingredientCount" ][ j ] )
+					{
+						console.log( "        Ingredient only has " + ingredientResponse[ "count" ] + " but order requires " + item[ "ingredientCount" ][ j ] + "." );
+
+						res.statusCode = 400;
+						res.end( JSON.stringify( { "response" : "not enough ingredient remains" } ) );
+						return;
+					}
+
+					var updateItemQuery = {}
+					updateItemQuery[ "_id" ] = ingredientResponse[ "_id" ];
+
+					var updateItemUpdate = {}
+					updateItemUpdate[ "$set" ] = {};
+					updateItemUpdate[ "$set" ][ "count" ] = ( parseInt( ingredientResponse[ "count" ] ) - item[ "ingredientCount" ][ j ] ).toString();
+					console.log( "        Setting " + ingredient + " count to " + updateItemUpdate[ "$set" ][ "count" ] + " ( subtracting " + item[ "ingredientCount" ][ j ] + " from " + parseInt( ingredientResponse[ "count" ] ) + " )." );
+
+					var updateItemOptions = { returnOriginal : false, returnNewDocument : true };
+					
+					var updateItemResponse = await updateItem( updateItemQuery, updateItemUpdate, updateItemOptions, inventoryCollection );
+				}
+				catch( e )
+				{
+					console.log( "        Fatal error checking ingredient.\nError log: " + e.message );
+
+					res.statusCode = 500;
+					res.end( JSON.stringify( { "response" : "fatal error checking ingredients" } ) );
+					return;
+				}
+			}
+		}
+
+		console.log( " \n" );
+	}
+
 	orderCollection.insertOne( order, function( err, result ) {
  		if( err )
  		{
@@ -227,7 +391,7 @@ async function createOrder( order, db, res )
  			res.statusCode = 500;								// Internal Server Error
  			res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
  			throw err;	
- 		} 
+ 		}
 
  		// Display new item for debugging
  		console.log( "Inserted: " + JSON.stringify( result.ops[ 0 ] ) );
@@ -245,6 +409,11 @@ async function getItem( query, collection )
 async function addNewOrderStat( itemName, newOrderStat, collection )
 {
 	return collection.findOneAndUpdate( itemName, { $addToSet : { "orders" : newOrderStat } }, { returnOriginal : false, returnNewDocument : true } );
+}
+
+async function updateItem( query, update, options, collection )
+{
+	return collection.findOneAndUpdate( query, update, options );
 }
 
 async function incrementStatsItem( query, update, collection )
