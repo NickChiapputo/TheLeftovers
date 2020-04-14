@@ -28,6 +28,7 @@ function getOrders()
 						var ingredients=[];
 						txt+="<p>Name:"+food.name+"</p>";
 						food.ingredients.forEach(function (ingredient){
+							alert(ingredient)
 								ingredients.push(ingredient);
 						});
 
@@ -174,7 +175,7 @@ function managerSearch()
 				month = '0' + month;
 			}
 		 
-			let today = (year+'-'+month+'-'+(dt+1-date.getDay()));
+			let today = (year+'-'+month+'-'+(dt))
 
 			obj.forEach(function(employee)
 			{
