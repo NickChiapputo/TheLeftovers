@@ -99,7 +99,7 @@ const server = http.createServer( ( req, res ) =>  {
 				if( obj[ "type" ] === undefined || obj[ "type" ] === "" ||
 					( obj[ "type" ] !== "server" && obj[ "type" ] !== "manager" ) )
 				{
-					cosole.log( "Invalid type: '" + obj[ "type" ] + "'." );
+					console.log( "Invalid type: '" + obj[ "type" ] + "'." );
 
 					res.statusCode = 400;
 					res.end( JSON.stringify( { "response" : "invalid type" } ) );
@@ -123,8 +123,8 @@ const server = http.createServer( ( req, res ) =>  {
 				employee[ "type" ] = obj[ "type" ];
 
 				employee[ "shifts" ] = [];
-				employee[ "tips" ] = [];
-				employee[ "comps" ] = [];
+				employee[ "tips" ] = 0;
+				employee[ "comps" ] = 0;
 
 				console.log( "Employee to create: " + JSON.stringify( employee ) );
 
@@ -146,7 +146,7 @@ const server = http.createServer( ( req, res ) =>  {
 				var obj = JSON.parse( body );
 
 				// Check that _id is valid
-				if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || obj[ "_id" ].length !== 24 )
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
 				{
 					res.statusCode = 400;
 					res.end( JSON.stringify( { "response" : "bad _id format" } ) );
@@ -156,7 +156,79 @@ const server = http.createServer( ( req, res ) =>  {
 				var employee = {};
 				employee[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
 
-				deleteEmployee( employee, collection, res ); 
+				deleteEmployee( employee, db, res ); 
+			});
+		}
+		else if( path == "/employees/edit" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. edit item
+	 		req.on( 'end', () => { 
+				console.log( "Received: \n" + body + "\n" ); 
+
+				// Get JSON object of input data
+				var obj = JSON.parse( body );
+
+	 			// Check that _id field is valid
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
+	 			{
+					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "success" : "no" } ) );
+					return;
+	 			}
+
+				// Check if first is valid 
+				if( obj[ "first" ] === undefined || obj[ "first" ] === "" )
+				{
+					console.log( "Invalid first name: '" + obj[ "first" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid first name" } ) );
+					return;
+				}
+
+				// Check if last is valid
+				if( obj[ "last" ] === undefined || obj[ "last" ] === "" )
+				{
+					cosole.log( "Invalid last name: '" + obj[ "last" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid last name" } ) );
+					return;
+				}
+
+				// Check if type is valid
+				if( obj[ "type" ] === undefined || obj[ "type" ] === "" ||
+					( obj[ "type" ] !== "server" && obj[ "type" ] !== "manager" ) )
+				{
+					console.log( "Invalid type: '" + obj[ "type" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid type" } ) );
+					return;
+				}
+
+				// Create JSON object of updated employee
+				var employee = {};
+				employee[ "_id" ] = obj[ "_id" ];
+				employee[ "first" ] = obj[ "first" ];
+
+				// Only add middle name if it exists
+				if( obj[ "middle" ] !== undefined & obj[ "middle" ] !== "" )
+					employee[ "middle" ] = obj[  "middle" ];
+
+				employee[ "last" ] = obj[ "last" ];
+				employee[ "type" ] = obj[ "type" ];
+
+				console.log( "Employee to update information: " + JSON.stringify( employee ) );
+				editEmployee( employee, collection, res );
 			});
 		}
 		else if( path == "/employees/login" )
@@ -174,7 +246,7 @@ const server = http.createServer( ( req, res ) =>  {
 	 			var obj = JSON.parse( body );
 
 	 			// Check that _id field is valid
-	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
 	 			{
 					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
 
@@ -193,23 +265,18 @@ const server = http.createServer( ( req, res ) =>  {
 					return;
 	 			}
 
-
 	 			// Ensure JSON object only has _id and pin fields
 	 			var employee = {}
 	 			employee[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
 				employee[ "pin" ] = obj[ "pin" ];
 
 	 			// Update status
-	 			findEmployee( employee, collection, res );
+	 			findEmployee( employee, db, res );
 	 		});
 		}
 		else if( path == "/employees/logout" )
 		{
-			res.statusCode = 501;
-			res.end( JSON.stringify( { "response" : "not implemented yet!" } ) );
-			return;
-
-	 		// Stringified JSON of new account values
+			// Stringified JSON of new account values
 	 		let body = '';
 
 	 		// Asynchronous. Keep appending data until all data is read
@@ -222,7 +289,7 @@ const server = http.createServer( ( req, res ) =>  {
 	 			var obj = JSON.parse( body );
 
 	 			// Check that _id field is valid
-	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
 	 			{
 					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
 
@@ -241,14 +308,13 @@ const server = http.createServer( ( req, res ) =>  {
 					return;
 	 			}
 
-
 	 			// Ensure JSON object only has _id and pin fields
 	 			var employee = {}
 	 			employee[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
 				employee[ "pin" ] = obj[ "pin" ];
 
 	 			// Update status
-	 			findEmployee( employee, collection, res );
+	 			logout( employee, db, res );
 	 		});
 		}
 		else if( path == "/employees/shift/create" )
@@ -266,7 +332,7 @@ const server = http.createServer( ( req, res ) =>  {
 	 			var obj = JSON.parse( body );
 
 	 			// Check that _id field is valid
-	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
 	 			{
 					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
 
@@ -333,7 +399,7 @@ const server = http.createServer( ( req, res ) =>  {
 	 			var obj = JSON.parse( body );
 
 	 			// Check that _id field is valid
-	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === ""  )
+	 			if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
 	 			{
 					console.log( "Invalid _id value '" + obj[ "_id" ] + "'." );
 
@@ -445,41 +511,241 @@ function createEmployee( employee, collection, res )
  	} );
 }
 
-function findEmployee( employee, collection, res )
+async function findEmployee( query, db, res )
 {
-	console.log( "Employee attempting login:\n    _id: " + employee[ "_id" ] + "\n    pin: " + employee[ "pin" ] + "\n" );
+	console.log( "Employee attempting login:\n    _id: " + query[ "_id" ] + "\n    pin: " + query[ "pin" ] + "\n" );
 
-	// Find and update the item
-	collection.findOne( employee, function( err, result ) {
-		if( err )
+	var employee;
+	var loginReturn;
+
+	try
+	{
+		employee = await getItem( query, db.db( "restaurant" ).collection( "employees" ) );
+
+		if( employee === null )
 		{
 			console.log( "Unable to verify employee." );
-	 		res.statusCode = 500;															// Internal Server Error
-	 		res.end( JSON.stringify( { "response" : "unable to verify employee" } ) );		// Give error response to client
-	 		throw err;
-			return;
-		}
 
-		if( result == null )
-		{
 			res.statusCode = 200;
-			res.end( JSON.stringify( { "success" : "no" } ) );
+			res.end( JSON.stringify( { "response" : "unable to verify employee" } ) );
 			return;
 		}
-		
-		// Display updated table for debugging
- 		console.log( "Successful login: " + JSON.stringify( result.value ) ); 
 
-		// Send a positive result back
-		res.end( JSON.stringify( { "success" : "yes" } ) );
-	});
+		// Update employee to logged in
+		var update = { $set : { "loggedIn" : 1 } };							// Set the loggedIn attribute to 1
+		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
+		loginReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
+
+		console.log( "Successful login update: " + JSON.stringify( loginReturn.value ) );
+
+		// Only assign tables to servers
+		if( employee[ "type" ] === "server" )
+		{
+			var assignResult = await assignServers( db );
+			if( assignResult === null )
+				return;
+		}
+	}
+	catch( e )
+	{
+		console.log( "Fatal error verifying employee.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error verifying employee" } ) );
+		return;
+	}
+
+	res.end( JSON.stringify( loginReturn.value ) );
 }
 
-function deleteEmployee( deleteItem, collection, res )
+async function logout( query, db, res )
+{
+	console.log( "Employee attempting logout:\n    _id: " + query[ "_id" ] + "\n    pin: " + query[ "pin" ] + "\n" );
+
+	var employee;
+	var logoutReturn;
+
+	try
+	{
+		employee = await getItem( query, db.db( "restaurant" ).collection( "employees" ) );
+
+		if( employee === null )
+		{
+			console.log( "Unable to verify employee." );
+
+			res.statusCode = 200;
+			res.end( JSON.stringify( { "response" : "unable to verify employee" } ) );
+			return;
+		}
+
+		// Update employee to logged in
+		var update = { $set : { "loggedIn" : 0 } };							// Set the loggedIn attribute to 0
+		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
+		logoutReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
+
+		console.log( "Successful logout update: " + JSON.stringify( logoutReturn.value ) );
+
+		// Only assign tables to servers
+		if( employee[ "type" ] === "server" )
+		{
+			var assignResult = await assignServers( db );
+			if( assignResult === null )
+				return;
+		}
+	}
+	catch( e )
+	{
+		console.log( "Fatal error verifying employee.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error verifying employee" } ) );
+		return;
+	}
+
+	res.end( JSON.stringify( employee ) );
+}
+
+async function assignServers( db )
+{
+	try
+	{
+		// Get number of employees logged in
+		var employeeListQuery = { "loggedIn" : 1, "type" : "server" };	// Only assign logged in servers to tables
+		var options = {};						// No options
+		var employeesLoggedIn = await getItems( employeeListQuery, options, db.db( "restaurant" ).collection( "employees" ) );
+
+		// Get number of tables (in case it's not the expected 20
+		countQuery = {};
+		options = {};
+		var numTables = await countItems( countQuery, options, db.db( "restaurant" ).collection( "tables" ) );
+		console.log( "Count of logged in employees, tables: " + employeesLoggedIn.length + ", " + numTables + "." );
+
+		// Assign employees to tables equally
+		var numTablesPerEmployee = numTables / employeesLoggedIn.length;
+		if( numTablesPerEmployee === 0 ) numTablesPerEmployee = 1;
+		var i;
+		for( i = 0; i < numTables; i++ )
+		{
+			var employeeNum = parseInt( i / numTablesPerEmployee );
+
+			// Assigning employee to table i
+			try
+			{
+				var query = {};
+				query[ "table" ] = i + 1;
+				var update = {};
+				update[ "$set" ] = {};
+				update[ "$set" ][ "server" ] = employeesLoggedIn[ employeeNum ][ "_id" ];
+				var options = { returnOriginal : false, returnNewDocument : true };
+
+				console.log( "Assigning employee " + JSON.stringify( update ) + " to table " + JSON.stringify( query ) );
+
+				var updateTableResponse = await editItem( query, update, options, db.db( "restaurant" ).collection( "tables" ) );
+
+				if( updateTableResponse.value === null )
+				{
+					console.log( "Unable to update table server." );
+
+					res.statusCode = 500;
+					res.end( JSON.stringify( { "response" : "unable to update table server assignment" } ) );
+					return;
+				}
+
+				console.log( "    Update Table Response: " + JSON.stringify( updateTableResponse.value ) + "\n " );
+			}
+			catch( e )
+			{
+				console.log( "Fatal error assigning employee to table.\nError log: " + e.message );
+
+				res.statusCode = 500;
+				res.end( JSON.stringify( { "response" : "fatal error assigning employee to table" } ) );
+				return;
+			}
+		}
+	}
+	catch( e )
+	{
+		console.log( "Fatal error assigning servers.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error assigning servers" } ) );
+		return null;
+	}
+}
+
+async function editEmployee( employee, collection, res )
+{
+	var employeeEditResponse;
+
+	try
+	{
+		var query = {};
+		query[ "_id" ] = mongo.ObjectId( employee[ "_id" ] );
+		var update = {};
+		update[ "$set" ] = {};
+		update[ "$set" ][ "first" ] = employee[ "first" ];
+
+		// If middle name is sent, update it. Otherwise unset it
+		if( employee[ "middle" ] !== undefined && employee[ "middle" ] !== "" )
+			update[ "$set" ][ "middle" ] = employee[ "middle" ];
+		else
+		 	update[ "$unset" ] = { "middle" : "" };
+
+		update[ "$set" ][ "last" ] = employee[ "last" ];
+		update[ "$set" ][ "type" ] = employee[ "type" ];
+		var options = { returnOriginal : false, returnNewDocument : true };
+		console.log( "Employee edit query:  " + JSON.stringify( query ) );
+		console.log( "Employee edit update: " + JSON.stringify( update ) );
+		console.log( "Employee edit options: " + JSON.stringify( options ) );
+
+		employeeEditResponse = await editItem( query, update, options, collection ); 
+		console.log( "Update employee response: " + JSON.stringify( employeeEditResponse ) );
+		if( employeeEditResponse.value === null )
+		{
+			console.log( "Unable to find employee." );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "unable to find employee" } ) );
+			return;
+		}
+	}
+	catch( e )
+	{
+		console.log( "Fatal error when editing employee.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error when editing employee" } ) );
+		return;
+	}
+	console.log( "Updated employee: " + JSON.stringify( employeeEditResponse ) );
+	res.end( JSON.stringify( employeeEditResponse.value ) );
+}
+
+async function getItem( query, collection )
+{
+	return collection.findOne( query );
+}
+
+async function editItem( query, update, options, collection )
+{
+	return collection.findOneAndUpdate( query, update, options );
+}
+
+async function countItems( query, options, collection )
+{
+	return collection.countDocuments( query, options );
+}
+
+async function getItems( query, options, collection )
+{
+	return collection.find( query, options ).toArray();
+}
+
+function deleteEmployee( deleteItem, db, res )
 {
 	console.log( "Attempting to delete employee: " + JSON.stringify( deleteItem ) );
 
-	collection.deleteOne( deleteItem, function( err, result ) {
+	db.db( "restaurant" ).collection( "employees" ).deleteOne( deleteItem, function( err, result ) {
 		if( err )
 		{
 			console.log( "Error deleting employee." );
@@ -490,6 +756,8 @@ function deleteEmployee( deleteItem, collection, res )
 
  		// Display deleted result for debugging
  		console.log( "Deleted Employee: " + JSON.stringify( result ) );
+
+ 		// await assignServers( db );
 
  		// Send deleted result back
  		res.end( JSON.stringify( result.result ) );

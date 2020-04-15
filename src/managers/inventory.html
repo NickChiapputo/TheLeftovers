@@ -8,9 +8,12 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+
     <!-- Original CSS -->
     <link rel="stylesheet" href="../css/style.css">
+
+    <!--Get Notifications-->
+    <script src="../js/server-notification.js"></script>
 
     <title>Staff</title>
 	<style>
@@ -19,37 +22,40 @@
 		}
 		table#t01 tr {
 			background-color: white;
-		}		
+		}
 		table#t01 th {
 			background-color: black;
 			color: white;
 		}
-		
+
 	</style>
-	
+
   </head>
 
-  <body class="page" onload="clock();">
+
+  <body class="page" onload="clock(); getMessages();" onbeforeunload="logout();">
+
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!-- Header bar -->
-    <div id="header" class="container-fluid"> 
+    <div id="header" class="container-fluid">
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
           <a href="manager1.html">
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-    <div class="col-2" style="margin: center-div;margin-top: 3vh;">
-		  <p class="schedule-text" >Inventory</p>
-		</div>
+        <div class="col-2" style="margin: center-div;">
+          <h1 class="menu-text">Inventory</h1>
+        </div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../js/get-time.js"> </script>
           <script src="../js/manager-inventory.js"></script>
+          <script src="../js/logout.js"></script>
         </div>
       </div>
     </div>
@@ -61,7 +67,7 @@
     <li class="col menu-box"><a data-toggle="pill" href="#edit">Edit</a></li>
     <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="getInventoryList()">View</a></li>
   </ul>
-  
+
   <div class="tab-content">
     <div id="view" class="tab-pane fade in active">
       <p id="invtxt"></p>

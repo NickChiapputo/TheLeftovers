@@ -20,7 +20,7 @@
     <!-- Cookies library -->
     <script src="../../js/js.cookie.js"></script>
 
-    <title>Hello, world!</title>
+    <title id='pageTitle'>View Order</title>
   </head>
   
   <body class="page" onload="clock(); loadOrderItems()">
@@ -37,15 +37,16 @@
             <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-        <div class="col-1" style="margin:auto;">
+        <div class="col-1" style="margin:auto;" onclick="sendHelp()">
           <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
         </div>
-        <div class="col-1" style="margin:auto;">
+        <div class="col-1" style="margin:auto;" onclick="sendRefill()">
           <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
         </div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../../js/get-time.js"> </script> 
+          <script src="../../js/get-time.js"> </script>
+          <script src="/src/js/table-messages.js"></script> 
         </div>
       </div>
     </div>
@@ -54,11 +55,11 @@
     <!-- Title bar -->
     <div class="container-fluid row title-bar">
       <div class="col menu-box">
-        <h1 id="humbug" class="menu-text">Table <text id="tableNum">7</text></h1>
+        <h1 id="humbug" class="menu-text">Table <text id="tableNum">0</text></h1>
       </div>
     </div>
 
-    <!-- Menu item -->
+    <!-- Items -->
     <div class="container-fluid">
         <div class="row" style="min-height: 70vh; max-height: 70vh;">
             <div class="col-6">
@@ -159,8 +160,8 @@
               </div>     
 
               <!-- Send order modal button -->
-              <button onclick="" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color: rgb(159, 245, 195); min-width: 100%; min-height: 20%; color: black;">
-                <h1 class="menu-text">Send order</h1>
+              <button id="sendOrderBtn" onclick="sendOrderBtn()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color: rgb(159, 245, 195); min-width: 100%; min-height: 20%; color: black;">
+                <h1 id="sendOrderText" class="menu-text">Send order</h1>
               </button>
 
               <!-- Confirm choice modal window -->
@@ -168,18 +169,19 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="confirm-order">Send order to kitchen?</h5>
+                      <h5 class="modal-title" id="send-order-window">Send order to kitchen?</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="send-body">
                       <text>After an order is sent, it can't be modified</text>
                     </div>
                     
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
-                      <button type="button" class="btn btn-outline-success" data-dismiss="modal" onclick="send_order(Cookies.get('current_order')); $('#order-sent').modal('show');">Yes</button>
+                    <div class="modal-footer" >
+                      <button type="button" id="send-dismiss" style="width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+                      <button type="button" id="send-no" class="btn btn-outline-danger" data-dismiss="modal">No</button>
+                      <button type="button" id="send-yes" class="btn btn-outline-success" data-dismiss="modal" onclick="send_order(); $('#order-sent').modal('show');">Yes</button>
                     </div>
                   </div>
                 </div>

@@ -6,44 +6,53 @@ function loadMenu()
         pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
         document.getElementById('category').innerText = pageTitle;
 
+        var maxloc=-1;
+        maxloc = Cookies.getJSON('max');
+        console.log(maxloc);
+        if (maxloc != undefined) {
+            maxloc = maxloc[cats][0];
+        }
+
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if( this.readyState == 4 && this.status == 200 ) 
+            if( this.readyState == 4 && this.status == 200 )
             {
                 //var doc = document.getElementById( 'textarea-menu-view' );
-            
+
                 // Response is a JSON array of items
                 var obj = JSON.parse( this.responseText );
-                
+
                 var numItems = Object.keys( obj ).length;
-        
+
                 //doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
 
                 var i;
-                var j;
-                j = 0;
+                var j = 1;
                 var itemBox;
-                for( i = 0; i < numItems; i++ )
-                {
-                    var currItem = obj[ i ];
-                    //doc.innerHTML += "\nItem " + ( i + 1 ) + "\n";
-                    if (currItem.category === cats) {
-                        j++;
-                        if (j > 8) {
-                            document.getElementById('row3').style.height = "35vh";
+                if (maxloc >= 0) {
+                    var currItem = obj[maxloc];
+                    itemBox = document.getElementById("foodText".concat(1));
+                    itemBox.innerText = currItem.name;
+                    var item = document.getElementById("food".concat(1));
+                    item.style.backgroundImage = "url(".concat(currItem.image, ")");
+                    item.style.visibility = "visible";
+                    item.name = JSON.stringify(currItem);
+                    for( i = 0; i < numItems; i++ )
+                    {
+                        currItem = obj[ i ];
+                        if (currItem.category === cats && maxloc != i) {
+                            j++;
+                            if (j > 8) {
+                                document.getElementById('row3').style.height = "35vh";
+                            }
+                            itemBox = document.getElementById("foodText".concat(j));
+                            itemBox.innerText = currItem.name;
+                            var item = document.getElementById("food".concat(j));
+                            item.style.backgroundImage = "url(".concat(currItem.image, ")");
+                            item.style.visibility = "visible";
+                            item.name = JSON.stringify(currItem);
                         }
-                        itemBox = document.getElementById("foodText".concat(j));
-                        //doc.innerHTML += "    food:    " + currItem.name;
-                        //doc.innerHTML += "\n    type:" + currItem.category;
-                        //doc.innerHTML += "\n  box id:" + "food".concat(j);
-
-                        itemBox.innerText = currItem.name;
-                        var item = document.getElementById("food".concat(j));
-                        item.style.backgroundImage = "url(".concat(currItem.image, ")");
-                        item.style.visibility = "visible";
-                        item.name = JSON.stringify(currItem);
                     }
-                    
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -59,7 +68,7 @@ function loadMenu()
 }
 
 function getCookieByName(name) {
-    
+
     var cook = document.cookie.split(';');
     var temp;
     for (var i=0; i< cook.length; i++) {
@@ -131,7 +140,6 @@ function loadOrderItems() {
     $(document).ready(function() {
         var order;
         // replace with real values later
-        var id=null;
         var table = Cookies.get('table-num');
         if (table == undefined) {
             table = 0;
@@ -139,70 +147,104 @@ function loadOrderItems() {
         document.getElementById('tableNum').innerText = table;
         // replace with real rewards num
         // default is 0
-        var rewards = 0;
+        var rewards = '';
 
         if (Cookies.get('current_order') == undefined) {
-            Cookies.set('current_order', {"_id":id,
+            Cookies.set('current_order', {
             "table":table,
             "rewards":rewards,
-            "status":"ordered"}, {path: '/', sameSite: 'strict'});
+            "status":"in progress"}, {path: '/', sameSite: 'strict'});
             order = Cookies.getJSON('current_order');
         }
         else {
             order = Cookies.getJSON('current_order')
         }
-        if (Cookies.get('new_item') == 1) {
-            var newItem = Cookies.getJSON('current_item');
-            if (order.items == undefined) {
-                order['items'] = [newItem];
+
+        order.table = table;
+
+        if (document.getElementById('pageTitle').innerText == "View Order") {
+            // adding new item
+            if (Cookies.get('new_item') == 1) {
+                order.status = "in progress";
+                var newItem = Cookies.getJSON('current_item');
+                if (order.items == undefined) {
+                    order['items'] = [newItem];
+                }
+                else {
+                    order.items.push(newItem);
+                }
+                Cookies.set('new_item', 0, {path: '/', sameSite: 'strict'});
+            }
+
+            // handling empty order
+            if (order.items == undefined || order.items.length == 0) {
+                document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
+                order.status = "none";
+                Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+                document.getElementById("sendOrderBtn").style.display = 'none';
+                console.log("empty");
+                return;
             }
             else {
-                order.items.push(newItem);
+                document.getElementById("sendOrderBtn").style.display = 'unset';
             }
-            Cookies.set('new_item', 0, {path: '/', sameSite: 'strict'});
-        }
-        Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
-
-        // handling empty order
-        if (order.items.length == 0) {
-            document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
-            return;
         }
 
         var output = "";
         var total = 0;
         for (i=0; i < order.items.length; i++) {
+            if (document.getElementById('pageTitle').innerText == "View Order" || order.items[i].sent == 'true') {
+                // adding happy hour discount
+                var date = new Date();
+                if (order.items[i].category == 'dessert' && order.items[i]['happy_hour'] == undefined && date.getHours() >= 17 && date.getHours() <= 19) {
+                    order.items[i]['happy_hour'] = true;
+                    order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
+                }
 
-            // adding happy hour discount
-            var date = new Date();
-            if (order.items[i].category == 'dessert' && order.items[i]['happy_hour'] == undefined && date.getHours() >= 0 && date.getHours() <= 19) {
-                order.items[i]['happy_hour'] = true;
-                order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
+                total += order.items[i].price;
+
+                // printing name, price, discount
+                output = output.concat(i+1, ". ");
+                if (order.items[i].sent != 'false') {
+                    if (document.getElementById('pageTitle').innerText == "View Order") {
+                        output = output.concat('(sent) ');
+                    }
+                }
+                output = output.concat(order.items[i].name, " $", order.items[i].price);
+                if (order.items[i].happy_hour != undefined) {
+                    output = output.concat(' (happy hour discount!)');
+                }
+                
+                output = output.concat('\n');
+                for (j=0; j < order.items[i].ingredients.length; j++) {
+                    if (order.items[i].hasIngredient[j] == '1') {
+                        output = output.concat('----', order.items[i].ingredients[j], '\n');
+                    }
+                }
+                output = output.concat('\n');
             }
-
-            total += order.items[i].price;
-
-            // printing name, price, discount
-            output = output.concat(i+1, ". ", order.items[i].name, " $", order.items[i].price);
-            if (order.items[i].happy_hour != undefined) {
-                output = output.concat(' (happy hour discount!)');
-            }
-            
-            output = output.concat('\n');
-            for (j=0; j < order.items[i].ingredients.length; j++) {
-                if (order.items[i].hasIngredient[j] == '1') {
-                    output = output.concat('----', order.items[i].ingredients[j], '\n');
+        }
+        if (document.getElementById('pageTitle').innerText == "View Order") {
+            if (order.status == "in progress") {
+                if (order.items[0].sent == 'true') {
+                    document.getElementById("sendOrderText").innerText = 'Send new items';
+                }
+                else {
+                    document.getElementById("sendOrderText").innerText = 'Send order';
                 }
             }
-            output = output.concat('\n');
+            else {
+                document.getElementById("sendOrderText").innerText = 'Go to bill';
+            }
         }
-        //total = Number(total.toFixed(2));
+
+        Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
         total = Number((total));
         var tax = Number((total * 0.0825));
         output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');
-        output = output.concat('Tax: $', addTrailingZeros(tax),'\n');
+        output = output.concat('Tax:      $', addTrailingZeros(tax),'\n');
         output = output.concat('___________________________________________\n');
-        output = output.concat('Total: $', addTrailingZeros(total + tax),'\n');
+        output = output.concat('Total:    $', addTrailingZeros(total + tax),'\n');
         document.getElementById('itemList').innerText = output;
     });
 }
@@ -221,13 +263,14 @@ function addTrailingZeros(num) {
         dot = length - 3;
     }
     while (length - dot < 3) {
-        str = str.concat('0'); 
+        str = str.concat('0');
         dot--;
     }
     return str;
 }
 
 function addToOrder(obj) {
+    obj.sent = 'false';
     Cookies.set("current_item", JSON.stringify(obj), { path: '/', sameSite: 'strict' });
     Cookies.set("new_item", '1', {path: '/', sameSite: 'strict'});
     window.location.href='View-Order.html';
@@ -257,10 +300,30 @@ function editRemoveItem(edRom) {
     if (selection >= 0 && selection < (Cookies.getJSON('current_order')).items.length) {
         Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/', sameSite: 'strict'});
         var temp = Cookies.getJSON('current_order');
-        temp.items.splice(selection, 1);
-        Cookies.set('current_order', temp, {path: '/', sameSite: 'strict'});
-        if (edRom == 1) {
-            window.location.href='Menu-Item.html';
+        if (temp.items[selection].sent == 'true') {
+            if (edRom == 1) {
+                var err = document.getElementById('cokies');
+            }
+            else {
+                var err = document.getElementById('coookies');
+            }
+            err.innerText = "\nCannot delete or edit sent items";
+            err.style.color = "red";
+            err.style.display = "unset";
+            console.log("sent");
+        }
+        else {
+            temp.items.splice(selection, 1);
+            if (temp.items.length > 0) {
+                if (temp.items[temp.items.length - 1].sent == 'true') {
+                    temp.status = 'ordered';
+                }
+            }
+            Cookies.set('current_order', temp, {path: '/', sameSite: 'strict'});
+            if (edRom == 1) {
+                window.location.href='Menu-Item.html';
+            }
+            console.log("unsent");
         }
     }
     else {
@@ -270,17 +333,13 @@ function editRemoveItem(edRom) {
         else {
             var err = document.getElementById('coookies');
         }
-        err.innerText = "\nError: item with this number does not exist";
+        err.innerText = "\nItem with this number does not exist";
         err.style.color = "red";
         err.style.display = "unset";
     }
     if (edRom == 0) {
         loadOrderItems();
     }
-}
-
-function sendOrder() {
-
 }
 
 function suppressEnter() {

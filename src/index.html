@@ -287,7 +287,7 @@
 			<li><a href="managers/manager1.html">Manager</a></li>
 			<li><a href="servers/server_login.html">Server</a></li>
 			<li><a href="Customer App/index.html">Customer</a></li>
-			<li><a href="index.html">Kitchen</a></li>
+			<li><a href="Kitchen/cookscreen.html">Kitchen</a></li>
 		</ul>
 
 		<!-- <ul class="websiteNavigationUL">
@@ -297,6 +297,164 @@
 			<li class="websiteNavigation"><a href="Customer App/index.html">Customer</a></li>
 			<li class="websiteNavigation"><a href="index.html">Kitchen</a></li>
 		</ul> -->
+
+		<hr style="border-width: 0.5vh;" id="messages">
+
+		<!-- MESSAGES -->
+		<button type="button" id="messages-collapsible-btn" onclick="collapse( 'messages-collapsible-btn', 'messages-collapsible' )" class="collapsible">Messages</button>
+		<div class="content" id="messages-collapsible">
+
+			<!-- Get and send messages -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers get and send messages -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for message query -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Get Messages</h3>
+					</div>
+
+					<!-- Header for send message -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Send Messages</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Request Messages Form -->
+					<div style="display: table-cell;">
+						<form id="getMessagesForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Receiver ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="message-get-id" />
+									</div>
+								</div>
+
+								<!-- User type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Type (receiving as)</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="message-get-type">
+											<option value="" selected="selected"></option>
+											<option value="server">Server</option>
+											<option value="manager">Manager</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Get messages button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="checkMessages()">Check for Messages</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Send Message Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="sendMessagesForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Sender ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Sending Table Number or Employee ID<br>(if not kitchen)</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="message-send-id" />
+									</div>
+								</div>
+
+								<!-- Sender type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Sending Type</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="message-send-type">
+											<option value="" selected="selected"></option>
+											<option value="table">Table</option>
+											<option value="server">Server</option>
+											<option value="kitchen">Kitchen</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Receiver ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Receiving Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="message-send-receive-id" />
+									</div>
+								</div>
+
+								<!-- Receiver type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Receiving Type</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="message-send-receive-type">
+											<option value="" selected="selected"></option>
+											<option value="server">Server</option>
+											<option value="manager">Manager</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Message type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Message</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="message-send-request">
+											<option value="" selected="selected"></option>
+											<option value="help">Help</option>
+											<option value="refill">Refill</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Get messages button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="sendMessage()">Send Message</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Messages Query textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-messages-get"></textarea>
+					</div>
+
+					<!-- Send message textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-messages-send"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<hr style="border-width: 0.5vh;" id="coupons">
 
@@ -585,18 +743,18 @@
 				</div>
 			</div>
 
-			<!-- Employee Login and Create Shift -->
+			<!-- Employee Login and Logout -->
 			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 				
 				<!-- Headers employee login and create shift -->
 				<div style="display: table-row; text-align: center;">
-					<!-- Header for employees query -->
+					<!-- Header for employee login -->
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Employee Login</h3>
+						<h3>Employee Log In</h3>
 					</div>
 
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Create Shift</h3>
+						<h3>Employee Log Out</h3>
 					</div>
 				</div>
 
@@ -637,6 +795,74 @@
 							</div>
 						</form>
 					</div>
+
+					<!-- Employee Logout Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="employeeLogoutForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Employee ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-logout-id" />
+									</div>
+								</div>
+
+								<!-- PIN input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">PIN</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="employee-logout-pin" />
+									</div>
+								</div>
+
+								<!-- Employee logout button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeLogout()">Log Out</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+					<!-- Employees Login textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-login"></textarea>
+					</div>
+
+					<!-- Delete Employees textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-logout"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Create and Remove Shift -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers create and remove shift -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for create shify -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Create Shift</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Remove Shift</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
 
 					<!-- Create Shift Form -->
 					<div style="display: table-cell; text-align: left;">
@@ -687,64 +913,6 @@
 									<div style="display: table-cell;"></div>
 									<div style="display: table-cell;">
 										<button style="width: 25vw;" class="button" type="button" onclick="employeeCreateShiftSubmit( true )">Create Shift</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-
-				<!-- Text areas -->
-				<div style="display: table-row;">
-					<!-- Employees Login textarea -->
-					<div style="display: table-cell; vertical-align: top;">
-						<textarea readonly id="textarea-employees-login"></textarea>
-					</div>
-
-					<!-- Delete Employees textarea -->
-					<div style="display: table-cell;">
-						<textarea readonly id="textarea-employees-create-shift"></textarea>
-					</div>
-				</div>
-			</div>
-
-			<!-- Delete Employee -->
-			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
-				
-				<!-- Headers delete employee -->
-				<div style="display: table-row; text-align: center;">
-					<!-- Header for delete employee -->
-					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Delete Employee</h3>
-					</div>
-
-					<div class="headerLabel" style="display: table-cell; width: 50vw;">
-						<h3>Remove Shift</h3>
-					</div>
-				</div>
-
-				<!-- Control buttons and fields -->
-				<div style="display: table-row;">
-
-					<!-- Delete Employee Form -->
-					<div style="display: table-cell; text-align: left;">
-						<form id="deleteEmployeeForm">
-							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
-								<!-- First Name input field -->
-								<div style="display: table-row">
-									<div style="display: table-cell;">
-										<div class="label" style="">Employee ID</div>
-									</div>
-									<div style="display: table-cell;">
-										<input style="width: 25vw;" type="text" required name="employee-delete-id" />
-									</div>
-								</div>
-
-								<!-- Delete employee button field -->
-								<div style="display: table-row">
-									<div style="display: table-cell;"></div>
-									<div style="display: table-cell;">
-										<button style="width: 25vw;" class="button" type="button" onclick="employeeDeleteSubmit()">Remove Employee</button>
 									</div>
 								</div>
 							</div>
@@ -805,8 +973,6 @@
 							</div>
 						</form>
 					</div>
-
-					<div style="display: table-cell; text-align: center;"></div>
 				</div>
 
 				<!-- Text areas -->
@@ -814,11 +980,139 @@
 
 					<!-- Delete Employees textarea -->
 					<div style="display: table-cell;">
-						<textarea readonly id="textarea-employees-delete"></textarea>
+						<textarea readonly id="textarea-employees-create-shift"></textarea>
 					</div>
 
 					<div style="display: table-cell; vertical-align: top;">
 						<textarea readonly id="textarea-employees-remove-shift"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- Delete and EditEmployee -->
+			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+				
+				<!-- Headers delete employee -->
+				<div style="display: table-row; text-align: center;">
+					<!-- Header for delete employee -->
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Edit Employee</h3>
+					</div>
+
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Delete Employee</h3>
+					</div>
+				</div>
+
+				<!-- Control buttons and fields -->
+				<div style="display: table-row;">
+
+					<!-- Create Employee Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="editEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- ID input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="edit-employee-id" />
+									</div>
+								</div>
+
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">First Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="edit-employee-first-name" />
+									</div>
+								</div>
+
+								<!-- Middle Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Middle Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" name="edit-employee-middle-name" />
+									</div>
+								</div>
+
+								<!-- Last Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Last Name</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="edit-employee-last-name" />
+									</div>
+								</div>
+
+								<!-- Employee type input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee Type</div>
+									</div>
+									<div style="display: table-cell;">
+										<select name="edit-employee-type">
+											<option value="" selected="selected"></option>
+											<option value="server">Server</option>
+											<option value="manager">Manager</option>
+										</select>
+									</div>
+								</div>
+
+								<!-- Create employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="editEmployee()">Edit Employee</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<!-- Delete Employee Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="deleteEmployeeForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- First Name input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="">Employee ID</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="text" required name="employee-delete-id" />
+									</div>
+								</div>
+
+								<!-- Delete employee button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="employeeDeleteSubmit()">Remove Employee</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Text areas -->
+				<div style="display: table-row;">
+
+					<!-- Edit Employee textarea -->
+					<div style="display: table-cell; vertical-align: top;">
+						<textarea readonly id="textarea-employees-edit"></textarea>
+					</div>
+
+					<!-- Delete Employee textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-employees-delete"></textarea>
 					</div>
 				</div>
 			</div>
@@ -1276,7 +1570,7 @@
 				</div>
 			</div>
 
-			<!-- Show list of rewards accounts and create new rewards account -->
+			<!-- Delete and search for account -->
 			<div style="display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
 				
 				<!-- Header delete rewards account -->
@@ -1285,7 +1579,9 @@
 					<div class="headerLabel" style="display: table-cell; width: 50vw;">
 						<h3>Delete Rewards Account</h3>
 					</div>
-					<div class="headerLabel" style="display: table-cell; width: 50vw;"></div>
+					<div class="headerLabel" style="display: table-cell; width: 50vw;">
+						<h3>Search For Rewards Account</h3>
+					</div>
 				</div>
 
 				<!-- Control buttons and fields -->
@@ -1315,15 +1611,44 @@
 							</div>
 						</form>
 					</div>
+
+					<!-- Search Rewards Account Form -->
+					<div style="display: table-cell; text-align: left;">
+						<form id="searchRewardsAccountForm">
+							<div style="width: 100%; display: table; border-collapse: separate; border-spacing: 0vw 0vw;">
+								<!-- Phone Number input field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;">
+										<div class="label" style="margin-left: 4vw; margin-right: -2vw;">Phone Number</div>
+									</div>
+									<div style="display: table-cell;">
+										<input style="width: 25vw;" type="number" required name="rewards-account-search-phone" pattern="[0-9]{10}" />
+									</div>
+								</div>
+
+								<!-- Save button field -->
+								<div style="display: table-row">
+									<div style="display: table-cell;"></div>
+									<div style="display: table-cell;">
+										<button style="width: 25vw;" class="button" type="button" onclick="searchRewardsAccount()">Delete Account</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 
 				<!-- Text areas -->
 				<div style="display: table-row;">
-					<!-- Inventory list textarea -->
+					<!-- Delete rewards textarea -->
 					<div style="display: table-cell; vertical-align: top;">
 						<textarea readonly id="textarea-rewards-accounts-delete"></textarea>
 					</div>
-					<div style="display: table-cell;"></div>
+
+					<!-- Search rewards textarea -->
+					<div style="display: table-cell;">
+						<textarea readonly id="textarea-rewards-account-search"></textarea>
+					</div>
 				</div>
 			</div>
 		</div>

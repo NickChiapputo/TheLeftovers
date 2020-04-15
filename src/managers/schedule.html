@@ -8,37 +8,40 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+
     <!-- Original CSS -->
     <link rel="stylesheet" href="../css/style.css">
+
+    <!--Get Notifications-->
+    <script src="../js/server-notification.js"></script>
 
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock(); week(); displayShifts()">
+
+  <body class="page" onload="clock(); week(); getMessages();" onbeforeunload="logout();">
+
     <!-- Bootstrap: jQuery, Popper.js, and Bosotstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!-- Header bar -->
-    <div id="header" class="container-fluid"> 
+    <div id="header" class="container-fluid">
       <div class="row h-100" style="padding: 1vw;">
         <div class="col-1" style="margin:auto;">
           <a href="manager1.html">
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
+        <div class="col-2" style="margin: center-div;">
+          <h1 class="menu-text">Schedule</h1>
         </div>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+          <script src="../js/get-time.js"> </script>
           <script src="../js/manager-shifts.js"></script>
+          <script src="../js/logout.js"></script>
         </div>
       </div>
     </div>
@@ -47,25 +50,26 @@
 
     <!-- Page contents -->
     <ul class="col nav nav-pills">
-      <li class="col menu-box"><a data-toggle="pill" href="#remove">Delete</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#add">Add</a></li>
-      <li class="col menu-box"><a data-toggle="pill" href="#view" >Weekly Schedule</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#remove" onclick="getEmployeeFormSubmit()">Delete</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#add" onclick="getEmployeeFormSubmit()">Add</a></li>
+      <li class="col menu-box"><a data-toggle="pill" href="#view" onclick="displayShifts();" >Weekly Schedule</a></li>
     </ul>
 
     <div class="tab-content">
       <div id="remove" class="tab-pane fade active">
         <form id="removeShiftForm">
           <label>EmpID:</label>
-          <input type="text" required name="employee-create-shift-id"/><br><br>
+          <input type="text" required name="employee-delete-shift-id"/><br><br>
           <label>Date:</label>
-          <input type="date" required name="employee-create-shift-date"/><br><br>
+          <input type="date" required name="employee-delete-shift-date"/><br><br>
           <label>Start Time:</label>
-          <input type="" required placeholder="HH:MM" name="employee-create-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+          <input type="" required placeholder="HH:MM" name="employee-delete-shift-start-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
           <label>End Time:</label>
-          <input type="" required placeholder="HH:MM" name="employee-create-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
-          <input type="button" onclick="employeeCreateShiftSubmit( false )" value="Remove-Shift"/>
+          <input type="" required placeholder="HH:MM" name="employee-delete-shift-end-time" pattern="[0-9]{2}:[0-9]{2}" /><br><br>
+          <input type="button" onclick="employeeDeleteShiftSubmit( false )" value="Remove-Shift"/>
           <p id="textarea-employees-remove-shift"></p>
         </form>
+        <p id="emptxt1"></p>
       </div>
       <div id="add" class="tab-pane fade">
         <form id="createShiftForm">
@@ -80,6 +84,8 @@
           <input type="button" onclick="employeeCreateShiftSubmit( true )" value="Create-Shift"/>
           <p id="textarea-employees-create-shift"></p>
         </form>
+
+          <p id="emptxt"></p>
       </div>
       <div id="view" class="tab-pane fade">
       <div class="row title-bar">
@@ -92,44 +98,51 @@
         </div>
       </div>
       <div class = "row schedule-row">
-        <div class="col schedule-box " id="monday" style="background-color: mediumaquamarine;">
+        <div class="col schedule-box " style="background-color: mediumaquamarine;">
           <h1 class="schedule-text" style="color: black;">Mon</h1>
           <br>
+          <p style="color: white;" id="monday"></p>
         </div>
-        <div class="col schedule-box" id="tuesday" style="background-color: mediumaquamarine;">
+        <div class="col schedule-box" style="background-color: mediumaquamarine;">
           <a href="">
             <h1 class="schedule-text"  style="color: black;">Tues</h1>
             <br>
+            <p id="tuesday"></p>
           </a>
         </div>
-        <div class="col schedule-box" id="wednesday" style="background-color: mediumaquamarine;">
+        <div class="col schedule-box" style="background-color: mediumaquamarine;">
           <a href="">
             <h1 class="schedule-text"  style="color: black;">Wed</h1>
             <br>
+            <p id="wednesday"></p>
           </a>
         </div>
-        <div class="col schedule-box" id="thursday"  style="background-color: mediumaquamarine;">
+        <div class="col schedule-box"  style="background-color: mediumaquamarine;">
             <a href="">
               <h1 class="schedule-text" style="color: black;">Thurs</h1>
               <br>
+              <p id="thursday"></p>
             </a>
         </div>
-        <div class="col schedule-box" id="friday"  style="background-color: mediumaquamarine;">
+        <div class="col schedule-box"  style="background-color: mediumaquamarine;">
          <a href="">
              <h1 class="schedule-text" style="color: black;">Fri</h1>
              <br>
+             <p id="friday"></p>
          </a>
         </div>
-        <div class="col schedule-box" id="saturday" style="background-color: mediumaquamarine;">
+        <div class="col schedule-box" style="background-color: mediumaquamarine;">
             <a href="">
               <h1 class="schedule-text"   style="color: black;">Sat</h1>
               <br>
+              <p id="saturday"></p>
             </a>
         </div>
-        <div class="col schedule-box" id="sunday" style="background-color: mediumaquamarine;">
+        <div class="col schedule-box" style="background-color: mediumaquamarine;">
             <a href="">
               <h1 class="schedule-text"style="color: black; ">Sun </h1>
               <br>
+              <p id="sunday"></p>
             </a>
         </div>
       </div>

@@ -9,7 +9,7 @@ const init = function (e)
 	var price = document.querySelector("#food-price");
 
 	var params = {};
- 		params['name']=localStorage.getItem('food-Item');
+ 		params['name']=sessionStorage.getItem('food-Item');
 
 
 	var xmlHttp = new XMLHttpRequest();
@@ -24,12 +24,12 @@ const init = function (e)
 			pic.innerHTML = "<div class=\"item-large-image\" style=\"background-image: url("+obj.image+");max-height:70vh;min-height:70vh\"></div>";
 			allergens.innerHTML="Allergens="+obj.allergens;
 			price.innerHTML="Price=$"+obj.price;
-			localStorage.setItem('food-item-name',obj.name);
-			localStorage.setItem('food-item-description',obj.description);
-			localStorage.setItem('food-item-calories',obj.calories);
-			localStorage.setItem('food-item-price',obj.price);
-			localStorage.setItem('food-item-id',obj._id)
-			localStorage.setItem('food-item-category',obj.category);
+			sessionStorage.setItem('food-item-name',obj.name);
+			sessionStorage.setItem('food-item-description',obj.description);
+			sessionStorage.setItem('food-item-calories',obj.calories);
+			sessionStorage.setItem('food-item-price',obj.price);
+			sessionStorage.setItem('food-item-id',obj._id)
+			sessionStorage.setItem('food-item-category',obj.category);
 			for(i=0; i< obj.ingredients.length; i++)
 			{
 				if(obj.hasIngredient[i]!=0)
@@ -173,23 +173,23 @@ function loadIngredients()
 function editMenuItem()
 {
 	var formData = new FormData( editMenuItemForm );
-	formData.set("menu-item-edit-id",localStorage.getItem('food-item-id'));
-	document.getElementsByName("menu-item-edit-id")[0].value=localStorage.getItem('food-item-id');
+	formData.set("menu-item-edit-id",sessionStorage.getItem('food-item-id'));
+	document.getElementsByName("menu-item-edit-id")[0].value=sessionStorage.getItem('food-item-id');
 	if(formData.get("menu-item-edit-name")=="")
 	{
-		formData.set("menu-item-edit-name",localStorage.getItem('food-item-name'));
+		formData.set("menu-item-edit-name",sessionStorage.getItem('food-item-name'));
 	}
 	if(formData.get("menu-item-edit-price")=="")
 	{
-		formData.set("menu-item-edit-price",localStorage.getItem('food-item-price'));
+		formData.set("menu-item-edit-price",sessionStorage.getItem('food-item-price'));
 	}
 	if(formData.get("menu-item-edit-calories")=="")
 	{
-		formData.set("menu-item-edit-calories",localStorage.getItem('food-item-calories'));
+		formData.set("menu-item-edit-calories",sessionStorage.getItem('food-item-calories'));
 	}
 	if(formData.get("menu-item-edit-description")=="")
 	{
-		formData.set("menu-item-edit-description",localStorage.getItem('food-item-description'));
+		formData.set("menu-item-edit-description",sessionStorage.getItem('food-item-description'));
 	}
 	
 	if( document.getElementById( "editMenuItemForm" ).checkValidity() )
@@ -237,7 +237,7 @@ function deleteMenuItem()
 {
 	window.document.location="./editmenu.html";
 	var params = {};
-	params[ "name" ] = localStorage.getItem('food-Item');
+	params[ "name" ] = sessionStorage.getItem('food-Item');
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -272,376 +272,3 @@ function deleteMenuItemFormSubmit()
 	deleteMenuItem();
 	return false;
 }
-
-/*
-function editMenu()
-{
-	var name = document.querySelector("#food-name");
-	var description = document.querySelector("#food-description");
-	var pic = document.querySelector("#food-picture");
-	var kcal = document.querySelector("#food-kcal");
-	var allergens = document.querySelector("#food-allergens");
-	var price = document.querySelector("#food-price");
-	var category = document.querySelector("#food-category");
-
-		name.innerHTML = "";
-		description.innerHTML="";
-		pic.innerHTML="";
-		kcal.innerHTML="";
-		allergens.innerHTML="";
-		price.innerHTML="";
-		category.innerHTML="";
-
-    var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) 
-		{
-			// Response is a JSON array of items
-			var obj = JSON.parse( this.responseText );
-			
-			var numItems = Object.keys( obj ).length;
-      
-	//		doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
-			obj.forEach(function(d) {
-                if(d.name==localStorage.getItem('food-Item'))
-                {
-					name.innerHTML+="<input name=\"menu-item-edit-name\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\""+d.name+"\">";
-					description.innerHTML+="<input name=\"menu-item-edit-description\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\""+d.description+"\">";
-					pic.innerHTML+="<div id=\"menu-item-edit-picture\" style=\"display:table-cell;\"><input type=\"file\" required id=\"menu-item-create-picture\"></div><div class=\"item-large-image\" style=\"background-image: url("+d.image+");max-height:70vh;min-height:70vh\"></div>";
-					kcal.innerHTML+="<input  name=\"menu-item-edit-calories\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\"Cal="+d.calories+"\">";
-					price.innerHTML+="<input name=\"menu-item-edit-price\" class=\"col\" style=\" height:5vh\" type=\"text\" placeholder=\"Price="+d.price+"\">";
-					gatherIngredients();
-					category.innerHTML+= "<select name=\"menu-item-edit-category\">"+
-                    					"<option value=\"appetizer\">Appetizer</option>"+
-                    					"<option value=\"entree\">Entree</option>"+
-                    					"<option value=\"drink\">Drink</option>"+
-                    					"<option value=\"dessert\">Dessert</option>"+
-                  						"</select>";
-
-					allergens.innerHTML+="<div style=\"display: table-row;\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"margin-top: 5vh;\">Ham</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-1\" value=\"ham\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Meat</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-2\" value=\"meat\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Dairy</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-3\" value=\"dairy\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Gluten</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-4\" value=\"gluten\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Shellfish</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-5\" value=\"shellfish\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Soy</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-6\" value=\"soy\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Fish</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-7\" value=\"fish\" />"
-					  +"</div>"
-					+"</div>"
-
-					+"<div style=\"display: table-row\">"
-					  +"<div style=\"display: table-cell;\">"
-						+"<div class=\"label\" style=\"\">Nuts</div>"
-					  +"</div>"
-					  +"<div style=\"display: table-cell;\">"
-						+"<input style=\"width: 5vw;\" type=\"checkbox\" name=\"menu-item-edit-allergens-8\" value=\"nuts\" />"
-					  +"</div>"
-					+"</div>"
-				+"</div>";
-                }
-			});
-		}
-		else if( this.readyState == 4 && this.status != 200 )
-		{
-			console.log( "Request inventory status response: " + this.status );
-		}
-	};
-	// Send a GET request to 64.225.29.130/inventory/view
-	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
-	xmlHttp.send();
-};
-
-function gatherIngredients()
-{
-	var ingredients = document.querySelector("#food-ingredients");
-	ingredients.innerHTML="";
-	ingredients.innerHTML+="<div id=\"ingredientLabel-edit\" class=\"ingredientArea\" style=\"display: table-row;\" id=\"ingredientLabel\">"
-	  +"<div style=\"display: table-cell;\">"
-		+"<div style=\"display: table; text-align: left;\">"
-		  +"<div style=\"display: table-row;\">"
-			+"<div style=\"display: table-cell;\">"
-			  +"<div class=\"label\" style=\"margin-top: 1vw;\">"
-				+"Ingredient"
-			  +"</div>"
-			+"</div>"
-		  +"</div>"
-		+"</div>"
-	  +"</div>"
-
-	  +"<div style=\"display: table-cell;\">"
-		+"<div style=\"display: table;  width: 25vw; text-align: center;\">"
-		  +"<div style=\"display: table-row;\">"
-
-			+"<div style=\"display: table-cell; width: 33%;\">"
-			  +"<div style=\"\">"
-				+"Included"
-			  +"</div>"
-			+"</div>"
-
-			+"<div style=\"display: table-cell; width: 33%;\">"
-			  +"<div style=\"\">"
-				+"Default"
-			  +"</div>"
-			+"</div>"
-
-			+"<div style=\"display: table-cell; width: 33%;\">"
-			  +"<div style=\"\">"
-				+"Count"
-			  +"</div>"
-			+"</div>"
-
-		  +"</div>"
-		+"</div>"
-	  +"</div>"
-	+"</div>";
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) 
-		{
-			// Response is a JSON array of items
-			var obj = JSON.parse( this.responseText );
-			
-			var numItems = Object.keys( obj ).length;
-	//		var el = document.getElementById( "ingredientLabel" );
-			var elEdit = document.getElementById( "ingredientLabel-edit" );
-
-			var i;
-			for( i = 0; i < numItems; i++ )
-			{
-				var currItem = obj[ i ];
-
-				var ingredientSrc = 
-					'<div class="ingredientArea" style="display: table-row;">' + 
-						'<div style="display: table-cell;">' + 
-							'<div class="labelIngredient" style="">' + 
-								currItem.name + 
-							'</div>' + 
-						'</div>' + 
-						'<div style="display: table-cell;">' + 
-							'<div style="display: table; table-layout: fixed; width: 25vw; text-align: center;">' + 
-								'<div style="display: table-row;">' + 
-									'<div style="display: table-cell;">' + 
-										'<input style="" type="checkbox" name="menu-item-edit-ingredient-' + 
-											( i + 1 ) + 
-											'" value="' + 
-											currItem.name + 
-										'" />' + 
-									'</div>' + 
-									'<div style="display: table-cell;">' + 
-										'<input style="" type="checkbox" name="menu-item-edit-has-ingredient-' + 
-											( i + 1 ) + 
-											'" value="' + 
-											'1' + 
-										'" />' + 
-									'</div>' + 
-									'<div style="display: table-cell;">' + 
-										'<input style="" type="number" size="5" maxlength="3" name="menu-item-edit-ingredient-count-' + 
-											( i + 1 ) + 
-											'" value="' + 
-											currItem.name + 
-										'" />' + 
-									'</div>' + 
-								'</div>' + 
-							'</div>' + 
-						'</div>' + 
-					'</div>';
-
-				//el.insertAdjacentHTML( 'afterend', ingredientSrc );
-
-				elEdit.insertAdjacentHTML( 'afterend', ingredientSrc );
-			}
-		}
-		else if( this.readyState == 4 && this.status != 200 )
-		{
-			console.log( "Request inventory status response: " + this.status );
-		}
-	};
-
-	// Send a GET request to 64.225.29.130/inventory/view
-	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
-	xmlHttp.send();
-}
-*/
-/*
-function editSubmit()
-{
-	var formData = new FormData(editMenuItemForm)
-	
-
-	var params = {}
-		params['_id'] = localStorage.getItem('food-item-id');
-
-		formData.set("menu-item-edit-id",localStorage.getItem('menu-item-id'));
-
-		if(document.getElementsByName("menu-item-edit-name")[0].value=="")
-		{
-			formData.set("menu-item-edit-name",localStorage.getItem('food-item-name'));
-
-		}
-		if(document.getElementsByName("menu-item-edit-description")[0].value=="")
-		{
-			formData.set("menu-item-edit-description",localStorage.getItem('food-item-description'));
-		}
-		if(document.getElementsByName("menu-item-edit-calories")[0].value=="")
-		{
-			formData.set("menu-item-edit-calories",localStorage.getItem('food-item-calories'));
-		}
-		if(document.getElementsByName("menu-item-edit-price")[0].value=="")
-		{
-			formData.set("menu-item-edit-price",localStorage.getItem('food-item-price'));
-		}
-		for(var value of formData.values()){
-			alert(value);
-		}
-		var xmlHttp = new XMLHttpRequest();
-
-		xmlHttp.onreadystatechange = function() {
-			if(this.readyState == 4 && this.status == 200)
-			{
-				console.log(this.responseText);
-				var obj = JSON.parse(this.responseText);
-
-				if( obj == null || obj.ok != 1 || obj.n != 1 )
-				{
-					document.getElementById('textarea-edit').innerHTML = "Edit Successful";
-				}
-				else
-				{
-					document.getElementById('textarea-edit').innerHTML = "Edit failed make sure the Ingredients area is filled"
-				}
-			}
-			else if( this.readyState == 4 && this.status != 200)
-			{
-				console.log("Edit menu item respone: " + this.status);
-			}
-		};
-		xmlHttp.open( "POST", "http://64.225.29.130/menu/edit");
-		xmlHttp.send( formData );
-}
-*/
-/*
-function createMenuItem()
-{
-	if(document.getElementsByName("menu-item-create-name").value==undefined)
-	{
-		document.getElementsByName("menu-item-create-name").value=localStorage.getItem('food-Item-n');
-
-	}
-	if(document.getElementsByName("menu-item-create-description").value==undefined)
-	{
-		document.getElementsByName("menu-item-create-description").value=localStorage.getItem('food-Item-d');
-	}
-	if(document.getElementsByName("menu-item-create-calories").value==undefined)
-	{
-		document.getElementsByName("menu-item-create-calories").value=localStorage.getItem('food-Item-cal');
-	}
-	if(document.getElementsByName("menu-item-create-price").value==undefined)
-	{
-		document.getElementsByName("menu-item-create-price").value=localStorage.getItem('food-Item-p');
-		//alert(document.getElementsByName("menu-item-create-price").value);
-	}
-
-	var formData = new FormData( createMenuItemForm );
-
-	if(formData.get("menu-item-create-name")=="")
-	{
-		formData.set("menu-item-create-name",localStorage.getItem('food-Item-n'));
-
-	}
-	if(formData.get("menu-item-create-description")=="")
-	{
-		formData.set("menu-item-create-description",localStorage.getItem('food-Item-d'));
-	}
-	if(formData.get("menu-item-create-calories")=="")
-	{
-		formData.set("menu-item-create-calories",localStorage.getItem('food-Item-cal'));
-	}
-	if(formData.get("menu-item-create-price")=="")
-	{
-		formData.set("menu-item-create-price",localStorage.getItem('food-Item-p'));
-		//alert(document.getElementsByName("menu-item-create-price").value);
-	}
-	formData.append( "fileToUpload", document.getElementById( "menu-item-create-picture" ).files[ 0 ] );
-
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 )
-		{
-			var obj = JSON.parse( this.responseText );
-			var el = document.getElementById( "textarea-menu-create" );
-
-			el.innerHTML = "Item Created:\n";
-			for( var attr in obj )
-				el.innerHTML += "    " + attr + ": " + obj[ attr ] + "\n";
-			console.log( this.responseText );
-		}
-		else if( this.readyState == 4 && this.status != 200 )
-		{
-			console.log( "Create menu item status response: " + this.status );
-		}
-	};
-
-	// Send a POST request to 64.225.29.130/menu/create
-	xmlHttp.open( "POST", "http://64.225.29.130/menu/create" );
-	xmlHttp.send( formData );
-}
-
-function createMenuItemSubmit()
-{
-	//deleteMenuItem();
-	createMenuItem();
-	return false;
-}
-*/
