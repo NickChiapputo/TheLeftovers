@@ -58,7 +58,7 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 	if( path == "/orders/view" )
 	 	{
-	 		viewOrders( collection, res );
+	 		getList( {}, collection, res );
 	 	}
 	 	else if( path == "/orders/create" )
 	 	{
@@ -70,7 +70,20 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 		// Data is finished being read. edit item
 	 		req.on( 'end', () => { 
-				var obj = JSON.parse( body );
+				// Get JSON object sent from user
+				try
+				{
+					// Get JSON object sent from user
+					var obj = JSON.parse( body );
+				}
+				catch( e )
+				{
+					console.log( "JSON parse error.\nError Log: " + e.message );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "input was not JSON string data" } ) );
+					return;
+				}
 
 				// Verify that table is valid
 				if( obj[ "table" ] === undefined || obj[ "table" ] === "" || isNaN( parseInt( obj[ "table" ] ) ) || parseInt( obj[ "table" ] ) < 1 || parseInt( obj[ "table" ] ) > 20 )
@@ -108,7 +121,30 @@ const server = http.createServer( ( req, res ) =>  {
 	 		req.on( 'end', () => { 
 				console.log( "Received: \n" + body + "\n" ); 
 				
-				var obj = JSON.parse( body );
+				// Get JSON object sent from user
+				try
+				{
+					// Get JSON object sent from user
+					var obj = JSON.parse( body );
+				}
+				catch( e )
+				{
+					console.log( "JSON parse error.\nError Log: " + e.message );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "input was not JSON string data" } ) );
+					return;
+				}
+
+				// Verify that ID is valid
+				if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
+				{
+					console.log( "Invalid _id '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid _id value" } ) );
+					return;
+				}
 
 				var deleteItem = {}
 				deleteItem[ "_id" ] = new mongo.ObjectId( obj[ "_id" ] );
@@ -126,15 +162,29 @@ const server = http.createServer( ( req, res ) =>  {
 
 			// Data is finished being read. Pay order
 			req.on( 'end', () => {
+				console.log( "Order payment received: " + body );
+
 				// Get JSON object sent from user
-				var obj = JSON.parse( body );
+				try
+				{
+					// Get JSON object sent from user
+					var obj = JSON.parse( body );
+				}
+				catch( e )
+				{
+					console.log( "JSON parse error.\nError Log: " + e.message );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "input was not JSON string data" } ) );
+					return;
+				}
 
 				// Make sure all fields are not empty
-				if( 	obj[ "_id" ] === undefined || obj[ "_id" ] === "" ||
+				if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) ||
 					obj[ "method" ] === undefined || obj[ "method" ] === "" || 
 					( obj[ "method" ] !== "card" && obj[ "method" ] !== "cash" ) ||
 					obj[ "amount" ] === undefined || obj[ "amount" ] === "" ||
-					isNaN( parseFloat( obj[ "amount" ] ) ) || parseFloat( obj[ "amount" ] ) <= 0 ||
+					isNaN( parseFloat( obj[ "amount" ] ) ) || parseFloat( obj[ "amount" ] ) < 0 ||
 					isNaN( parseFloat( obj[ "tip" ] ) ) || parseFloat( obj[ "tip" ] ) < 0 ||
 					obj[ "receipt" ] === undefined || obj[ "receipt" ] === "" ||
 					( obj[ "receipt" ] !== "print" && obj[ "receipt" ] !== "email" ) )
@@ -142,7 +192,7 @@ const server = http.createServer( ( req, res ) =>  {
 					console.log( "Incorrect input format." );
 
 					res.statusCode = 400;
-					res.end( JSON.stringify( { "success" : "no" } ) );
+					res.end( JSON.stringify( { "response" : "invalid input fields" } ) );
 					return;
 				}
 
@@ -161,11 +211,22 @@ const server = http.createServer( ( req, res ) =>  {
 
 			// Data is finished being read. Pay order
 			req.on( 'end', () => {
-				// Get JSON object sent from user
-				var obj = JSON.parse( body );
+				try
+				{
+					// Get JSON object sent from user
+					var obj = JSON.parse( body );
+				}
+				catch( e )
+				{
+					console.log( "JSON parse error.\nError Log: " + e.message );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "input was not JSON string data" } ) );
+					return;
+				}
 
 				// Make sure all fields are not empty
-				if( 	obj[ "_id" ] === undefined || obj[ "_id" ] === "" )
+				if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
 				{
 					console.log( "Invalid _id '" + obj[ "_id" ] + "'." );
 
@@ -197,6 +258,84 @@ const server = http.createServer( ( req, res ) =>  {
 				updateStatus( query, update, collection, res );
 			});
 		}
+		else if( path == "/orders/get" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+			// Data is finished being read. Pay order
+			req.on( 'end', () => {
+				// Get JSON object sent from user
+				var obj = JSON.parse( body );
+			
+				getList( obj, collection, res );
+			});
+		}
+		else if( path == "/orders/comp" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+			// Data is finished being read. Pay order
+			req.on( 'end', () => {
+				try
+				{
+					// Get JSON object sent from user
+					var obj = JSON.parse( body );
+				}
+				catch( e )
+				{
+					console.log( "JSON parse error.\nError Log: " + e.message );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "input was not JSON string data" } ) );
+					return;
+				}
+
+				console.log( "Checking order comp." );
+
+				// Verify that ID is valid
+				if( obj[ "_id" ] === undefined || obj[ "_id" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "_id" ] ) ) )
+				{
+					console.log( "Invalid _id '" + obj[ "_id" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid _id value" } ) );
+					return;
+				}
+
+				// Verify that amount is valid
+				if( obj[ "amount" ] === undefined || obj[ "amount" ] === "" || isNaN( parseFloat( obj[ "amount" ] ) ) || parseInt( obj[ "amount" ] ) <= 0 )
+				{
+					console.log( "Invalid amount '" + obj[ "amount" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid comp amount" } ) );
+					return;
+				}
+
+				// Ensure that amount is a float, not string
+				obj[ "amount" ] = parseFloat( obj[ "amount" ] );
+
+				// Verify that server ID is valid
+				if( obj[ "server" ] === undefined || obj[ "server" ] === "" || !(/^[0-9a-fA-F]{24}$/.test( obj[ "server" ] ) ) )
+				{
+					console.log( "Invalid server id '" + obj[ "server" ] + "'." );
+
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "invalid server id" } ) );
+					return;
+				}
+
+				compOrder( obj, db, res );
+			});
+		}
 	 	else
 	 	{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -214,26 +353,6 @@ server.listen( port, hostname, () => {
 	var date = new Date().toISOString().substr( 11, 8 );
 	console.log(  "(" + date + "): " ); 
 });
-
-function viewOrders( collection, res )
-{
-	collection.find( {} ).toArray( function( err, result ) {
- 		if( err )
- 		{
- 			console.log( "Error querying database." );
- 			res.statusCode = 500;								// Internal Server Error
- 			res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
- 			throw err;	
- 		} 
-
-		console.log( 	"Items found in orders database:\n" +
-						JSON.stringify( result ) +
-						"\n\n" );
-
-		// Send list of items back
-		res.end( JSON.stringify( result ) );
-	} );
-}
 
 async function createOrder( order, db, res )
 {
@@ -283,6 +402,9 @@ async function createOrder( order, db, res )
 	order[ "subtotal" ] = Math.round( ( subtotal + 0.00001 ) * 100 ) / 100;
 	order[ "tax" ] = Math.round( ( subtotal * 0.0825 + 0.00001 ) * 100 ) / 100;
 	order[ "total" ] = Math.round( ( order[ "subtotal" ] + order[ "tax" ] + 0.00001 ) * 100 ) / 100;
+
+	// Set the order as not ready
+	order[ "ready" ] = 0;
 
 	// Remove _id tag if added previously
 	delete order[ "_id" ];
@@ -512,9 +634,42 @@ async function createOrder( order, db, res )
  	} );
 }
 
+async function addItem( item, collection )
+{
+	return collection.insertOne( item );
+}
+
+async function getList( query, collection, res )
+{
+	try
+	{
+		console.log( "Searching for items that match " + JSON.stringify( query ) + " in collection " + collection.collectionName + "." );
+
+		var list = await getItems( query, collection );
+
+		console.log( "Found " + list.length + " items." );
+
+		res.end( JSON.stringify( list ) );
+		return;
+	}
+	catch( e )
+	{
+		console.log( "Fatal error getting items.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error getting list" } ) );
+		return;
+	}
+}
+
 async function getItem( query, collection )
 {
 	return collection.findOne( query );
+}
+
+async function getItems( query, collection )
+{
+	return collection.find( query ).toArray();
 }
 
 async function addNewOrderStat( itemName, newOrderStat, collection )
@@ -607,7 +762,7 @@ async function payOrder( input, db, res )
 
 		// Update order
 		var orderUpdate = {}
-		orderUpdate[ "$set" ] = result;
+		orderUpdate[ "$set" ] = order;
 		var updateOptions = { returnOriginal : false, returnNewDocument : true };
 
 		var updatedOrder = await updateItem( searchItem, orderUpdate, updateOptions, ordersCollection );
@@ -789,6 +944,22 @@ async function payOrder( input, db, res )
 			});
 		}
 
+		// Check if there is any feedback for the server
+		if( input[ "feedback" ] !== undefined && input[ "feedback" ] !== "" )
+		{
+			var message = {};
+			message[ "src" ] = newTable[ "table" ];		// Message sent fromt Table ##
+			message[ "srcType" ] = "table";
+			message[ "dest" ] = newTable[ "server" ].toString();	// Convert to string in case it is an ObjectId
+			message[ "destType" ] = "server";
+			message[ "request" ] = "$" + tip + " tip. Message from table: " + input[ "feedback" ];
+
+			console.log( "Sending message from table " + newTable[ "table" ] + " to server " + newTable[ "server" ] + ":\n" + message[ "request" ] );
+
+			var messageReturn = await addItem( message, db.db( "restaurant" ).collection( "messages" ) );
+			console.log( "Message sent: " + JSON.stringify( messageReturn ) );
+		}
+
 		// Send the updated item back
 		res.end( JSON.stringify( updatedOrder.value ) );
 	}
@@ -804,6 +975,9 @@ async function payOrder( input, db, res )
 
 function updateStatus( query, update, collection, res )
 {
+	if( update[ "$set" ][ "status" ] === "complete" )
+		update[ "$set" ][ "ready" ] = 1;
+
 	collection.findOneAndUpdate( query, update, { returnOriginal : false, returnNewDocument : true }, function( err, result ) {
 		if( err )
 		{
@@ -826,4 +1000,86 @@ function updateStatus( query, update, collection, res )
 
 		res.end( JSON.stringify( result.value ) );
 	});
+}
+
+async function compOrder( comp, db, res )
+{
+	var ordersCollection = db.db( "restaurant" ).collection( "orders" );
+	var employeesCollection = db.db( "restaurant" ).collection( "employees" );
+
+	try
+	{
+		// Verify order id exists
+		var query = {};
+		query[ "_id" ] = mongo.ObjectId( comp[ "_id" ] );
+		var order = await getItem( query, ordersCollection );
+
+		if( order === null )
+		{
+			console.log( "Order '" + query[ "_id" ] + "' does not exist." );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "order does not exist" } ) );
+			return;
+		}
+
+		// Verify that employee exists
+		query[ "_id" ] = mongo.ObjectId( comp[ "server" ] );
+		var employee = await getItem( query, employeesCollection );
+
+		if( employee === null )
+		{
+			console.log( "Employee '" + query[ "_id" ] + "' does not exist." );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "employee does not exist" } ) );
+			return;
+		}
+
+		// Update the order price
+		query[ "_id" ] = mongo.ObjectId( comp[ "_id" ] );
+		var update = {};
+		update[ "$set" ] = {};
+		update[ "$set" ][ "total" ] = Math.round( ( ( order[ "total" ] <= parseFloat( comp[ "amount" ] ) ? 0 : ( order[ "total" ] - parseFloat( comp[ "amount" ] ) ) ) + 0.00001 ) * 100 ) / 100;
+		update[ "$set" ][ "status" ] = update[ "$set" ][ "total" ] === 0 ? "paid" : "partially paid";
+		var options = { returnOriginal : false, returnNewDocument : true };
+		var updatedOrder = await updateItem( query, update, options, ordersCollection );
+
+		if( updatedOrder.value === null )
+		{
+			console.log( "Error updating order value: " + updatedOrder.value );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "unable to update order total" } ) );
+			return;
+		}
+
+		console.log( "Previous Order Total: $" + order[ "total" ] + "\nComp Amount: $" + comp[ "amount" ] + "\nNew Total: $" + updatedOrder.value[ "total" ] );
+
+		// Update the number of comps
+		query[ "_id" ] = mongo.ObjectId( comp[ "server" ] );
+		var update = { $inc : { "comps" : 1 } };
+		var updatedEmployee = await updateItem( query, update, options, employeesCollection );
+
+		if( updatedEmployee.value === null )
+		{
+			console.log( "Error updating employee value: " + updatedEmployee.value );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "unable to update employee comps" } ) );
+			return;
+		}
+
+		console.log( "Employee '" + updatedEmployee.value[ "_id" ] + "' comps increased to " + updatedEmployee.value[ "comps" ] );
+
+		res.end( JSON.stringify( updatedOrder.value ) );
+	}
+	catch( e )
+	{
+		console.log( "Fata error comping order.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error comping order" } ) );
+		return;
+	}
 }
