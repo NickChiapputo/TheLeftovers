@@ -159,6 +159,36 @@ const server = http.createServer( ( req, res ) =>  {
 	 			updateTableStatus( tableNum, table, collection, res );
 	 		});
 		}
+		else if( path == "/tables/search" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+	 		// Data is finished being read. Update table status
+	 		req.on( 'end', () => {
+	 			console.log( "Received: \n" + body + "\n" );
+
+	 			var obj = JSON.parse( body );
+
+	 			// Check that table number is valid
+				if( obj[ "table" ] === undefined || obj[ "table" ] === "" || isNaN( parseInt( obj[ "table" ] ) ) || parseInt( obj[ "table" ] ) > 20 || parseInt( obj[ "table" ] ) < 1 )
+				{
+					res.statusCode = 400;
+					res.end( JSON.stringify( { "response" : "bad table number format" } ) );
+					return;
+				}
+
+	 			// Ensure JSON object only has table number field
+	 			var table = {}
+	 			table[ "table" ] = parseInt( obj[ "table" ] );
+
+	 			// Update status
+	 			findTable( table, collection, res );
+	 		});
+		}
 	 	else
 	 	{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -263,3 +293,37 @@ function deleteTable( deleteItem, collection, res )
 	} );
 }
 
+async function findTable( table, collection, res )
+{
+	var tableFindResult;
+
+	try
+	{
+		tableFindResult = await getItem( table, collection );
+
+		if( tableFindResult === null )
+		{
+			console.log( "Could not find table with ID '" + table[ "table" ] + "'." );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "could not find table" } ) );
+			return;
+		}
+	}
+	catch( e )
+	{
+		console.log( "Fatal error searching for table.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error searching for table" } ) );
+		return;
+	}
+
+	console.log( "Found table: " + JSON.stringify( tableFindResult ) );
+	res.end( JSON.stringify( tableFindResult ) );
+}
+
+async function getItem( query, collection )
+{
+	return collection.findOne( query );
+}
