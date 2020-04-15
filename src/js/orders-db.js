@@ -558,257 +558,248 @@ async function payOrder( input, db, res )
 {
 	console.log( "Beginning pay for order ID " + input[ "_id" ] );
 
-	var collection = db.db( "restaurant" ).collection( "orders" );
+	var ordersCollection = db.db( "restaurant" ).collection( "orders" );
 	var tableCollection = db.db( "restaurant" ).collection( "tables" );
 	var employeesCollection = db.db( "restaurant" ).collection( "employees" );
 
-	// Create item with unique _id to search for order
-	var searchItem = {}
-	searchItem[ "_id" ] = new mongo.ObjectId( input[ "_id" ] );
+	try
+	{
+		// Create item with unique _id to search for order
+		var searchItem = {}
+		searchItem[ "_id" ] = new mongo.ObjectId( input[ "_id" ] );
 
-	// Search for order with given _id value
-	collection.findOne( searchItem, function( err, result ) {
-		if( err )
-		{
-			console.log( "Could not find order." );
-			res.statusCode = 500;
-			res.end( JSON.stringify( { "response" : "Could not find order." } ) );
-			throw err;
-		}
+		var order = await getItem( searchItem, ordersCollection );
 
-		// Result is null if the item is not found
-		if( result === null )
+		if( order === null )
 		{
 			console.log( "Did not find order." );
 			res.statusCode = 400;
-			res.end( "Did not find order." );
+			res.end( JSON.stringify( { "response" : "did not find order" } ) );
 			return;
 		}
 
+
 		// Save previous total amount
-		var previousTotal = result[ "total" ];
+		var previousTotal = order[ "total" ];
 
 		// If amount to pay is less than amount owed, update tota
 		// Otherwise, clear total
-		if( input[ "amount" ] < result[ "total" ] )
+		if( input[ "amount" ] < order[ "total" ] )
 		{
-			result[ "total" ] -= input[ "amount" ];
-			result[ "total" ] = Math.round( ( result[ "total" ] + 0.00001 ) * 100 ) / 100;
-			result[ "status" ] = "partially paid";
+			order[ "total" ] -= input[ "amount" ];
+			order[ "total" ] = Math.round( ( order[ "total" ] + 0.00001 ) * 100 ) / 100;
+			order[ "status" ] = "partially paid";
 
 			console.log( "Applied payment of $" + input[ "amount" ] + ".\n" 
 					+ "Old Total: $" + previousTotal + "\n"
-					+ "New Total: $" + result[ "total" ] );
+					+ "New Total: $" + order[ "total" ] );
 		}
 		else
 		{
-			result[ "total" ] = 0;
-			result[ "status" ] = "paid";
+			order[ "total" ] = 0;
+			order[ "status" ] = "paid";
 
 			console.log( "Applied payment of $" + previousTotal + ".\n"
 					+ "Old Total: $" + previousTotal + "\n"
-					+ "New Total: $" + result[ "total " ] );
+					+ "New Total: $" + order[ "total " ] );
 		}
 
+
 		// Update order
-		collection.findOneAndUpdate( searchItem, { $set : result }, { returnOriginal : false, returnNewDocument : true }, function( err, updatedResult ) {
-			if( err )
+		var orderUpdate = {}
+		orderUpdate[ "$set" ] = result;
+		var updateOptions = { returnOriginal : false, returnNewDocument : true };
+
+		var updatedOrder = await updateItem( searchItem, orderUpdate, updateOptions, ordersCollection );
+
+		if( updatedOrder.value === null )
+		{
+			console.log( "Unable to update order." );
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "unable to apply payment to order" } ) );
+			return;
+		}
+
+		// Display updated order for debugging
+		console.log( "Updated order: " + JSON.stringify( updatedOrder.value ) );
+
+		// Update table
+		var table = {};
+		table[ "table" ] = parseInt( updatedOrder.value[ "table" ] );
+		
+		var tableUpdates = {};
+		if( updatedOrder.value[ "total" ] == 0 )
+		{
+			// Reset back to initial state
+			tableUpdates[ "status" ] = "sitting";
+		}
+		else
+		{
+			// Still has more left on bill
+			tableUpdates[ "status" ] = "partially paid";
+		}
+
+		// Add tip if applicable
+		var tip = 0.00;
+		if( input[ "tip" ] !== undefined && input[ "tip" ] !== null && !isNaN( parseFloat( input[ "tip" ] ) ) && parseFloat( input[ "tip" ] ) > 0 )
+		{
+			tip = Math.round( ( parseFloat( input[ "tip" ] ) + 0.00001 ) * 100 ) / 100;
+		}
+
+		console.log( "Updated Query Status: '" + tableUpdates[ "status" ] + "' for table " + table[ "table" ] + "." ); 
+
+		var updatedTableResponse = await updateItem( table, { $set : tableUpdates }, updateOptions, tableCollection );
+
+		if( updatedTableResponse.value === null )
+		{
+			console.log( "Could not find table." );
+
+			res.statusCode = 400;
+			res.end( JSON.stringify( { "response" : "could not find table" } ) );
+		}
+
+		var newTable = updatedTableResponse.value;
+		console.log( "Updated status for table " + table[ "table" ] + " to '" + newTable[ "status" ] + "'." );
+
+		// Update employee tips if applicable
+		if( tip > 0 )
+		{
+			var employeeQuery = {};
+			employeeQuery[ "_id" ] = mongo.ObjectId( newTable[ "server" ] );
+			var employeeUpdate = {};
+			employeeUpdate[ "$inc" ] = {};
+			employeeUpdate[ "$inc" ][ "tips" ] = tip;
+
+			console.log( "Increasing tips by " + tip + " for server '" + employeeQuery[ "_id" ] + "'." );
+
+			var employeeResult = await updateItem( employeeQuery, employeeUpdate, updateOptions, employeesCollection );
+
+			if( employeeResult.value === null )
 			{
-				res.statusCode = 500;
-				res.end( JSON.stringify( { "success" : "no" } ) );
-				throw err;
+				console.log( "Unable to add tip to server." );
+
+				res.statusCode = 400;
+				res.end( JSON.stringify( { "response" : "unable to add tip to server" } ) );
+			}
+		}
+
+		// Check if receipt method is e-mail
+		if( input[ "receipt" ] === "email" )
+		{
+			// Check if e-mail is empty
+			if( input[ "email" ] === undefined || input[ "email" ] === "" )
+			{
+				res.statusCode = 400;
+				res.end( JSON.stringify( { "response" : "Invalid e-mail." } ) );
+				return;
 			}
 
-			// Display updated order for debugging
-			console.log( "Updated order: " + JSON.stringify( updatedResult.value ) );
+			console.log( "Send receipt by e-mail." );
 
-			// Update table
-			var table = {};
-			table[ "table" ] = parseInt( updatedResult.value[ "table" ] );
-			
-			var updatedQuery = {};
-			if( updatedResult.value[ "total" ] == 0 )
-			{
-				// Reset back to initial state
-				updatedQuery[ "status" ] = "sitting";
-			}
-			else
-			{
-				// Still has more left on bill
-				updatedQuery[ "status" ] = "partially paid";
-			}
-
-			// Add tip if applicable
-			var tip = 0.00;
-			if( input[ "tip" ] !== undefined && input[ "tip" ] !== null && !isNaN( parseFloat( input[ "tip" ] ) ) && parseFloat( input[ "tip" ] ) > 0 )
-			{
-				tip = Math.round( ( parseFloat( input[ "tip" ] ) + 0.00001 ) * 100 ) / 100;
-			}
-
-			console.log( "Updated Query Status: '" + updatedQuery[ "status" ] + "' for table " + table[ "table" ] + "." ); 
-
-			tableCollection.findOneAndUpdate( table, { $set : updatedQuery }, { returnOriginal : false, returnNewDocument : true }, function( err, updatedTable ) {
-				if( err )
-				{
-					console.log( "Unable to update table " + table[ "table" ] + " status." );
-					res.statusCode = 500;
-					res.end( JSON.stringify( { "response" : "unable to update table stats" } ) );
-					throw err;
-					return;
+			// Create transport for e-mail source
+			var transporter = nodemailer.createTransport( {
+				// sendmail: true,
+				service: 'gmail',
+				auth: {
+					user: 'theleftovers.csce3444@gmail.com',
+					pass: 'theLeftovers!'
 				}
-			
-				var newTable = updatedTable.value;
-
-				console.log( "Updated Table: " + JSON.stringify( newTable ) );
-
-				if( newTable === null )
-				{
-					console.log( "Could not find table " + table[ "table" ] + "." );
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "could not find table" } ) );
-					return;
-				}
-
-				// Update employee tips if applicable
-				if( tip > 0 )
-				{
-					/*try
-					{
-						var employeeQuery = {};
-						employeeQuery[ "_id" ] = mongo.ObjectId( newTable[ "server" ] );
-						var employeeUpdate = {};
-						employeeUpdate[ "$inc" ] = {};
-						employeeUpdate[ "$inc" ][ "tips" ] = tip;
-						var employeeOptions = { returnOriginal : false, returnNewDocument : true };
-
-						console.log( "Increasing tips by " + tip + " for server '" + employeeQuery[ "_id" ] + "'." );
-
-						var employeeResult = await updateItem( employeeQuery, employeeUpdate, employeeOptions, employeesCollection );
-
-						if( employeeResult.value === null )
-						{
-							console.log( "Unable to add tip to server." );
-						}
-					}
-					catch( e )
-					{
-						console.log( "Fatal error updating employe tips.\nError log: " + e.message );
-					}*/
-				}
-
-				console.log( "Updated status for table " + table[ "table" ] + " to '" + newTable[ "status" ] + "'." );
 			});
 
-			// Check if receipt method is e-mail
-			if( input[ "receipt" ] === "email" )
+			// Create subject text for e-mail
+			var subject = "Receipt for Order #" + input[ "_id" ] + " - The Leftovers";
+
+			// Create body text for e-mail
+
+			// Add document headers and CSS styling
+			mailBody = "<!doctype html><html><head><meta charset='utf-8'><title>A simple, clean, and responsive HTML invoice template</title><style>.invoice-box{max-width:800px;margin:auto;padding:30px;border:1px solid #eee;box-shadow:0 0 10px rgba(0, 0, 0, .15);font-size:16px;line-height:24px;font-family:'Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;color:#555}.invoice-box table{width:100%;line-height:inherit;text-align:left}.invoice-box table td{padding:5px;vertical-align:top}.invoice-box table tr td:nth-child(2){text-align:right}.invoice-box table tr.top table td{padding-bottom:20px}.invoice-box table tr.top table td.title{font-size:45px;line-height:45px;color:#333}.invoice-box table tr.information table td{padding-bottom:40px}.invoice-box table tr.heading td{background:#eee;border-bottom:1px solid #ddd;font-weight:bold}.invoice-box table tr.details td{padding-bottom:20px}.invoice-box table tr.item td{border-bottom:1px solid #eee}.invoice-box table tr.item.last td{border-bottom:none}.invoice-box table tr.total td:nth-child(2){border-top:2px solid #eee;font-weight:bold}@media only screen and (max-width: 600px){.invoice-box table tr.top table td{width:100%;display:block;text-align:center}.invoice-box table tr.information table td{width:100%;display:block;text-align:center}}.rtl{direction:rtl;font-family:Tahoma,'Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif}.rtl table{text-align:right}.rtl table tr td:nth-child(2){text-align:left}</style></head><body>";
+
+			// Add header
+			mailBody += 	"<div class='invoice-box'><table cellpadding='0' cellspacing='0'><tr class='top'><td colspan='2'><table><tr><td class='title'></td>" + 
+					"<td>Order #: " + input[ "_id" ] + "<br>" + 
+					"Created: " + new Date().toISOString().replace( /T/, ' ' ).replace( /\..+/, '' ) + " UTC</td></tr></table></td></tr>" + 
+
+			// Add payment method
+					"<tr class='heading'><td>Payment Method</td><td></td></tr>" + 
+				
+			// Add payment details	
+					"<tr class='details'><td>" + input[ "method" ] + "</td><td></td></tr>" + 
+
+			// Add items
+					"<tr class='heading'><td>Item</td><td>Price</td></tr>";
+
+			var newResult = updatedOrder.value;
+			var i;
+			var numItems = Object.keys( newResult[ "items" ] ).length;
+			console.log( numItems + " items in order." );
+			for( i = 0; i < numItems - 1; i++ )
 			{
-				// Check if e-mail is empty
-				if( input[ "email" ] === undefined || input[ "email" ] === "" )
+				var item = newResult[ "items" ][ i ];
+				mailBody += "<tr class='item'><td>" + item[ "name" ] + "</td><td>$" + item[ "price" ] + "</td></tr>";
+			}
+
+			// Add last item
+			mailBody += "<tr class='item last'><td>" + newResult[ "items"][ numItems - 1 ][ "name" ] + "</td><td>$" + newResult[ "items" ][ numItems - 1 ][ "price" ] + "</td></tr>";
+
+			// Add subtotal
+			mailBody += "<tr class='total'><td></td><td>Subtotal: $" + newResult[ "subtotal" ] + "</td></tr>";
+
+			// Add tax
+			mailBody += "<tr class='total'><td></td><td>Tax: $" + newResult[ "tax" ] + "</td></tr>";
+
+			// Add old total
+			mailBody += "<tr class='total'><td></td><td>Total: $" + previousTotal + "</td></tr>";
+
+			// Add payment
+			if( newResult[ "subtotal" ] + newResult[ "tax" ] > previousTotal )
+				mailBody += "<tr class='total'><td></td><td>Previous Payments: -$" + ( newResult[ "subtotal" ] + newResult[ "tax" ] - previousTotal ) + "</td></tr>";
+			mailBody += "<tr class='total'><td></td><td>Total: $" + previousTotal + "</td></tr>";
+			mailBody += "<tr class='total'><td></td><td>Payment: -$" + input[ "amount" ] + "</td></tr>";
+			mailBody += "<tr class='total'><td></td><td>Remaining Balance: $" + newResult[ "total" ] + "</td></tr>";
+
+			// Close remaining tags
+			mailBody += "</table></div></body></html>";
+
+
+			// Create e-mail data
+			var mailOptions = {
+				from: 'theleftovers.csce3444@gmail.com',
+				to: input[ "email" ],
+				subject: subject,
+				html: mailBody,
+			};
+
+			// Send e-mail
+			console.log( "Sending e-mail..." );
+			transporter.sendMail( mailOptions, function( err, info ) {
+				if( err )
 				{
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "Invalid e-mail." } ) );
+					console.log( "Error sending e-mail: " + err );
+
+					res.statusCode = 500;
+
+					var response = {}
+					response.response = err;
+					
+					res.end( JSON.stringify( response ) );
 					return;
 				}
 
-				console.log( "Send receipt by e-mail." );
+				console.log( "E-mail sent to " + input[ "email" ] + "\n" + info.response );
+			});
+		}
 
-				// Create transport for e-mail source
-				var transporter = nodemailer.createTransport( {
-					// sendmail: true,
-					service: 'gmail',
-					auth: {
-						user: 'theleftovers.csce3444@gmail.com',
-						pass: 'theLeftovers!'
-					}
-				});
+		// Send the updated item back
+		res.end( JSON.stringify( updatedOrder.value ) );
+	}
+	catch( e )
+	{
+		console.log( "Fatal error when paying for order.\nError log: " + e.message );
 
-				// Create subject text for e-mail
-				var subject = "Receipt for Order #" + input[ "_id" ] + " - The Leftovers";
-
-				// Create body text for e-mail
-
-				// Add document headers and CSS styling
-				mailBody = "<!doctype html><html><head><meta charset='utf-8'><title>A simple, clean, and responsive HTML invoice template</title><style>.invoice-box{max-width:800px;margin:auto;padding:30px;border:1px solid #eee;box-shadow:0 0 10px rgba(0, 0, 0, .15);font-size:16px;line-height:24px;font-family:'Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;color:#555}.invoice-box table{width:100%;line-height:inherit;text-align:left}.invoice-box table td{padding:5px;vertical-align:top}.invoice-box table tr td:nth-child(2){text-align:right}.invoice-box table tr.top table td{padding-bottom:20px}.invoice-box table tr.top table td.title{font-size:45px;line-height:45px;color:#333}.invoice-box table tr.information table td{padding-bottom:40px}.invoice-box table tr.heading td{background:#eee;border-bottom:1px solid #ddd;font-weight:bold}.invoice-box table tr.details td{padding-bottom:20px}.invoice-box table tr.item td{border-bottom:1px solid #eee}.invoice-box table tr.item.last td{border-bottom:none}.invoice-box table tr.total td:nth-child(2){border-top:2px solid #eee;font-weight:bold}@media only screen and (max-width: 600px){.invoice-box table tr.top table td{width:100%;display:block;text-align:center}.invoice-box table tr.information table td{width:100%;display:block;text-align:center}}.rtl{direction:rtl;font-family:Tahoma,'Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif}.rtl table{text-align:right}.rtl table tr td:nth-child(2){text-align:left}</style></head><body>";
-
-				// Add header
-				mailBody += 	"<div class='invoice-box'><table cellpadding='0' cellspacing='0'><tr class='top'><td colspan='2'><table><tr><td class='title'></td>" + 
-						"<td>Order #: " + input[ "_id" ] + "<br>" + 
-						"Created: " + new Date().toISOString().replace( /T/, ' ' ).replace( /\..+/, '' ) + " UTC</td></tr></table></td></tr>" + 
-
-				// Add payment method
-						"<tr class='heading'><td>Payment Method</td><td></td></tr>" + 
-					
-				// Add payment details	
-						"<tr class='details'><td>" + input[ "method" ] + "</td><td></td></tr>" + 
-
-				// Add items
-						"<tr class='heading'><td>Item</td><td>Price</td></tr>";
-
-				var newResult = updatedResult.value;
-				var i;
-				var numItems = Object.keys( newResult[ "items" ] ).length;
-				console.log( numItems + " items in order." );
-				for( i = 0; i < numItems - 1; i++ )
-				{
-					var item = newResult[ "items" ][ i ];
-					mailBody += "<tr class='item'><td>" + item[ "name" ] + "</td><td>$" + item[ "price" ] + "</td></tr>";
-				}
-
-				// Add last item
-				mailBody += "<tr class='item last'><td>" + newResult[ "items"][ numItems - 1 ][ "name" ] + "</td><td>$" + newResult[ "items" ][ numItems - 1 ][ "price" ] + "</td></tr>";
-
-				// Add subtotal
-				mailBody += "<tr class='total'><td></td><td>Subtotal: $" + newResult[ "subtotal" ] + "</td></tr>";
-
-				// Add tax
-				mailBody += "<tr class='total'><td></td><td>Tax: $" + newResult[ "tax" ] + "</td></tr>";
-
-				// Add old total
-				mailBody += "<tr class='total'><td></td><td>Total: $" + previousTotal + "</td></tr>";
-
-				// Add payment
-				if( newResult[ "subtotal" ] + newResult[ "tax" ] > previousTotal )
-					mailBody += "<tr class='total'><td></td><td>Previous Payments: -$" + ( newResult[ "subtotal" ] + newResult[ "tax" ] - previousTotal ) + "</td></tr>";
-				mailBody += "<tr class='total'><td></td><td>Total: $" + previousTotal + "</td></tr>";
-				mailBody += "<tr class='total'><td></td><td>Payment: -$" + input[ "amount" ] + "</td></tr>";
-				mailBody += "<tr class='total'><td></td><td>Remaining Balance: $" + newResult[ "total" ] + "</td></tr>";
-
-				// Close remaining tags
-				mailBody += "</table></div></body></html>";
-
-
-				// Create e-mail data
-				var mailOptions = {
-					from: 'theleftovers.csce3444@gmail.com',
-					to: input[ "email" ],
-					subject: subject,
-					html: mailBody,
-				};
-
-				// Send e-mail
-				console.log( "Sending e-mail..." );
-				transporter.sendMail( mailOptions, function( err, info ) {
-					if( err )
-					{
-						console.log( "Error sending e-mail: " + err );
-
-						res.statusCode = 500;
-
-						var response = {}
-						response.response = err;
-						
-						res.end( JSON.stringify( response ) );
-						return;
-					}
-
-					console.log( "E-mail sent to " + input[ "email" ] + "\n" + info.response );
-				});
-			}
-
-			// Send the updated item back
-			res.end( JSON.stringify( updatedResult.value ) );
-		});
-	});
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error when paying for order" } ) );
+		return;
+	}
 }
 
 function updateStatus( query, update, collection, res )
