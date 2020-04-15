@@ -36,7 +36,7 @@ function menuItemStats(name, loc, type, firstCheck)
 			{
 				if( attr === "name" )
 				{
-                    console.log("Name                 : ", item[attr]), " (", type, ")";
+                    //console.log("Name                 : ", item[attr]), " (", type, ")";
 					// Get number of different days item has been ordered on
                     // Each date is a key, there are 2 extra keys (_id and name)
                     sum=0;
@@ -52,11 +52,11 @@ function menuItemStats(name, loc, type, firstCheck)
                     //console.log("Difference           : ", compare);
                     if (compare < 7) {
                         sum += item[attr];
-                        console.log("sales (", dateStr.substr(0, 10), ") : ", item[attr]);
+                        //console.log("sales (", dateStr.substr(0, 10), ") : ", item[attr]);
                     }
                 }
             }
-            console.log("total                : ", sum);
+            //console.log("total                : ", sum);
             var max = Cookies.getJSON('tempMax');
             if (Number(max [type] [1]) < sum) {
                 max [type] = [loc, sum];

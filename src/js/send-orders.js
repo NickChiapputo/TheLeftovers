@@ -3,16 +3,12 @@ function send_order()
 	var jsonOrder = (Cookies.getJSON('current_order'));
 	jsonOrder.status = 'ordered';
 
-	var i;
 	for (i = jsonOrder.items.length - 1; i >= 0; i--) {
-		if (jsonOrder.items[i].sent == 'true') {
-			console.log('0');
-			jsonOrder.items.splice(i, 1);
-		}
+		jsonOrder.items[i].sent = 'true';
 	}
+	Cookies.set('current_order', jsonOrder, {path: '/', sameSite: 'strict'});
 
 	var xmlHttp = new XMLHttpRequest();
-
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
 		{
@@ -21,18 +17,27 @@ function send_order()
 			// Response is a JSON object
 			var obj = JSON.parse( this.responseText );
 
+			document.getElementById('close-pay-response').className = "btn btn-outline-success";
+			document.getElementById('order-sent').style.color = 'green';
+			document.getElementById('order-sent-title').innerText = "Sent!";
+			document.getElementById('order-sent-text').innerText = "Your order will be out soon!";			
+			console.log( "Create inventory item status response: " + this.status );
+
 			console.log(obj);
 			if( obj == null )
 			 	console.log("Unable to send item.\n");
 			else {
 				console.log("Sent Item: \n" + JSON.stringify(obj));
-				Cookies.remove('current_order');
 				loadOrderItems();
 			}
 
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
+			document.getElementById('close-pay-response').className = "btn btn-outline-danger";
+			document.getElementById('order-sent').style.color = 'red';
+			document.getElementById('order-sent-title').innerText = "Not sent";
+			document.getElementById('order-sent-text').innerText = "One or more of the selected items is unavailable";			
 			console.log( "Create inventory item status response: " + this.status );
 		}
 	};

@@ -110,9 +110,6 @@ function getOrdersByTable()
                     output += '___________________________________________\n';
                     output += 'Total: $' + addTrailingZeros(total) + '\n';
                     document.getElementById('itemList').innerText = output;
-                    if (total == 0) {
-                        document.getElementById('pay-bill-button').innerText = "Paid";
-                    }
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -181,6 +178,7 @@ function getOptions() {
     if (payment.receipt == "email" && payment.payment != "N/A" && (payment.email == undefined || payment.email.length == 0)) {
         email.style.display = 'unset';
         email.value = '';
+        document.getElementById('pay-foot').style.display = 'unset';
         document.getElementById('submitEmail').style.display = 'unset';
         document.getElementById('yesnoPay').style.display = 'none';
         document.getElementById('pay-text').innerText = "Enter your email address to receive your receipt";
@@ -189,30 +187,38 @@ function getOptions() {
     }
     else {
         email.style.display = 'none';
+        document.getElementById('pay-foot').style.display = 'none';
         document.getElementById('yesnoPay').style.display = 'unset';
         document.getElementById('submitEmail').style.display = 'none';
     }
     Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
     var payText = document.getElementById('pay-text');
     payText.style.color = 'red';
-    var total = 0;
     var bill_orders = JSON.parse(window.localStorage.getItem('bill_orders'));
+    var isItEmpty = true;
     for (var i=1; i < bill_orders.length; i++) {
-        total += bill_orders[i].total;
+        if (bill_orders[i].status != 'paid') {
+            isItEmpty = false;
+            break;
+        }
     }
-    if (total <= 0) {
-        document.getElementById('pay-foot').style.display = 'hidden';
+    console.log(bill_orders.length)
+    if (isItEmpty == true) {
+        document.getElementById('pay-foot').style.display = 'none';
         payText.style.color = "green"
         payText.innerText = "Bill has been paid. Have a great day! :)";
     }
     else if (payment.payment == "N/A" && payment.receipt == "N/A") {
+        document.getElementById('pay-foot').style.display = 'none';
         payText.innerText = 'No payment method selected';
         payText.innerText = payText.innerText.concat('\nNo receipt method selected');
     }
     else if (payment.payment == "N/A") {
+        document.getElementById('pay-foot').style.display = 'none';
         payText.innerText = 'No payment method selected';
     }
     else if (payment.receipt == "N/A") {
+        document.getElementById('pay-foot').style.display = 'none';
         payText.innerText = 'No receipt method selected';
     }
     else {
@@ -248,7 +254,13 @@ function handlePayment(frac) {
     var tip = payment.tip;
     var total = buildPayments(payment);
     var sucText = document.getElementById('pay-success-text');
-    sucText.innerText = "Paid: $" + Number(payment.amount) + "\n+ Tip: $" + tip + "\nRemaining: $" + total;
+    total = (Number(total.toFixed(2))).toString();
+    if (total < 0) {
+        sucText.innerText = "Paid: $" + Number(payment.amount) + "\n+ Tip: $" + tip + "\nNot charged: $" + total-payment.amount;
+    }
+    else {
+        sucText.innerText = "Paid: $" + Number(payment.amount) + "\n+ Tip: $" + tip + "\nRemaining: $" + total;
+    }
     sucText.style.textAlign = 'left';
     Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
 
@@ -258,6 +270,9 @@ function handlePayment(frac) {
         sendPayment(payments[i]);
     }
 
+    if (total <= 0) {
+        Cookies.remove('current_order');
+    }
     getOrdersByTable();
     document.getElementsByName( "order-pay-method" )[ 0 ].value = "N/A";
     document.getElementsByName( "order-receipt-method" )[ 0 ].value = "N/A";
@@ -281,7 +296,7 @@ function buildPayments(payment) {
         newPayment ['_id'] = orders[i]._id;
         if (orders[i].status != 'paid') {
             payment.tip = 0;
-            if (money > orders[i].total) {
+            if (money >= orders[i].total) {
                 console.log('whole')
                 newPayment.amount = orders[i].total;
                 money = money - orders[i].total;
@@ -295,9 +310,7 @@ function buildPayments(payment) {
                 money = 0
             }
         }
-        if (newPayment.amount != 0) {
-            payments.push(newPayment);
-        }
+        payments.push(newPayment);
     }
     payments.splice(0,1);
     window.localStorage.setItem('payments', JSON.stringify(payments));
@@ -305,8 +318,6 @@ function buildPayments(payment) {
 
     if (money > 0) {
         document.getElementById('pay-success-title').innerText = "Successfully paid full order";
-        var sucText = document.getElementById('pay-success-text');
-        sucText.innerText = "Paid: $" + Number(total) + "\n+ Tip: $" + saveTip + "\nNot charged: $" + money;
     }
     return total;
 }
@@ -328,7 +339,7 @@ function sendPayment(payment)
     //console.log("PAYMENT: ", payment);
 	order[ "email" ] = payment.email;
     console.log("ORDER: ", order);
-    
+
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
@@ -337,7 +348,7 @@ function sendPayment(payment)
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log(document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText);
+			console.log("Status response: " + this.status + "\n" + this.responseText);
 		}
 	};
 
