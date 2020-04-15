@@ -91,7 +91,6 @@
               <div class="modal-body">    
                 <script>
                   function setCookCook() {
-                    sessionStorage.setItem('tableid',document.getElementById('new-num').value);
                     findID();
                     Cookies.set('table-num', document.getElementById('new-num').value, {path: '/', sameSite: 'strict'});
                   }
