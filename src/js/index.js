@@ -653,8 +653,8 @@ function getRewardsAccounts()
 function createRewardsAccount()
 {
 	var params = {};
-	params[ "phone" ] = document.getElementsByName( "rewardsPhone" )[ 0 ].value;
-	params[ "name" ] = document.getElementsByName( "rewardsName" )[ 0 ].value;
+	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
+	params[ "name" ] = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
 
 	var xmlHttp = new XMLHttpRequest();
 

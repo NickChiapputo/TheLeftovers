@@ -12,6 +12,12 @@
     <!-- Original CSS -->
     <link rel="stylesheet" href="../../css/style.css">
 
+    <!-- js.cookie.js-->
+    <script src="../../js/js.cookie.js" type="text/javascript"></script>
+
+    <!-- Original js -->
+    <script type="text/javascript" src="../../js/printRewards.js"></script>
+    
     <title>The Leftovers!</title>
   </head>
 
@@ -44,19 +50,19 @@
 
     <!-- Page contents-->
     <div>
-      <p></p>
+      <p id="textarea-rewards-accounts-create"></p>
       <div class="row" style="max-height: 20vh; min-height: 20vh;">
-        <input id="rewardsPhone" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Phone Number" name="phone" required>
+        <input name="rewards-account-phone" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Phone Number" name="phone" required>
       </div>
       <p></p>
       <div class="row" style="max-height: 20vh; min-height: 20vh;">
-        <input id="rewardsName" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Name" name="name" required>
+        <input name="rewards-account-name" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Name" name="name" required>
       </div>
       <div class="row menu-row">
         <button class="col menu-box" style="background-color: blue;" onclick="createRewardsAccount()">
-        <a href="signed.html">
+        <!--a href=""!-->
             <h1 class="menu-text" style="background-color: blue;">Sign Up</h1>
-        </a>
+        <!--/a!-->
         </button>
       </div>  
     </div>
