@@ -182,7 +182,6 @@ function loadOrderItems() {
                 order.status = "none";
                 Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
                 document.getElementById("sendOrderBtn").style.display = 'none';
-                console.log("empty");
                 return;
             }
             else {

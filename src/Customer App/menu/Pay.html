@@ -85,7 +85,7 @@
                     </div>
                     <div class="modal-body">    
                       <form id="myForm">
-                        <input type="text" autocomplete="off" id="tip-input" value="">
+                        <input type="number" min=0 autocomplete="off" id="tip-input" value="">
                         <button type="reset" class="btn btn-primary" data-dismiss="modal" onclick="addTip()">Submit</button>
                         <p id="cokies" style="display: none;">as</p>
                       </form>          
@@ -95,7 +95,7 @@
               </div>
 
               <!-- Leave a note modal button -->
-              <button type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#leave-note" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
+              <button onclick="loadNote()" type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#leave-note" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
                 <h1 class="menu-text">Leave a note</h1>
               </button>
               <!-- Leave a note modal window -->
@@ -111,10 +111,10 @@
                     <form>
                       <p id="note-body"></p>
                       <input type="text" autocomplete="off" id="note" style="min-width: 90%;">
-                      <p id="note-success"></p>
+                      <br><br>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" onclick="clearNote()" data-dismiss="modal">Delete note</button>
-                        <button type="button" class="btn btn-outline-success" onclick="submitNote(); $('#note-sent').modal('show')" data-dismiss="modal">Leave note</button>
+                        <button type="button" class="btn btn-outline-success" onclick="submitNote()" data-dismiss="modal">Leave note</button>
                       </div>
                     </form>
                   </div>
@@ -161,7 +161,7 @@
 
               <!-- Pay modal button -->
               <button onclick="getOptions()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#pay-order" style="background-color:rgb(159, 245, 195); min-width: 100%; min-height: 20%; color: black;">
-                <h1 class="menu-text">Pay bill</h1>
+                <h1 class="menu-text" id='pay-bill-button'>Pay bill</h1>
               </button>
 
               <!-- Pay modal window -->
@@ -175,12 +175,17 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <text id="pay-text"></text>
+                      <p id="pay-text"></p>
+                      <input id="email-input" style="display: none;" type="text" placeholder="email@address.com">
                     </div>
-                    
-                    <div class="modal-footer" style="display: none;" id="pay-foot">
-                      <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="$('#pay-amount').modal('show');">Pay part of order</button>
-                      <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="handlePayment('W')">Pay full order</button>
+                    <div class="modal-footer" id="pay-foot">
+                      <div autocomplete="off" id="submitEmail" style="width: 100%;">
+                        <button type="button" style="min-width: 100%;" class="btn btn-outline-primary" onclick="submitEmail()">Submit email</button>
+                      </div>
+                      <div id="yesnoPay">
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="$('#pay-amount').modal('show');">Pay part of order</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="handlePayment('W'); $('#pay-success').modal('show')">Pay remainder of order</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -199,16 +204,37 @@
                     <div class="modal-body">    
                       <form id="myForm">
                         <text>$</text>
-                        <input type="number" step="any" min="1" autocomplete="off" id="partial-pay-amount">
+                        <input type="number" min=0; step="any" valid autocomplete="off" id="partial-pay-amount">
                         <p id="partial-pay-comment"></p>
                       </form>          
                     </div>
                     <div class="modal-footer">
-                      <button type="reset" data-dismiss="modal" style="width: 100%;" class="btn btn-success" onclick="handlePayment('P')">Submit</button>
+                      <button type="button" data-toggle="modal" data-dismiss="modal" style="width: 100%;" class="btn btn-success" onclick="$('#pay-success').modal('show'); handlePayment('F')">Submit</button>
                     </div>
                   </div>
                 </div>
               </div> 
+
+              <!-- Pay response modal window -->
+              <div class="modal fade" id="pay-success" tabindex="-1" role="dialog" aria-labelledby="pay-order" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 style="color: red" class="modal-title" id="pay-success-title">Invalid input</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p id="pay-success-text">Enter a number equal to or below your remaining total</p>
+                    </div>
+                    
+                    <div class="modal-footer" id="pay-foot">
+                      <button type="button" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
     </div>
