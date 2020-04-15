@@ -634,6 +634,11 @@ async function createOrder( order, db, res )
  	} );
 }
 
+async function addItem( item, collection )
+{
+	return collection.insertOne( item );
+}
+
 async function getList( query, collection, res )
 {
 	try
@@ -937,6 +942,21 @@ async function payOrder( input, db, res )
 
 				console.log( "E-mail sent to " + input[ "email" ] + "\n" + info.response );
 			});
+		}
+
+		// Check if there is any feedback for the server
+		if( input[ "feedback" ] !== undefined && input[ "feedback" ] !== "" )
+		{
+			var message = {};
+			message[ "src" ] = newTable[ "table" ];		// Message sent fromt Table ##
+			message[ "srcType" ] = "table";
+			message[ "dest" ] = newTable[ "server" ];
+			message[ "destType" ] = 
+			message[ "request" ] = "$" + tip + " tip. Message from table: " + input[ "feedback" ];
+
+			var messageReturn = await addItem( message, db.db( "restaurant" ).collection( "messages" ) );
+
+			console.log( "Sending message from table " + newTable[ "table" ] + " to server " + newTable[ "server" ] + ":\n" + message[ "request" ] );
 		}
 
 		// Send the updated item back
