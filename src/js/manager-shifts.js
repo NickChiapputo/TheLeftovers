@@ -159,7 +159,6 @@ function displayShifts()
 						}
 						else if(shift.date==day2)
 						{
-							alert();
 							document.getElementById("tuesday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
 							shift.start+"-"+shift.end+"</p>";
 						}

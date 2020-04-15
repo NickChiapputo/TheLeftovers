@@ -31,14 +31,10 @@ function managerSearch()
 			{
 				if(employee.type=='manager')
 				{
-					//alert(employee.first+" "+employee.last)
-					employee.shifts.forEach(function (shift){
-						//alert(shift.date);
-						if(shift.date==today)
-						{
-							help(employee._id)
-						}
-					} );
+					if(employee.loggedIn=='1')
+					{
+						help(employee._id)
+					}
 				}
 			});
 			

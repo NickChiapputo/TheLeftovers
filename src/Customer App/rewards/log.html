@@ -12,6 +12,12 @@
     <!-- Original CSS -->
     <link rel="stylesheet" href="../../css/style.css">
 
+    <!-- js.cookie.js-->
+    <script src="../../js/js.cookie.js" type="text/javascript"></script>
+
+    <!-- Original js -->
+    <script type="text/javascript" src="../../js/printRewards.js"></script>
+    
     <title>The Leftovers!</title>
   </head>
 
@@ -29,30 +35,31 @@
               <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
             </a>
           </div>
-          <div class="col-1" style="margin:auto;">
+          <div class="col-1" style="margin:auto;" onclick="sendHelp()">
             <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
           </div>
-          <div class="col-1" style="margin:auto;">
+          <div class="col-1" style="margin:auto;" onclick="sendRefill()">
             <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
           </div>
           <div class="col-9" style="margin: auto;">
             <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
             <script src="../../js/get-time.js"> </script> 
+            <script src="/src/js/table-messages.js"></script>
           </div>
         </div>
       </div>
 
     <!-- Page contents-->
     <div>
-      <div class="row">
-        <h1 style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; font-size: 8vw; color: white; outline-color: black;">Welcome back Jackson!</h1>
+      <div class="row" onload="printRewardsAccounts()">
+        <h1 style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; color: white; -webkit-text-stroke: 0.2vh black; font-size: 8vw;">Welcome back <span id="rewards-Name"></span></h1>
       </div>
       <p></p>
       <div class="row menu-row">
-        <div class="col menu-row">
-          <h1 style="color: white;">Would you like another BBQ burger?</h1>
+        <div class="col menu-row" onload="printRewardsAccounts()">
+          <h1 style="color: white; -webkit-text-stroke: 0.2vh black; font-size: 4vw;">Would you like another <span id="rewards-Meal"></span>?</h1>
           <a href="log.html">
-              <h1 class="col menu-box" style="width: 40%; margin-left: 23vw; margin-right: 0vw;">Yes</h1>
+              <h1 class="col menu-box" style="width: 40%; margin-left: 23vw; margin-right: 0vw; background-color:limegreen;">Yes</h1>
           </a>
         </div>
         <div class="col-3 menu-row">
@@ -63,9 +70,9 @@
       </div>
       <div class="row menu-row">
       <p style="height: 20vh;"></p>
-        <div class="col menu-box" style="background-color: blue;">
+        <div class="col menu-box">
         <a href="../index.html">
-            <h1 class="menu-text" style="background-color: blue;">No, Return to Main Menu</h1>
+            <h1 class="menu-text">No, Return to Main Menu</h1>
         </a>
         </div>
       </div>  

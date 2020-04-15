@@ -13,8 +13,11 @@ function getTableList() {
       //loop through tables
       for (var i = 0; i < numTables; i++){
 
+		//alert(obj[i].table + "\n" + obj[i].server + "\n" + sessionStorage.getItem("employee-id"));
+
         var currentTable = obj[i];
-        placeTable(currentTable.table, currentTable.status);
+		if (obj[i].server == sessionStorage.getItem("employee-id"))
+        	placeTable(currentTable.table, currentTable.status);
 
       }
 
@@ -42,7 +45,7 @@ function getTableList() {
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/tables/view", true );
 	xmlHttp.send();
-	var x = setTimeout(getInventoryList, 1000);
+	//var x = setTimeout(getTableList, 1000);
 
 }
 

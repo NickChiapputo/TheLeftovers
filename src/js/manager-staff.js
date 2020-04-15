@@ -153,3 +153,49 @@ function getEmployeeFormSubmit()
 	getEmployeeList();
 	return false;
 }
+
+function editEmployee()
+{
+	var params = {};
+	params['_id'] = document.getElementsByName('EID')[0].value;
+    params["first"] = document.getElementsByName( "efirst" )[ 0 ].value;
+    params["middle"] = document.getElementsByName("emiddle")[0].value;
+	params["last"] = document.getElementsByName( "elast" )[ 0 ].value;
+    params["type"] = document.getElementsByName("etype")[0].value;
+
+
+	var xmlHttp = new XMLHttpRequest();
+
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			console.log( this.responseText );
+
+			// Response is a JSON object
+			var obj = JSON.parse( this.responseText );
+
+			if( obj == null )
+			 	document.getElementById( 'textarea-edit' ).innerHTML = "Unable to edit item.\n";
+			else
+			 	document.getElementById( 'textarea-edit' ).innerHTML = "Edited Item: \n" + 
+                     "     First:  " + obj.first+
+                     "     Middle: " + obj.middle+
+					 "     Last: " + obj.last+
+                     "     Type: "+obj.type;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Edit staff status response: " + this.status );
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	xmlHttp.open( "POST", "http://64.225.29.130/employees/edit");
+	xmlHttp.send( JSON.stringify(params) );
+}
+
+function editEmployeeFormSubmit()
+{
+	editEmployee();
+	return false;
+}
