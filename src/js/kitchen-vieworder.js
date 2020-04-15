@@ -74,6 +74,7 @@ function getOrders()
 	// Send a GET request to 64.225.29.130/inventory/view
     xmlHttp.open( "POST", "http://64.225.29.130/orders/get", true );
 	xmlHttp.send(JSON.stringify(params));
+	setTimeout(getOrders,5000);
 
 }
 
