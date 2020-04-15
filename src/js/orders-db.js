@@ -950,13 +950,14 @@ async function payOrder( input, db, res )
 			var message = {};
 			message[ "src" ] = newTable[ "table" ];		// Message sent fromt Table ##
 			message[ "srcType" ] = "table";
-			message[ "dest" ] = newTable[ "server" ];
-			message[ "destType" ] = 
+			message[ "dest" ] = newTable[ "server" ].toString();	// Convert to string in case it is an ObjectId
+			message[ "destType" ] = "server";
 			message[ "request" ] = "$" + tip + " tip. Message from table: " + input[ "feedback" ];
 
-			var messageReturn = await addItem( message, db.db( "restaurant" ).collection( "messages" ) );
-
 			console.log( "Sending message from table " + newTable[ "table" ] + " to server " + newTable[ "server" ] + ":\n" + message[ "request" ] );
+
+			var messageReturn = await addItem( message, db.db( "restaurant" ).collection( "messages" ) );
+			console.log( "Message sent: " + JSON.stringify( messageReturn ) );
 		}
 
 		// Send the updated item back
