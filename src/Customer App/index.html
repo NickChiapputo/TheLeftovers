@@ -93,6 +93,7 @@
                   function setCookCook() {
                     sessionStorage.setItem('tableid',document.getElementById('new-num').value)
                     findID();
+                    Cookies.remove('current_order');
                     Cookies.set('table-num', document.getElementById('new-num').value, {path: '/', sameSite: 'strict'});
                   }
                 </script>
