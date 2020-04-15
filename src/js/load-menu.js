@@ -8,7 +8,7 @@ function loadMenu()
 
         var maxloc=-1;
         maxloc = Cookies.getJSON('max');
-        console.log(maxloc);
+        //console.log(maxloc);
         if (maxloc != undefined) {
             maxloc = maxloc[cats][0];
         }
@@ -57,7 +57,7 @@ function loadMenu()
             }
             else if( this.readyState == 4 && this.status != 200 )
             {
-                console.log( "Request inventory status response: " + this.status );
+                //console.log( "Request inventory status response: " + this.status );
             }
 	    };
 
@@ -89,14 +89,30 @@ function load_item() {
         document.getElementById("food_pic").style.backgroundImage = "url(".concat(obj.image,")");
         var ingArr = obj.ingredients;
         var hasIng = obj.hasIngredient;
+        var ingCount = obj.ingredientCount;
+        var inventory  = JSON.parse(window.localStorage.getItem('inventory'));
         for (i=0; i < ingArr.length; i++) {
-            currLab = document.getElementById("top".concat(i+1));
-            currLab.innerText = ingArr[i];
-            currLab.style.visibility = "visible";
-            currBox = document.getElementById("topping_".concat(i+1));
-            currBox.style.visibility = "visible";
-            if (hasIng[i] == 1) {
-                currBox.checked = true;
+            console.log( inventory[ingArr[i]]);
+            console.log( inventory[ingArr[i]]);
+            console.log( ingCount[i]);
+            if ( inventory[ingArr[i]] == undefined || inventory[ingArr[i]] < ingCount[i] ) {
+                currLab = document.getElementById("top".concat(i+1));
+                currLab.innerText = ingArr[i] + ' (out of stock)';
+                currLab.style.visibility = "visible";
+                currLab.style.color = 'red';
+                currBox = document.getElementById("topping_".concat(i+1));
+                currLab.checked = false;
+            }
+            else {
+                currLab = document.getElementById("top".concat(i+1));
+                currLab.innerText = ingArr[i];
+                currLab.style.visibility = "visible";
+                currLab.style.color = 'black';
+                currBox = document.getElementById("topping_".concat(i+1));
+                currBox.style.visibility = "visible";
+                if (hasIng[i] == 1) {
+                    currBox.checked = true;
+                }
             }
         }
         var allergens = document.getElementById('allerg');
@@ -309,7 +325,7 @@ function editRemoveItem(edRom) {
             err.innerText = "\nCannot delete or edit sent items";
             err.style.color = "red";
             err.style.display = "unset";
-            console.log("sent");
+            //console.log("sent");
         }
         else {
             temp.items.splice(selection, 1);
@@ -322,7 +338,7 @@ function editRemoveItem(edRom) {
             if (edRom == 1) {
                 window.location.href='Menu-Item.html';
             }
-            console.log("unsent");
+            //console.log("unsent");
         }
     }
     else {
