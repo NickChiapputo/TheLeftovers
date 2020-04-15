@@ -125,6 +125,7 @@ const server = http.createServer( ( req, res ) =>  {
 				employee[ "shifts" ] = [];
 				employee[ "tips" ] = 0;
 				employee[ "comps" ] = 0;
+				employee[ "hours" ] = 0;
 
 				console.log( "Employee to create: " + JSON.stringify( employee ) );
 
@@ -184,48 +185,50 @@ const server = http.createServer( ( req, res ) =>  {
 					return;
 	 			}
 
-				// Check if first is valid 
-				if( obj[ "first" ] === undefined || obj[ "first" ] === "" )
+				// Check to make sure that there is at least one field
+				if( ( obj[ "first" ] === undefined || obj[ "first" ] === "" ) &&
+					( obj[ "middle" ] === undefined || obj[ "middle" ] === "" ) &&
+					( obj[ "last" ] === undefined || obj[ "middle" ] === "" ) &&
+					( obj[ "type" ] === undefined || obj[ "type" ] === "" ) )
 				{
-					console.log( "Invalid first name: '" + obj[ "first" ] + "'." );
+					console.log( "All fields are empty." );
 
 					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "invalid first name" } ) );
+					res.end( JSON.stringify( { "response" : "all fields are empty. nothing to update" } ) );
 					return;
 				}
 
-				// Check if last is valid
-				if( obj[ "last" ] === undefined || obj[ "last" ] === "" )
-				{
-					cosole.log( "Invalid last name: '" + obj[ "last" ] + "'." );
-
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "invalid last name" } ) );
-					return;
-				}
-
-				// Check if type is valid
-				if( obj[ "type" ] === undefined || obj[ "type" ] === "" ||
-					( obj[ "type" ] !== "server" && obj[ "type" ] !== "manager" ) )
-				{
-					console.log( "Invalid type: '" + obj[ "type" ] + "'." );
-
-					res.statusCode = 400;
-					res.end( JSON.stringify( { "response" : "invalid type" } ) );
-					return;
-				}
-
-				// Create JSON object of updated employee
+	 			// Create updated employee object with just _id
 				var employee = {};
 				employee[ "_id" ] = obj[ "_id" ];
-				employee[ "first" ] = obj[ "first" ];
 
-				// Only add middle name if it exists
-				if( obj[ "middle" ] !== undefined & obj[ "middle" ] !== "" )
-					employee[ "middle" ] = obj[  "middle" ];
+				// If first name exists, add to updated list
+				if( obj[ "first" ] !== undefined && obj[ "first" ] !== "" )
+					employee[ "first" ] = obj[ "first" ];
 
-				employee[ "last" ] = obj[ "last" ];
-				employee[ "type" ] = obj[ "type" ];
+				// If middle name exists, add to updated list
+				if( obj[ "middle" ] !== undefined )
+					employee[ "middle" ] = obj[ "middle" ];
+
+				// If last name exists, add to updated list
+				if( obj[ "last" ] !== undefined && obj[ "last" ] !== "" )
+					employee[ "last" ] = obj[ "last" ];
+
+				// If type exists, add to updated list
+				if( obj[ "type" ] !== undefined && obj[ "type" ] !== ""  )
+				{
+					// Check if type is invalid value
+					if( obj[ "type" ] !== "server" && obj[ "type" ] !== "manager" ) 
+					{
+						console.log( "Invalid type '" + obj[ "type" ] + "'." );
+
+						res.statusCode = 400;
+						res.end( JSON.stringify( { "response" : "invalid type" } ) );
+						return;
+					}
+
+					employee[ "type" ] = obj[ "type" ];
+				}
 
 				console.log( "Employee to update information: " + JSON.stringify( employee ) );
 				editEmployee( employee, collection, res );
@@ -533,6 +536,7 @@ async function findEmployee( query, db, res )
 
 		// Update employee to logged in
 		var update = { $set : { "loggedIn" : 1 } };							// Set the loggedIn attribute to 1
+		update[ "$set" ][ "loginTime" ] = new Date().getTime();
 		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
 		loginReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
 
@@ -580,6 +584,9 @@ async function logout( query, db, res )
 
 		// Update employee to logged in
 		var update = { $set : { "loggedIn" : 0 } };							// Set the loggedIn attribute to 0
+		update[ "$unset" ] = { "loginTime" : "" };
+		update[ "$inc" ] = {};
+		update[ "$inc" ][ "hours" ] = ( ( new Date().getTime() ) - employee[ "loginTime" ] ) / ( 1000 * 3600 );
 		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
 		logoutReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
 
@@ -683,7 +690,9 @@ async function editEmployee( employee, collection, res )
 		query[ "_id" ] = mongo.ObjectId( employee[ "_id" ] );
 		var update = {};
 		update[ "$set" ] = {};
-		update[ "$set" ][ "first" ] = employee[ "first" ];
+
+		if( employee[ "first" ] !== undefined )
+			update[ "$set" ][ "first" ] = employee[ "first" ];
 
 		// If middle name is sent, update it. Otherwise unset it
 		if( employee[ "middle" ] !== undefined && employee[ "middle" ] !== "" )
@@ -691,8 +700,13 @@ async function editEmployee( employee, collection, res )
 		else
 		 	update[ "$unset" ] = { "middle" : "" };
 
-		update[ "$set" ][ "last" ] = employee[ "last" ];
-		update[ "$set" ][ "type" ] = employee[ "type" ];
+
+		if( employee[ "last" ] !== undefined )
+			update[ "$set" ][ "last" ] = employee[ "last" ];
+
+		if( employee[ "type" ] !== undefined )
+			update[ "$set" ][ "type" ] = employee[ "type" ];
+
 		var options = { returnOriginal : false, returnNewDocument : true };
 		console.log( "Employee edit query:  " + JSON.stringify( query ) );
 		console.log( "Employee edit update: " + JSON.stringify( update ) );

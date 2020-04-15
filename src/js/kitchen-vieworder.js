@@ -1,5 +1,8 @@
 function getOrders()
 {
+	var params = {}
+		params['ready'] = 0;
+
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
@@ -17,6 +20,7 @@ function getOrders()
 				var currItem = obj[i];
 				var name=[];
 				var allergens;
+				var notes=[];
 				var y=i+1;
 				localStorage.setItem('btn'+y,"");
 				if(currItem.status!="complete"&&currItem.status!="completed")
@@ -27,17 +31,30 @@ function getOrders()
 					currItem.items.forEach(function (food) {
 						var ingredients=[];
 						txt+="<p>Name:"+food.name+"</p>";
-						food.ingredients.forEach(function (ingredient){
-								ingredients.push(ingredient);
-						});
+
+						for(k=0;k<food.ingredients.length;k++)
+						{
+							if(food.hasIngredient[k]==1)
+							{
+								ingredients.push(food.ingredients[k]);
+							}
+						}
+						
+						if(food.notes!=undefined)
+						{
+							notes.push(food.notes+"<br>");
+						}
+
 
 						if(ingredients.length!=0)
 						{
 							txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
 						}
 					});
-					if(currItem.notes!=undefined)
-						txt+="Note:"+currItem.notes;
+					
+
+					if(notes.length!=0)
+						txt+="Note:"+notes.join(",");
 						var ide = "";
 						sessionStorage.setItem('btn'+y,currItem._id);
 					txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
@@ -55,8 +72,10 @@ function getOrders()
 	};
 
 	// Send a GET request to 64.225.29.130/inventory/view
-    xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
-	xmlHttp.send();
+    xmlHttp.open( "POST", "http://64.225.29.130/orders/get", true );
+	xmlHttp.send(JSON.stringify(params));
+	setTimeout(getOrders,5000);
+
 }
 
 function sendMessage(tableid)
