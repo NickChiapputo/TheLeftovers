@@ -215,3 +215,19 @@ a:hover, a:active {
     overflow: hidden;
     background-color: #f1f1f1;
   }
+
+  .menu-box-dropdown {
+    background-color: white;
+    color: black;
+    margin: 1vw 1vw;
+    padding: 0vw 0vw;
+    border: black;
+    border-width: 0.5vw;
+    border-style: solid;
+    border-radius: 5rem;
+}
+
+.menu-text-dropdown {
+    font-size: 6vh;
+    text-align: center;
+}

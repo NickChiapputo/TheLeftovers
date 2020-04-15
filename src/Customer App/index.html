@@ -36,15 +36,17 @@
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </div>
-        <div class="col-1" style="margin:auto;">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
-        </div>
+        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp()">
+          <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
+        </button>
+        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendRefill()">
+          <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
+        </button>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script> 
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/find-table-id.js"></script>
+          <script src="../js/table-messages.js"></script> 
         </div>
       </div>
     </div>
@@ -53,13 +55,13 @@
     <div class="container-fluid center-div">
       <div class="row menu-row">
         <a href="menu/menu.html" class="col menu-box">
-          <h1 class="menu-text">Place Order</h1>
+          <h1 class="menu-text">Menu</h1>
         </a>
         <a href="menu/View-Order.html" class="col menu-box">
-          <h1 class="menu-text">View Order</h1>
+          <h1 class="menu-text">Place Order</h1>
         </a>
           <a href="menu/Pay.html" class="col menu-box">
-            <h1 class="menu-text">Pay</h1>
+            <h1 class="menu-text">Pay Bill</h1>
           </a>
       </div>
       <div class="row menu-row">
@@ -89,6 +91,8 @@
               <div class="modal-body">    
                 <script>
                   function setCookCook() {
+                    sessionStorage.setItem('tableid',document.getElementById('new-num').value);
+                    findID();
                     Cookies.set('table-num', document.getElementById('new-num').value, {path: '/', sameSite: 'strict'});
                   }
                 </script>

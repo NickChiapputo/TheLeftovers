@@ -157,24 +157,29 @@ function displayShifts()
 							document.getElementById("monday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
 							shift.start+"-"+shift.end+"</p>";
 						}
-						else if(shift.date==day3)
+						else if(shift.date==day2)
 						{
 							document.getElementById("tuesday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
 							shift.start+"-"+shift.end+"</p>";
 						}
-						else if(shift.date==day4)
+						else if(shift.date==day3)
 						{
 							document.getElementById("wednesday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
 							shift.start+"-"+shift.end+"</p>";
 						}
-						else if(shift.date==day5)
+						else if(shift.date==day4)
 						{
 							document.getElementById("thursday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
 							shift.start+"-"+shift.end+"</p>";
 						}
-						else if(shift.date==day6)
+						else if(shift.date==day5)
 						{
 							document.getElementById("friday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
+							shift.start+"-"+shift.end+"</p>";
+						}
+						else if(shift.date==day6)
+						{
+							document.getElementById("saturday").innerHTML+="<p style=\"font-size:12px\" text-align:left>"+currItem.first+" "+currItem.last+":"+
 							shift.start+"-"+shift.end+"</p>";
 						}
 				});

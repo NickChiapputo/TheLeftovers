@@ -56,7 +56,7 @@ function getMenu()
 
 function displayInfo(name)
 {
-	localStorage.setItem('food-Item',name);
+	sessionStorage.setItem('food-Item',name);
 	window.document.location="./viewfood.html";
 
 }
