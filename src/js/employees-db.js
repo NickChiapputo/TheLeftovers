@@ -125,6 +125,7 @@ const server = http.createServer( ( req, res ) =>  {
 				employee[ "shifts" ] = [];
 				employee[ "tips" ] = 0;
 				employee[ "comps" ] = 0;
+				employee[ "hours" ] = 0;
 
 				console.log( "Employee to create: " + JSON.stringify( employee ) );
 
@@ -535,6 +536,7 @@ async function findEmployee( query, db, res )
 
 		// Update employee to logged in
 		var update = { $set : { "loggedIn" : 1 } };							// Set the loggedIn attribute to 1
+		update[ "$set" ][ "loginTime" ] = new Date().getTime();
 		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
 		loginReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
 
@@ -582,6 +584,9 @@ async function logout( query, db, res )
 
 		// Update employee to logged in
 		var update = { $set : { "loggedIn" : 0 } };							// Set the loggedIn attribute to 0
+		update[ "$unset" ] = { "loginTime" : "" };
+		update[ "$inc" ] = {};
+		update[ "$inc" ][ "hours" ] = ( ( new Date().getTime() ) - employee[ "loginTime" ] ) / ( 1000 * 3600 );
 		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
 		logoutReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
 
