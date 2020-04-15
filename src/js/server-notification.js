@@ -19,7 +19,7 @@ function getMessages()
 					var txt = "";
 					alert('new messages');
 					obj.forEach(function (message) {
-						txt+="<p>"+message.src+" "+message.request+"</p>";
+						txt+=message.src+" "+message.request+" ";
 					});
 					sessionStorage.setItem('newmessage',txt)
 					updateNotifications();
