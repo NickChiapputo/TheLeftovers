@@ -16,7 +16,7 @@
     <script src="../../js/js.cookie.js" type="text/javascript"></script>
 
     <!-- Original js -->
-    <script type="text/javascript" src="../../js/rewards.js"></script>
+    <script type="text/javascript" src="../../js/printRewards.js"></script>
     
     <title>The Leftovers!</title>
   </head>
@@ -51,21 +51,21 @@
 
     <!-- Page contents-->
     <div>
+      <div class="row">
+        <div class="col menu-row" onload="printRewardsAccounts()">
+            <h1 style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; font-size: 8vw; color: white; outline-color: black;">Thanks for signing up, <span id="rewards-Name"></span></h1>
+        </div>
+      </div>
       <p></p>
-      <div class="row" style="max-height: 20vh; min-height: 20vh;">
-        <input id="textarea-rewards-accounts-log" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Rewards #" required/>
+      <div class="row menu-row" onload="printRewardsAccounts()">
+        <div class="col menu-row">
+          <h1 style="color: white; text-align: center; font-size: 4vw; padding-top: 10vh; padding-bottom: 0vh;">Your loyalty number is <span id="rewards-Number"></span></h1>
+        </div>
       </div>
       <div class="row menu-row">
-        <button class="col menu-box" style="background-color: limegreen;  max-height: 80%; min-height: 80%;" onclick="logRewardsAccounts()">
-        <!--a href="log.html"!-->
-            <h1 class="menu-text" style="background-color: limegreen;">Login</h1>
-        <!--/a!-->
-      </button>
-      </div>
-      <div class="row menu-row">
-        <div class="col menu-box" style="background-color: limegreen; max-height: 80%; min-height: 80%;">
-        <a href="sign.html">
-            <h1 class="menu-text" style="background-color: limegreen;">Sign Up</h1>
+        <div class="col menu-box" style="background-color: blue;">
+            <a href="../index.html">
+                <h1 class="menu-text" style="background-color: blue;">Return to Main Menu</h1>
         </a>
         </div>
       </div>  
