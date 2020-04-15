@@ -30,7 +30,6 @@ function send_order()
 				console.log("Sent Item: \n" + JSON.stringify(obj));
 				loadOrderItems();
 			}
-
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -55,11 +54,33 @@ function sendOrderBtn() {
 		document.getElementById('send-order-window').innerText = "Nothing to send";
 		document.getElementById('send-body').style.display = 'none';
 		document.getElementById('send-yes').style.display = 'none';
-		document.getElementById('send-no').style.display = 'none';		
+		document.getElementById('send-no').style.display = 'none';
 		document.getElementById('send-dismiss').style.display = 'unset';
 	}
 	else if (ord.status != 'in progress') {
 		window.location.href="Pay.html";
+	}
+	else {
+		document.getElementById('send-order-window').innerText = "Send order to kitchen?";
+		document.getElementById('send-body').style.display = 'unset';
+		document.getElementById('send-yes').style.display = 'unset';
+		document.getElementById('send-no').style.display = 'unset';
+		document.getElementById('send-dismiss').style.display = 'none';
+	}
+}
+
+function serverSendOrderBtn() {
+	var ord = Cookies.getJSON('current_order');
+	console.log(ord.items.length);
+	if (ord.items == undefined || ord.items.length == 0) {
+		document.getElementById('send-order-window').innerText = "Nothing to send";
+		document.getElementById('send-body').style.display = 'none';
+		document.getElementById('send-yes').style.display = 'none';
+		document.getElementById('send-no').style.display = 'none';
+		document.getElementById('send-dismiss').style.display = 'unset';
+	}
+	else if (ord.status != 'in progress') {
+		window.location.href="../server_bill_view.html";
 	}
 	else {
 		document.getElementById('send-order-window').innerText = "Send order to kitchen?";
