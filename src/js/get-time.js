@@ -31,6 +31,8 @@ function week(){
   let nextweek = (date.getMonth()+1)+'/'+(date.getDate()+(6-date.getDay()))+'/'+date.getFullYear();
   let duration = currentweek+'-'+nextweek;
   document.getElementById("date").innerHTML=duration;
-  return duration;
+
   
 }
+
+module.exports = week;

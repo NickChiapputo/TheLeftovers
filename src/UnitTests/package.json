@@ -1,0 +1,16 @@
+{
+  "name": "UnitTests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "get-time.test.js",
+  "dependencies": {
+    "jest": "^25.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
