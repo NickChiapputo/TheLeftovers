@@ -99,9 +99,9 @@ function getOrdersByTable()
                         }
                         //console.log("Paid: ", paid);
                 }
+                window.localStorage.setItem('bill_orders', JSON.stringify(billOrders));
                 if (billExists == true) {
                     paid = (subtotal + tax - total);
-                    window.localStorage.setItem('bill_orders', JSON.stringify(billOrders));
                     out += "\n";
                     console.log(out);
                     output += "Subtotal: $" + addTrailingZeros(subtotal) + '\n';
@@ -110,6 +110,9 @@ function getOrdersByTable()
                     output += '___________________________________________\n';
                     output += 'Total: $' + addTrailingZeros(total) + '\n';
                     document.getElementById('itemList').innerText = output;
+                }
+                else {
+                    document.getElementById('itemList').innerText = "No items have been ordered yet";
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -273,6 +276,7 @@ function handlePayment(frac) {
     if (total <= 0) {
         Cookies.remove('current_order');
     }
+
     getOrdersByTable();
     document.getElementsByName( "order-pay-method" )[ 0 ].value = "N/A";
     document.getElementsByName( "order-receipt-method" )[ 0 ].value = "N/A";
