@@ -23,7 +23,7 @@ function loadBill(){
             var order = 0;
             var totalPrice = 0;
             for (var i = 0; i < numBills; i++){
-                if (table == obj[i].table) {
+                if (table == obj[i].table && obj[i].status != 'paid') {
                     totalPrice += obj[i].total;
                     showBill(obj[i], ++order);
                 }
@@ -81,26 +81,94 @@ function showBill(obj, orderNo){
 
 function compBill(compAmt){
 
-    //entire string of bill
-    var billStr = document.getElementById('itemList').innerText;
-    var grandTotal = 0;
-    var totalPlacement = 0;
-    //find actual grand total
-    for (var i = billStr.length - 1; i >= 0; i--){
+    //order num to comp
+    var orderToComp = document.getElementById('comp-order-num').value;
 
-        if (billStr[i] == "$") {
-            grandTotal = billStr.substring(i + 1);
-            totalPlacement = i;
-            break;
-        }
+    //set table Number
+    var table = Cookies.get('table-num');
+    if (table == undefined) {
+        table = 0;
     }
+    document.getElementById('tableNum').innerText = table;
 
-    //calculate comp'd amount
-    grandTotal -= +grandTotal * (+compAmt/100);
 
-    //update bill
-    document.getElementById('itemList').innerText = billStr.substring(0, totalPlacement) + grandTotal;
+    //first, get list of orders
+    var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) {
+			//var doc = document.getElementById( 'textarea-view' );
+			var txt ="";
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+            //get total number of tables
+			var numBills = Object.keys(obj).length;
+            //loop through bills
 
+            var validOrders = 0;
+            for (var i = 0; i < numBills; i++){
+                if (table == obj[i].table && obj[i].status != 'paid') {
+                    validOrders++;
+                    if (validOrders == orderToComp){
+                        sendComp(obj[i], compAmt);
+                        return;
+                    }
+                }
+            }
+            document.getElementById('comp-response').innerHTML = 'No such order exists.';
+        }
+
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request inventory status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
+	xmlHttp.send();
+
+    loadBill();
+
+}
+
+function sendComp(orderObj, compAmt){
+    var comp = {};
+
+    var serverID = sessionStorage.getItem('employee-id')
+
+	// Get order payment data
+	comp[ "_id" ] = orderObj._id;
+	comp[ "amount" ] = compAmt;
+	comp[ "server" ] = serverID;
+
+    if (parseFloat(compAmt) > orderObj.total || parseInt(compAmt) > orderObj.total) {
+        document.getElementById('comp-response').innerHTML = 'Comp amount cannot be greater than price of order.';
+        return;
+    }
+    /*alert(order[ "_id" ]);
+	alert(order[ "amount" ]);
+	alert(order[ "method" ]);
+	alert(order[ "receipt" ]);
+	alert(order[ "tip" ]);
+	alert(order[ "feedback" ]);
+	alert(order[ "email" ]);*/
+    alert(JSON.stringify( comp ));
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			//document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			//document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/orders/pay
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/comp" );
+	xmlHttp.send( JSON.stringify( comp ) );
 }
 
 function splitBill(splitAmt){
@@ -120,6 +188,7 @@ function splitBill(splitAmt){
 
     //calculate comp'd amount
     grandTotal = +grandTotal - +splitAmt;
+    grandTotal = grandTotal.toFixed(2);
 
     //update bill
     document.getElementById('itemList').innerText = billStr.substring(0, totalPlacement) + grandTotal;
@@ -141,7 +210,7 @@ function applyCoupon(code){
             //loop through coupons
             for (var i = 0; i < numCoupons; i++){
                 if (obj[i]._id == code){
-                    alert(obj[i]._id +"\n"+code);
+                    alert(obj[i].id +"\n"+code);
                     compBill(obj[i].discount);
                 }
             }
@@ -156,4 +225,85 @@ function applyCoupon(code){
 	xmlHttp.open( "GET", "http://64.225.29.130/coupons/view", true );
 	xmlHttp.send();
 
+}
+
+function sendPayment(){
+    //set table Number
+    var table = Cookies.get('table-num');
+    if (table == undefined) {
+        table = 0;
+    }
+    document.getElementById('tableNum').innerText = table;
+
+
+    //first, get list of orders
+    var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 ) {
+			//var doc = document.getElementById( 'textarea-view' );
+			var txt ="";
+			// Response is a JSON array of items
+			var obj = JSON.parse( this.responseText );
+            //get total number of tables
+			var numBills = Object.keys(obj).length;
+            //loop through bills
+
+            var order = 0;
+            var totalPrice = 0;
+            for (var i = 0; i < numBills; i++){
+                if (table == obj[i].table && obj[i].status != 'paid') {
+                    payOrder(obj[i]);
+                }
+            }
+
+        }
+
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			console.log( "Request orders status response: " + this.status );
+		}
+	};
+
+	// Send a GET request to 64.225.29.130/inventory/view
+	xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
+	xmlHttp.send();
+}
+
+function payOrder(orderObj)
+{
+	var order = {};
+
+	// Get order payment data
+	order[ "_id" ] = orderObj._id;
+	order[ "amount" ] = orderObj.total;
+	order[ "method" ] = document.getElementsByName( "payment-method" )[ 0 ].value;
+	order[ "receipt" ] = document.getElementsByName( "receipt-method" )[ 0 ].value;
+	order[ "tip" ] = document.getElementsByName( "tip-amount" )[ 0 ].value;
+	order[ "feedback" ] = document.getElementsByName( "feedback" )[ 0 ].value;
+	order[ "email" ] = document.getElementsByName( "email" )[ 0 ].value;
+
+    /*alert(order[ "_id" ]);
+	alert(order[ "amount" ]);
+	alert(order[ "method" ]);
+	alert(order[ "receipt" ]);
+	alert(order[ "tip" ]);
+	alert(order[ "feedback" ]);
+	alert(order[ "email" ]);*/
+    alert(JSON.stringify( order ));
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if( this.readyState == 4 && this.status == 200 )
+		{
+			document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+		else if( this.readyState == 4 && this.status != 200 )
+		{
+			document.getElementById( "textarea-orders-pay" ).innerHTML = "Status response: " + this.status + "\n" + this.responseText;
+		}
+	};
+
+	// Send a POST request to 64.225.29.130/orders/pay
+	xmlHttp.open( "POST", "http://64.225.29.130/orders/pay" );
+	xmlHttp.send( JSON.stringify( order ) );
 }
