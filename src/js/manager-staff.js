@@ -135,9 +135,9 @@ function getEmployeeList() {
                         +currItem.last +"</td></td><td style=' background-color: white; color: black;'>"
                         +currItem.pin +"</td><td style=' background-color: white; color: black;'>"
                         +currItem.type+"</td><td style=' background-color: white; color: black;'>"
-						+currItem.tips+"</td><td style=' background-color: white; color: black;'>"
+						+"$"+(currItem.tips).toFixed(2)+"</td><td style=' background-color: white; color: black;'>"
 						+currItem.comps+"</td><td style=' background-color: white; color: black;'>"
-                        +currItem.hours+"</td></tr>";
+                        +(currItem.hours).toFixed(2)+"</td></tr>";
 			}
 			txt += "</table>"
 			document.getElementById('emptxt').innerHTML = txt;
