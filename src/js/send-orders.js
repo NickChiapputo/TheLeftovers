@@ -24,9 +24,12 @@ function send_order()
 			console.log(obj);
 			if( obj == null )
 			 	console.log("Unable to send item.\n");
-			else
-                console.log("Sent Item: \n" + 
-			 		JSON.stringify(obj));
+			else {
+				console.log("Sent Item: \n" + JSON.stringify(obj));
+				Cookies.remove('current_order');
+				loadOrderItems();
+			}
+
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -38,15 +41,6 @@ function send_order()
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
 	xmlHttp.send( JSON.stringify(jsonOrder) );
-
-	jsonOrder = (Cookies.getJSON('current_order'))
-	var i;
-	for (i=0; i < jsonOrder.items.length; i++) {
-		jsonOrder.items[i].sent = 'true';
-	}
-	jsonOrder.status = 'ordered';
-	Cookies.set('current_order', jsonOrder, {path: '/', sameSite: 'strict'});
-	loadOrderItems();
 }
 
 function sendOrderBtn() {
