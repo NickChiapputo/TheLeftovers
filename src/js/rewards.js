@@ -55,8 +55,10 @@ function createRewardsAccount()
 				"    Phone Number: " + obj[ "_id" ] + "\n" + 
 				"    Last Meal: " + obj[ "lastMeal" ] + "\n";
             console.log( this.responseText );
-            localStorage.setItem("")
-            window.location="signed.html";
+            sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
+            sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
+            sessionStorage.setItem('rewards-meal-save',obj[ "lastMeal" ]);
+            window.location="log.html";
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -77,10 +79,10 @@ function createRewardsAccountSubmit()
 	return false;
 }
 
-function printRewardsAccounts()
+function logRewardsAccounts()
 {
 	var params = {};
-	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
+	params[ "phone" ] = document.getElementById( 'textarea-rewards-accounts-log' ).value;
 
 	var xmlHttp = new XMLHttpRequest();
 
@@ -88,18 +90,23 @@ function printRewardsAccounts()
 		if( this.readyState == 4 && this.status == 200 )
 		{
 			var obj = JSON.parse( this.responseText );
-			document.getElementById( 'textarea-rewards-accounts-create' ).innerHTML = "New Account: \n" + 
+			document.getElementById( 'textarea-rewards-accounts-log' ).innerHTML = "Logged into: \n" + 
 				"    Name: " + obj[ "name" ] + "\n" + 
 				"    Phone Number: " + obj[ "_id" ] + "\n" + 
 				"    Last Meal: " + obj[ "lastMeal" ] + "\n";
-            console.log( this.responseText );
-            localStorage.setItem("")
+			console.log( this.responseText );
+			sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
+			sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
+			obj[ "lastMeal" ].forEach(function (meal) {
+				sessionStorage.setItem('rewards-meal-save', meal.name);
+				sessionStorage.setItem('rewards-meal-image-save', meal.image);
+			});
             window.location="log.html";
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			document.getElementById( 'textarea-rewards-accounts-create' ).innerHTML = "Create rewards account status response: " + this.status;
-			console.log( "Create rewards account status response: " + this.status );
+			document.getElementById( 'textarea-rewards-accounts-log' ).innerHTML = "Log into rewards account status response: " + this.status;
+			console.log( "Log into rewards account status response: " + this.status );
 		}
 	};
 
