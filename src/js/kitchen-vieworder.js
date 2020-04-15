@@ -1,5 +1,8 @@
 function getOrders()
 {
+	var params = {}
+		params['ready'] = 0;
+
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
@@ -69,8 +72,9 @@ function getOrders()
 	};
 
 	// Send a GET request to 64.225.29.130/inventory/view
-    xmlHttp.open( "GET", "http://64.225.29.130/orders/view", true );
-	xmlHttp.send();
+    xmlHttp.open( "POST", "http://64.225.29.130/orders/get", true );
+	xmlHttp.send(JSON.stringify(params));
+
 }
 
 function sendMessage(tableid)
