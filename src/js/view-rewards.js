@@ -1,7 +1,6 @@
 
 function printRewardsAccounts()
 {
-	alert(sessionStorage.getItem('rewards-name-save'));
     document.getElementById("welcome-rewards-header").innerHTML += sessionStorage.getItem('rewards-name-save');
     document.getElementById("number-rewards-header").innerHTML += sessionStorage.getItem('rewards-number-save');
 
@@ -21,3 +20,5 @@ function printRewardsAccounts()
 
     document.getElementById("if-else-display").innerHTML += text;
 }
+
+module.exports = {  printRewardsAccounts };

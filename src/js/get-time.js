@@ -35,4 +35,4 @@ function week(){
   
 }
 
-module.exports = week;
+module.exports = {week, addZero, clock} ;
