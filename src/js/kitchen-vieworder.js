@@ -10,59 +10,83 @@ function getOrders()
 			var doc = document.getElementById( 'order-view-area' );
 
 			console.log( this.responseText );
-		
+
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			var numItems = Object.keys( obj ).length;
 			var txt="";
-			for(i=0; i<numItems; i++)
-			{
-				var currItem = obj[i];
-				var name=[];
-				var allergens;
-				var notes=[];
-				var y=i+1;
-				localStorage.setItem('btn'+y,"");
-				if(currItem.status!="complete"&&currItem.status!="completed")
-				{
-					txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
-					txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
-					txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
-					currItem.items.forEach(function (food) {
-						var ingredients=[];
-						txt+="<p>Name:"+food.name+"</p>";
 
-						for(k=0;k<food.ingredients.length;k++)
-						{
-							if(food.hasIngredient[k]==1)
-							{
-								ingredients.push(food.ingredients[k]);
-							}
+			// Skipping reload if nothing has changed
+			var cooksOrders = sessionStorage.getItem('cooksOrders');
+			sessionStorage.setItem('cooksOrders', JSON.stringify(obj));
+			var isItDifferent = false;
+			if (cooksOrders == null) {
+				cooksOrders = obj;
+				isItDifferent = true;
+			}
+			else {
+				cooksOrders = JSON.parse(cooksOrders);
+				if (cooksOrders.length != obj.length) {
+					isItDifferent = true;
+				}
+				else {
+					for (var i=0; i < cooksOrders.length; i++) {
+						if (cooksOrders[i]._id != obj[i]._id) {
+							isItDifferent = true;
 						}
-						
-						if(food.notes!=undefined)
-						{
-							notes.push(food.notes+"<br>");
-						}
-
-
-						if(ingredients.length!=0)
-						{
-							txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
-						}
-					});
-					
-
-					if(notes.length!=0)
-						txt+="Note:"+notes.join(",");
-						var ide = "";
-						sessionStorage.setItem('btn'+y,currItem._id);
-					txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
+					}
 				}
 			}
+
+			if (isItDifferent == true) {
+				for(i=0; i<numItems; i++)
+				{
+					var currItem = obj[i];
+					var name=[];
+					var allergens;
+					var notes=[];
+					var y=i+1;
+					localStorage.setItem('btn'+y,"");
+					if(currItem.status=='ordered')
+					{
+						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
+						txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
+						txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
+						currItem.items.forEach(function (food) {
+							var ingredients=[];
+							txt+="<p>Name:"+food.name+"</p>";
+
+							for(k=0;k<food.ingredients.length;k++)
+							{
+								if(food.hasIngredient[k]==1)
+								{
+									ingredients.push(food.ingredients[k]);
+								}
+							}
+							
+							if(food.notes!=undefined)
+							{
+								notes.push(food.notes+"<br>");
+							}
+
+
+							if(ingredients.length!=0)
+							{
+								txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+							}
+						});
+						
+
+						if(notes.length!=0)
+							txt+="Note:"+notes.join(",");
+							var ide = "";
+							sessionStorage.setItem('btn'+y,currItem._id);
+						txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
+					}
+				}
+				doc.innerHTML=txt;
+			}
 			
-			console.log( this.responseText );
-			doc.innerHTML=txt;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
