@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../../js/load-menu.js"></script>
     <script type="text/javascript" src="../../js/send-orders.js"></script>
     <script src="../../js/pay-bill.js"></script>
+    <script src="../../js/customer-verify-coupon.js"></script>
 
     <!-- Cookies library -->
     <script src="../../js/js.cookie.js"></script>
@@ -37,7 +38,12 @@
             <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-
+        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
+          <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
+        </button>
+        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
+          <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
+        </button>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
           <script src="../../js/get-time.js"> </script> 
@@ -60,13 +66,13 @@
             <div class="col-6">
                 <div class="text-box" style="overflow-y: scroll; width: 100%; min-height: 100%; max-height: 50vh;">
                   <h1 style="font-weight: bold;">Bill</h1>
-                  <p style="font-size: 1.75vw" id="itemList" >No items have been ordered yet</p>
+                  <p style="font-size: 1.75vw" id="itemList" >When the kitchen finishes your order, you'll see it here"</p>
                 </div>
             </div>
             <div class="col-5">
 
               <!-- Add tip modal button -->
-              <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#add-tip" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
+              <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#add-tip" style="min-width: 100%; min-height: 13%; background-color:white; color: black;">
                 <h1 class="menu-text" id="tip-label">Add tip</h1>
               </button>
               <!-- Add tip modal window -->
@@ -91,7 +97,7 @@
               </div>
 
               <!-- Leave a note modal button -->
-              <button onclick="loadNote()" type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#leave-note" style="min-width: 100%; min-height: 15%; background-color:white; color: black;">
+              <button onclick="loadNote()" type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#leave-note" style="margin-top: 0vh; margin-bottom: 0vh;min-width: 100%; min-height: 13%; background-color:white; color: black;">
                 <h1 class="menu-text">Leave a note</h1>
               </button>
               <!-- Leave a note modal window -->
@@ -139,7 +145,7 @@
 
               <!-- Choose payment type -->
               <div class="dropdown col-2" style="min-width: 100%; min-height: 13%;">
-                <select name="order-pay-method" class="btn btn-secondary dropdown-toggle menu-box-dropdown menu-text-dropdown" style="min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
+                <select name="order-pay-method" class="btn btn-secondary dropdown-toggle menu-box-dropdown menu-text-dropdown" style="margin: 2vh 0vh; min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
                   <option style="font-size: xx-large; font-style: italic;" value="N/A" selected="selected">*Choose payment method</option>
                   <option style="font-size: xx-large;" value="card">Card</option>
                   <option style="font-size: xx-large;" value="cash">Cash</option>
@@ -147,16 +153,64 @@
               </div>
 
               <!-- Choose receipt type -->
-              <div class="dropdown col-2" style="min-width: 100%; min-height: 15%;">
-                <select name="order-receipt-method" class="btn btn-secondary dropdown-toggle  menu-box-dropdown menu-text-dropdown" style="min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
+              <div class="dropdown col-2" style="min-width: 100%; min-height: 13%;">
+                <select name="order-receipt-method" class="btn btn-secondary dropdown-toggle  menu-box-dropdown menu-text-dropdown" style="margin: 0vh 0vh; min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
                   <option style="font-size: xx-large; font-style: italic;" value="N/A" selected="selected">*Choose receipt method</option>
                   <option style="font-size: xx-large;" value="email">E-Mail</option>
                   <option style="font-size: xx-large;" value="print">Print</option>
                 </select>
               </div>
 
+              <!-- Add coupon modal button -->
+              <button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#add-coupon" style="min-width: 100%; min-height: 13%; background-color:white; color: black;">
+                <h1 class="menu-text" id="coupon-label">Add coupon</h1>
+              </button>
+              <!-- Add coupon modal window -->
+              <div class="modal fade" id="add-coupon" tabindex="-1" role="dialog" aria-labelledby="add-coupon" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Enter coupon id and press submit</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">    
+                      <form>
+                        <input type="text" min=0 autocomplete="off" id="coupon-input" value="">
+                        <button type="reset" class="btn btn-primary" data-dismiss="modal" onclick="customerCouponVerification(); $('#coupon-success').modal('show')">Submit</button>
+                        <p id="cokies" style="display: none;">as</p>
+                      </form>          
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Coupon response modal window -->
+              <div class="modal fade" id="coupon-success" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 style="color: red" class="modal-title" id="coupon-success-title">Invalid coupon</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div id="coupon-success-body" class="modal-body">
+                      <p id="coupon-success-text">Coupon invalid</p>
+                    </div>
+                    <div class="modal-footer" id="coupon-foot-fail">
+                      <button type="button" style="min-width: 100%;" class="btn btn-outline-danger" data-dismiss="modal">Close window</button>
+                    </div>
+                    <div class="modal-footer" id="coupon-foot-success">
+                      <button type="button" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- Pay modal button -->
-              <button onclick="getOptions()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#pay-order" style="background-color:rgb(159, 245, 195); min-width: 100%; min-height: 20%; color: black;">
+              <button onclick="getOptions()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#pay-order" style="background-color:rgb(159, 245, 195); min-width: 100%; min-height: 15%; color: black;">
                 <h1 class="menu-text" id='pay-bill-button'>Pay bill</h1>
               </button>
 

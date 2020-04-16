@@ -31,13 +31,11 @@ function sendHelp(note)
 
                 alert("Server "+params['dest']+" was notified");
                 console.log( this.responseText );
-                return true
             }
             else if( this.readyState == 4 && this.status != 200 )
             {
         //			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
                 console.log( "Rewards accounts inventory status response: " + this.status );
-                return false
             }
         };
 
