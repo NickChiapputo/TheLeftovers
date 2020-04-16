@@ -156,6 +156,11 @@ function changeColor(number)
 
 function managerSearch()
 {
+	var query = {
+		"type" : "manager",
+		"loggedIn" : 1
+	};
+
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
@@ -172,11 +177,8 @@ function managerSearch()
 			for( i = 0; i < numItems; i++ )
 			{
 				var employee = obj[ i ];
-
-				if( employee[ "type" ] === "manager" && employee[ "loggedIn" ] === 1 )
-				{
-					help( employee[ "_id" ] );
-				}
+				help( employee[ "_id" ] );
+				alert( employee[ "first" ] + " " + employee[ "last" ] + " (" + employee[ "type" ] + ") was notified" );
 			}
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -186,8 +188,8 @@ function managerSearch()
 	};
 
 	// Send a GET request to 64.225.29.130/inventory/view
-    xmlHttp.open( "GET", "http://64.225.29.130/employees/view", true );
-	xmlHttp.send();
+    xmlHttp.open( "POST", "http://64.225.29.130/employees/get", true );
+	xmlHttp.send( JSON.stringify( query ) );
 }
 
 function help(managerid)
@@ -211,7 +213,6 @@ function help(managerid)
 				var obj = JSON.parse( this.responseText );
 				var numItems = Object.keys( obj ).length;
 	
-				alert("Manager "+managerid+" was notified");
 				console.log( this.responseText );
 			}
 			else if( this.readyState == 4 && this.status != 200 )
