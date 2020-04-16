@@ -60,8 +60,7 @@ function getOrdersByTable()
                 }*/
 
                 for( p = 0; p < numItems; p++ ) {
-                    //if (obj[p].table == table && searchBill(obj[p]._id) == false) {
-                    if (obj[p].table == table && obj[p].status != 'paid') {
+                    if (obj[p].table == table && obj[p].status != 'paid' && obj[p].status != 'ordered') {
                         obj[p].tip = 0;
                         billOrders.push(obj[p]);
                     }
@@ -112,7 +111,7 @@ function getOrdersByTable()
                     document.getElementById('itemList').innerText = output;
                 }
                 else {
-                    document.getElementById('itemList').innerText = "No items have been ordered yet";
+                    document.getElementById('itemList').innerText = "When the kitchen finishes your order, you'll see it here";
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
