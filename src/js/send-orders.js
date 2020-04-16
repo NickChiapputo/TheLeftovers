@@ -2,6 +2,7 @@ function send_order()
 {
 	var jsonOrder = (Cookies.getJSON('current_order'));
 	jsonOrder.status = 'ordered';
+	jsonOrder['rewards'] = sessionStorage.getItem('rewards-number-save');
 
 	for (i = jsonOrder.items.length - 1; i >= 0; i--) {
 		jsonOrder.items[i].sent = 'true';
