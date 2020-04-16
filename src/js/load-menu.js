@@ -137,9 +137,9 @@ function load_ingredients() {
         for (i=0; i < ingArr.length; i++) {
             obj.hasIngredient[i] = 0;
             currLab = document.getElementById("top".concat(i+1));
-            currLab.innerText = ingArr[i];
+            //currLab.innerText = ingArr[i];
             currBox = document.getElementById("topping_".concat(i+1));
-            currBox.style.visibility = "visible";
+            //currBox.style.visibility = "visible";
             if (currBox.checked == true) {
                 str = str.concat(currLab.innerText, ', ');
                 obj.hasIngredient[i] = 1;
