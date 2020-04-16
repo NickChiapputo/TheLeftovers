@@ -246,34 +246,61 @@ function createCoupon( coupon, collection, res )
  	} );
 }
 
-function findCoupon( coupon, collection, res )
+async function findCoupon( coupon, collection, res )
 {
 	console.log( "Attempting coupon verification:\n    _id: " + coupon[ "_id" ] + "\n" );
 
-	// Find and update the item
-	collection.findOne( coupon, function( err, result ) {
-		if( err )
+	try
+	{
+		// Find coupon
+		var couponReturn = await getItem( coupon, collection );
+
+		if( couponReturn === null )
 		{
-			console.log( "Unable to verify coupon." );
-	 		res.statusCode = 500;																		// Internal Server Error
-	 		res.end( JSON.stringify( { "response" : "unable to verify coupon" } ) );	// Give error response to client
-	 		throw err;
-			return;
+			console.log( "Unable to verify coupon" );
+
+	 		res.statusCode = 500;
+	 		res.end( JSON.stringify( { "response" : "unable to verify coupon" } ) );
+	 		return;
 		}
 
-		if( result == null )
-		{
-			res.statusCode = 200;
-			res.end( JSON.stringify( { "success" : "no" } ) );
-			return;
-		}
-		
-		// Display updated table for debugging
- 		console.log( "Successful verification: " + JSON.stringify( result.value ) ); 
+		console.log( "Successful verification : " + JSON.stringify( couponReturn.value ) );
 
-		// Send a positive signal back
-		res.end( JSON.stringify( { "success" : "yes" } ) );
-	});
+		// Delete the coupon
+		var deleteReturn = await removeItem( coupon, collection );
+
+		if( deleteReturn[ "deletedCount" ] !== 1 )
+		{
+			console.log( "Unable to delete coupon" );
+
+	 		res.statusCode = 500;
+	 		res.end( JSON.stringify( { "response" : "unable to delete coupon" } ) );
+	 		return;
+		}
+
+		console.log( "Succesful deletion: " + JSON.stringify( deleteReturn ) );
+
+		// Return coupon to client
+		res.end( JSON.stringify( couponReturn ) );
+	}
+	catch( e )
+	{
+		console.log( "Fatal error while verifying.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response": "fatal error while verifrying" } ) );
+		return;
+	}
+}
+
+async function getItem( query, collection )
+{
+	return collection.findOne( query );
+}
+
+async function removeItem( query, collection )
+{
+	return collection.deleteOne( query );
 }
 
 function deleteCoupon( coupon, collection, res )

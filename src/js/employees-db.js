@@ -125,6 +125,7 @@ const server = http.createServer( ( req, res ) =>  {
 				employee[ "shifts" ] = [];
 				employee[ "tips" ] = 0;
 				employee[ "comps" ] = 0;
+				employee[ "hours" ] = 0;
 
 				console.log( "Employee to create: " + JSON.stringify( employee ) );
 
@@ -453,6 +454,22 @@ const server = http.createServer( ( req, res ) =>  {
 	 			removeShift( { "_id" : new mongo.ObjectId( obj[ "_id" ] ) }, shift, collection, res );
 	 		});
 		}
+		else if( path == "/employees/get" )
+		{
+	 		// Stringified JSON of new account values
+	 		let body = '';
+
+	 		// Asynchronous. Keep appending data until all data is read
+	 		req.on( 'data', ( chunk ) => { body += chunk; } );
+
+			// Data is finished being read. Pay order
+			req.on( 'end', () => {
+				// Get JSON object sent from user
+				var obj = JSON.parse( body );
+			
+				getList( obj, collection, res );
+			});
+		}
 	 	else
 	 	{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -535,6 +552,7 @@ async function findEmployee( query, db, res )
 
 		// Update employee to logged in
 		var update = { $set : { "loggedIn" : 1 } };							// Set the loggedIn attribute to 1
+		update[ "$set" ][ "loginTime" ] = new Date().getTime();
 		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
 		loginReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
 
@@ -582,6 +600,9 @@ async function logout( query, db, res )
 
 		// Update employee to logged in
 		var update = { $set : { "loggedIn" : 0 } };							// Set the loggedIn attribute to 0
+		update[ "$unset" ] = { "loginTime" : "" };
+		update[ "$inc" ] = {};
+		update[ "$inc" ][ "hours" ] = ( ( new Date().getTime() ) - employee[ "loginTime" ] ) / ( 1000 * 3600 );
 		var options = { returnOriginal: false, returnNewDocument: true };	// Return the updated document
 		logoutReturn = await editItem( query, update, options, db.db( "restaurant" ).collection( "employees" ) );
 
@@ -813,5 +834,29 @@ function removeShift( employeeID, shift, collection, res )
 		// Send the updated item back
 		res.end( JSON.stringify( result.value ) );
 	});
+}
+
+
+async function getList( query, collection, res )
+{
+	try
+	{
+		console.log( "Searching for items that match " + JSON.stringify( query ) + " in collection " + collection.collectionName + "." );
+
+		var list = await getItems( query, {}, collection );
+
+		console.log( "Found " + list.length + " items." );
+
+		res.end( JSON.stringify( list ) );
+		return;
+	}
+	catch( e )
+	{
+		console.log( "Fatal error getting items.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error getting list" } ) );
+		return;
+	}
 }
 

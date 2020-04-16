@@ -96,7 +96,7 @@ function getEmployeeList() {
 			var numItems = Object.keys( obj ).length;
 //			<!--doc.innerHTML = "<p>Number of Inventory Items: " + numItems + "</p>";-->
 			var i;
-			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>EID</th><th style=' background-color: black; color: white;'>First</th><th style=' background-color: black; color: white;'>Middle</th><th style=' background-color: black; color: white;'>Last</th><th style=' background-color: black; color: white;'>Pin</th><th style=' background-color: black; color: white;'>Type</th><th style=' background-color: black; color: white;'>Tips</th><th style=' background-color: black; color: white;'>Comps</th>"
+			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>EID</th><th style=' background-color: black; color: white;'>First</th><th style=' background-color: black; color: white;'>Middle</th><th style=' background-color: black; color: white;'>Last</th><th style=' background-color: black; color: white;'>Pin</th><th style=' background-color: black; color: white;'>Type</th><th style=' background-color: black; color: white;'>Tips</th><th style=' background-color: black; color: white;'>Comps</th><th style=' background-color: black; color: white;'>Hours</th>"
 			for( i = 0; i < numItems; i++ )
 			{
 				var currItem = obj[ i ];
@@ -123,7 +123,11 @@ function getEmployeeList() {
                 if(currItem.comps=="")
                 {
                     currItem.comps=0;
-                }
+				}
+				if(currItem.hours==undefined)
+				{
+					currItem.hours=0;
+				}
 
 				txt += "<tr><td style=' background-color: white; color: black;'>" + currItem._id + "</td><td style=' background-color: white; color: black;'>" 
 						+currItem.first + "</td><td style=' background-color: white; color: black;'>"  
@@ -131,8 +135,9 @@ function getEmployeeList() {
                         +currItem.last +"</td></td><td style=' background-color: white; color: black;'>"
                         +currItem.pin +"</td><td style=' background-color: white; color: black;'>"
                         +currItem.type+"</td><td style=' background-color: white; color: black;'>"
-                        +currItem.tips+"</td><td style=' background-color: white; color: black;'>"
-                        +currItem.comps+"</td></tr>";
+						+"$"+(currItem.tips).toFixed(2)+"</td><td style=' background-color: white; color: black;'>"
+						+currItem.comps+"</td><td style=' background-color: white; color: black;'>"
+                        +(currItem.hours).toFixed(2)+"</td></tr>";
 			}
 			txt += "</table>"
 			document.getElementById('emptxt').innerHTML = txt;
