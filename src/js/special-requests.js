@@ -49,3 +49,5 @@ function submitList(ordItem) {
       Cookies.set('current_order', JSON.stringify(obj), { path: '/', sameSite: 'strict'});
     }
 }
+
+module.exports = {add, remove, clearList, submitList}
