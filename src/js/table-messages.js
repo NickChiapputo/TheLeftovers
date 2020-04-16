@@ -44,3 +44,11 @@ function sendHelp(note)
         xmlHttp.send(JSON.stringify(params));
 
 } 
+
+function initializeTable() {
+	var tab = sessionStorage.getItem('tableid');
+	if (tab == null) {
+        sessionStorage.setItem('tableid', 0);
+        Cookies.set('table-num', 0, {path: '/', sameSite: 'strict'});
+	}
+}
