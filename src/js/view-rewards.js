@@ -23,12 +23,12 @@ function printRewardsAccounts()
                 '</div>';               
 
 
-    document.getElementById("if-else-display").innerHTML += text;
-}
-
-module.exports = {  printRewardsAccounts };
     document.getElementById("welcome-header-display").innerHTML += text;
     if (sessionStorage.getItem('rewards-meal-save') == "Not Available"){}    
     else document.getElementById("if-else-display").innerHTML += next;
 }
+
+module.exports = {  printRewardsAccounts };
+
+
 
