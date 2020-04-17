@@ -1,4 +1,4 @@
-function managerSearch()
+ function managerSearch()
 {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -39,11 +39,13 @@ function managerSearch()
 			});
 			
 			console.log( this.responseText );
+			return then(thiss.responseText)
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
 //			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
 			console.log( "Rewards accounts inventory status response: " + this.status );
+			return then(this.responseText)
 		}
 	};
 
@@ -88,4 +90,8 @@ function help(managerid)
 		xmlHttp.send(JSON.stringify(params));
 }
 
-module.exports = {managerSearch, help} ;
+
+
+=======  
+  module.exports = {managerSearch, help} ;
+
