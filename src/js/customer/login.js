@@ -55,3 +55,5 @@ function communicateWithServer( data, request, url, asynchronous )
 	xmlHttp.send( data );
 	return xmlHttp;
 }
+
+module.exports = {initializeTable, communicateWithServer} ;

@@ -16,3 +16,5 @@ function setData()
 		console.log( "Table ID: " + tab );
 	}
 }
+
+module.exports = {setData} ;

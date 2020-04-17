@@ -46,4 +46,4 @@ function updateNotifications()
 	document.getElementById("notifications").innerHTML+=sessionStorage.getItem('newmessage');
 }
 
-module.exports = {getMessages,updateNotifications}
+module.exports = {getMessages,updateNotifications} ;

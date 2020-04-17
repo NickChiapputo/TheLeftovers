@@ -390,3 +390,5 @@ function suppressEnter() {
 		}
 	});
 }
+
+module.exports = {loadMenu, getCookieByName, load_item, load_ingredients, loadOrderItems, addTrailingZeros, addToOrder, saveChoice, setType, editRemoveItem, suppressEnter} ;

@@ -284,3 +284,5 @@ function changeStatus(count)
 		xmlHttp.open( "POST", "http://64.225.29.130/orders/status", true );
 		xmlHttp.send(JSON.stringify(params));
 }
+
+module.exports = {changeStatus, help, managerSearch, changeColor, findTable, sendMessage, getOrders} ;
