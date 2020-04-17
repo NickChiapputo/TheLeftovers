@@ -171,14 +171,15 @@ function loadOrderItems() {
 		// default is 0
 		var rewards = '';
 
-		if (sessionStorage.getItem('current_order') == undefined) {
-			sessionStorage.setItem('current_order', {
+		if (sessionStorage.getItem('current_order') == undefined || sessionStorage.getItem('current_order') === 'undefined' ) {
+			sessionStorage.setItem('current_order', JSON.stringify( {
 			"table":table,
 			"rewards":rewards,
-			"status":"in progress"}, {path: '/', sameSite: 'strict'});
+			"status":"in progress"} ), {path: '/', sameSite: 'strict'});
 			order = JSON.parse( sessionStorage.getItem('current_order') );
 		}
 		else {
+			console.log( typeof sessionStorage.getItem( 'current_order' ) );
 			order = JSON.parse( sessionStorage.getItem('current_order') );
 		}
 
