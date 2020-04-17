@@ -1,7 +1,28 @@
 #header {
     background-color: black;
-    height: 10vh;
+    height: 50px;
     color: white;
+}
+
+#time, #table-id
+{
+    font-size: 1.5rem;
+    font-weight: bold; 
+    text-align: right; 
+    margin: auto; 
+    max-height: 30px;
+}
+
+#table-id
+{
+    text-align: center;
+}
+
+.headerButtons
+{
+    max-height: 30px;
+    min-height: 30px;
+    max-width: 250px;
 }
 
 .page {
@@ -11,14 +32,11 @@
 }
 
 .center-div {
-    position: absolute; 
-    top: 52%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
+    margin-top: 15px;
 }
 
 .menu-row {
-    height: 35vh; 
+    height: 300px; 
     margin: auto;
 }
 
@@ -38,6 +56,26 @@
     border-radius: 5rem;
     font-size: 6vw;
     text-align: center;
+}
+
+.menu-text {
+    font-size: 3rem;
+    text-align: center;
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.menu-text-small {
+    font-size: 5vh;
+    text-align: center;
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    width: 100%;
 }
 
 .rewards-header {
@@ -130,26 +168,6 @@ input:-ms-input-placeholder {
     top: 5%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 100%;
-}
-
-.menu-text {
-    font-size: 8vh;
-    text-align: center;
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
-    width: 100%;
-}
-
-.menu-text-small {
-    font-size: 5vh;
-    text-align: center;
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
     width: 100%;
 }
 
