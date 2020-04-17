@@ -1,13 +1,13 @@
 function loadMenu()
 {
 	$(document).ready(function() {
-		var cats = Cookies.get('type');
+		var cats = sessionStorage.getItem('type');
 		var pageTitle = cats;
 		pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
 		document.getElementById('category').innerText = pageTitle;
 
 		var maxloc=-1;
-		maxloc = Cookies.getJSON('max');
+		maxloc = JSON.parse( sessionStorage.getItem('max') );
 		//console.log(maxloc);
 		if (maxloc != undefined) {
 			maxloc = maxloc[cats][0];
@@ -62,7 +62,7 @@ function loadMenu()
 		};
 
 		// Send a GET request to 64.225.29.130/inventory/view
-		xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
+		xmlHttp.open( "GET", "http://64.225.29.130/menu/view-available", true );
 		xmlHttp.send();
 	});
 }
@@ -171,14 +171,15 @@ function loadOrderItems() {
 		// default is 0
 		var rewards = '';
 
-		if (sessionStorage.getItem('current_order') == undefined) {
-			sessionStorage.setItem('current_order', {
+		if (sessionStorage.getItem('current_order') == undefined || sessionStorage.getItem('current_order') === 'undefined' ) {
+			sessionStorage.setItem('current_order', JSON.stringify( {
 			"table":table,
 			"rewards":rewards,
-			"status":"in progress"}, {path: '/', sameSite: 'strict'});
+			"status":"in progress"} ), {path: '/', sameSite: 'strict'});
 			order = JSON.parse( sessionStorage.getItem('current_order') );
 		}
 		else {
+			console.log( typeof sessionStorage.getItem( 'current_order' ) );
 			order = JSON.parse( sessionStorage.getItem('current_order') );
 		}
 
@@ -230,6 +231,13 @@ function loadOrderItems() {
 					order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
 				}
 
+				// Kid's menu discount (4:00-11:59pm Mondays)
+				if( order[ "items" ][ i ][ "category" ] === "kids" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23 && date.getDat() === 1 )
+				{
+					order[ "items" ][ i ][ "kids_discount" ] = true;
+					order[ "items" ][ i ][ "price" ] = 0;
+				}
+
 				// printing name, price, discount
 				output = output.concat(i+1, ". ");
 				if (order.items[i].sent != 'false') {
@@ -250,6 +258,11 @@ function loadOrderItems() {
 					output = output.concat(order.items[i].name, " $", order.items[i].price);
 					if (order.items[i].happy_hour != undefined) {
 						output = output.concat(' (happy hour discount!)');
+					}
+
+					if( order[ "items" ][ i ][ "kids_discount" ] !== undefined )
+					{
+						output = output.concat( "(free kid's meal)" );
 					}
 				}
 
@@ -325,8 +338,8 @@ function saveChoice(num) {
 }
 
 function setType(type) {
-	Cookies.set('type', type, {path: '/', sameSite: 'strict'});
-	//document.cookie = "type=".concat(type,";path=/Customer%20App/menu;");
+	console.log( "Set " );
+	sessionStorage.setItem('type', type );
 }
 
 function editRemoveItem(edRom) {
