@@ -230,6 +230,13 @@ function loadOrderItems() {
 					order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
 				}
 
+				// Kid's menu discount (4:00-11:59pm Mondays)
+				if( order[ "items" ][ i ][ "category" ] === "kids" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23 && date.getDat() === 1 )
+				{
+					order[ "items" ][ i ][ "kids_discount" ] = true;
+					order[ "items" ][ i ][ "price" ] = 0;
+				}
+
 				// printing name, price, discount
 				output = output.concat(i+1, ". ");
 				if (order.items[i].sent != 'false') {
@@ -250,6 +257,11 @@ function loadOrderItems() {
 					output = output.concat(order.items[i].name, " $", order.items[i].price);
 					if (order.items[i].happy_hour != undefined) {
 						output = output.concat(' (happy hour discount!)');
+					}
+
+					if( order[ "items" ][ i ][ "kids_discount" ] !== undefined )
+					{
+						output = output.concat( "(free kid's meal)" );
 					}
 				}
 
