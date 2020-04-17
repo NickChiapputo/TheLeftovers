@@ -100,4 +100,4 @@ function serverSendOrderBtn() {
 	}
 }
 
-module.exports = {send_order,sendOrderBtn,serverSendOrderBtn};
+module.exports = {send_order,sendOrderBtn,serverSendOrderBtn}
