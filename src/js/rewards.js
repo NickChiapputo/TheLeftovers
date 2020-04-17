@@ -36,6 +36,7 @@ function getRewardsAccounts()
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/rewards/view", true );
 	xmlHttp.send();
+	return xmlHttp
 }
 
 function createRewardsAccount()
@@ -118,5 +119,6 @@ function logRewardsAccounts()
 
 	// Send a POST request to 64.225.29.130/rewards/create with selected parameters
 	xmlHttp.open( "POST", "http://64.225.29.130/rewards/search", true );
-    xmlHttp.send( JSON.stringify( params ) );
+	xmlHttp.send( JSON.stringify( params ) );
+	module.exports = {getRewardsAccounts,createRewardsAccount,logRewardsAccounts}
 }
