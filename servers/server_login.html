@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+
+		<title>The Leftovers</title>
+
+		<!-- Link to css, javascript, etc. here -->
+		<!-- Remember to minify css and javascript before pushing the changes to the site -->
+		<!--<link href="css/table.min.css" rel="stylesheet">-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="../css/style.css">
+
+	</head>
+
+	<body class="page" onload="clock()">
+
+	<!-- Header bar -->
+    <div id="header" class="container-fluid">
+      <div class="row h-100" style="padding: 1vw;">
+        <div class="col-9" style="margin: auto;">
+          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/login.js"> </script>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid center-div">
+      <div class="row menu-row">
+          <div class="col menu-box">
+            <a onclick="login()">
+              <h1 class="menu-text" >Clock In</h1>
+            </a>
+          </div>
+      </div>
+	</div>
+    <div class="container center">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required><br>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+     </div>
+    <p id="textarea-login"></p>
+
+
+	</body>
+</html>
