@@ -22,7 +22,7 @@
     <title>Hello, world!</title>
   </head>
 
-  <body class="page" onload="clock(); suppressEnter()">
+  <body class="page" onload="clock(); suppressEnter(); initializeTable()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -36,11 +36,11 @@
             <img src="../Icons/Group 17.svg" style="max-width: 73%;">
           </a>
         </div>
-        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp()">
-          <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
+        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
+          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
         </button>
-        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendRefill()">
-          <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
+        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
+          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
         </button>
         <div class="col-9" style="margin: auto;">
           <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
@@ -91,8 +91,9 @@
               <div class="modal-body">    
                 <script>
                   function setCookCook() {
-                    sessionStorage.setItem('tableid',document.getElementById('new-num').value);
+                    sessionStorage.setItem('tableid',document.getElementById('new-num').value)
                     findID();
+                    Cookies.remove('current_order');
                     Cookies.set('table-num', document.getElementById('new-num').value, {path: '/', sameSite: 'strict'});
                   }
                 </script>

@@ -137,9 +137,9 @@ function load_ingredients() {
         for (i=0; i < ingArr.length; i++) {
             obj.hasIngredient[i] = 0;
             currLab = document.getElementById("top".concat(i+1));
-            currLab.innerText = ingArr[i];
+            //currLab.innerText = ingArr[i];
             currBox = document.getElementById("topping_".concat(i+1));
-            currBox.style.visibility = "visible";
+            //currBox.style.visibility = "visible";
             if (currBox.checked == true) {
                 str = str.concat(currLab.innerText, ', ');
                 obj.hasIngredient[i] = 1;
@@ -205,6 +205,14 @@ function loadOrderItems() {
             }
         }
 
+        // adding free drink discounts
+        var freeDrinks = 0;
+        for (var i=0; i < order.items.length; i++) {
+            if (order.items[i].category == 'entree') {
+                freeDrinks = freeDrinks + 1;
+            }
+        }
+
         var output = "";
         var total = 0;
         for (i=0; i < order.items.length; i++) {
@@ -216,8 +224,6 @@ function loadOrderItems() {
                     order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
                 }
 
-                total += order.items[i].price;
-
                 // printing name, price, discount
                 output = output.concat(i+1, ". ");
                 if (order.items[i].sent != 'false') {
@@ -225,10 +231,23 @@ function loadOrderItems() {
                         output = output.concat('(sent) ');
                     }
                 }
-                output = output.concat(order.items[i].name, " $", order.items[i].price);
-                if (order.items[i].happy_hour != undefined) {
-                    output = output.concat(' (happy hour discount!)');
+
+                if (order.items[i].category == 'drink' && freeDrinks > 0) {
+                    freeDrinks = freeDrinks - 1;
+                    order.items[i]['free_drink'] = 'true';
+                    output = output.concat(order.items[i].name, " $", 0);
+                    output = output.concat(' (free drink with entree)');
                 }
+                else {
+                    order.items[i]['free_drink'] = 'false';
+                    total += order.items[i].price;
+                    output = output.concat(order.items[i].name, " $", order.items[i].price);
+                    if (order.items[i].happy_hour != undefined) {
+                        output = output.concat(' (happy hour discount!)');
+                    }
+                }
+
+
                 
                 output = output.concat('\n');
                 for (j=0; j < order.items[i].ingredients.length; j++) {

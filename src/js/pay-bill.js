@@ -60,8 +60,7 @@ function getOrdersByTable()
                 }*/
 
                 for( p = 0; p < numItems; p++ ) {
-                    //if (obj[p].table == table && searchBill(obj[p]._id) == false) {
-                    if (obj[p].table == table && obj[p].status != 'paid') {
+                    if (obj[p].table == table && obj[p].status != 'paid' && obj[p].status != 'ordered') {
                         obj[p].tip = 0;
                         billOrders.push(obj[p]);
                     }
@@ -99,9 +98,9 @@ function getOrdersByTable()
                         }
                         //console.log("Paid: ", paid);
                 }
+                window.localStorage.setItem('bill_orders', JSON.stringify(billOrders));
                 if (billExists == true) {
                     paid = (subtotal + tax - total);
-                    window.localStorage.setItem('bill_orders', JSON.stringify(billOrders));
                     out += "\n";
                     console.log(out);
                     output += "Subtotal: $" + addTrailingZeros(subtotal) + '\n';
@@ -110,6 +109,9 @@ function getOrdersByTable()
                     output += '___________________________________________\n';
                     output += 'Total: $' + addTrailingZeros(total) + '\n';
                     document.getElementById('itemList').innerText = output;
+                }
+                else {
+                    document.getElementById('itemList').innerText = "When the kitchen finishes your order, you'll see it here";
                 }
             }
             else if( this.readyState == 4 && this.status != 200 )
@@ -273,6 +275,7 @@ function handlePayment(frac) {
     if (total <= 0) {
         Cookies.remove('current_order');
     }
+
     getOrdersByTable();
     document.getElementsByName( "order-pay-method" )[ 0 ].value = "N/A";
     document.getElementsByName( "order-receipt-method" )[ 0 ].value = "N/A";

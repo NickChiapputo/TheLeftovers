@@ -24,12 +24,14 @@ function getMessages()
 					sessionStorage.setItem('newmessage',txt)
 					updateNotifications();
 				}
-                console.log( this.responseText );
+				console.log( this.responseText );
+				return true;
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
 	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
 				console.log( "Get Messages status response: " + this.status );
+				return false;
 			}
 		};
 
@@ -43,3 +45,5 @@ function updateNotifications()
 	alert(sessionStorage.getItem('newmessage'))
 	document.getElementById("notifications").innerHTML+=sessionStorage.getItem('newmessage');
 }
+
+module.exports = {getMessages,updateNotifications}

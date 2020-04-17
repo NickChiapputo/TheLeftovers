@@ -5,7 +5,7 @@
 }
 
 .page {
-    background-color:lavender;
+    background-color:aquamar;
     font-family: Arial, Helvetica, sans-serif;
     text-align:center;
 }
@@ -38,6 +38,15 @@
     border-radius: 5rem;
     font-size: 6vw;
     text-align: center;
+}
+
+.rewards-header {
+    padding-left: 5vw;
+    color: black;
+    margin: 1vw 1vw;
+    text-align: center;
+    border-style: hidden;
+    border-radius: 5rem;
 }
 
 .rewardstext-box {

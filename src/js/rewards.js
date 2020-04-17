@@ -97,10 +97,14 @@ function logRewardsAccounts()
 			console.log( this.responseText );
 			sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
 			sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
-			obj[ "lastMeal" ].forEach(function (meal) {
-				sessionStorage.setItem('rewards-meal-save', meal.name);
-				sessionStorage.setItem('rewards-meal-image-save', meal.image);
-			});
+			if( obj[ "lastMeal" ] == null ) sessionStorage.setItem('rewards-meal-save', "Not Available");
+			else
+			{
+				obj[ "lastMeal" ].forEach(function (meal) {
+					sessionStorage.setItem('rewards-meal-save', meal.name);
+					sessionStorage.setItem('rewards-meal-image-save', meal.image);
+				});
+			}
             window.location="log.html";
 		}
 		else if( this.readyState == 4 && this.status != 200 )
