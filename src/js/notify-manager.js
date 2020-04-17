@@ -89,4 +89,9 @@ function help(managerid)
 		xmlHttp.open( "POST", "http://64.225.29.130/messages/send", true );
 		xmlHttp.send(JSON.stringify(params));
 }
-module.exports = {managerSearch,help}
+
+
+
+=======  
+  module.exports = {managerSearch, help} ;
+

@@ -202,3 +202,4 @@ function fetchStats()
         }
     
 }*/
+module.exports = {menuItemStats, fetchStats} ;
