@@ -16,7 +16,8 @@ function fetchStats()
 				"entree" : 		[ -1, -1 ],
 				"appetizer" : 	[ -1, -1 ],
 				"drink" : 		[ -1, -1 ],
-				"dessert" : 	[ -1, -1 ]
+				"dessert" : 	[ -1, -1 ],
+				"kids" : 		[ -1, -1 ]
 			};
 
 			var i;
