@@ -72,3 +72,5 @@ function failCoupon() {
     document.getElementById('coupon-foot-fail').style.display = 'unset';
     document.getElementById('coupon-foot-success').style.display = 'none';
 }
+
+module.exports = {customerCouponVerification, addCoupon, failCoupon} ;

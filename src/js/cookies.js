@@ -24,3 +24,5 @@ function clearCookies() {
     document.cookie = ''.concat((str.split('='))[0],"=; expires=",date.toUTCString());
   }
 }
+
+module.exports = {saveCookie, loadCookie, clearCookies} ;

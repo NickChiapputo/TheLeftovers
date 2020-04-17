@@ -1,13 +1,13 @@
 function loadMenu()
 {
 	$(document).ready(function() {
-		var cats = Cookies.get('type');
+		var cats = sessionStorage.getItem('type');
 		var pageTitle = cats;
 		pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
 		document.getElementById('category').innerText = pageTitle;
 
 		var maxloc=-1;
-		maxloc = Cookies.getJSON('max');
+		maxloc = JSON.parse( sessionStorage.getItem('max') );
 		//console.log(maxloc);
 		if (maxloc != undefined) {
 			maxloc = maxloc[cats][0];
@@ -62,7 +62,7 @@ function loadMenu()
 		};
 
 		// Send a GET request to 64.225.29.130/inventory/view
-		xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
+		xmlHttp.open( "GET", "http://64.225.29.130/menu/view-available", true );
 		xmlHttp.send();
 	});
 }
@@ -325,8 +325,8 @@ function saveChoice(num) {
 }
 
 function setType(type) {
-	Cookies.set('type', type, {path: '/', sameSite: 'strict'});
-	//document.cookie = "type=".concat(type,";path=/Customer%20App/menu;");
+	console.log( "Set " );
+	sessionStorage.setItem('type', type );
 }
 
 function editRemoveItem(edRom) {
@@ -390,3 +390,5 @@ function suppressEnter() {
 		}
 	});
 }
+
+module.exports = {loadMenu, getCookieByName, load_item, load_ingredients, loadOrderItems, addTrailingZeros, addToOrder, saveChoice, setType, editRemoveItem, suppressEnter} ;
