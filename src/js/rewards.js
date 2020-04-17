@@ -58,7 +58,7 @@ function createRewardsAccount()
             sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
             sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
             sessionStorage.setItem('rewards-meal-save',obj[ "lastMeal" ]);
-            window.location="log.html";
+           // window.location="log.html";
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -103,6 +103,8 @@ function logRewardsAccounts()
 				obj[ "lastMeal" ].forEach(function (meal) {
 					sessionStorage.setItem('rewards-meal-save', meal.name);
 					sessionStorage.setItem('rewards-meal-image-save', meal.image);
+					alert(meal.image)
+			
 				});
 			}
             window.location="log.html";

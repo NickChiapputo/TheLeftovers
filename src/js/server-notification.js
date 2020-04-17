@@ -31,13 +31,13 @@ function getMessages()
 			{
 	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
 				console.log( "Get Messages status response: " + this.status );
-				return false;
 			}
 		};
 
 		// Send a GET request to 64.225.29.130/inventory/view
 		xmlHttp.open( "POST", "http://64.225.29.130/messages/get", true );
 		xmlHttp.send(JSON.stringify(params));
+		return params['dest']+params['destType'];
 }
 
 function updateNotifications()

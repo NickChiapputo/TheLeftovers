@@ -2,8 +2,7 @@
 function printRewardsAccounts()
 {
 
-    document.getElementById("welcome-rewards-header").innerHTML += sessionStorage.getItem('rewards-name-save');
-    document.getElementById("number-rewards-header").innerHTML += sessionStorage.getItem('rewards-number-save');
+  
 
 	alert(sessionStorage.getItem('rewards-name-save'));
 
@@ -21,11 +20,10 @@ function printRewardsAccounts()
                     '</a>' +
                     '<p class="col-3"></p>' +
                 '</div>';               
-
-
-    document.getElementById("welcome-header-display").innerHTML += text;
-    if (sessionStorage.getItem('rewards-meal-save') == "Not Available"){}    
-    else document.getElementById("if-else-display").innerHTML += next;
+                document.getElementById("welcome-rewards-header").innerHTML += sessionStorage.getItem('rewards-name-save');
+                document.getElementById("number-rewards-header").innerHTML += sessionStorage.getItem('rewards-number-save');
+                if(sessionStorage.getItem('rewards-meal-save')!=null)
+                    document.getElementById("if-else-display").innerHTML += next;
 }
 
 module.exports = {  printRewardsAccounts };

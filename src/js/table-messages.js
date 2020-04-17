@@ -36,12 +36,14 @@ function sendHelp(note)
             {
         //			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
                 console.log( "Rewards accounts inventory status response: " + this.status );
+
             }
         };
 
         // Send a GET request to 64.225.29.130/inventory/view
         xmlHttp.open( "POST", "http://64.225.29.130/messages/send", true );
         xmlHttp.send(JSON.stringify(params));
+        return params['request'];
 
 } 
 module.exports = {sendHelp};

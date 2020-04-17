@@ -45,6 +45,7 @@ function send_order()
 			document.getElementById('order-sent-title').innerText = "Not sent";
 			document.getElementById('order-sent-text').innerText = "One or more of the selected items is unavailable";			
 			console.log( "Create inventory item status response: " + this.status );
+			Cookies.remove('current_order');
 		}
 	};
 
@@ -52,6 +53,7 @@ function send_order()
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
 	xmlHttp.send( JSON.stringify(jsonOrder) );
+	return jsonOrder;
 }
 
 function sendOrderBtn() {
@@ -97,3 +99,5 @@ function serverSendOrderBtn() {
 		document.getElementById('send-dismiss').style.display = 'none';
 	}
 }
+
+module.exports = {send_order,sendOrderBtn,serverSendOrderBtn};
