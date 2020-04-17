@@ -14,6 +14,9 @@
 
     <!--Get Notifications-->
     <script src="../js/server-notification.js"></script>
+    
+      <!-- Used to update clock every 5 seconds -->
+    <script src="../js/get-time.js"> </script> 
 
     <title>Hello, world!</title>
   </head>
@@ -27,21 +30,28 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!-- Header bar -->
-    <div id="header" class="container-fluid">
-      <div class="row h-100" style="padding: 1vw;">
+    <div id="header" class="container-fluid"> 
+      <div class="row h-100" style="padding: 0;">
+        <!-- Back button -->
         <div class="col-1" style="margin:auto;">
-          <a href="manager1.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
+          <a href="index.html">
+            <!-- <img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;"> -->
           </a>
         </div>
-        <div class="col-2" style="margin: center-div;">
-          <h1 class="menu-text">Manager:Options</h1>
-        </div>
-        <div class="col-9" style="margin: auto;">
-          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script>
 
-          <script src="../js/logout.js"></script> 
+        <!-- Refill request button -->
+        <button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"></button>
+
+        <!-- Help request button -->
+        <button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"></button>
+
+        <div class="col-6" style="margin: auto; border: 1px blue; text-align: left;">
+          <p id="table-id"></p>
+        </div>
+
+        <!-- Clock section -->
+        <div class="col-3" style="margin: auto; border: 1px green;">
+          <p id="time"></p>
         </div>
       </div>
     </div>
