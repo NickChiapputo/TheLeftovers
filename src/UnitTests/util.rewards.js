@@ -6,13 +6,13 @@ function createRewardsAccount()
 	if( phone === undefined || phone === "" || phone.length !== 10 || isNaN( phone ) || !( /[0-9]{10}/.test( phone ) ) )
 	{
 		alert( 'Invalid phone number!\nPlease enter your 10-digit phone number with no special characters.' );
-		return;
+		return phone;
 	}
 
 	if( name === undefined || name === "" )
 	{
 		alert( 'Invalid name!\nPlease enter your name so we know who you are.' );
-		return;
+		return name;
 	}
 
 	var params = {};
@@ -34,10 +34,12 @@ function createRewardsAccount()
 		alert( 'Account successfully created!\nYour ID is: ' + obj[ "_id" ] );
 
 		location = 'index.html';
+		return response.status;
 	}
 	else
 	{
 		alert( 'Account already exists!' );
+		return response.status
 	}
 }
 
@@ -81,13 +83,15 @@ function logRewardsAccounts()
 			sessionStorage.removeItem( 'rewards-meal' );
 		}
 
-        window.location="log.html";
+		window.location="log.html";
+		return response.status;
 	}
 	else
 	{
 		document.getElementById( 'textarea-rewards-accounts-log' ).innerHTML = "Log into rewards account status response: " + this.status;
 		console.log( "Log into rewards account status response: " + response.status );
 		alert( 'No rewards account for ' + rewardsAccountNumber + ' was found.' );
+		return response.status;
 	}
 }
 module.exports = {createRewardsAccount,logRewardsAccounts}

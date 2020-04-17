@@ -5,15 +5,17 @@ function getFreeReward(){
     else if (userNum == randomNumber(1,6))
     {
         alert("You won a free desert! 😀");
-        window.location="../menu/View-Order.html";
+        window.location="View-Order.html";
     }
     else
     { 
         alert("Sorry! better luck next time ☹️");
-        window.location="../menu/menu.html";
+        window.location="menu.html";
     }
 }
 
 function randomNumber(min, max) { 
 	return Math.floor(Math.random() * (max - min) + min); 
 } 
+
+module.exports = {randomNumber}
