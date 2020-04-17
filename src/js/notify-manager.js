@@ -91,7 +91,6 @@ function help(managerid)
 }
 
 
-
-=======  
+ 
   module.exports = {managerSearch, help} ;
 
