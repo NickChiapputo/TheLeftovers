@@ -24,7 +24,8 @@ function getMessages()
 					sessionStorage.setItem('newmessage',txt)
 					updateNotifications();
 				}
-                console.log( this.responseText );
+				console.log( this.responseText );
+				return true;
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
@@ -36,6 +37,7 @@ function getMessages()
 		// Send a GET request to 64.225.29.130/inventory/view
 		xmlHttp.open( "POST", "http://64.225.29.130/messages/get", true );
 		xmlHttp.send(JSON.stringify(params));
+		return params['dest']+params['destType'];
 }
 
 function updateNotifications()
@@ -43,3 +45,5 @@ function updateNotifications()
 	alert(sessionStorage.getItem('newmessage'))
 	document.getElementById("notifications").innerHTML+=sessionStorage.getItem('newmessage');
 }
+
+module.exports = {getMessages,updateNotifications}

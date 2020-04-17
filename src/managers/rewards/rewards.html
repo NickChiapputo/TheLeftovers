@@ -35,12 +35,7 @@
               <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
             </a>
           </div>
-          <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
-            <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
-          </button>
-          <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendRefill('refill')">
-            <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
-          </button>
+
           <div class="col-9" style="margin: auto;">
             <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
             <script src="../../js/get-time.js"> </script> 
@@ -50,10 +45,10 @@
       </div>
 
     <!-- Page contents-->
-    <div id="body" class="container-fluid">
+    <div>
       <p></p>
       <div class="row" style="max-height: 20vh; min-height: 20vh;">
-        <input id="textarea-rewards-accounts-log" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Rewards #" required>
+        <input id="textarea-rewards-accounts-log" class="col rewardstext-box" style="max-height: 20vh; min-height: 20vh; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Rewards #" required/>
       </div>
       <div class="row menu-row">
         <button class="col menu-box" style="background-color: limegreen;  max-height: 80%; min-height: 80%;" onclick="logRewardsAccounts()">

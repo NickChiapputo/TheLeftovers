@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title>The Leftovers</title>
-
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<title>The Leftovers</title>
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,17 +13,24 @@
 		<!-- Sitewide CSS -->
 		<link rel="stylesheet" href="../css/style.css">
 
-
 		<!-- Scripts -->
+			<!-- Used to send requests to the server -->
+		<script src="../js/server-communication.js"></script>
+
 			<!-- Used to update clock every 5 seconds -->
 		<script src="../js/get-time.js"> </script> 
 
-			<!-- Used to send messages to the server -->
+			<!-- js.cookie.js-->
+		<script src="../js/js.cookie.js" type="text/javascript"></script>
+
+			<!-- Used to send and verify rewards data -->
+		<script type="text/javascript" src="../js/rewards.js"></script>
+
+			<!-- Used to fill in table header text -->
 		<script src="../js/table-messages.js"></script> 
 	</head>
 
-  
-  	<body class="page" onload="clock(); initializeTable();">
+  <body class="page" onload="clock(); initializeTable();">
 		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -34,9 +41,9 @@
 			<div class="row h-100" style="padding: 0;">
 				<!-- Back button -->
 				<div class="col-1" style="margin:auto;">
-					<!-- <a href="index.html">
+					<a href="index.html">
 						<img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;">
-					</a> -->
+					</a>
 				</div>
 
 				<!-- Refill request button -->
@@ -61,29 +68,27 @@
 		</div>
 
 		<!-- Page contents-->
-		<div class="container-fluid center-div">
-		  	<div class="row menu-row">
-				<a href="menu/menu.html" class="col menu-box">
-			  		<h1 class="menu-text">Menu</h1>
+		<div id="body" class="container-fluid">
+			<p></p>
+
+			<!-- Rewards Number Input -->
+			<div class="row" style="max-height: 20vh; min-height: 20vh;">
+				<input id="textarea-rewards-accounts-log" class="col rewardstext-box" style="height: 100px; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Rewards #" required>
+			</div>
+
+			<!-- Login Button -->
+			<div class="row menu-row">
+				<div onclick="logRewardsAccounts();" style="cursor: pointer;" class="col menu-box">
+					<h1 class="menu-text">Log In</h1>
+				</div>
+			</div>
+
+			<!-- Sign Up Button -->
+			<div class="row menu-row">
+				<a href="sign.html" class="col menu-box">
+					<h1 class="menu-text">Sign Up</h1>
 				</a>
-				<a href="View-Order.html" class="col menu-box">
-			  		<h1 class="menu-text">Place Order</h1>
-				</a>
-			  	<a href="menu/Pay.html" class="col menu-box">
-					<h1 class="menu-text">Pay Bill</h1>
-			  	</a>
-		  	</div>
-		  	<div class="row menu-row">
-			  	<a href="games.html" class="col menu-box">
-					<h1 class="menu-text">Games</h1>
-			  	</a>
-			  	<a href="rewards.html" class="col menu-box">
-					<h1 class="menu-text">Rewards</h1>
-			  	</a>
-			  	<a href="videos.html" class="col menu-box">
-					<h1 class="menu-text">Videos</h1>
-			  	</a>
-		  	</div>
+			</div>
 		</div>
-  	</body>
+	</body>
 </html>
