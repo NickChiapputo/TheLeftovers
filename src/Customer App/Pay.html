@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title id="pageTitle">Pay Bill</title>
+
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+		<!-- Sitewide CSS -->
+		<link rel="stylesheet" href="../css/style.css">
+
+		<!-- Scripts -->
+			<!-- Used to update clock every 5 seconds -->
+		<script src="../js/get-time.js"> </script> 
+
+			<!-- Used to send messages to the server -->
+		<script src="../js/table-messages.js"></script> 
+
+
+		<script src="../js/index.js"></script>
+		<script src="../js/cookies.js"></script>
+		<script type="text/javascript" src="../js/load-menu.js"></script>
+		<script type="text/javascript" src="../js/send-orders.js"></script>
+		<script src="../js/pay-bill.js"></script>
+		<script src="../js/customer-verify-coupon.js"></script>
+
+		<!-- Cookies library -->
+		<script src="../js/js.cookie.js"></script>
+	</head>
+	
+	<body class="page" onload="clock(); getOrdersByTable(); initializeTable();">
+		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+		<!-- Header bar -->
+		<div id="header" class="container-fluid"> 
+			<div class="row h-100" style="padding: 0;">
+				<!-- Back button -->
+				<div class="col-1" style="margin:auto;">
+					<a href="index.html">
+						<img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;">
+					</a>
+				</div>
+
+				<!-- Refill request button -->
+				<button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
+					<img src="../Icons/Group 18.svg" class="headerButtons" style="max-width: 100%;">
+				</button>
+
+				<!-- Help request button -->
+				<button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
+					<img src="../Icons/Group 19.svg" class="headerButtons" style="max-width: 100%;">
+				</button>
+
+				<div class="col-6" style="margin: auto; border: 1px blue; text-align: left;">
+					<p id="table-id"></p>
+				</div>
+
+				<!-- Clock section -->
+				<div class="col-3" style="margin: auto; border: 1px green;">
+					<p id="time"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Page contents-->
+		<!-- Title bar -->
+		<div class="container-fluid row title-bar">
+			<div class="col menu-box">
+				<h1 id="humbug" class="menu-text">Table <text id="tableNum">0</text></h1>
+			</div>
+		</div>
+
+		<!-- Bill -->
+		<div class="container-fluid">
+				<div class="row" style="min-height: 70vh; max-height: 70vh;">
+						<div class="col-6">
+								<div class="text-box" style="overflow-y: scroll; width: 100%; min-height: 100%; max-height: 50vh;">
+									<h1 style="font-weight: bold;">Bill</h1>
+									<p style="font-size: 1.75vw" id="itemList" >When the kitchen finishes your order, you'll see it here"</p>
+								</div>
+						</div>
+						<div class="col-5">
+
+							<!-- Add tip modal button -->
+							<button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#add-tip" style="min-width: 100%; min-height: 13%; background-color:white; color: black;">
+								<h1 class="menu-text" id="tip-label">Add tip</h1>
+							</button>
+							<!-- Add tip modal window -->
+							<div class="modal fade" id="add-tip" tabindex="-1" role="dialog" aria-labelledby="add-tip" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Enter tip and press submit</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">    
+											<form id="myForm">
+												<input type="number" min=0 autocomplete="off" id="tip-input" value="">
+												<button type="reset" class="btn btn-primary" data-dismiss="modal" onclick="addTip()">Submit</button>
+												<p id="cokies" style="display: none;">as</p>
+											</form>          
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Leave a note modal button -->
+							<button onclick="loadNote()" type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#leave-note" style="margin-top: 0vh; margin-bottom: 0vh;min-width: 100%; min-height: 13%; background-color:white; color: black;">
+								<h1 class="menu-text">Leave a note</h1>
+							</button>
+							<!-- Leave a note modal window -->
+							<div class="modal fade" id="leave-note" tabindex="-1" role="dialog" aria-labelledby="leave-note" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 id="leaveNoteTitle" class="modal-title">Leave a note</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<form>
+											<p id="note-body"></p>
+											<input type="text" autocomplete="off" id="note" style="min-width: 90%;">
+											<br><br>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-danger" onclick="clearNote()" data-dismiss="modal">Delete note</button>
+												<button type="button" class="btn btn-outline-success" onclick="submitNote()" data-dismiss="modal">Leave note</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>   
+
+							<!-- Leave a note success window -->
+							<div class="modal fade valid-feedback" id="note-sent" tabindex="-1" role="dialog" aria-labelledby="note-sent" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="order-sent">Sent!</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<text>Your note will be sent to your server!</text>
+										</div>
+										<div class="modal-footer">
+											<button type="button" style="width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Choose payment type -->
+							<div class="dropdown col-2" style="min-width: 100%; min-height: 13%;">
+								<select name="order-pay-method" class="btn btn-secondary dropdown-toggle menu-box-dropdown menu-text-dropdown" style="margin: 2vh 0vh; min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
+									<option style="font-size: xx-large; font-style: italic;" value="N/A" selected="selected">*Choose payment method</option>
+									<option style="font-size: xx-large;" value="card">Card</option>
+									<option style="font-size: xx-large;" value="cash">Cash</option>
+								</select>
+							</div>
+
+							<!-- Choose receipt type -->
+							<div class="dropdown col-2" style="min-width: 100%; min-height: 13%;">
+								<select name="order-receipt-method" class="btn btn-secondary dropdown-toggle  menu-box-dropdown menu-text-dropdown" style="margin: 0vh 0vh; min-width: 100%; max-height: 100%;" type="button" data-toggle="dropdown">
+									<option style="font-size: xx-large; font-style: italic;" value="N/A" selected="selected">*Choose receipt method</option>
+									<option style="font-size: xx-large;" value="email">E-Mail</option>
+									<option style="font-size: xx-large;" value="print">Print</option>
+								</select>
+							</div>
+
+							<!-- Add coupon modal button -->
+							<button type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#add-coupon" style="min-width: 100%; min-height: 13%; background-color:white; color: black;">
+								<h1 class="menu-text" id="coupon-label">Add coupon</h1>
+							</button>
+							<!-- Add coupon modal window -->
+							<div class="modal fade" id="add-coupon" tabindex="-1" role="dialog" aria-labelledby="add-coupon" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Enter coupon id and press submit</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">    
+											<form>
+												<input type="text" min=0 autocomplete="off" id="coupon-input" value="">
+												<button type="reset" class="btn btn-primary" data-dismiss="modal" onclick="customerCouponVerification(); $('#coupon-success').modal('show')">Submit</button>
+												<p id="cokies" style="display: none;">as</p>
+											</form>          
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Coupon response modal window -->
+							<div class="modal fade" id="coupon-success" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 style="color: red" class="modal-title" id="coupon-success-title">Invalid coupon</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div id="coupon-success-body" class="modal-body">
+											<p id="coupon-success-text">Coupon invalid</p>
+										</div>
+										<div class="modal-footer" id="coupon-foot-fail">
+											<button type="button" style="min-width: 100%;" class="btn btn-outline-danger" data-dismiss="modal">Close window</button>
+										</div>
+										<div class="modal-footer" id="coupon-foot-success">
+											<button type="button" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Pay modal button -->
+							<button onclick="getOptions()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#pay-order" style="background-color:rgb(159, 245, 195); min-width: 100%; min-height: 15%; color: black;">
+								<h1 class="menu-text" id='pay-bill-button'>Pay bill</h1>
+							</button>
+
+							<!-- Pay modal window -->
+							<div class="modal fade" id="pay-order" tabindex="-1" role="dialog" aria-labelledby="pay-order" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="pay-order">Pay bill</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p id="pay-text"></p>
+											<input id="email-input" style="display: none;" type="text" placeholder="email@address.com">
+										</div>
+										<div class="modal-footer" id="pay-foot">
+											<div autocomplete="off" id="submitEmail" style="width: 100%;">
+												<button type="button" style="min-width: 100%;" class="btn btn-outline-primary" onclick="submitEmail()">Submit email</button>
+											</div>
+											<div id="yesnoPay">
+												<button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="$('#pay-amount').modal('show');">Pay part of order</button>
+												<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="handlePayment('W'); $('#pay-success').modal('show')">Pay remainder of order</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Pay amount modal window -->
+							<div class="modal fade" id="pay-amount" tabindex="-1" role="dialog" aria-labelledby="pay-amount" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Enter amount to pay and press submit</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">    
+											<form id="myForm">
+												<text>$</text>
+												<input type="number" min=0; step="any" valid autocomplete="off" id="partial-pay-amount">
+												<p id="partial-pay-comment"></p>
+											</form>          
+										</div>
+										<div class="modal-footer">
+											<button type="button" data-toggle="modal" data-dismiss="modal" style="width: 100%;" class="btn btn-success" onclick="$('#pay-success').modal('show'); handlePayment('F')">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div> 
+
+							<!-- Pay response modal window -->
+							<div class="modal fade" id="pay-success" tabindex="-1" role="dialog" aria-labelledby="pay-order" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 style="color: red" class="modal-title" id="pay-success-title">Invalid input</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p id="pay-success-text">Enter a number equal to or below your remaining total</p>
+										</div>
+										
+										<div class="modal-footer" id="pay-foot">
+											<button type="button" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+		</div>
+	</body>
+</html>
