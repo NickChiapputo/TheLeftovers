@@ -16,12 +16,12 @@
     <script src="../../js/js.cookie.js" type="text/javascript"></script>
 
     <!-- Original js -->
-    <script type="text/javascript" src="../../js/view-rewards.js"></script>
+    <script type="text/javascript" src="../../js/free-reward.js"></script>
     
     <title>The Leftovers!</title>
   </head>
 
-  <body class="page" onload="clock(); printRewardsAccounts()">
+  <body class="page" onload="clock()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -31,14 +31,14 @@
     <div id="header" class="container-fluid"> 
         <div class="row h-100" style="padding: 1vw;">
           <div class="col-1" style="margin:auto;">
-            <a href="rewards.html">
+            <a href="pay-rewards.html">
               <img src="../../Icons/Group 17.svg" style="max-width: 73%;">
             </a>
           </div>
           <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
             <img src="../../Icons/Group 18.svg" style="max-width: 100%;">
           </button>
-          <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
+          <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendRefill('refill')">
             <img src="../../Icons/Group 19.svg" style="max-width: 100%;">
           </button>
           <div class="col-9" style="margin: auto;">
@@ -50,16 +50,10 @@
       </div>
 
     <!-- Page contents-->
-    <div id="body" class="container-fluid">
-      <p id="welcome-header-display"></p>
-      <p id="if-else-display"></p>
-      <div class="row menu-row">
-        <div class="col menu-box">
-          <a href="../index.html">
-            <h1 class="menu-text">Return to Main Menu</h1>
-          </a>
-        </div>
-      </div>  
+    <p style="height: 20vh;"></p>
+    <div class="popup">
+        <input class="rewardstext-box" id="user-input-number" style="border: black;">Choose a number between 1 and 6 &#128540;</input>
+        <button class="menu-box-dropdown" style="border-style: solid; background-color: limegreen; border-radius: 0rem; border-width: 0.1vw;" onclick="getFreeReward()">Submit</button>
     </div>
   </body>
 </html>

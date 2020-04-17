@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title>The Leftovers</title>
-
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<title>The Leftovers</title>
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,21 +13,22 @@
 		<!-- Sitewide CSS -->
 		<link rel="stylesheet" href="../css/style.css">
 
-
 		<!-- Scripts -->
-			<!-- Used to update clock every 5 seconds -->
+		  <!-- Used to update clock every 5 seconds -->
 		<script src="../js/get-time.js"> </script> 
 
-			<!-- Used to send messages to the server -->
+			<!-- Used to display rewards meal data -->
+		<script type="text/javascript" src="../js/view-rewards.js"></script>
+
+			<!-- Used to fill in table header text -->
 		<script src="../js/table-messages.js"></script> 
 	</head>
 
-  
-  	<body class="page" onload="clock(); initializeTable();">
-		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <body class="page" onload="clock(); printRewardsAccounts()">
+	<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 		<!-- Header bar -->
 		<div id="header" class="container-fluid"> 
@@ -60,30 +61,23 @@
 			</div>
 		</div>
 
+
 		<!-- Page contents-->
-		<div class="container-fluid center-div">
-		  	<div class="row menu-row">
-				<a href="menu.html" class="col menu-box">
-			  		<h1 class="menu-text">Menu</h1>
-				</a>
-				<a href="View-Order.html" class="col menu-box">
-			  		<h1 class="menu-text">Place Order</h1>
-				</a>
-			  	<a href="Pay.html" class="col menu-box">
-					<h1 class="menu-text">Pay Bill</h1>
-			  	</a>
-		  	</div>
-		  	<div class="row menu-row">
-			  	<a href="games.html" class="col menu-box">
-					<h1 class="menu-text">Games</h1>
-			  	</a>
-			  	<a href="rewards.html" class="col menu-box">
-					<h1 class="menu-text">Rewards</h1>
-			  	</a>
-			  	<a href="videos.html" class="col menu-box">
-					<h1 class="menu-text">Videos</h1>
-			  	</a>
-		  	</div>
+		<div>
+			<div class="row">
+			<h1 id="welcome-rewards-header" style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; color: black; -webkit-text-stroke: 0.2vh white; font-size: 8vw;">Welcome </h1>
+			<h2 id="number-rewards-header" style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; color: black; -webkit-text-stroke: 0.2vh white; font-size: 4vw;">Rewards number: </h2>
+			</div>
+			<p></p>
+			<p id="if-else-display"></p>
+			
+			<!-- Main Menu Button -->
+			<div class="row menu-row">
+			<p style="height: 20vh;"></p>
+			<a href="index.html" class="col menu-box">
+			  <h1 class="menu-text">Return to Main Menu</h1>
+			</a>
+			</div>  
 		</div>
-  	</body>
+	</body>
 </html>

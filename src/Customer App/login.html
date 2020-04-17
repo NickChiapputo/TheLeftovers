@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+
+		<title>The Leftovers</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/login.css">
+
+		<!-- Scripts -->
+			<!-- Used to update clock every 5 seconds -->
+		<script src="../js/get-time.js"> </script> 	
+
+			<!-- Used to verify the table login information -->
+		<script src="../js/customer/login.js"> </script> 
+	</head>
+
+	<!-- clock()	: Update the time every 5 seconds. From get-time.js -->
+	<body onload="clock();">
+
+		<!-- Header bar -->
+		<div id="header" class="container-fluid"> 
+			<div class="row h-100" style="padding: 0vw;">
+				<!-- Back button -->
+				<div class="col-1" style="margin:auto;"></div>
+
+				<!-- Refill button -->
+				<div class="col-1" style="margin:auto;"></div>
+
+				<!-- Help Button -->
+				<div class="col-1" style="margin:auto;"></div>
+
+				<!-- Clock -->
+				<div class="col-9" style="margin: auto;">
+					<p id="time"></p>
+				</div>
+			</div>
+		</div>
+
+		<div id="loginArea">
+			<form id="tableLogin">
+			    <label for="table" class="login"><b>Table Number</b></label>
+			    <input type="number" class="login" id="table-num-input" placeholder="Enter Table Number (1-20)" name="table" min="1" max="20" step="1" required>
+			</form>
+		</div>
+
+		<div class="row menu-row">
+			<div class="col menu-box" style="margin-left: auto; margin-right: auto;" onclick="initializeTable();">
+				<h1 class="menu-text">Clock In</h1>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+/* Class login for login input fields and labels */
+.login
+{
+	margin-top: 20px;
+	height: 30px;
+}
+
+.menu-box 
+{
+    background-color: #7986CB;
+    color: white;
+    margin: 1vw 1vw;
+    border: none;
+    border-radius: 4rem;
+    font-size: 2;
+    text-align: center;
+    cursor: pointer;
+}
+
+input 
+{
+	background-color: #ffffff;
+	color: #000000;
+	text-decoration: none;
+}
+
+input[ type="number" ] 
+{
+	-moz-appearance: textfield;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	height: 30px;
+	border-radius: 4px;
+}
+
+
+/* ID loginArea for login input area div */
+#loginArea
+{
+	width: 100%;
+	max-width: 720px;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	box-sizing: border-box;
+	text-align: center;
+}
