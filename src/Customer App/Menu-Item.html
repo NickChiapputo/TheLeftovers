@@ -1,165 +1,181 @@
 <!doctype html>
 <html lang="en">
+	<head>
+		<title>The Leftovers</title>
 
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-    <!-- Original CSS -->
-    <link rel="stylesheet" href="../css/style.css">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- js.cookie.js-->
-    <script src="../js/js.cookie.js" type="text/javascript"></script>
+		<!-- Sitewide CSS -->
+		<link rel="stylesheet" href="../css/style.css">
 
-    <!-- Original js -->
-    <script type="text/javascript" src="../js/load-menu.js"></script>
-    <script type="text/javascript" src="../js/special-requests.js"></script>
-    <script src="../js/invectory-check.js"></script>
+		<!-- Scripts -->
+			<!-- Used to update clock every 5 seconds -->
+		<script src="../js/get-time.js"> </script> 
 
-    <title>Hello, world!</title>
-  </head>
+			<!-- Used to send messages to the server -->
+		<script src="../js/table-messages.js"></script> 
 
-  
-  <body class="page" onload="clock(); load_item()">
-    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		
+		<!-- js.cookie.js-->
+		<script src="../js/js.cookie.js" type="text/javascript"></script>
 
-    <!-- Header bar -->
-    <div id="header" class="container-fluid"> 
-      <div class="row h-100" style="padding: 1vw;">
-        <div class="col-1" style="margin:auto;">
-          <a href="Items.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
-          </a>
-        </div>
-        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </button>
-        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
-        </button>
-        <div class="col-9" style="margin: auto;">
-          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script>
-          <script src="../js/table-messages.js"></script>  
-        </div>
-      </div>
-    </div>
+		<!-- Original js -->
+		<script type="text/javascript" src="../js/load-menu.js"></script>
+		<script type="text/javascript" src="../js/special-requests.js"></script>
+		<script src="../js/invectory-check.js"></script>
+	</head>
 
-    <!-- Page contents-->
-    <!-- Title bar -->
-    <div class="container-fluid row title-bar">
-        <div class="col-6 menu-box">
-          <h1 id="item-name" class="menu-text">Greek Burger</h1>
-        </div>
+	
+	<body class="page" onload="clock(); load_item(); initializeTable();">
+		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+		<!-- Header bar -->
+		<div id="header" class="container-fluid"> 
+			<div class="row h-100" style="padding: 0;">
+				<!-- Back button -->
+				<div class="col-1" style="margin:auto;">
+					<a href="Items.html">
+						<img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;">
+					</a>
+				</div>
+
+				<!-- Refill request button -->
+				<button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
+					<img src="../Icons/Group 18.svg" class="headerButtons" style="max-width: 100%;">
+				</button>
+
+				<!-- Help request button -->
+				<button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
+					<img src="../Icons/Group 19.svg" class="headerButtons" style="max-width: 100%;">
+				</button>
+
+				<div class="col-6" style="margin: auto; border: 1px blue; text-align: left;">
+					<p id="table-id"></p>
+				</div>
+
+				<!-- Clock section -->
+				<div class="col-3" style="margin: auto; border: 1px green;">
+					<p id="time"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Page contents-->
+		<!-- Title bar -->
+		<div class="container-fluid row title-bar">
+				<div class="col-6 menu-box">
+					<h1 id="item-name" class="menu-text">Greek Burger</h1>
+				</div>
 
 
-        <!-- Special request js -->
-        <script src="../js/special-requests.js"></script>
+				<!-- Special request js -->
+				<script src="../js/special-requests.js"></script>
 
-        <!-- Special request modal button -->
-        <button type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#special-request" style="background-color:cyan; color: black">
-          <h1 class="menu-text-small">Special Request</h1>
-        </button>
+				<!-- Special request modal button -->
+				<button type="button" class="col-3 btn btn-primary menu-box" data-toggle="modal" data-target="#special-request" style="background-color:cyan; color: black">
+					<h1 class="menu-text-small">Special Request</h1>
+				</button>
 
-        <!-- Special request modal window -->
-        <div class="modal fade" id="special-request" tabindex="-1" role="dialog" aria-labelledby="special-requests" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="confirm-request">Special request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <form>
-                <br>
-                <ol id="list" style="text-align: left;">
-                </ol>
-                <input type="text" autocomplete="off" id="request" style="width: 90%;"><br><br>
-                <div>
-                  <button type="button" class="btn btn-primary" value="Add request" onclick="add()">Add request</button>
-                  <button type="button" class="btn btn-secondary" value="Remove last request" onclick="remove()">Remove last request</button> <br><br>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-danger" onclick="clearList()" data-dismiss="modal">Clear Requests</button>
-                  <button type="button" class="btn btn-outline-success" onclick="submitList(1)" data-dismiss="modal">Confirm Requests</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>        
+				<!-- Special request modal window -->
+				<div class="modal fade" id="special-request" tabindex="-1" role="dialog" aria-labelledby="special-requests" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="confirm-request">Special request</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<form>
+								<br>
+								<ol id="list" style="text-align: left;">
+								</ol>
+								<input type="text" autocomplete="off" id="request" style="width: 90%;"><br><br>
+								<div>
+									<button type="button" class="btn btn-primary" value="Add request" onclick="add()">Add request</button>
+									<button type="button" class="btn btn-secondary" value="Remove last request" onclick="remove()">Remove last request</button> <br><br>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-danger" onclick="clearList()" data-dismiss="modal">Clear Requests</button>
+									<button type="button" class="btn btn-outline-success" onclick="submitList(1)" data-dismiss="modal">Confirm Requests</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>        
 
-        <!-- Add item modal button -->
-        <button onclick="load_ingredients()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color:rgb(159, 245, 195); color: black;">
-          <h1 class="menu-text-small">Add Item</h1>
-        </button>
+				<!-- Add item modal button -->
+				<button onclick="load_ingredients()" type="button" class="col-2 btn btn-primary menu-box" data-toggle="modal" data-target="#confirm-order" style="background-color:rgb(159, 245, 195); color: black;">
+					<h1 class="menu-text-small">Add Item</h1>
+				</button>
 
-        <!-- Confirm choice modal window -->
-        <div class="modal fade" id="confirm-order" tabindex="-1" role="dialog" aria-labelledby="confirm-order" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="confirm-order">Add item to order?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <text id="confirm-choice"></text>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
-                <button type="button" class="btn btn-outline-success" onclick="addToOrder(load_ingredients())">Yes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
+				<!-- Confirm choice modal window -->
+				<div class="modal fade" id="confirm-order" tabindex="-1" role="dialog" aria-labelledby="confirm-order" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="confirm-order">Add item to order?</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<text id="confirm-choice"></text>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
+								<button type="button" class="btn btn-outline-success" onclick="addToOrder(load_ingredients())">Yes</button>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
 
-    <!-- Menu item -->
-    <div class="container-fluid">
-        <div class="row" style="min-height: 70vh; max-height: 70vh;">
-            <div id="food_pic" class="col-5 item-large-image" style="background-image: url(../../Images/greek-burgers-for-submission.png);">
-            </div>
-            <div class="col-3">
-                <div id="descrip" class="text-box" style="width: 100%; max-height: 100%;">
-                    This burger is Greek. It has Greek qualities. When you eat it you'll say "mmmm... Greece." Again, this burger is Greek. It has Greek qualities. When you eat it you'll say "mmmm... Greece."
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="text-box" style="max-height: 48vh;">
-                    <input type="checkbox" id="topping_1" name="topping_1" value="topping_1" style="visibility: hidden;">
-                    <label id="top1" for="topping_1" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_2" name="topping_2" value="topping_2" style="visibility: hidden;">
-                    <label id="top2" for="topping_2" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_3" name="topping_3" value="topping_3" style="visibility: hidden;">
-                    <label id="top3" for="topping_3" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_4" name="topping_4" value="topping_4" style="visibility: hidden;">
-                    <label id="top4" for="topping_4" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_5" name="topping_5" value="topping_5" style="visibility: hidden;">
-                    <label id="top5" for="topping_5" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_6" name="topping_6" value="topping_6" style="visibility: hidden;">
-                    <label id="top6" for="topping_6" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_7" name="topping_7" value="topping_7" style="visibility: hidden;">
-                    <label id="top7" for="topping_7" style="visibility: hidden;"></label><br>
-                    <input type="checkbox" id="topping_8" name="topping_8" value="topping_8" style="visibility: hidden;">
-                    <label id="top8" for="topping_8" style="visibility: hidden;"></label><br>
-                </div>
-                <div class="text-box" style="max-height: 10vh;">
-                    <text id="Kcal">Kcal = NO CALORIES!!!</text>
-                </div>
-                <div class="text-box" style="max-height: 15vh;">
-                    <text id="allerg">Allergens: (none)</text>
-                </div>
-            </div>
-        </div>
-    </div>
-  </body>
+		<!-- Menu item -->
+		<div class="container-fluid">
+				<div class="row" style="min-height: 70vh; max-height: 70vh;">
+						<div id="food_pic" class="col-5 item-large-image" style="background-image: url(../../Images/greek-burgers-for-submission.png);">
+						</div>
+						<div class="col-3">
+								<div id="descrip" class="text-box" style="width: 100%; max-height: 100%;">
+										This burger is Greek. It has Greek qualities. When you eat it you'll say "mmmm... Greece." Again, this burger is Greek. It has Greek qualities. When you eat it you'll say "mmmm... Greece."
+								</div>
+						</div>
+						<div class="col-3">
+								<div class="text-box" style="max-height: 48vh;">
+										<input type="checkbox" id="topping_1" name="topping_1" value="topping_1" style="visibility: hidden;">
+										<label id="top1" for="topping_1" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_2" name="topping_2" value="topping_2" style="visibility: hidden;">
+										<label id="top2" for="topping_2" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_3" name="topping_3" value="topping_3" style="visibility: hidden;">
+										<label id="top3" for="topping_3" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_4" name="topping_4" value="topping_4" style="visibility: hidden;">
+										<label id="top4" for="topping_4" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_5" name="topping_5" value="topping_5" style="visibility: hidden;">
+										<label id="top5" for="topping_5" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_6" name="topping_6" value="topping_6" style="visibility: hidden;">
+										<label id="top6" for="topping_6" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_7" name="topping_7" value="topping_7" style="visibility: hidden;">
+										<label id="top7" for="topping_7" style="visibility: hidden;"></label><br>
+										<input type="checkbox" id="topping_8" name="topping_8" value="topping_8" style="visibility: hidden;">
+										<label id="top8" for="topping_8" style="visibility: hidden;"></label><br>
+								</div>
+								<div class="text-box" style="max-height: 10vh;">
+										<text id="Kcal">Kcal = NO CALORIES!!!</text>
+								</div>
+								<div class="text-box" style="max-height: 15vh;">
+										<text id="allerg">Allergens: (none)</text>
+								</div>
+						</div>
+				</div>
+		</div>
+	</body>
 </html>
