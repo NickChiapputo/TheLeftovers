@@ -68,3 +68,5 @@ function sendData( data )
     xmlHttp.send( data );
     return xmlHttp;
 }
+
+module.exports = {sendHelp, initializeTable, sendData} ;

@@ -133,3 +133,6 @@ function couponDeleteSubmit()
 	xmlHttp.send( JSON.stringify( params ) );
 }
 /*******************************************/
+
+
+module.exports = {getCoupons, createCouponSubmit, couponVerificationSubmit, couponDeleteSubmit} ;

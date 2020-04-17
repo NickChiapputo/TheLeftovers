@@ -263,3 +263,5 @@ function getEmployeeFormSubmit()
 	getEmployeeList();
 	return false;
 }
+
+module.exports = {getEmployeeFormSubmit, getEmployeeList, displayShifts, employeeDeleteShift, employeeDeleteShiftSubmit, employeeCreateShiftSubmit, employeeChangeShift, } ;

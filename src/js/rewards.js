@@ -90,3 +90,5 @@ function logRewardsAccounts()
 		alert( 'No rewards account for ' + rewardsAccountNumber + ' was found.' );
 	}
 }
+
+module.exports = {createRewardsAccount, logRewardsAccounts} ;

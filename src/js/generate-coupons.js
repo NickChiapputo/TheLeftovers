@@ -85,3 +85,5 @@ function deleteFormSubmit()
 	deleteCoupon();
 	return false;
 }
+
+module.exports = {createCoupon, createFormSubmit, deleteCoupon, deleteFormSubmit} ;
