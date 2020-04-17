@@ -1,4 +1,5 @@
 const {functions} = require('./CouponsData')
+const {}
 
 test('Makes sure the Coupons receives the get request', () => {
    expect.assertions(1);
