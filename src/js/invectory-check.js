@@ -32,3 +32,5 @@ function getInventoryList()
 	xmlHttp.open( "GET", "http://64.225.29.130/inventory/view", true );
 	xmlHttp.send();
 }
+
+module.exports = {getInventoryList} ;

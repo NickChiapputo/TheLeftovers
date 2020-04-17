@@ -33,3 +33,5 @@ function logout()
 	xmlHttp.open( "POST", "http://64.225.29.130/employees/logout",true );
 	xmlHttp.send( JSON.stringify(params ));
 }
+
+module.exports = {logout} ;

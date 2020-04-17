@@ -376,3 +376,5 @@ function submitEmail() {
         getOptions();
     }
 }
+
+module.exports = {submitEmail, sendPayment, buildPayments, handlePayment, getOptions, submitNote, loadNote, clearNote, getOrdersByTable, addTip} ;

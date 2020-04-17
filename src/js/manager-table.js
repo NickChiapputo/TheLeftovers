@@ -103,3 +103,5 @@ function store(value){
 	Cookies.set('table-num', value, {path: '/', sameSite: 'strict'});
 	alert(Cookies.get('table-num'));
 }
+
+module.exports = {store, getTableList, getTableList} ;

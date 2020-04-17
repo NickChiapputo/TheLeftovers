@@ -204,3 +204,5 @@ function editEmployeeFormSubmit()
 	editEmployee();
 	return false;
 }
+
+module.exports = {createEmployee, createEmployeeFormSubmit, deleteEmployee, deleteEmployeeFormSubmit, getEmployeeList, getEmployeeFormSubmit, editEmployee, editEmployeeFormSubmit} ;

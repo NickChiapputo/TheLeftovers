@@ -68,3 +68,5 @@ function getStats(name)
 	console.log( "Sending: " + JSON.stringify( params ) );
 	xmlHttp.send( JSON.stringify( params ) );
 }
+
+module.exports = {viewStats, getStats} ;

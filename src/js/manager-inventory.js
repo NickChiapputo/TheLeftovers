@@ -189,3 +189,4 @@ function deleteFormSubmit()
 	return false;
 }
 
+module.exports = {deleteFormSubmit, deleteInventoryItem, createFormSubmit, createInventoryItem, editFormSubmit,editInventoryItem, getInventoryList, getInventoryNames} ;
