@@ -1,6 +1,6 @@
 const {functions} = require('./OrdersData')
 
-test('Makes sure the Menu receives the get request', () => {
+test('Makes sure the Orders receives the get request', () => {
    expect.assertions(1);
     return functions.fetchOrders()
         .then(data => {
