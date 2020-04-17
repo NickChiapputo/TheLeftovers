@@ -240,3 +240,9 @@ a:hover, a:active {
     font-size: 6vh;
     text-align: center;
 }
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
