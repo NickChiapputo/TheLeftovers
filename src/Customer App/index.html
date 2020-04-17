@@ -1,110 +1,91 @@
 <!doctype html>
 <html lang="en">
+	<head>
+		<title>The Leftovers</title>
 
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-    <!-- Original CSS -->
-    <link rel="stylesheet" href="../css/style.css">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- Original js -->
-    <script src="../js/special-requests.js"></script>
-    <script src="../js/load-menu.js"></script>
+		<!-- Original CSS -->
+		<link rel="stylesheet" href="../css/style.css">
 
-    <!-- Cookies library -->
-    <script src="../js/js.cookie.js"></script>
+		<!-- Original js -->
+		<script src="../js/special-requests.js"></script>
+		<script src="../js/load-menu.js"></script>
 
-    <title>Hello, world!</title>
-  </head>
+		<!-- Cookies library -->
+		<script src="../js/js.cookie.js"></script>
+	</head>
 
-  <body class="page" onload="clock(); suppressEnter(); initializeTable()">
-    <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+  	<body class="page" onload="clock(); suppressEnter(); initializeTable()">
+		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <!-- Header bar -->
-    <div id="header" class="container-fluid"> 
-      <div class="row h-100" style="padding: 1vw;">
-        <div class="col-1" style="margin:auto;">
-          <a href="index.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
-          </a>
-        </div>
-        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
-          <img src="../Icons/Group 18.svg" style="max-width: 100%;">
-        </button>
-        <button class="col-1" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
-          <img src="../Icons/Group 19.svg" style="max-width: 100%;">
-        </button>
-        <div class="col-9" style="margin: auto;">
-          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script>
-          <script src="../js/find-table-id.js"></script>
-          <script src="../js/table-messages.js"></script> 
-        </div>
-      </div>
-    </div>
+		<!-- Header bar -->
+		<div id="header" class="container-fluid"> 
+			<div class="row h-100" style="padding: 0;">
+				<!-- Back button -->
+				<div class="col-1" style="margin:auto;">
+					<!-- <a href="index.html">
+						<img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;">
+					</a> -->
+				</div>
 
-    <!-- Page contents-->
-    <div class="container-fluid center-div">
-      <div class="row menu-row">
-        <a href="menu/menu.html" class="col menu-box">
-          <h1 class="menu-text">Menu</h1>
-        </a>
-        <a href="menu/View-Order.html" class="col menu-box">
-          <h1 class="menu-text">Place Order</h1>
-        </a>
-          <a href="menu/Pay.html" class="col menu-box">
-            <h1 class="menu-text">Pay Bill</h1>
-          </a>
-      </div>
-      <div class="row menu-row">
-          <a href="media/games.html" class="col menu-box">
-            <h1 class="menu-text">Games</h1>
-          </a>
-          <a href="rewards/rewards.html" class="col menu-box">
-            <h1 class="menu-text">Rewards</h1>
-          </a>
-          <a href="media/videos.html" class="col menu-box">
-            <h1 class="menu-text">Videos</h1>
-          </a>
-      </div>
-    </div>
-      <!-- Change table # modal button -->
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#change-table" style="float: right; background-color: gray; transform:translate(-2vw, 80vh); transform: translateZ(4) ;" class="btn btn-info ">Set Table #</button>
-        <!-- Change table # modal window -->
-        <div class="modal fade" id="change-table" tabindex="-1" role="dialog" aria-labelledby="change-table" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Enter new table number and press submit</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">    
-                <script>
-                  function setCookCook() {
-                    sessionStorage.setItem('tableid',document.getElementById('new-num').value)
-                    findID();
-                    Cookies.remove('current_order');
-                    Cookies.set('table-num', document.getElementById('new-num').value, {path: '/', sameSite: 'strict'});
-                  }
-                </script>
-                <form id="myForm">
-                  <input type="text" autocomplete="off" id="new-num" value="">
-                  <button type="reset" data-dismiss="modal" class="btn btn-outline-primary" onclick='setCookCook()'>Change #</button>
-                  <p id="cokies" style="display: none;">as</p>
-                </form>          
-              </div>
-            </div>
-          </div>
-        </div>
-  </body>
+				<!-- Refill request button -->
+				<button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('help')">
+					<img src="../Icons/Group 18.svg" class="headerButtons" style="max-width: 100%;">
+				</button>
+
+				<!-- Help request button -->
+				<button class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;" onclick="sendHelp('refill')">
+					<img src="../Icons/Group 19.svg" class="headerButtons" style="max-width: 100%;">
+				</button>
+
+				<div class="col-6" style="margin: auto; border: 1px blue; text-align: left;">
+					<p id="table-id"></p>
+				</div>
+
+				<!-- Clock section -->
+				<div class="col-3" style="margin: auto; border: 1px green;">
+					<p id="time"></p>
+					<script src="../js/get-time.js"> </script>
+					<script src="../js/find-table-id.js"></script>
+					<script src="../js/table-messages.js"></script> 
+				</div>
+			</div>
+		</div>
+
+		<!-- Page contents-->
+		<div class="container-fluid center-div">
+		  	<div class="row menu-row">
+				<a href="menu/menu.html" class="col menu-box">
+			  		<h1 class="menu-text">Menu</h1>
+				</a>
+				<a href="View-Order.html" class="col menu-box">
+			  		<h1 class="menu-text">Place Order</h1>
+				</a>
+			  	<a href="menu/Pay.html" class="col menu-box">
+					<h1 class="menu-text">Pay Bill</h1>
+			  	</a>
+		  	</div>
+		  	<div class="row menu-row">
+			  	<a href="media/games.html" class="col menu-box">
+					<h1 class="menu-text">Games</h1>
+			  	</a>
+			  	<a href="rewards/rewards.html" class="col menu-box">
+					<h1 class="menu-text">Rewards</h1>
+			  	</a>
+			  	<a href="media/videos.html" class="col menu-box">
+					<h1 class="menu-text">Videos</h1>
+			  	</a>
+		  	</div>
+		</div>
+  	</body>
 </html>
