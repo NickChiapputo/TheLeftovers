@@ -16,7 +16,6 @@ function menuItemStats(name, loc, type, firstCheck)
 		tempMax ['dessert'] = [-1, -1];
 		tempMax ['kid'] = [-1, -1];
 		tempMax ['five'] = [-1, -1];
-		console.log("TEMPMAX: ", tempMax);
         sessionStorage.setItem('tempMax', JSON.stringify(tempMax));
     }
 
@@ -33,7 +32,7 @@ function menuItemStats(name, loc, type, firstCheck)
             var itemDate;
             var dateStr;
             var currentDate = new Date();
-            var compare = Infinity;2
+            var compare = Infinity;
 
 			for( var attr in item )
 			{
@@ -61,7 +60,6 @@ function menuItemStats(name, loc, type, firstCheck)
             }
             //console.log("total                : ", sum);
 			var max = JSON.parse(sessionStorage.getItem('tempMax'));
-			console.log(max)
             if (Number(max [type] [1]) < sum) {
 				max [type] = [loc, sum];
 				console.log

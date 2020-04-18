@@ -282,12 +282,10 @@ function handlePayment(frac) {
         sessionStorage.removeItem('current_order');
         document.getElementById('noGame').style.display = 'none';
         document.getElementById('playGame').style.display = 'unset';
-        document.getElementById('playGame').onclick = "$('#game').modal('show')";
     }
     else {
         document.getElementById('noGame').style.display = 'none';
         document.getElementById('playGame').style.display = 'unset';
-        document.getElementById('playGame').onclick = "$('#game').modal('show')";
     }
 
     getOrdersByTable();
