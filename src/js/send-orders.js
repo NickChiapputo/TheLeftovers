@@ -1,19 +1,26 @@
 function send_order()
 {
-	var jsonOrder = (Cookies.getJSON('current_order'));
+	var jsonOrder = JSON.parse(sessionStorage.getItem('current_order'));
 	jsonOrder.status = 'ordered';
 	var rewards = sessionStorage.getItem('rewards-number-save');
 	if (rewards != null) {
 		jsonOrder['rewards'] = rewards;
 	}
 
+	var sendOrd = JSON.stringify(jsonOrder);
+	sendOrd = JSON.parse(sendOrd);
+
 	for (i = jsonOrder.items.length - 1; i >= 0; i--) {
+		console.log[i];
 		jsonOrder.items[i].sent = 'true';
-		if (jsonOrder.items[i].free_drink == 'true') {
-			jsonOrder.items[i].price = 0;
+		if (sendOrd.items[i].sent == 'true') {
+			sendOrd.items.splice(i, 1);
+		}
+		if (sendOrd.items[i].free_drink == 'true') {
+			sendOrd.items[i].price = 0;
 		}
 	}
-	Cookies.set('current_order', jsonOrder, {path: '/', sameSite: 'strict'});
+	sessionStorage.setItem('current_order', JSON.stringify(jsonOrder));
 
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -45,17 +52,19 @@ function send_order()
 			document.getElementById('order-sent-title').innerText = "Not sent";
 			document.getElementById('order-sent-text').innerText = "One or more of the selected items is unavailable";			
 			console.log( "Create inventory item status response: " + this.status );
+			sessionStorage.removeItem('current_order');
 		}
 	};
 
 	console.log(jsonOrder);
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
-	xmlHttp.send( JSON.stringify(jsonOrder) );
+	xmlHttp.send( JSON.stringify(sendOrd) );
+	return jsonOrder;
 }
 
 function sendOrderBtn() {
-	var ord = Cookies.getJSON('current_order');
+	var ord = JSON.parse(sessionStorage.getItem('current_order'));
 	console.log(ord.items.length);
 	if (ord.items == undefined || ord.items.length == 0) {
 		document.getElementById('send-order-window').innerText = "Nothing to send";
@@ -77,7 +86,7 @@ function sendOrderBtn() {
 }
 
 function serverSendOrderBtn() {
-	var ord = Cookies.getJSON('current_order');
+	var ord = JSON.parse(sessionStorage.getItem('current_order'));
 	console.log(ord.items.length);
 	if (ord.items == undefined || ord.items.length == 0) {
 		document.getElementById('send-order-window').innerText = "Nothing to send";
@@ -97,3 +106,5 @@ function serverSendOrderBtn() {
 		document.getElementById('send-dismiss').style.display = 'none';
 	}
 }
+
+module.exports = {send_order,sendOrderBtn,serverSendOrderBtn}

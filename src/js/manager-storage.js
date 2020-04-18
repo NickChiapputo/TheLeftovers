@@ -272,3 +272,5 @@ function deleteMenuItemFormSubmit()
 	deleteMenuItem();
 	return false;
 }
+
+module.exports = {loadIngredients, editMenuItem, editMenuItemSubmit, deleteMenuItem, deleteMenuItemFormSubmit} ;

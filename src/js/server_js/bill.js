@@ -307,3 +307,5 @@ function payOrder(orderObj)
 	xmlHttp.open( "POST", "http://64.225.29.130/orders/pay" );
 	xmlHttp.send( JSON.stringify( order ) );
 }
+
+module.exports = {loadBill,showBill, compBill, sendComp, splitBill, applyCoupon, sendPayment,payOrder} ;

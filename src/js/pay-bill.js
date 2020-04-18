@@ -1,7 +1,7 @@
 function getOrdersByTable()
 {
     $(document).ready(function() {
-        var table = Cookies.get('table-num');
+        var table = (sessionStorage.getItem('tableid'));
         var payment = Cookies.get('payment');
             payment = {}
             payment['tip'] = '';
@@ -235,7 +235,13 @@ function handlePayment(frac) {
     
     if (frac == 'F') {
         payment.amount = document.getElementById('partial-pay-amount').value;
+        document.getElementById('partial-pay-amount').value = 0;
         if (payment.amount <= 0) {
+            document.getElementById('noGame').style.display = 'unset';
+            document.getElementById('playGame').style.display = 'none';
+            document.getElementById('pay-success-title').innerText = "Invalid input";
+            document.getElementById('pay-success-title').style.color = "red";
+            document.getElementById('pay-success-text').innerText = "Enter a number above 0";
             return;
         }
     }
@@ -273,7 +279,13 @@ function handlePayment(frac) {
     }
 
     if (total <= 0) {
-        Cookies.remove('current_order');
+        sessionStorage.removeItem('current_order');
+        document.getElementById('noGame').style.display = 'none';
+        document.getElementById('playGame').style.display = 'unset';
+    }
+    else {
+        document.getElementById('noGame').style.display = 'none';
+        document.getElementById('playGame').style.display = 'unset';
     }
 
     getOrdersByTable();
@@ -376,3 +388,7 @@ function submitEmail() {
         getOptions();
     }
 }
+
+
+
+module.exports = {submitEmail, sendPayment, buildPayments, handlePayment, getOptions, submitNote, loadNote, clearNote, getOrdersByTable, addTip} ;

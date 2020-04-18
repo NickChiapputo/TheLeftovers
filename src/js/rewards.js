@@ -1,120 +1,96 @@
-function getRewardsAccounts()
+function createRewardsAccount( manager )
 {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) 
-		{
-			var doc = document.getElementById( 'textarea-rewards-accounts-view' );
+	var phone = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
+	var name = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
 
-			console.log( this.responseText );
-		
-			// Response is a JSON array of items
-			var obj = JSON.parse( this.responseText );
-			
-			var numItems = Object.keys( obj ).length;
-			doc.innerHTML = "Number of Rewards Accounts: " + numItems + "\n";
+	if( phone === undefined || phone === "" || phone.length !== 10 || isNaN( phone ) || !( /[0-9]{10}/.test( phone ) ) )
+	{
+		alert( 'Invalid phone number!\nPlease enter your 10-digit phone number with no special characters.' );
+		return;
+	}
 
-			var i;
-			for( i = 0; i < numItems; i++ )
-			{
-				var currItem = obj[ i ];
-				doc.innerHTML += "Item " + ( i + 1 ) + "\n" + 
-						"    Name:  " + currItem.name + "\n" + 
-						"    Phone Number: " + currItem[ "_id" ] + "\n" + 
-						"    Last Order: " + currItem[ "lastMeal" ] + "\n\n";
-			}
+	if( name === undefined || name === "" )
+	{
+		alert( 'Invalid name!\nPlease enter your name so we know who you are.' );
+		return;
+	}
 
-			console.log( this.responseText );
-		}
-		else if( this.readyState == 4 && this.status != 200 )
-		{
-			document.getElementById( 'textarea-rewards-accounts-view' ).innerHTML = "Rewards accounts status response: " + this.status;
-			console.log( "Rewards accounts status response: " + this.status );
-		}
-	};
-
-	// Send a GET request to 64.225.29.130/inventory/view
-	xmlHttp.open( "GET", "http://64.225.29.130/rewards/view", true );
-	xmlHttp.send();
-}
-
-function createRewardsAccount()
-{
 	var params = {};
-	params[ "phone" ] = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
-	params[ "name" ] = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
+	params[ "phone" ] = phone;
+	params[ "name" ] = name;
 
-	var xmlHttp = new XMLHttpRequest();
+	var response = communicateWithServer( JSON.stringify( params ), "POST", "http://64.225.29.130/rewards/create", false );
 
-	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 )
-		{
-			var obj = JSON.parse( this.responseText );
-			document.getElementById( 'textarea-rewards-accounts-create' ).innerHTML = "New Account: \n" + 
-				"    Name: " + obj[ "name" ] + "\n" + 
-				"    Phone Number: " + obj[ "_id" ] + "\n" + 
-				"    Last Meal: " + obj[ "lastMeal" ] + "\n";
-            console.log( this.responseText );
-            sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
-            sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
-            sessionStorage.setItem('rewards-meal-save',obj[ "lastMeal" ]);
-            window.location="log.html";
-		}
-		else if( this.readyState == 4 && this.status != 200 )
-		{
-			document.getElementById( 'textarea-rewards-accounts-create' ).innerHTML = "Create rewards account status response: " + this.status;
-			console.log( "Create rewards account status response: " + this.status );
-		}
-	};
+	if( response.status === 200 )
+	{
+		console.log( response.responseText );
 
-	// Send a POST request to 64.225.29.130/rewards/create with selected parameters
-	xmlHttp.open( "POST", "http://64.225.29.130/rewards/create", true );
-    xmlHttp.send( JSON.stringify( params ) );
-}
+		var obj = JSON.parse( response.responseText );
 
-function createRewardsAccountSubmit()
-{
-	createRewardsAccount();
-	// Function must return false to prevent reloading of page
-	return false;
+		sessionStorage.setItem( 'rewards-name-save', obj[ "name" ] );
+		sessionStorage.setItem( 'rewards-number-save', obj[ "_id" ] );
+		sessionStorage.removeItem( 'rewards-meal' );
+
+		alert( 'Account successfully created!\nYour ID is: ' + obj[ "_id" ] );
+
+		location = true ? '../index.html' : 'index.html';
+	}
+	else
+	{
+		alert( 'Account already exists!' );
+	}
 }
 
 function logRewardsAccounts()
 {
+	var rewardsAccountNumber = document.getElementById( 'textarea-rewards-accounts-log' ).value
+
+	if( rewardsAccountNumber === null || rewardsAccountNumber === "" || 
+		rewardsAccountNumber.length !== 10 || isNaN( rewardsAccountNumber ) || 
+		!( /[0-9]{10}/.test( rewardsAccountNumber ) ) )
+	{
+		alert( 'Invalid phone number.\nPlease enter a 10 digit phone number with no special characters.' );
+		return;
+	}
+
 	var params = {};
-	params[ "phone" ] = document.getElementById( 'textarea-rewards-accounts-log' ).value;
+	params[ "phone" ] = rewardsAccountNumber;
 
-	var xmlHttp = new XMLHttpRequest();
+	// Send rewards query to server
+	var response = communicateWithServer( JSON.stringify( params ), "POST", "http://64.225.29.130/rewards/search", false );
 
-	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 )
+	// If rewards account is found, set session storage and return to main menu
+	// Otherwise, inform user no rewards account was found
+	if( response.status === 200 )
+	{
+		// Get JSON object of rewards account
+		var obj = JSON.parse( response.responseText );
+
+		// Save rewards account name and number
+		sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
+		sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
+
+		// If rewards account contains previous order, save it.
+		// Otherwise, ensure session storage does not contain any data
+		if( obj[ "lastMeal" ] !== null )
 		{
-			var obj = JSON.parse( this.responseText );
-			document.getElementById( 'textarea-rewards-accounts-log' ).innerHTML = "Logged into: \n" + 
-				"    Name: " + obj[ "name" ] + "\n" + 
-				"    Phone Number: " + obj[ "_id" ] + "\n" + 
-				"    Last Meal: " + obj[ "lastMeal" ] + "\n";
-			console.log( this.responseText );
-			sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
-			sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);
-			if( obj[ "lastMeal" ] == null ) sessionStorage.setItem('rewards-meal-save', "Not Available");
-			else
-			{
-				obj[ "lastMeal" ].forEach(function (meal) {
-					sessionStorage.setItem('rewards-meal-save', meal.name);
-					sessionStorage.setItem('rewards-meal-image-save', meal.image);
-				});
-			}
-            window.location="log.html";
+			sessionStorage.setItem( 'rewards-meal', JSON.stringify( obj[ "lastMeal" ] ) );
 		}
-		else if( this.readyState == 4 && this.status != 200 )
+		else
 		{
-			document.getElementById( 'textarea-rewards-accounts-log' ).innerHTML = "Log into rewards account status response: " + this.status;
-			console.log( "Log into rewards account status response: " + this.status );
+			sessionStorage.removeItem( 'rewards-meal' );
 		}
-	};
 
-	// Send a POST request to 64.225.29.130/rewards/create with selected parameters
-	xmlHttp.open( "POST", "http://64.225.29.130/rewards/search", true );
-    xmlHttp.send( JSON.stringify( params ) );
+        window.location="log.html";
+	}
+	else
+	{
+		document.getElementById( 'textarea-rewards-accounts-log' ).innerHTML = "Log into rewards account status response: " + this.status;
+		console.log( "Log into rewards account status response: " + response.status );
+		alert( 'No rewards account for ' + rewardsAccountNumber + ' was found.' );
+	}
 }
+
+
+module.exports = {createRewardsAccount, logRewardsAccounts} ;
+

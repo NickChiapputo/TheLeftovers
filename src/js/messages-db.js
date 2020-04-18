@@ -137,7 +137,7 @@ const server = http.createServer( ( req, res ) =>  {
 					return;
 				}
 				else if( obj[ "srcType" ] === "table" && 
-						( obj[ "src" ] === undefined || obj[ "src" ] === "" || isNaN( parseInt( obj[ "src" ] ) ) || parseInt( obj[ "src" ] ) < 1 || parseInt( obj[ "src" ] ) > 20 ) )
+						( obj[ "src" ] === undefined || obj[ "src" ] === "" || !(/[0-9]{1,2}/.test( obj[ "src" ] ) ) || isNaN( parseInt( obj[ "src" ] ) ) || parseInt( obj[ "src" ] ) < 1 || parseInt( obj[ "src" ] ) > 20 ) )
 				{
 					console.log( "Invalid table src '" + obj[ "src" ] + "'." );
 

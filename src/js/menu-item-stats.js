@@ -13,8 +13,10 @@ function menuItemStats(name, loc, type, firstCheck)
         tempMax ['entree'] = [-1, -1];
         tempMax ['appetizer'] = [-1, -1];
         tempMax ['drink'] = [-1, -1];
-        tempMax ['dessert'] = [-1, -1];
-        Cookies.set('tempMax', tempMax, {path: '/', sameSite: 'strict'});
+		tempMax ['dessert'] = [-1, -1];
+		tempMax ['kid'] = [-1, -1];
+		tempMax ['five'] = [-1, -1];
+        sessionStorage.setItem('tempMax', JSON.stringify(tempMax));
     }
 
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
@@ -57,10 +59,11 @@ function menuItemStats(name, loc, type, firstCheck)
                 }
             }
             //console.log("total                : ", sum);
-            var max = Cookies.getJSON('tempMax');
+			var max = JSON.parse(sessionStorage.getItem('tempMax'));
             if (Number(max [type] [1]) < sum) {
-                max [type] = [loc, sum];
-                Cookies.set("tempMax", max, {path: '/', sameSite: 'strict'});
+				max [type] = [loc, sum];
+				console.log
+                sessionStorage.setItem("tempMax", JSON.stringify(max));
             }
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -90,7 +93,6 @@ function fetchStats()
                 var i;
                 var j;
                 j = 1;
-                var maxloc=0;
                 var firstCheck=true;
                 for( i = 0; i < numItems; i++ )
                 {
@@ -98,7 +100,7 @@ function fetchStats()
                     menuItemStats(currItem.name, i, currItem.category, firstCheck);
                     firstCheck = false;
                 }
-                Cookies.set('max', Cookies.getJSON('tempMax'), {path: '/', sameSite: 'strict'});
+                sessionStorage.setItem('max', (sessionStorage.getItem('tempMax')));
             }
             else if( this.readyState == 4 && this.status != 200 )
             {
@@ -107,7 +109,7 @@ function fetchStats()
 	    };
 
         // Send a GET request to 64.225.29.130/inventory/view
-        xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
+        xmlHttp.open( "GET", "http://64.225.29.130/menu/view-available", true );
         xmlHttp.send();
     });
 }

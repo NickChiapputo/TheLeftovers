@@ -1,7 +1,6 @@
 const {functions} = require('./inventoryData')
 const communication = require('../js/server-communication.js')
 
-
 test('Makes sure the Employee receives the get request', () => {
    expect.assertions(1);
     return functions.fetchInventory()
