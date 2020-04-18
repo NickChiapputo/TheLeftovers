@@ -20,6 +20,9 @@
     <script src="../js/js.cookie.js"></script>
 
     <title>Hello, world!</title>
+          <script src="../js/get-time.js"> </script>
+          <script src="../js/find-table-id.js"></script>
+          <script src="../js/table-messages.js"></script> 
   </head>
 
   <body class="page" onload="clock(); suppressEnter()">
@@ -30,17 +33,27 @@
 
     <!-- Header bar -->
     <div id="header" class="container-fluid"> 
-      <div class="row h-100" style="padding: 1vw;">
+      <div class="row h-100" style="padding: 0;">
+        <!-- Back button -->
         <div class="col-1" style="margin:auto;">
           <a href="manager1.html">
-            <img src="../Icons/Group 17.svg" style="max-width: 73%;">
+            <img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;">
           </a>
         </div>
-        <div class="col-9" style="margin: auto;">
-          <p style="font-size: 2vw; font-weight: bold; text-align: right; margin: auto;" id="time"></p>
-          <script src="../js/get-time.js"> </script>
-          <script src="../js/find-table-id.js"></script>
-          <script src="../js/table-messages.js"></script> 
+
+        <!-- Refill request button -->
+        <div class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"></div>
+
+        <!-- Help request button -->
+        <div class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"> </div>
+
+        <div class="col-6" style="margin: auto; border: 1px blue; text-align: left;">
+          <p id="manager-name"></p>
+        </div>
+
+        <!-- Clock section -->
+        <div class="col-3" style="margin: auto; border: 1px green;">
+          <p id="time"></p>
         </div>
       </div>
     </div>

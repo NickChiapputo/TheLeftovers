@@ -4,6 +4,7 @@
   "description": "",
   "main": "get-time.test.js",
   "dependencies": {
+    "axios": "^0.19.2",
     "jest": "^25.3.0"
   },
   "devDependencies": {},

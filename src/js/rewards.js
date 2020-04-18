@@ -1,4 +1,4 @@
-function createRewardsAccount()
+function createRewardsAccount( manager )
 {
 	var phone = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
 	var name = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
@@ -33,7 +33,7 @@ function createRewardsAccount()
 
 		alert( 'Account successfully created!\nYour ID is: ' + obj[ "_id" ] );
 
-		location = 'index.html';
+		location = true ? '../index.html' : 'index.html';
 	}
 	else
 	{
@@ -91,4 +91,6 @@ function logRewardsAccounts()
 	}
 }
 
+
 module.exports = {createRewardsAccount, logRewardsAccounts} ;
+
