@@ -11,6 +11,7 @@ test('Should send a help message to a server from a valid table id', async()=>{
         console.log("Message should be refill. It is "+note)
     }
 
+<<<<<<< Updated upstream
 })
 
 test('Should send a refill message', async() => {
@@ -28,3 +29,15 @@ test('Should return false if invalid id is entered', async()=>{
    console.log("I am expecting undefined as a message")
     expect(sendHelp(note)).toBe(undefined);
 })
+=======
+test('Should change the word "help" to "refill" and "refill" to "help" ', ()=>{
+   console.log = jest.fn();
+   sessionStorage.setItem('tableid','1')
+   sessionStorage.setItem('tableid-messenger','5e92d202d016150b8a388ac4')
+   var  note = "help";
+   console.log = jest.fn();
+    expect(sendHelp(note)).toBe('refill');
+    note = 'refill';
+    expect(sendHelp(note)).toBe('help');
+})
+>>>>>>> Stashed changes
