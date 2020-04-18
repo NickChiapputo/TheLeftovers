@@ -20,14 +20,25 @@
 			<!-- Used to update clock every 5 seconds -->
 		<script src="../js/get-time.js"> </script> 
 
-			<!-- Used to send and verify rewards data -->
-		<script type="text/javascript" src="../js/rewards.js"></script>
-
 			<!-- Used to fill in table header text -->
 		<script src="../js/table-messages.js"></script> 
-	</head>
 
-  <body class="page" onload="clock(); initializeTable();">
+			<!-- Function for free reward game -->
+		<script src="../js/free-reward.js"></script>
+
+	</head>
+	<script>
+		function rewardCheck() {
+			if (sessionStorage.getItem('free-shiz') != 'true') {
+				window.location.href = "index.html"
+			}
+			else {
+				sessionStorage.setItem('free-shiz', 'false');
+			}
+		}
+	</script>
+
+  <body class="page" onload="clock(); initializeTable(); rewardCheck()">
 		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -68,23 +79,17 @@
 		<div id="body" class="container-fluid">
 			<p></p>
 
+			<h1 >Guess a number between 1 and 6!</h1>
 			<!-- Rewards Number Input -->
 			<div class="row" style="max-height: 20vh; min-height: 20vh;">
-				<input id="textarea-rewards-accounts-log" class="col rewardstext-box" style="height: 100px; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Rewards #" required>
+				<input id="user-input-number" class="col rewardstext-box" style="height: 100px; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off" required>
 			</div>
 
 			<!-- Login Button -->
 			<div class="row menu-row">
-				<div onclick="logRewardsAccounts();" style="cursor: pointer;" class="col menu-box">
-					<h1 class="menu-text">Log In</h1>
+				<div onclick="getFreeReward();" style="cursor: pointer;" class="col menu-box">
+					<h1 class="menu-text">Guess!</h1>
 				</div>
-			</div>
-
-			<!-- Sign Up Button -->
-			<div class="row menu-row">
-				<a href="sign.html" class="col menu-box">
-					<h1 class="menu-text">Sign Up</h1>
-				</a>
 			</div>
 		</div>
 	</body>
