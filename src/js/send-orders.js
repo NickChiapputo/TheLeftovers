@@ -7,10 +7,17 @@ function send_order()
 		jsonOrder['rewards'] = rewards;
 	}
 
+	var sendOrd = JSON.stringify(jsonOrder);
+	sendOrd = JSON.parse(sendOrd);
+
 	for (i = jsonOrder.items.length - 1; i >= 0; i--) {
+		console.log[i];
 		jsonOrder.items[i].sent = 'true';
-		if (jsonOrder.items[i].free_drink == 'true') {
-			jsonOrder.items[i].price = 0;
+		if (sendOrd.items[i].sent == 'true') {
+			sendOrd.items.splice(i, 1);
+		}
+		if (sendOrd.items[i].free_drink == 'true') {
+			sendOrd.items[i].price = 0;
 		}
 	}
 	sessionStorage.setItem('current_order', JSON.stringify(jsonOrder));
@@ -52,7 +59,7 @@ function send_order()
 	console.log(jsonOrder);
 	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/orders/create", true );
-	xmlHttp.send( JSON.stringify(jsonOrder) );
+	xmlHttp.send( JSON.stringify(sendOrd) );
 	return jsonOrder;
 }
 
