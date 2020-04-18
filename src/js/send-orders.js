@@ -45,7 +45,7 @@ function send_order()
 			document.getElementById('order-sent-title').innerText = "Not sent";
 			document.getElementById('order-sent-text').innerText = "One or more of the selected items is unavailable";			
 			console.log( "Create inventory item status response: " + this.status );
-			Cookies.remove('current_order');
+			sessionStorage.removeItem('current_order');
 		}
 	};
 
@@ -79,7 +79,7 @@ function sendOrderBtn() {
 }
 
 function serverSendOrderBtn() {
-	var ord = Cookies.getJSON('current_order');
+	var ord = JSON.parse(sessionStorage.getItem('current_order'));
 	console.log(ord.items.length);
 	if (ord.items == undefined || ord.items.length == 0) {
 		document.getElementById('send-order-window').innerText = "Nothing to send";
