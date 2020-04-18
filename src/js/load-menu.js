@@ -171,12 +171,15 @@ function loadOrderItems() {
 		// default is 0
 		var rewards = '';
 
-		if (sessionStorage.getItem('current_order') == undefined || sessionStorage.getItem('current_order') === 'undefined' ) {
-			sessionStorage.setItem('current_order', JSON.stringify( {
-			"table":table,
-			"rewards":rewards,
-			"status":"in progress"} ), {path: '/', sameSite: 'strict'});
+		if (sessionStorage.getItem('current_order') == null) {
+			var cur_ord = {
+				"table":table,
+				"rewards":rewards,
+				"status":"in progress"};
+			console.log(cur_ord);
+			sessionStorage.setItem('current_order', JSON.stringify(cur_ord));
 			order = JSON.parse( sessionStorage.getItem('current_order') );
+			console.log(order);
 		}
 		else {
 			console.log( typeof sessionStorage.getItem( 'current_order' ) );
@@ -203,7 +206,8 @@ function loadOrderItems() {
 			if (order.items == undefined || order.items.length == 0) {
 				document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
 				order.status = "none";
-				Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+				//Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+				sessionStorage.setItem('current_order', JSON.stringify(order));
 				document.getElementById("sendOrderBtn").style.display = 'none';
 				return;
 			}
@@ -291,7 +295,9 @@ function loadOrderItems() {
 			}
 		}
 
-		Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+		//Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+		console.log('current order: ',  order);
+		sessionStorage.setItem('current_order', JSON.stringify(order));
 		total = Number((total));
 		var tax = Number((total * 0.0825));
 		output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');

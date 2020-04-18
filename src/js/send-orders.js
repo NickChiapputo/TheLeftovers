@@ -1,6 +1,6 @@
 function send_order()
 {
-	var jsonOrder = (Cookies.getJSON('current_order'));
+	var jsonOrder = JSON.parse(sessionStorage.getItem('current_order'));
 	jsonOrder.status = 'ordered';
 	var rewards = sessionStorage.getItem('rewards-number-save');
 	if (rewards != null) {
@@ -13,7 +13,7 @@ function send_order()
 			jsonOrder.items[i].price = 0;
 		}
 	}
-	Cookies.set('current_order', jsonOrder, {path: '/', sameSite: 'strict'});
+	sessionStorage.setItem('current_order', JSON.stringify(jsonOrder));
 
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -57,7 +57,7 @@ function send_order()
 }
 
 function sendOrderBtn() {
-	var ord = Cookies.getJSON('current_order');
+	var ord = JSON.parse(sessionStorage.getItem('current_order'));
 	console.log(ord.items.length);
 	if (ord.items == undefined || ord.items.length == 0) {
 		document.getElementById('send-order-window').innerText = "Nothing to send";
