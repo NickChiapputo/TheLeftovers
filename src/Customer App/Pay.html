@@ -293,11 +293,12 @@
 											</button>
 										</div>
 										<div class="modal-body">
-											<p id="pay-success-text">Enter a number equal to or below your remaining total</p>
+											<p id="pay-success-text">Enter a number above 0</p>
 										</div>
 										
 										<div class="modal-footer" id="pay-foot">
-											<button type="button" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
+											<button type="button" data-toggle="modal" style="min-width: 100%;" class="btn btn-outline-success" onclick='sessionStorage.setItem("free-shiz", "true"); window.location.href = "free-item-game.html"' data-dismiss="modal" id="playGame">Close window</button>
+											<button type="button" style="min-width: 100%;" class="btn btn-outline-danger" data-dismiss="modal" id="noGame">Close window</button>
 										</div>
 									</div>
 								</div>

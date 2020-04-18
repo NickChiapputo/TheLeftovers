@@ -92,9 +92,8 @@ function load_item() {
 		var ingCount = obj.ingredientCount;
 		var inventory  = JSON.parse(window.localStorage.getItem('inventory'));
 		for (i=0; i < ingArr.length; i++) {
-			console.log( inventory[ingArr[i]]);
-			console.log( inventory[ingArr[i]]);
-			console.log( ingCount[i]);
+			console.log( 'arr', inventory[ingArr[i]]);
+			console.log( 'count', ingCount[i]);
 			if ( inventory[ingArr[i]] == undefined || inventory[ingArr[i]] < ingCount[i] ) {
 				currLab = document.getElementById("top".concat(i+1));
 				currLab.innerText = ingArr[i] + ' (out of stock)';
@@ -171,12 +170,15 @@ function loadOrderItems() {
 		// default is 0
 		var rewards = '';
 
-		if (sessionStorage.getItem('current_order') == undefined || sessionStorage.getItem('current_order') === 'undefined' ) {
-			sessionStorage.setItem('current_order', JSON.stringify( {
-			"table":table,
-			"rewards":rewards,
-			"status":"in progress"} ), {path: '/', sameSite: 'strict'});
+		if (sessionStorage.getItem('current_order') == null) {
+			var cur_ord = {
+				"table":table,
+				"rewards":rewards,
+				"status":"in progress"};
+			console.log(cur_ord);
+			sessionStorage.setItem('current_order', JSON.stringify(cur_ord));
 			order = JSON.parse( sessionStorage.getItem('current_order') );
+			console.log(order);
 		}
 		else {
 			console.log( typeof sessionStorage.getItem( 'current_order' ) );
@@ -203,7 +205,8 @@ function loadOrderItems() {
 			if (order.items == undefined || order.items.length == 0) {
 				document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
 				order.status = "none";
-				Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+				//Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+				sessionStorage.setItem('current_order', JSON.stringify(order));
 				document.getElementById("sendOrderBtn").style.display = 'none';
 				return;
 			}
@@ -231,13 +234,13 @@ function loadOrderItems() {
 					order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
 				}
 
-				// Kid's menu discount (4:00-11:59pm Mondays)
-				if( order[ "items" ][ i ][ "category" ] === "kids" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23 && date.getDat() === 1 )
-				{
-					order[ "items" ][ i ][ "kids_discount" ] = true;
-					order[ "items" ][ i ][ "price" ] = 0;
-				}
-
+								// Kid's menu discount (4:00-11:59pm Mondays)
+								if( order[ "items" ][ i ][ "category" ] === "kids" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23 && date.getDat() === 1 )
+								{
+									order[ "items" ][ i ][ "kids_discount" ] = true;
+									order[ "items" ][ i ][ "price" ] = 0;
+								}
+				
 				// printing name, price, discount
 				output = output.concat(i+1, ". ");
 				if (order.items[i].sent != 'false') {
@@ -291,7 +294,9 @@ function loadOrderItems() {
 			}
 		}
 
-		Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+		//Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+		console.log('current order: ',  order);
+		sessionStorage.setItem('current_order', JSON.stringify(order));
 		total = Number((total));
 		var tax = Number((total * 0.0825));
 		output = output.concat('Subtotal: $', addTrailingZeros(total),'\n');
@@ -350,9 +355,9 @@ function editRemoveItem(edRom) {
 		var item = document.getElementById('remove-choice');
 	}
 	var selection = item.value - 1;
-	if (selection >= 0 && selection < (Cookies.getJSON('current_order')).items.length) {
-		Cookies.set('current_item', (Cookies.getJSON('current_order')).items[selection], {path: '/', sameSite: 'strict'});
-		var temp = Cookies.getJSON('current_order');
+	if (selection >= 0 && selection < (JSON.parse(sessionStorage.getItem('current_order'))).items.length) {
+		Cookies.set('current_item', (JSON.parse(sessionStorage.getItem('current_order'))).items[selection], {path: '/', sameSite: 'strict'});
+		var temp = JSON.parse(sessionStorage.getItem('current_order'));
 		if (temp.items[selection].sent == 'true') {
 			if (edRom == 1) {
 				var err = document.getElementById('cokies');
@@ -372,7 +377,7 @@ function editRemoveItem(edRom) {
 					temp.status = 'ordered';
 				}
 			}
-			Cookies.set('current_order', temp, {path: '/', sameSite: 'strict'});
+			sessionStorage.setItem('current_order', JSON.stringify(temp));
 			if (edRom == 1) {
 				window.location.href='Menu-Item.html';
 			}

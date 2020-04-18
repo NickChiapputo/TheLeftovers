@@ -29,8 +29,6 @@ function initializeTable() {
 		// If successful, set order session storage, else set order session storage to empty.
 		if( response.status === 200 )
 		{
-			sessionStorage.setItem( 'current_order', JSON.stringify( JSON.parse( response.responseText )[ 0 ] ) );
-			console.log( sessionStorage.getItem( 'current_order' ) );
 		}
 
 		// Set table ID session storage

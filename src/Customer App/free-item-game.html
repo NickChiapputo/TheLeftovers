@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title>The Leftovers</title>
-
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<title>The Leftovers</title>
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,17 +13,32 @@
 		<!-- Sitewide CSS -->
 		<link rel="stylesheet" href="../css/style.css">
 
-
 		<!-- Scripts -->
+			<!-- Used to send requests to the server -->
+		<script src="../js/server-communication.js"></script>
+
 			<!-- Used to update clock every 5 seconds -->
 		<script src="../js/get-time.js"> </script> 
 
-			<!-- Used to send messages to the server -->
+			<!-- Used to fill in table header text -->
 		<script src="../js/table-messages.js"></script> 
+
+			<!-- Function for free reward game -->
+		<script src="../js/free-reward.js"></script>
+
 	</head>
+	<script>
+		function rewardCheck() {
+			if (sessionStorage.getItem('free-shiz') != 'true') {
+				window.location.href = "index.html"
+			}
+			else {
+				sessionStorage.setItem('free-shiz', 'false');
+			}
+		}
+	</script>
 
-
-	<body class="page" onload="clock(); initializeTable();">
+  <body class="page" onload="clock(); initializeTable(); rewardCheck()">
 		<!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -60,56 +75,22 @@
 			</div>
 		</div>
 
-
 		<!-- Page contents-->
-	 <div class="container-fluid center-div"> 
-		 
-		<!-- Title bar -->
-		<div class="container-fluid row title-bar"> <!-- GO BACK & CHANGE EDIT-->
-				<div class="col menu-box">
-					<h1 class="menu-text">Media</h1> <!-- GO BACK & CHANGE EDIT-->
+		<div id="body" class="container-fluid">
+			<p></p>
+
+			<h1 >Guess a number between 1 and 6!</h1>
+			<!-- Rewards Number Input -->
+			<div class="row" style="max-height: 20vh; min-height: 20vh;">
+				<input id="user-input-number" class="col rewardstext-box" style="height: 100px; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off" required>
+			</div>
+
+			<!-- Login Button -->
+			<div class="row menu-row">
+				<div onclick="getFreeReward();" style="cursor: pointer;" class="col menu-box">
+					<h1 class="menu-text">Guess!</h1>
 				</div>
+			</div>
 		</div>
-
-		<!-- Video Options -->
-		<div class="row menu-row">
-			<a href="video1.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/nbc.png);"> 
-				<h1 class="menu-text"></h1>
-			</button>
-			<a href="video2.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/cbs.png);"> 
-				<h1 class="menu-text"></h1>
-			</a>
-			<a href="video3.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/fox4.png);"> 
-				<h1 class="menu-text"></h1>
-			</button>
-			<a href="video4.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/nick.png);"> 
-				<h1 class="menu-text"></h1>
-			</a>
-		</div>
-
-		<div class="row menu-row">
-			<a href="video5.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/discovery.png);"> 
-				<h1 class="menu-text"></h1>
-			</a>
-			<a href="video6.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/fs1.png);"> 
-				<h1 class="menu-text"></h1>
-			</a>
-			<a href="video7.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/cn.png);"> 
-				<h1 class="menu-text"></h1>
-			</a>
-			<a href="video8.html" class="col menu-box menu-box-image" style="background-image: url(http://64.225.29.130/img/disney.png);"> 
-				<h1 class="menu-text"></h1>
-			</a>
-		</div>
-
-	 </div>
-
-
-
-	 
-
-
-
-
 	</body>
 </html>
