@@ -4,7 +4,6 @@ function getTableList() {
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
 		{
-			//var doc = document.getElementById( 'textarea-view' );
 			var txt ="";
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
@@ -13,28 +12,11 @@ function getTableList() {
       //loop through tables
       for (var i = 0; i < numTables; i++){
 
-		//alert(obj[i].table + "\n" + obj[i].server + "\n" + sessionStorage.getItem("employee-id"));
-
         var currentTable = obj[i];
 		if (obj[i].server == sessionStorage.getItem("employee-id"))
         	placeTable(currentTable.table, currentTable.status);
 
       }
-
-
-
-      /*
-			var i;
-			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>Item#</th><th style=' background-color: black; color: white;'>Ingredient</th><th style=' background-color: black; color: white;'>Count</th>"
-			for( i = 0; i < numItems; i++ )
-			{
-				var currItem = obj[ i ];
-				txt += "<tr><td style=' background-color: white; color: black;'>" + "Item " + ( i + 1 ) + "</td><td style=' background-color: white; color: black;'>" +
-						"    Name:  " + currItem.name + "</td><td style=' background-color: white; color: black;'>" +
-						"    Count: " + currItem.count + "</td></tr>";
-			}
-			txt += "</table>"
-			document.getElementById('invtxt').innerHTML = txt;*/
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
@@ -45,19 +27,18 @@ function getTableList() {
 	// Send a GET request to 64.225.29.130/inventory/view
 	xmlHttp.open( "GET", "http://64.225.29.130/tables/view", true );
 	xmlHttp.send();
-	//var x = setTimeout(getTableList, 1000);
 
 }
 
 //places the table in the table of statuses
 function placeTable(tableNum, status){
   var table = document.getElementById("table-table");
-  //alert(table.rows.length);
 
 
   //enter max amount of rows
   if (table.rows.length < 22){
     for (var i = table.rows.length; i < 22; i++){
+      console.log( i );
       var r = table.insertRow(table.rows.length);
       r.style.backgroundColor = "lavender";
       r.style.color = "white";
@@ -87,9 +68,9 @@ function placeTable(tableNum, status){
 
   //place table button in table
   for (var i = 1; i < table.rows.length; i++){
+    console.log( i );
     if (table.rows[i].cells[col].innerHTML == "") {
       table.rows[i].cells[col].innerHTML = '<button type="button" class="col btn btn-primary menu-box" value="' +  tableNum  + '" onclick="store(this.value)" data-toggle="modal" data-target="#table" style="height: 200px; width: 200px;">' + tableNum + '</button></td>';
-      //alert(table.rows[i].cells[col].innerHTML);
       break;
     }
   }
@@ -102,7 +83,6 @@ function placeTable(tableNum, status){
 
 function store(value){
 	Cookies.set('table-num', value, {path: '/', sameSite: 'strict'});
-	//alert(Cookies.get('table-num'));
 }
 
 module.exports = {getTableList, placeTable, store} ;
