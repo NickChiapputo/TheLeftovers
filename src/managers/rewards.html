@@ -1,30 +1,37 @@
 <!doctype html>
 <html lang="en">
+
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>The Leftovers</title>
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="../css/style.css">
 
     <!-- Sitewide CSS -->
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
     <!-- Scripts -->
-      <!-- Used to update clock every 5 seconds -->
-    <script src="../../js/get-time.js"> </script> 
+      <!-- Used to send requests to the server -->
+    <script src="../js/server-communication.js"></script>
 
-      <!-- Used to display rewards meal data -->
-    <script type="text/javascript" src="../../js/view-rewards.js"></script>
+      <!-- Used to update clock every 5 seconds -->
+    <script src="../js/get-time.js"> </script> 
+
+      <!-- Used to send and verify rewards data -->
+    <script type="text/javascript" src="../js/rewards.js"></script>
 
       <!-- Used to fill in table header text -->
-    <script src="../../js/table-messages.js"></script> 
+    <script src="../js/table-messages.js"></script> 
+    <script src="../js/logout.js"></script>
+    <title>The Leftovers!</title>
   </head>
 
-  <body class="page" onload="clock(); printRewardsAccounts()">
+  <body class="page" onload="clock()" onbeforeunload="logout()">
     <!-- Bootstrap: jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -35,16 +42,16 @@
       <div class="row h-100" style="padding: 0;">
         <!-- Back button -->
         <div class="col-1" style="margin:auto;">
-          <!-- <a href="index.html">
+          <a href="index.html">
             <img src="../Icons/Group 17.svg" class="headerButtons" style="max-width: 73%;">
-          </a> -->
+          </a>
         </div>
 
         <!-- Refill request button -->
         <div class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"></div>
 
         <!-- Help request button -->
-        <div class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"></div>
+        <div class="col-1 headerButtons" style="margin:auto; background-color: black; border: none;"> </div>
 
         <div class="col-6" style="margin: auto; border: 1px blue; text-align: left;">
           <p id="table-id"></p>
@@ -58,22 +65,27 @@
     </div>
 
     <!-- Page contents-->
-    <div>
-      <div class="row">
-        <h1 id="welcome-rewards-header" style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; color: black; -webkit-text-stroke: 0.2vh white; font-size: 8vw;">Welcome, </h1>
-        <h2 id="number-rewards-header" style="padding-left: 1vw; padding-right: 1vw; text-align: center; max-width: 90vw; min-width: 90vw; color: black; -webkit-text-stroke: 0.2vh white; font-size: 4vw;">Rewards number: </h2>
-      </div>
+    <div id="body" class="container-fluid">
       <p></p>
-      <p id="if-else-display">
-      </p>
+
+      <!-- Rewards Number Input -->
+      <div class="row" style="max-height: 20vh; min-height: 20vh;">
+        <input id="textarea-rewards-accounts-log" class="col rewardstext-box" style="height: 100px; max-width: 90vw; min-width: 90vw;" type="text" placeholder="Rewards #" required>
+      </div>
+
+      <!-- Login Button -->
       <div class="row menu-row">
-      <p style="height: 20vh;"></p>
-        <div class="col menu-box">
-        <a href="../index.html">
-            <h1 class="menu-text">Return to Server Menu</h1>
-        </a>
+        <div onclick="logRewardsAccounts();" style="cursor: pointer;" class="col menu-box">
+          <h1 class="menu-text">Log In</h1>
         </div>
-      </div>  
+      </div>
+
+      <!-- Sign Up Button -->
+      <div class="row menu-row">
+        <a href="sign.html" class="col menu-box">
+          <h1 class="menu-text">Sign Up</h1>
+        </a>
+      </div>
     </div>
   </body>
 </html>

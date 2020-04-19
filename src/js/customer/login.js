@@ -40,7 +40,7 @@ function initializeTable() {
 		// Navigate to customer home page
 		var userType = sessionStorage.getItem('userType')
 		if (userType != undefined && userType != 'cus') {
-			location = "../index.html"
+			location = "index.html"
 		}
 		else {
 			location = "index.html";
