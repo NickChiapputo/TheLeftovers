@@ -1,5 +1,6 @@
 function logout()
 {
+    //Uses the id and pin stored from the users session storage is added to the parameters to logout
     var params={}
     params['_id']=sessionStorage.getItem('employee-id');
     params['pin']=sessionStorage.getItem('employee-pin');
@@ -13,14 +14,13 @@ function logout()
 			// Response is a JSON object
 			var obj = JSON.parse( this.responseText );
 
-            if( obj == null || obj.ok != 1 || obj.n != 1 )
+            if( obj == null || obj.ok != 1 || obj.n != 1 )//On Success brings manager back to the login page
             {
-             //   document.getElementById( 'textarea-login' ).innerHTML = this.responseText;
-                document.location="../login/login.html";
+                document.location="login.html";
             }
             else
             {
-                document.getElementById( 'textarea-login' ).innerHTML = "Invalid ID or PIN\n";
+               document.getElementById( 'textarea-login' ).innerHTML = "Invalid ID or PIN\n";
             }
 		}
 		else if( this.readyState == 4 && this.status != 200 )

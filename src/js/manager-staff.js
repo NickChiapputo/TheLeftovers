@@ -128,7 +128,7 @@ function getEmployeeList() {
 				{
 					currItem.hours=0;
 				}
-
+				
 				txt += "<tr><td style=' background-color: white; color: black;'>" + currItem._id + "</td><td style=' background-color: white; color: black;'>" 
 						+currItem.first + "</td><td style=' background-color: white; color: black;'>"  
                         +currItem.middle + "</td><td style=' background-color: white; color: black;'>"
@@ -137,7 +137,7 @@ function getEmployeeList() {
                         +currItem.type+"</td><td style=' background-color: white; color: black;'>"
 						+"$"+(currItem.tips).toFixed(2)+"</td><td style=' background-color: white; color: black;'>"
 						+currItem.comps+"</td><td style=' background-color: white; color: black;'>"
-                        +(currItem.hours).toFixed(2)+"</td></tr>";
+                        +(parseInt(currItem.hours)).toFixed(2)+"</td></tr>";
 			}
 			txt += "</table>"
 			document.getElementById('emptxt').innerHTML = txt;

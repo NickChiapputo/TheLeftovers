@@ -1,5 +1,6 @@
 function login()
 {
+	//Collects user inputed data in username and password
     var params={}
     params['_id']=document.getElementsByName('uname')[0].value;
     params['pin']=document.getElementsByName('psw')[0].value;
@@ -14,9 +15,10 @@ function login()
 			var obj = JSON.parse( this.responseText );
             if( obj == null || obj.ok != 1 || obj.n != 1 && obj.response!=undefined)
             {
-				sessionStorage.setItem('employee-id',params['_id']);
+				sessionStorage.setItem('employee-id',params['_id']);//Saves username and password for messages and logout later
 				sessionStorage.setItem('employee-pin',params['pin']);
 				sessionStorage.setItem('employee-type',obj.type);
+				//Sends employee to their appropriate screen based on type
 				if(obj.type=="manager")
 				{
 					window.document.location="../managers/manager1.html";
@@ -39,11 +41,9 @@ function login()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	// Send a POST request to 64.225.29.130/employees/login with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/employees/login",true );
 	xmlHttp.send( JSON.stringify(params ));
 }
-//5e924b86ecc95c521190e478
-//9255
 
 module.exports = {login} ;

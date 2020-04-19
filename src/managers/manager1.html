@@ -18,6 +18,8 @@
       <!-- Used to update clock every 5 seconds -->
     <script src="../js/get-time.js"> </script> 
 
+    <script src="../js/logout.js"></script>
+
     <title>Hello, world!</title>
   </head>
 
@@ -97,10 +99,16 @@
           </a>
         </div>
         <div class="col menu-box">
-          <a href = "menu/login.html">
+          <a href = "login-table.html">
             <h1 class="menu-text">Server Menu</h1>
           </a>
         </div>
+        <div class="col menu-box">
+          <a onclick="logout()">
+            <h1 class="menu-text">Clock out</h1>
+          </a>
+        </div>
+        <p id="textarea-login"></p>
       </div>
     </div>
   </body>
