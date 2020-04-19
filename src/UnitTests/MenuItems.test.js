@@ -1,13 +1,7 @@
 const {functions} = require('./MenuItems')
 const communication = require('../js/server-communication')
-<<<<<<< HEAD
-const frisby = require('frisby')
-const fs = require('fs')
-
-=======
 const frisby = require( 'frisby' );
 const fs = require( 'fs' );
->>>>>>> master
 
 test('Makes sure the Menu receives the get request', () => {
     expect.assertions(1);
@@ -18,16 +12,10 @@ test('Makes sure the Menu receives the get request', () => {
          });
  });
 
-<<<<<<< HEAD
-test('Can create a new menu item',()=> {
-    let formData = frisby.formData();
-    formData.append("menu-item-create-name","UNITTST");
-=======
 
 test('Can create a new menu item',() => {
     let formData = frisby.formData();
     formData.append("menu-item-create-name","UNITTEST");
->>>>>>> master
     formData.append("menu-item-create-description","UNITTEST");
     formData.append("menu-item-create-category","drink");
     formData.append("menu-item-create-calories","100");
@@ -38,20 +26,6 @@ test('Can create a new menu item',() => {
 
     var pathToImage = "/home/nick/Pictures/Litterbug.jpg";
 
-<<<<<<< HEAD
-    formData.append("fileToUpload", fs.createReadStream(pathToImage));
-    var url = "http://64.225.29.130/menu/create"
-    return frisby.post(url, {body:formData})
-                .expect('status',200)
-                .then(
-                    function( res )
-                    {
-                        expect(res.status).toBe(200);
-                    }
-                )
-                .catch(err)
-})
-=======
     formData.append( "fileToUpload", fs.createReadStream( pathToImage ) );
 
     var url = "http://64.225.29.130/menu/create"
@@ -65,7 +39,6 @@ test('Can create a new menu item',() => {
                     } 
                 );
 });
->>>>>>> master
 
  
 //delete an empty menu item
