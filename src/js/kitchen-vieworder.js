@@ -65,8 +65,6 @@ function getOrders()
 						// Display the table number
 						txt+="<p style='text-align: center'>Table:"+currItem.table+"</p>";
 
-						console.log( JSON.stringify( currItem ) );
-
 						// Display the order notes
 						if( currItem.notes != undefined )
 						{
@@ -104,7 +102,12 @@ function getOrders()
 						}
 
 						sessionStorage.setItem('btn'+y,currItem._id);
-						txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
+
+						// Add notify server button
+						txt += "</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button>";
+						
+						// Add mark as complete button
+						txt += "<button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+");changeStatus(" + y + "," + currItem.table + ")\">Mark-Complete</button></div><div style=\"background-color:black;font-size:3px\">-</div> ";
 					}
 				}
 				doc.innerHTML=txt;
@@ -123,11 +126,11 @@ function getOrders()
 	setTimeout(getOrders,5000);
 }
 
-function sendMessage(tableid)
+function sendMessage(server)
 {
 	var params = {};
 	params['srcType']="kitchen";
-	params['dest']=tableid;
+	params['dest']=server;
 	params['destType']="server";
 	params['request']="help";
 
@@ -141,7 +144,7 @@ function sendMessage(tableid)
 			var obj = JSON.parse( this.responseText );
 			var numItems = Object.keys( obj ).length;
 
-			alert("Server "+tableid+" was notified");
+			alert("Server "+server+" was notified");
 			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -274,7 +277,7 @@ function help(managerid)
 		xmlHttp.send(JSON.stringify(params));
 }
 
-function changeStatus(count)
+function changeStatus(count, table)
 {
 	var ide=sessionStorage.getItem('btn'+count);
 	sessionStorage.setItem('btn'+count,"");
@@ -286,24 +289,42 @@ function changeStatus(count)
 		xmlHttp.onreadystatechange = function() {
 			if( this.readyState == 4 && this.status == 200 ) 
 			{
-	//			var doc = document.getElementById( 'order-view-area' );
-	
 				console.log( this.responseText );
-			
-				// Response is a JSON array of items
-				var obj = JSON.parse( this.responseText );
-				var numItems = Object.keys( obj ).length;
-	
-				console.log( this.responseText );
+
+				// Get server id
+				var query = {};
+				query[ "table" ] = table;
+				var method = "POST";
+				var url = "http://64.225.29.130/tables/search";
+				var asynchronous = false;
+
+				var response = communicateWithServer( JSON.stringify( query ), method, url, asynchronous );
+
+				console.log( response.responseText );
+
+				// Send complete message to server
+				var query = {};
+				query[ "src" ] = "";
+				query[ "srcType" ] = "kitchen";
+				query[ "dest" ] = JSON.parse( response.responseText )[ "server" ];
+				query[ "destType" ] = "server";
+				query[ "request" ] = "Kitchen has marked order for table " + table + " as complete.";
+
+				var method = "POST";
+				var url = "http://64.225.29.130/messages/send";
+				var asynchronous = false;
+
+				var response = communicateWithServer( JSON.stringify( query ), method, url, asynchronous );
+
+				console.log( "Response: " + response.responseText );
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
-	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
-				console.log( "Rewards accounts inventory status response: " + this.status );
+				console.log( "Change order status response: " + this.status );
 			}
 		};
 	
-		// Send a GET request to 64.225.29.130/inventory/view
+		// Send a GET request to 64.225.29.130/orders/status
 		xmlHttp.open( "POST", "http://64.225.29.130/orders/status", true );
 		xmlHttp.send(JSON.stringify(params));
 }

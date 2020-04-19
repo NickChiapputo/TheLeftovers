@@ -17,6 +17,7 @@ function getMessages()
 					var txt = "";
 					alert('new messages');
 					obj.forEach(function (message) {
+						console.log( "'" + message.request + "'" );
 						if( message.request === 'help' )
 						{
 							if( message.srcType === 'table' )
@@ -35,6 +36,12 @@ function getMessages()
 						else if( message.request === 'refill' )
 						{
 							txt += "Table " + message.src + " requests a refill.\n";
+						}
+						else
+						{
+							// Order completion from table
+							txt += message.request + "\n";
+							console.log( "txt" );
 						}
 						// txt+=message.src+" "+message.request+" ";
 					});
@@ -58,6 +65,7 @@ function getMessages()
 
 function updateNotifications()
 {
+	console.log( "" )
 	alert(sessionStorage.getItem('newmessage'))
 	document.getElementById("notifications").innerHTML+=sessionStorage.getItem('newmessage');
 }
