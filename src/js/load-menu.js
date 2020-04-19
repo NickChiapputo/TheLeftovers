@@ -243,7 +243,7 @@ function loadOrderItems() {
 				}
 
 				// Kid's menu discount (4:00-11:59pm Mondays)
-				if( order[ "items" ][ i ][ "category" ] === "kid" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && ( date.getHours() <= 23.5 )
+				if( order[ "items" ][ i ][ "category" ] === "kid" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23.5 )
 				{
 					order[ "items" ][ i ][ "kids_discount" ] = true;
 					order[ "items" ][ i ][ "price" ] = 0;

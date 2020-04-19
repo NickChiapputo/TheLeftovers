@@ -74,6 +74,7 @@ function send_order()
 // displaying data to send confirmation window
 function sendOrderBtn() {
 	var ord = JSON.parse(sessionStorage.getItem('current_order'));
+	console.log( JSON.stringify( ord ) );
 	console.log(ord.items.length);
 	var currDate = new Date();
 	var hour = currDate.getHours();
