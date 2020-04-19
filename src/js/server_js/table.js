@@ -20,7 +20,6 @@ function getTableList() {
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-			console.log( "Request inventory status response: " + this.status );
 		}
 	};
 
@@ -38,7 +37,6 @@ function placeTable(tableNum, status){
   //enter max amount of rows
   if (table.rows.length < 22){
     for (var i = table.rows.length; i < 22; i++){
-      console.log( i );
       var r = table.insertRow(table.rows.length);
       r.style.backgroundColor = "lavender";
       r.style.color = "white";
@@ -68,7 +66,6 @@ function placeTable(tableNum, status){
 
   //place table button in table
   for (var i = 1; i < table.rows.length; i++){
-    console.log( i );
     if (table.rows[i].cells[col].innerHTML == "") {
       table.rows[i].cells[col].innerHTML = '<button type="button" class="col btn btn-primary menu-box" value="' +  tableNum  + '" onclick="store(this.value)" data-toggle="modal" data-target="#table" style="height: 200px; width: 200px;">' + tableNum + '</button></td>';
       break;

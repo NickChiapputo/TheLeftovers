@@ -17,7 +17,26 @@ function getMessages()
 					var txt = "";
 					alert('new messages');
 					obj.forEach(function (message) {
-						txt+=message.src+" "+message.request+" ";
+						if( message.request === 'help' )
+						{
+							if( message.srcType === 'table' )
+							{
+								txt += "Table " + message.src + " requests help.\n";
+							}
+							else if( message.srcType === 'server' )
+							{
+								txt += " Server " + message.src + " requests help.\n";
+							}
+							else
+							{
+								txt += "Kitchen requests help for an order.\n";
+							}
+						}
+						else if( message.request === 'refill' )
+						{
+							txt += "Table " + message.src + " requests a refill.\n";
+						}
+						// txt+=message.src+" "+message.request+" ";
 					});
 					sessionStorage.setItem('newmessage',txt)
 					updateNotifications();
