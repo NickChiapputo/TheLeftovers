@@ -46,9 +46,10 @@ function getOrders()
 					var allergens;
 					var notes=[];
 					var y=i+1;
-					localStorage.setItem('btn'+y,"");
+					sessionStorage.setItem('btn'+y,"");
 					if(currItem.status=='ordered')
 					{
+						alert(y)
 						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
 						txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
 						txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
