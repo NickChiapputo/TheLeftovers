@@ -241,50 +241,51 @@
                 </div>
               </div>
 
-              <!-- Pay amount modal window -->
-              <div class="modal fade" id="pay-amount" tabindex="-1" role="dialog" aria-labelledby="pay-amount" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Enter amount to pay and press submit</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">    
-                      <form id="myForm">
-                        <text>$</text>
-                        <input type="number" min=0; step="any" valid autocomplete="off" id="partial-pay-amount">
-                        <p id="partial-pay-comment"></p>
-                      </form>          
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" data-toggle="modal" data-dismiss="modal" style="width: 100%;" class="btn btn-success" onclick="$('#pay-success').modal('show'); handlePayment('F')">Submit</button>
-                    </div>
-                  </div>
-                </div>
-              </div> 
+							<!-- Pay amount modal window -->
+							<div class="modal fade" id="pay-amount" tabindex="-1" role="dialog" aria-labelledby="pay-amount" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Enter amount to pay and press submit</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">    
+											<form id="myForm">
+												<text>$</text>
+												<input type="number" min=0; step="any" valid autocomplete="off" id="partial-pay-amount">
+												<p id="partial-pay-comment"></p>
+											</form>          
+										</div>
+										<div class="modal-footer">
+											<button type="button" data-toggle="modal" data-dismiss="modal" style="width: 100%;" class="btn btn-success" onclick="$('#pay-success').modal('show'); handlePayment('F')">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div> 
 
-              <!-- Pay response modal window -->
-              <div class="modal fade" id="pay-success" tabindex="-1" role="dialog" aria-labelledby="pay-order" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 style="color: red" class="modal-title" id="pay-success-title">Invalid input</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <p id="pay-success-text">Enter a number equal to or below your remaining total</p>
-                    </div>
-                    
-                    <div class="modal-footer" id="pay-foot">
-                      <button type="button" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+							<!-- Pay response modal window -->
+							<div class="modal fade" id="pay-success" tabindex="-1" role="dialog" aria-labelledby="pay-order" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 style="color: red" class="modal-title" id="pay-success-title">Invalid input</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p id="pay-success-text">Enter a number above 0</p>
+										</div>
+										
+										<div class="modal-footer" id="pay-foot">
+											<button type="button" data-toggle="modal" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal" id="playGame">Close window</button>
+											<button type="button" style="min-width: 100%;" class="btn btn-outline-danger" data-dismiss="modal" id="noGame">Close window</button>
+										</div>
+									</div>
+								</div>
+							</div>
             </div>
         </div>
     </div>
