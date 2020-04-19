@@ -1,13 +1,13 @@
-const {functions} = require('./inventoryData')
 const communication = require('../js/server-communication.js')
 
-test('Makes sure the Employee receives the get request', () => {
-   expect.assertions(1);
-    return functions.fetchInventory()
-        .then(data => {
-            console.log("Trying to connect to database")
-            expect(typeof(data)).toEqual("object");
-        });
+test('Get the list of inventoryitems from the inventory database', () => {
+    console.log = jest.fn();
+    var url = "http://64.225.29.130/inventory/view"
+    var method = "POST";
+    var response = communication.communicateWithServer("", method, url, false);
+
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(200);
 });
 
 //create

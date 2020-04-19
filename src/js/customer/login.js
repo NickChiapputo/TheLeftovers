@@ -38,7 +38,13 @@ function initializeTable() {
 		// Cookies.set('table-num', document.getElementById('table-num-input').value, {path: '/', sameSite: 'strict'});
 
 		// Navigate to customer home page
-		location = "index.html";
+		var userType = sessionStorage.getItem('userType')
+		if (userType != undefined && userType != 'cus') {
+			location = "../index.html"
+		}
+		else {
+			location = "index.html";
+		}
 	}
 	else 
 	{

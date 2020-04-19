@@ -1,38 +1,96 @@
-const {functions} = require('./MenuItems')
 const communication = require('../js/server-communication')
+const frisby = require( 'frisby' );
+const fs = require( 'fs' );
+var id
+test('Get the list of menuitems from the menu database', () => {
+    console.log = jest.fn();
+    var url = "http://64.225.29.130/menu/view"
+    var method = "POST";
+    var response = communication.communicateWithServer("", method, url, false);
 
-test('Makes sure the Menu receives the get request', () => {
-    expect.assertions(1);
-     return functions.fetchMenu()
-         .then(data => {
-             console.log("Trying to connect to database")
-             expect(typeof(data)).toEqual("object");
-         });
- });
- 
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(200);
+});
 
-//  test('Can create a menu item',() => {
-//                  const file = new File([''],'http://64.225.29.130/img/yd7b6zdowsr41.jpg',{
-//                      type: 'text/plain',
-//                      lastModified:new Date()
-//                  })
-//                  var formData = new FormData();
-//                  formData.set("menu-item-create-name","UNITTEST");
-//                  formData.set("menu-item-create-description","UNITTEST");
-//                  formData.set("menu-item-create-category","drink");
-//                  formData.set("menu-item-create-calories","100");
-//                  formData.set("menu-item-create-price","2.99");
-//                  formData.set("menu-item-create-ingredient-1","1");
-//                  formData.set("menu-item-create-has-ingredient-1","1");
-//                  formData.set("menu-item-create-ingredient-count-1","1");
-//                  formData.append("fileToUpload",file)
-//                  var url = "http://64.225.29.130/menu/create"
-//                  var method = "POST";
-//                  var response = communication.communicateWithServer(formData, method, url, false);
-//                  console.log("Response text: "+response.status)
-//                  expect(response.status).toBe(200);
-//  })
+//Create
+test('Can create a new menu item',() => {
+    let formData = frisby.formData();
+    formData.append("menu-item-create-name","GUNIT9");
+    formData.append("menu-item-create-description","UNITTEST");
+    formData.append("menu-item-create-category","drink");
+    formData.append("menu-item-create-calories","100");
+    formData.append("menu-item-create-price","2.99");
+    formData.append("menu-item-create-ingredient-1","1");
+    formData.append("menu-item-create-has-ingredient-1","1");
+    formData.append("menu-item-create-ingredient-count-1","1");
 
+    var pathToImage = "../Images/cbs.png";
+
+    formData.append( "fileToUpload", fs.createReadStream( pathToImage ) );
+
+    var url = "http://64.225.29.130/menu/create"
+    
+    return frisby.post( url, { body : formData } )
+                .expect( 'status', 200 )
+                .then( 
+                    function( res ) 
+                    {
+                        id = JSON.parse( res[ "_body" ] )[ "_id" ];
+                        console.log(res);
+                        expect( res.status ).toBe( 200 );
+                    } 
+                );
+});
+
+test('Can edit a menu item', ()=>{
+    let formData = frisby.formData();
+    formData.append("menu-item-edit-id",id)
+    formData.append("menu-item-edit-name","UNIT87");
+    formData.append("menu-item-edit-description","UNITTEST");
+    formData.append("menu-item-edit-category","drink");
+    formData.append("menu-item-edit-calories","100");
+    formData.append("menu-item-edit-price","2.99");
+    formData.append("menu-item-edit-ingredient-1","1");
+    formData.append("menu-item-edit-has-ingredient-1","1");
+    formData.append("menu-item-edit-ingredient-count-1","1");
+
+    var pathToImage = "../Images/cbs.png";
+
+    formData.append( "fileToUpload", fs.createReadStream( pathToImage ) );
+
+    var url = "http://64.225.29.130/menu/edit"
+    
+    return frisby.post( url, { body : formData } )
+                .expect( 'status', 200 )
+                .then( 
+                    function( res ) 
+                    {
+                        
+                        expect( res.status ).toBe( 200 );
+                    } 
+                );
+})
+
+//Delete
+test('Delete a menu item from the database',()=>{
+    console.log = jest.fn();
+    var menuItem = {"name":"UNIT87"}
+    var url = "http://64.225.29.130/menu/delete"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(menuItem), method, url, false);
+    console.log("Response text: " + response.text)
+    var outcome;
+    if(JSON.parse(response.responseText)["n"]=="1"&&JSON.parse(response.responseText)["ok"]=="1")
+    {
+        outcome=1;
+    }
+    else
+    {
+        outcome=0
+    }
+    expect(outcome).toBe(1);
+
+})
  
 //delete an empty menu item
 test('Delete an empty item from the menu items database', () => {

@@ -242,15 +242,7 @@ function loadOrderItems() {
 					order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
 				}
 
-<<<<<<< Updated upstream
-								// Kid's menu discount (4:00-11:59pm Mondays)
-								if( order[ "items" ][ i ][ "category" ] === "kids" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23 && date.getDat() === 1 )
-								{
-									order[ "items" ][ i ][ "kids_discount" ] = true;
-									order[ "items" ][ i ][ "price" ] = 0;
-								}
-				
-=======
+
 				// Kid's menu discount (4:00-11:59pm Mondays)
 				if( order[ "items" ][ i ][ "category" ] === "kid" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23.5 )
 				{
@@ -258,7 +250,6 @@ function loadOrderItems() {
 					order[ "items" ][ i ][ "price" ] = 0;
 				}
 
->>>>>>> Stashed changes
 				// printing name, price, discount
 				output = output.concat(i+1, ". ");
 				if (order.items[i].sent != 'false') {

@@ -7,8 +7,6 @@ function getMessages()
 		xmlHttp.onreadystatechange = function() {
 			if( this.readyState == 4 && this.status == 200 )
 			{
-	//			var doc = document.getElementById( 'order-view-area' );
-
 				console.log( this.responseText );
 
 				// Response is a JSON array of items
@@ -19,7 +17,33 @@ function getMessages()
 					var txt = "";
 					alert('new messages');
 					obj.forEach(function (message) {
-						txt+=message.src+" "+message.request+" ";
+						console.log( "'" + message.request + "'" );
+						if( message.request === 'help' )
+						{
+							if( message.srcType === 'table' )
+							{
+								txt += "Table " + message.src + " requests help.\n";
+							}
+							else if( message.srcType === 'server' )
+							{
+								txt += " Server " + message.src + " requests help.\n";
+							}
+							else
+							{
+								txt += "Kitchen requests help for an order.\n";
+							}
+						}
+						else if( message.request === 'refill' )
+						{
+							txt += "Table " + message.src + " requests a refill.\n";
+						}
+						else
+						{
+							// Order completion from table
+							txt += message.request + "\n";
+							console.log( "txt" );
+						}
+						// txt+=message.src+" "+message.request+" ";
 					});
 					sessionStorage.setItem('newmessage',txt)
 					updateNotifications();
@@ -29,7 +53,6 @@ function getMessages()
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
-	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
 				console.log( "Get Messages status response: " + this.status );
 			}
 		};
@@ -42,6 +65,7 @@ function getMessages()
 
 function updateNotifications()
 {
+	console.log( "" )
 	alert(sessionStorage.getItem('newmessage'))
 	document.getElementById("notifications").innerHTML+=sessionStorage.getItem('newmessage');
 }
