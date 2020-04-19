@@ -27,6 +27,18 @@ test('Add a coupon to the Coupon database', () => {
     expect(response.status).toBe(200);
 });
 
+//Create Coupon with no data
+test('Cannot create coupon with no data to the Coupon database', () => {
+    console.log = jest.fn();
+    var query = {
+                };
+    var url = "http://64.225.29.130/coupons/create"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
 //Delete
 test('Cannot Delete with an invalid ID',() => {
     console.log = jest.fn();

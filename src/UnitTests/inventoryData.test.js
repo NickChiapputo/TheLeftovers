@@ -38,7 +38,7 @@ test('Add a duplicate item to the inventory', () => {
 //create item with negative count
 test('Add an item with a negative count to the inventory', () => {
     console.log = jest.fn();
-    var params = "name=negative" + "&count=-1";
+    var params = "name=n" + "&count=-5";
 
     var url = "http://64.225.29.130/inventory/create?"
     var method = "POST";
