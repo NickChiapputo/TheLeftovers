@@ -4,10 +4,6 @@
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-//			var doc = document.getElementById( 'order-view-area' );
-
-			console.log( this.responseText );
-		
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 
@@ -39,12 +35,9 @@
 			});
 			
 			console.log( this.responseText );
-			return then(thiss.responseText)
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
-//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
-			console.log( "Rewards accounts inventory status response: " + this.status );
 			return then(this.responseText)
 		}
 	};
@@ -67,10 +60,6 @@ function help(managerid)
 		xmlHttp.onreadystatechange = function() {
 			if( this.readyState == 4 && this.status == 200 ) 
 			{
-	//			var doc = document.getElementById( 'order-view-area' );
-	
-				console.log( this.responseText );
-			
 				// Response is a JSON array of items
 				var obj = JSON.parse( this.responseText );
 				var numItems = Object.keys( obj ).length;
@@ -80,8 +69,6 @@ function help(managerid)
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
-	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
-				console.log( "Rewards accounts inventory status response: " + this.status );
 			}
 		};
 	
@@ -90,7 +77,4 @@ function help(managerid)
 		xmlHttp.send(JSON.stringify(params));
 }
 
-
- 
-  module.exports = {managerSearch, help} ;
-
+module.exports = {managerSearch, help} ;
