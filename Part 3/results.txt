@@ -1,0 +1,784 @@
+{
+  "numFailedTestSuites": 0,
+  "numFailedTests": 0,
+  "numPassedTestSuites": 11,
+  "numPassedTests": 80,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 11,
+  "numTotalTests": 80,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0
+  },
+  "startTime": 1587304420802,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of orders from the order database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of orders from the order database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Add an order to the order database",
+          "location": null,
+          "status": "passed",
+          "title": "Add an order to the order database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Process payment without id from the order database",
+          "location": null,
+          "status": "passed",
+          "title": "Process payment without id from the order database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Process payment without id from the order database",
+          "location": null,
+          "status": "passed",
+          "title": "Process payment without id from the order database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete an order without id from the order database",
+          "location": null,
+          "status": "passed",
+          "title": "Delete an order without id from the order database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete an order without id from the order database",
+          "location": null,
+          "status": "passed",
+          "title": "Delete an order without id from the order database"
+        }
+      ],
+      "endTime": 1587304427259,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/OrdersData.test.js",
+      "startTime": 1587304421535,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of inventoryitems from the inventory database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of inventoryitems from the inventory database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Add an item to the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Add an item to the inventory"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Add a duplicate item to the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Add a duplicate item to the inventory"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Add an item with a negative count to the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Add an item with a negative count to the inventory"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Edit an item in the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Edit an item in the inventory"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Edit an item in the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Edit an item in the inventory"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete an item from the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Delete an item from the inventory"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete an item from the inventory",
+          "location": null,
+          "status": "passed",
+          "title": "Delete an item from the inventory"
+        }
+      ],
+      "endTime": 1587304428656,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/inventoryData.test.js",
+      "startTime": 1587304421536,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Storage is null",
+          "location": null,
+          "status": "passed",
+          "title": "Storage is null"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Name and number should store properly",
+          "location": null,
+          "status": "passed",
+          "title": "Name and number should store properly"
+        }
+      ],
+      "endTime": 1587304428815,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/view-rewards.test.js",
+      "startTime": 1587304428681,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Should output the date from Sunday until Saturday",
+          "location": null,
+          "status": "passed",
+          "title": "Should output the date from Sunday until Saturday"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "If a number is less than 10 a zero should be concatonated to the front",
+          "location": null,
+          "status": "passed",
+          "title": "If a number is less than 10 a zero should be concatonated to the front"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "The clock should output the current time",
+          "location": null,
+          "status": "passed",
+          "title": "The clock should output the current time"
+        }
+      ],
+      "endTime": 1587304428926,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/get-time.test.js",
+      "startTime": 1587304428841,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "The following should add the word hello to the list",
+          "location": null,
+          "status": "passed",
+          "title": "The following should add the word hello to the list"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "The following should remove a word from the list",
+          "location": null,
+          "status": "passed",
+          "title": "The following should remove a word from the list"
+        }
+      ],
+      "endTime": 1587304429073,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/special-requests.test.js",
+      "startTime": 1587304428964,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of rewards from the reward database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of rewards from the reward database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Create rewards account",
+          "location": null,
+          "status": "passed",
+          "title": "Create rewards account"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Create rewards account",
+          "location": null,
+          "status": "passed",
+          "title": "Create rewards account"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Cannot create duplicate rewards account",
+          "location": null,
+          "status": "passed",
+          "title": "Cannot create duplicate rewards account"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Search for rewards account",
+          "location": null,
+          "status": "passed",
+          "title": "Search for rewards account"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Search for rewards account with invalid number",
+          "location": null,
+          "status": "passed",
+          "title": "Search for rewards account with invalid number"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Search for rewards account with no phone number",
+          "location": null,
+          "status": "passed",
+          "title": "Search for rewards account with no phone number"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete rewards account",
+          "location": null,
+          "status": "passed",
+          "title": "Delete rewards account"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete rewards account with empty phone number",
+          "location": null,
+          "status": "passed",
+          "title": "Delete rewards account with empty phone number"
+        }
+      ],
+      "endTime": 1587304429528,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/RewardsData.test.js",
+      "startTime": 1587304421494,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of menuitems from the menu database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of menuitems from the menu database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Can create a new menu item",
+          "location": null,
+          "status": "passed",
+          "title": "Can create a new menu item"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Can edit a menu item",
+          "location": null,
+          "status": "passed",
+          "title": "Can edit a menu item"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete a menu item from the database",
+          "location": null,
+          "status": "passed",
+          "title": "Delete a menu item from the database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete an empty item from the menu items database",
+          "location": null,
+          "status": "passed",
+          "title": "Delete an empty item from the menu items database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Reject stats on an item from the menu items database",
+          "location": null,
+          "status": "passed",
+          "title": "Reject stats on an item from the menu items database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Reject stats on an item from the menu items database",
+          "location": null,
+          "status": "passed",
+          "title": "Reject stats on an item from the menu items database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete an empty item from the menu items database",
+          "location": null,
+          "status": "passed",
+          "title": "Delete an empty item from the menu items database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Receive stats on an item from the menu items database",
+          "location": null,
+          "status": "passed",
+          "title": "Receive stats on an item from the menu items database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Reject stats on an item from the menu items database",
+          "location": null,
+          "status": "passed",
+          "title": "Reject stats on an item from the menu items database"
+        }
+      ],
+      "endTime": 1587304430167,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/MenuItems.test.js",
+      "startTime": 1587304421565,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of tables from the table database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of tables from the table database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Create a table that already exists",
+          "location": null,
+          "status": "passed",
+          "title": "Create a table that already exists"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Create a table with no number",
+          "location": null,
+          "status": "passed",
+          "title": "Create a table with no number"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Create a table that is negative",
+          "location": null,
+          "status": "passed",
+          "title": "Create a table that is negative"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Create a table that is greater than 20",
+          "location": null,
+          "status": "passed",
+          "title": "Create a table that is greater than 20"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Update table status to sitting",
+          "location": null,
+          "status": "passed",
+          "title": "Update table status to sitting"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Update table status to ordered",
+          "location": null,
+          "status": "passed",
+          "title": "Update table status to ordered"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Update table status to eating",
+          "location": null,
+          "status": "passed",
+          "title": "Update table status to eating"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Update table status to paid",
+          "location": null,
+          "status": "passed",
+          "title": "Update table status to paid"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Update table status to invalid status",
+          "location": null,
+          "status": "passed",
+          "title": "Update table status to invalid status"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Update invalid table",
+          "location": null,
+          "status": "passed",
+          "title": "Update invalid table"
+        }
+      ],
+      "endTime": 1587304431033,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/TablesData.test.js",
+      "startTime": 1587304421501,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of employees from the employee database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of employees from the employee database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Add a employee to the Employee database",
+          "location": null,
+          "status": "passed",
+          "title": "Add a employee to the Employee database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Cannot Add a employee without data to the Employee database",
+          "location": null,
+          "status": "passed",
+          "title": "Cannot Add a employee without data to the Employee database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Cannot delete an employee with an invalid ID",
+          "location": null,
+          "status": "passed",
+          "title": "Cannot delete an employee with an invalid ID"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Login passes for an existing employee",
+          "location": null,
+          "status": "passed",
+          "title": "Login passes for an existing employee"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Logout passes for an existing employee",
+          "location": null,
+          "status": "passed",
+          "title": "Logout passes for an existing employee"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Logout does for bad login info",
+          "location": null,
+          "status": "passed",
+          "title": "Logout does for bad login info"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Can create a shift for an employee with a valid id",
+          "location": null,
+          "status": "passed",
+          "title": "Can create a shift for an employee with a valid id"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Can create a shift for an employee with an invalid id",
+          "location": null,
+          "status": "passed",
+          "title": "Can create a shift for an employee with an invalid id"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Can delete a shift for an employee with a valid id, that is scheduled",
+          "location": null,
+          "status": "passed",
+          "title": "Can delete a shift for an employee with a valid id, that is scheduled"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Cannot delete a shift for an employee with an invalid id",
+          "location": null,
+          "status": "passed",
+          "title": "Cannot delete a shift for an employee with an invalid id"
+        }
+      ],
+      "endTime": 1587304431102,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/EmployeeData.test.js",
+      "startTime": 1587304421524,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages can be sent from the kitchen to a valid-managerid",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages can be sent from the kitchen to a valid-managerid"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages can be sent from the kitchen to a valid-serverid",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages can be sent from the kitchen to a valid-serverid"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages can be sent with a valid-serverid to a valid-managerid",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages can be sent with a valid-serverid to a valid-managerid"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": " Help messages can be sent from a valid tablenum to a server",
+          "location": null,
+          "status": "passed",
+          "title": " Help messages can be sent from a valid tablenum to a server"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages fail to send from kitchen to manager without a validid",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages fail to send from kitchen to manager without a validid"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages fail to send from kitchen to manager without a validid",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages fail to send from kitchen to manager without a validid"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages fail to send from server to managers without validids",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages fail to send from server to managers without validids"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Help messages fail to send from server to managers without validids",
+          "location": null,
+          "status": "passed",
+          "title": "Help messages fail to send from server to managers without validids"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Servers can get messages from anyone by checking their inbox with valid ids",
+          "location": null,
+          "status": "passed",
+          "title": "Servers can get messages from anyone by checking their inbox with valid ids"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Managers can get messages from anyone by checking their inbox with valid ids",
+          "location": null,
+          "status": "passed",
+          "title": "Managers can get messages from anyone by checking their inbox with valid ids"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Servers can get messages from anyone by checking their inbox with valid ids",
+          "location": null,
+          "status": "passed",
+          "title": "Servers can get messages from anyone by checking their inbox with valid ids"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Managers can get messages from anyone by checking their inbox with valid ids",
+          "location": null,
+          "status": "passed",
+          "title": "Managers can get messages from anyone by checking their inbox with valid ids"
+        }
+      ],
+      "endTime": 1587304431305,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/MessageData.test.js",
+      "startTime": 1587304421545,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Get the list of coupons from the Coupon database",
+          "location": null,
+          "status": "passed",
+          "title": "Get the list of coupons from the Coupon database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Add a coupon to the Coupon database",
+          "location": null,
+          "status": "passed",
+          "title": "Add a coupon to the Coupon database"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Verfiy with a valid ID",
+          "location": null,
+          "status": "passed",
+          "title": "Verfiy with a valid ID"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Cannot Verfiy with an invalid ID",
+          "location": null,
+          "status": "passed",
+          "title": "Cannot Verfiy with an invalid ID"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Delete with a valid ID",
+          "location": null,
+          "status": "passed",
+          "title": "Delete with a valid ID"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "Cannot Delete with an invalid ID",
+          "location": null,
+          "status": "passed",
+          "title": "Cannot Delete with an invalid ID"
+        }
+      ],
+      "endTime": 1587304431623,
+      "message": "",
+      "name": "/home/nick/Documents/TheLeftovers/src/UnitTests/CouponsData.test.js",
+      "startTime": 1587304427284,
+      "status": "passed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

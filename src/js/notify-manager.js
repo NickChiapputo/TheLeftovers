@@ -2,7 +2,7 @@
 {
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
-		if( this.readyState == 4 && this.status == 200 ) 
+		if( this.readyState == 4 && this.status == 200 )
 		{
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
@@ -12,7 +12,7 @@
 			let year = date.getFullYear();
 			let month = date.getMonth()+1
 			dt = date.getDate();
-		
+
 			if(dt < 10)
 			{
 				dt = '0' + dt;
@@ -21,7 +21,7 @@
 			{
 				month = '0' + month;
 			}
-		 
+
 			let today = (year+'-'+month+'-'+(dt));
 			obj.forEach(function(employee)
 			{
@@ -33,7 +33,7 @@
 					}
 				}
 			});
-			
+
 			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -49,6 +49,7 @@
 
 function help(managerid)
 {
+    alert("TEST");
 	var params = {}
 		params['src']=sessionStorage.getItem('employee-id');
 		params['srcType']='server';
@@ -58,12 +59,12 @@ function help(managerid)
 
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
-			if( this.readyState == 4 && this.status == 200 ) 
+			if( this.readyState == 4 && this.status == 200 )
 			{
 				// Response is a JSON array of items
 				var obj = JSON.parse( this.responseText );
 				var numItems = Object.keys( obj ).length;
-	
+
 				alert("Manager "+managerid+" was notified");
 				console.log( this.responseText );
 			}
@@ -71,7 +72,7 @@ function help(managerid)
 			{
 			}
 		};
-	
+
 		// Send a GET request to 64.225.29.130/inventory/view
 		xmlHttp.open( "POST", "http://64.225.29.130/messages/send", true );
 		xmlHttp.send(JSON.stringify(params));
