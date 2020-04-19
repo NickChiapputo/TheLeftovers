@@ -81,16 +81,17 @@ function sendOrderBtn() {
 	console.log(hour);
 
 	// doesn't send while kitchen isn't taking order
-	if ((hour >= 23 && minute >= 30) || (hour < 8)) {
+	/*if ((hour >= 23 && minute >= 30) || (hour < 8)) {
 		document.getElementById('send-order-window').innerText = "Kitchen only accepts orders between 8:00am and 11:30pm";
 		document.getElementById('send-body').style.display = 'none';
 		document.getElementById('send-yes').style.display = 'none';
 		document.getElementById('send-no').style.display = 'none';
 		document.getElementById('send-dismiss').style.display = 'unset';
-	}
+	}*/
 
 	// doesn't send if no items to order
-	else if (ord.items == undefined || ord.items.length == 0) {
+	//else if (ord.items == undefined || ord.items.length == 0) {
+	if (ord.items == undefined || ord.items.length == 0) {
 		document.getElementById('send-order-window').innerText = "Nothing to send";
 		document.getElementById('send-body').style.display = 'none';
 		document.getElementById('send-yes').style.display = 'none';
