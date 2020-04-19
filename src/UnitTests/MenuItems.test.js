@@ -1,5 +1,7 @@
 const {functions} = require('./MenuItems')
 const communication = require('../js/server-communication')
+const frisby = require( 'frisby' );
+const fs = require( 'fs' );
 
 test('Makes sure the Menu receives the get request', () => {
     expect.assertions(1);
@@ -9,29 +11,34 @@ test('Makes sure the Menu receives the get request', () => {
              expect(typeof(data)).toEqual("object");
          });
  });
- 
 
-//  test('Can create a menu item',() => {
-//                  const file = new File([''],'http://64.225.29.130/img/yd7b6zdowsr41.jpg',{
-//                      type: 'text/plain',
-//                      lastModified:new Date()
-//                  })
-//                  var formData = new FormData();
-//                  formData.set("menu-item-create-name","UNITTEST");
-//                  formData.set("menu-item-create-description","UNITTEST");
-//                  formData.set("menu-item-create-category","drink");
-//                  formData.set("menu-item-create-calories","100");
-//                  formData.set("menu-item-create-price","2.99");
-//                  formData.set("menu-item-create-ingredient-1","1");
-//                  formData.set("menu-item-create-has-ingredient-1","1");
-//                  formData.set("menu-item-create-ingredient-count-1","1");
-//                  formData.append("fileToUpload",file)
-//                  var url = "http://64.225.29.130/menu/create"
-//                  var method = "POST";
-//                  var response = communication.communicateWithServer(formData, method, url, false);
-//                  console.log("Response text: "+response.status)
-//                  expect(response.status).toBe(200);
-//  })
+
+test('Can create a new menu item',() => {
+    let formData = frisby.formData();
+    formData.append("menu-item-create-name","UNITTEST");
+    formData.append("menu-item-create-description","UNITTEST");
+    formData.append("menu-item-create-category","drink");
+    formData.append("menu-item-create-calories","100");
+    formData.append("menu-item-create-price","2.99");
+    formData.append("menu-item-create-ingredient-1","1");
+    formData.append("menu-item-create-has-ingredient-1","1");
+    formData.append("menu-item-create-ingredient-count-1","1");
+
+    var pathToImage = "/home/nick/Pictures/Litterbug.jpg";
+
+    formData.append( "fileToUpload", fs.createReadStream( pathToImage ) );
+
+    var url = "http://64.225.29.130/menu/create"
+    
+    return frisby.post( url, { body : formData } )
+                .expect( 'status', 200 )
+                .then( 
+                    function( res ) 
+                    {
+                        expect( res.status ).toBe( 200 );
+                    } 
+                );
+});
 
  
 //delete an empty menu item
