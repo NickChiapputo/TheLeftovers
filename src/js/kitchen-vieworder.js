@@ -9,8 +9,6 @@ function getOrders()
 		{
 			var doc = document.getElementById( 'order-view-area' );
 
-			console.log( this.responseText );
-
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			var numItems = Object.keys( obj ).length;
@@ -21,7 +19,7 @@ function getOrders()
 			sessionStorage.setItem('cooksOrders', JSON.stringify(obj));
 
 
-			var isItDifferent = true;	// CHANGE THIS BACK TO FALSE WHEN DONE
+			var isItDifferent = false;	// CHANGE THIS BACK TO FALSE WHEN DONE
 
 
 			if (cooksOrders == null) {
@@ -46,19 +44,16 @@ function getOrders()
 				for(i=0; i<numItems; i++)
 				{
 					var currItem = obj[i];
-					console.log( "\n\nCurrent Item: " + JSON.stringify( currItem ) + "\n\n" );
 					var name=[];
 					var allergens;
 					var notes=[];
 					var y=i+1;
-					localStorage.setItem('btn'+y,"");
+					sessionStorage.setItem('btn'+y,"");
 					if(currItem.status=='ordered')
 					{
 						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
 						txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
 						txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>";
-
-						console.log( "\n\nItems: " + JSON.stringify( currItem.items ) + "\n\n" );
 
 						currItem.items.forEach(function (food) {
 							var ingredients=[];
@@ -71,14 +66,11 @@ function getOrders()
 									ingredients.push(food.ingredients[k]);
 								}
 							}
-							
-							console.log( "\n\nFood: " + JSON.stringify( food ) + "\n\n" );
+
 							if(food.notes!=undefined)
 							{
-								console.log( "Foode notes: " + food.notes );
 								notes.push(food.notes+"<br>");
 							}
-
 
 							if(ingredients.length!=0)
 							{
@@ -86,9 +78,7 @@ function getOrders()
 							}
 						});
 
-						notes.push( currItem.notes );
-						
-						console.log( "Notes: " + notes );
+
 						if(notes.length!=0)
 							txt+="Note:"+notes.join(",");
 							var ide = "";

@@ -1,15 +1,15 @@
-const {functions} = require('./EmployeeData')
 const communication = require('../js/server-communication')
 
 
 //Grabs object Data
-test('Makes sure the Employee receives the get request', () => {
-   expect.assertions(1);
-    return functions.fetchEmployees()
-        .then(data => {
-            console.log("Trying to connect to database")
-            expect(typeof(data)).toEqual("object");
-        });
+test('Get the list of employees from the employee database', () => {
+    console.log = jest.fn();
+    var url = "http://64.225.29.130/employees/view"
+    var method = "POST";
+    var response = communication.communicateWithServer("", method, url, false);
+
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(200);
 });
 
 //Create
