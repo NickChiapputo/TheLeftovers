@@ -35,7 +35,7 @@ test('Can create a new menu item',() => {
                 .then( 
                     function( res ) 
                     {
-                        id='responseText'['_id'];
+                        id = JSON.parse( res[ "_body" ] )[ "_id" ];
                         console.log(res);
                         expect( res.status ).toBe( 200 );
                     } 
