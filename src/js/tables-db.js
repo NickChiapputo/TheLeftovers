@@ -235,10 +235,10 @@ function createTable( table, collection, res )
 	collection.insertOne( table, function( err, result ) {
  		if( err )
  		{
- 			console.log( "Error inserting table." );
+ 			console.log( "Error inserting table.\nError log: " + err.message );
  			res.statusCode = 500;													// Internal Server Error
  			res.end( JSON.stringify( { "response" : "error inserting table" } ) );	// Unsuccessful action
- 			throw err;	
+			return;
  		} 
 
  		// Display new item for debugging
