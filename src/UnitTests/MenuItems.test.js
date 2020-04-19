@@ -15,7 +15,7 @@ test('Get the list of menuitems from the menu database', () => {
 //Create
 test('Can create a new menu item',() => {
     let formData = frisby.formData();
-    formData.append("menu-item-create-name","GUNIT2");
+    formData.append("menu-item-create-name","GUNIT9");
     formData.append("menu-item-create-description","UNITTEST");
     formData.append("menu-item-create-category","drink");
     formData.append("menu-item-create-calories","100");
@@ -35,6 +35,7 @@ test('Can create a new menu item',() => {
                 .then( 
                     function( res ) 
                     {
+                        id='responseText'['_id'];
                         console.log(res);
                         expect( res.status ).toBe( 200 );
                     } 
@@ -44,7 +45,7 @@ test('Can create a new menu item',() => {
 test('Can edit a menu item', ()=>{
     let formData = frisby.formData();
     formData.append("menu-item-edit-id",id)
-    formData.append("menu-item-edit-name","UNIT3");
+    formData.append("menu-item-edit-name","UNIT87");
     formData.append("menu-item-edit-description","UNITTEST");
     formData.append("menu-item-edit-category","drink");
     formData.append("menu-item-edit-calories","100");
@@ -73,7 +74,7 @@ test('Can edit a menu item', ()=>{
 //Delete
 test('Delete a menu item from the database',()=>{
     console.log = jest.fn();
-    var menuItem = {"name":"UNIT3"}
+    var menuItem = {"name":"UNIT87"}
     var url = "http://64.225.29.130/menu/delete"
     var method = "POST";
     var response = communication.communicateWithServer(JSON.stringify(menuItem), method, url, false);
