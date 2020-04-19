@@ -79,7 +79,7 @@ function placeTable(tableNum, status){
 }
 
 function store(value){
-	Cookies.set('table-num', value, {path: '/', sameSite: 'strict'});
+	sessionStorage.setItem( 'tableid', value );
 }
 
 module.exports = {getTableList, placeTable, store} ;
