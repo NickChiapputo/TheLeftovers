@@ -49,7 +49,6 @@ function getOrders()
 					sessionStorage.setItem('btn'+y,"");
 					if(currItem.status=='ordered')
 					{
-						alert(y)
 						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
 						txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
 						txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
@@ -64,20 +63,17 @@ function getOrders()
 									ingredients.push(food.ingredients[k]);
 								}
 							}
-							
+							alert(food)
 							if(food.notes!=undefined)
 							{
 								notes.push(food.notes+"<br>");
 							}
-
 
 							if(ingredients.length!=0)
 							{
 								txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
 							}
 						});
-						
-
 						if(notes.length!=0)
 							txt+="Note:"+notes.join(",");
 							var ide = "";

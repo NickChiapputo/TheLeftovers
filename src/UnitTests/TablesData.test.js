@@ -1,13 +1,14 @@
 const {functions} = require('./TablesData')
 const communication = require('../js/server-communication.js')
 
-test('Makes sure the Tables receives the get request', () => {
-   expect.assertions(1);
-    return functions.fetchMenu()
-        .then(data => {
-            console.log("Trying to connect to database")
-            expect(typeof(data)).toEqual("object");
-        });
+test('Get the list of tables from the table database', () => {
+    console.log = jest.fn();
+    var url = "http://64.225.29.130/tables/view"
+    var method = "POST";
+    var response = communication.communicateWithServer("", method, url, false);
+
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(200);
 });
 
 //Create
