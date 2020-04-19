@@ -8,6 +8,7 @@ function getMenu()
 			var entree = document.querySelector("#menu-entree");
 			var drink = document.querySelector("#menu-drink");
 			var desserts = document.querySelector("#menu-desserts");
+			var kid = document.querySelector("#menu-kid");
 
 			appetizer.innerHTML="";
 			entree.innerHTML="";
@@ -37,6 +38,10 @@ function getMenu()
 				else if(d.category=="dessert")
 				{
 					desserts.innerHTML+="    "+"<button class=\"menu-box\" id=\"food\" onclick=\"displayInfo('"+d.name+"');\"><img style=\"width:120px; height:120px; border-radius:50% \" src=\""+d.image+"\"<button>"+d.name;
+				}
+				else if(d.category=="kid")
+				{
+					kid.innerHTML+="    "+"<button class=\"menu-box\" id=\"food\" onclick=\"displayInfo('"+d.name+"');\"><img style=\"width:120px; height:120px; border-radius:50% \" src=\""+d.image+"\"<button>"+d.name;
 				}
 				
 			});
