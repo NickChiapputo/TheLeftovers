@@ -29,11 +29,11 @@
 	</head>
 	<script>
 		function rewardCheck() {
-			if (sessionStorage.getItem('free-shiz') != 'true') {
+			if (sessionStorage.getItem('free-stuff-plz') != 'true') {
 				window.location.href = "index.html"
 			}
 			else {
-				sessionStorage.setItem('free-shiz', 'false');
+				sessionStorage.setItem('free-stuff-plz', 'false');
 			}
 		}
 	</script>
@@ -85,7 +85,7 @@
 				<input id="user-input-number" class="col rewardstext-box" style="height: 100px; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off" required>
 			</div>
 
-			<!-- Login Button -->
+			<!-- Guess Button -->
 			<div class="row menu-row">
 				<div onclick="getFreeReward();" style="cursor: pointer;" class="col menu-box">
 					<h1 class="menu-text">Guess!</h1>

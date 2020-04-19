@@ -94,6 +94,7 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
+							<!-- Requests are recorded here -->
 							<form>
 								<br>
 								<ol id="list" style="text-align: left;">
@@ -131,6 +132,7 @@
 								<text id="confirm-choice"></text>
 							</div>
 							<div class="modal-footer">
+								<!-- Green button shown on success and red button shown on failure -->
 								<button type="button" class="btn btn-outline-danger" data-dismiss="modal">No</button>
 								<button type="button" class="btn btn-outline-success" onclick="addToOrder(load_ingredients())">Yes</button>
 							</div>
@@ -150,6 +152,7 @@
 								</div>
 						</div>
 						<div class="col-3">
+							<!-- Currrent item's ingredients -->
 								<div class="text-box" style="max-height: 48vh;">
 									<input type="checkbox" id="topping_1" name="topping_1" value="topping_1" style="visibility: hidden;">
 									<label id="top1" for="topping_1" style="visibility: hidden;"></label><br>
@@ -169,7 +172,7 @@
 									<label id="top8" for="topping_8" style="visibility: hidden;"></label><br>
 								</div>
 								<div class="text-box" style="max-height: 10vh;">
-										<text id="Kcal">Kcal = NO CALORIES!!!</text>
+										<text id="Kcal">Kcal = (none)</text>
 								</div>
 								<div class="text-box" style="max-height: 15vh;">
 										<text id="allerg">Allergens: (none)</text>
