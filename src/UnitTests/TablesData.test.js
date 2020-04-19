@@ -23,6 +23,32 @@ test('Create a table that already exists', () => {
     expect(response.status).toBe(500);
 });
 
+//Create a negative table
+test('Create a table that is negative', () => {
+    console.log = jest.fn();
+    var query = {
+                    "table":"-5"
+                };
+    var url = "http://64.225.29.130/tables/create"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
+//Create a table number greater than 20
+test('Create a table that is greater than 20', () => {
+    console.log = jest.fn();
+    var query = {
+                    "table":"25"
+                };
+    var url = "http://64.225.29.130/tables/create"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
 //Update a table's status to 'sitting'
 test('Update table status to sitting', () => {
     console.log = jest.fn();
@@ -78,6 +104,7 @@ test('Update table status to paid', () => {
     console.log("Response status: "+response.status)
     expect(response.status).toBe(200);
 });
+
 
 //Update a table's status to invalid status
 test('Update table status to invalid status', () => {
