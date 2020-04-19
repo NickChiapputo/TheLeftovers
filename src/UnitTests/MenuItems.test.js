@@ -15,7 +15,7 @@ test('Makes sure the Menu receives the get request', () => {
 //Create
 test('Can create a new menu item',() => {
     let formData = frisby.formData();
-    formData.append("menu-item-create-name","GUNIT");
+    formData.append("menu-item-create-name","GUNIT1");
     formData.append("menu-item-create-description","UNITTEST");
     formData.append("menu-item-create-category","drink");
     formData.append("menu-item-create-calories","100");
@@ -35,7 +35,7 @@ test('Can create a new menu item',() => {
                 .then( 
                     function( res ) 
                     {
-                        id = JSON.parse(res.responseText)["_id"];
+                        console.log(res);
                         expect( res.status ).toBe( 200 );
                     } 
                 );
@@ -64,7 +64,7 @@ test('Can edit a menu item', ()=>{
                 .then( 
                     function( res ) 
                     {
-                        id = JSON.parse(res.responseText)["_id"];
+                        
                         expect( res.status ).toBe( 200 );
                     } 
                 );
@@ -78,7 +78,16 @@ test('Delete a menu item from the database',()=>{
     var method = "POST";
     var response = communication.communicateWithServer(JSON.stringify(menuItem), method, url, false);
     console.log("Response text: " + response.text)
-    expect(response.status).toBe(200);
+    var outcome;
+    if(JSON.parse(response.responseText)["n"]=="1"&&JSON.parse(response.responseText)["ok"]=="1")
+    {
+        outcome=1;
+    }
+    else
+    {
+        outcome=0
+    }
+    expect(outcome).toBe(1);
 
 })
  
