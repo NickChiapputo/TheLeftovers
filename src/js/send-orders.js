@@ -1,15 +1,21 @@
+// sending order to the database
 function send_order()
 {
+	//grabbing order from session storage
 	var jsonOrder = JSON.parse(sessionStorage.getItem('current_order'));
 	jsonOrder.status = 'ordered';
+
+	// grabbing and rewarding rewards number
 	var rewards = sessionStorage.getItem('rewards-number-save');
 	if (rewards != null) {
 		jsonOrder['rewards'] = rewards;
 	}
 
+	// creating new order object to send
 	var sendOrd = JSON.stringify(jsonOrder);
 	sendOrd = JSON.parse(sendOrd);
 
+	// removing previously sent items
 	for (i = jsonOrder.items.length - 1; i >= 0; i--) {
 		console.log[i];
 		jsonOrder.items[i].sent = 'true';
@@ -31,6 +37,7 @@ function send_order()
 			// Response is a JSON object
 			var obj = JSON.parse( this.responseText );
 
+			// printing success info to post-send-order window
 			document.getElementById('close-pay-response').className = "btn btn-outline-success";
 			document.getElementById('order-sent').style.color = 'green';
 			document.getElementById('order-sent-title').innerText = "Sent!";
@@ -47,6 +54,7 @@ function send_order()
 		}
 		else if( this.readyState == 4 && this.status != 200 )
 		{
+			// printing failure info to post-send-order window
 			document.getElementById('close-pay-response').className = "btn btn-outline-danger";
 			document.getElementById('order-sent').style.color = 'red';
 			document.getElementById('order-sent-title').innerText = "Not sent";
@@ -63,6 +71,7 @@ function send_order()
 	return jsonOrder;
 }
 
+// displaying data to send confirmation window
 function sendOrderBtn() {
 	var ord = JSON.parse(sessionStorage.getItem('current_order'));
 	console.log(ord.items.length);

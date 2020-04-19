@@ -1,7 +1,9 @@
+// getting orders for current table from databse
 function getOrdersByTable()
 {
     $(document).ready(function() {
         var table = (sessionStorage.getItem('tableid'));
+        // making new payment object
         var payment = Cookies.get('payment');
             payment = {}
             payment['tip'] = '';
@@ -11,16 +13,16 @@ function getOrdersByTable()
             payment['amount'] = '';
             payment['email'] = '';
             Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
-            //console.log(payment);
         if (table == undefined) {
             table = 0;
         }
+
+        // displaying table's orders
         document.getElementById('tableNum').innerText = table;
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if( this.readyState == 4 && this.status == 200 ) 
             {
-                //var doc = document.getElementById( 'textarea-orders-view' );
 
                 // Response is a JSON array of items
                 var obj = JSON.parse( this.responseText );
@@ -37,27 +39,7 @@ function getOrdersByTable()
                 var tax=0;
                 var paid=0;
                 var billExists = false;
-                //var billOrders = JSON.parse(window.localStorage.getItem('bill_orders'));
                 var billOrders = [{}];
-                /*if (billOrders == null) {
-                    console.log('CREATE');
-                    var billOrders = [{}];
-                }
-                else {
-                    console.log('REUSE');
-                }*/
-                //console.log(billOrders);
-
-                /*function searchBill(id) {
-                    for (i=0; i < billOrders.length; i++) {
-                        if (id == billOrders[i]._id) {
-                            console.log("MATCH");
-                            return true;
-                        }
-                    }
-                    console.log("NO MATCH");
-                    return false;
-                }*/
 
                 for( p = 0; p < numItems; p++ ) {
                     if (obj[p].table == table && obj[p].status != 'paid' && obj[p].status != 'ordered') {
@@ -65,6 +47,8 @@ function getOrdersByTable()
                         billOrders.push(obj[p]);
                     }
                 }
+
+                // multiple active orders can exist. Printing every active order
                 for( p = 1; p < billOrders.length; p++ ) {
                         billExists = true;
                         out += 	  "Order " + ( p + 1 ) + " (" + billOrders[ p ][ "status" ] + "): " + billOrders[ p ][ "_id" ] + "\n"
@@ -96,8 +80,9 @@ function getOrdersByTable()
                             }
                             output = output.concat('\n');
                         }
-                        //console.log("Paid: ", paid);
                 }
+
+                // recording current orders and printing them
                 window.localStorage.setItem('bill_orders', JSON.stringify(billOrders));
                 if (billExists == true) {
                     paid = (subtotal + tax - total);
@@ -126,8 +111,8 @@ function getOrdersByTable()
     });
 }
 
+// add tip to payment object
 function addTip() {
-    //window.localStorage.setItem('bill_orders', JSON.stringify(billOrders));
     var tip = document.getElementById("tip-input").value;
     if (tip < 0) {
         return;
@@ -135,10 +120,10 @@ function addTip() {
     var payment = Cookies.getJSON('payment');
     payment.tip = tip;
     Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
-    //console.log(payment);
     document.getElementById('tip-label').innerText = "Tip: $" + tip;
 }
 
+// clearing note left for server
 function clearNote() {
     var note = document.getElementById("note");
     note.value = '';
@@ -147,11 +132,13 @@ function clearNote() {
     Cookies.set('payment', payment, { path: '/', sameSite: 'strict'});
 }
 
+// retrieving server note
 function loadNote() {
     var payment = Cookies.getJSON('payment');
     document.getElementById('note-body').innerText = payment.note;
 }
 
+// submitting note for server
 function submitNote() {
     var payment = Cookies.getJSON('payment');
     var note = document.getElementById("note");
@@ -162,21 +149,20 @@ function submitNote() {
     console.log(note.value)
     payment ['note'] = note.value;
     Cookies.set('payment', payment, { path: '/', sameSite: 'strict'});
-    //console.log(payment);
     note.value = '';
-    /*var noteSuc = document.getElementById('note-success');
-    noteSuc.innerText = "\nNote will be sent to your server";
-    noteSuc.style.color = "green";
-    noteSuc.style.display = "unset";*/
     console.log("sent");
 }
 
+// called after clicking pay button
+// loading payment and reciept options
 function getOptions() {
     document.getElementById('pay-text').style.color = 'black';
     var payment = Cookies.getJSON('payment');
     payment.payment = document.getElementsByName( "order-pay-method" )[ 0 ].value;
     payment.receipt = document.getElementsByName( "order-receipt-method" )[ 0 ].value;
     var email = document.getElementById('email-input');
+
+    // getting user email if relevant
     if (payment.receipt == "email" && payment.payment != "N/A" && (payment.email == undefined || payment.email.length == 0)) {
         email.style.display = 'unset';
         email.value = '';
@@ -193,10 +179,14 @@ function getOptions() {
         document.getElementById('yesnoPay').style.display = 'unset';
         document.getElementById('submitEmail').style.display = 'none';
     }
+
+    // errors are displayed in red
     Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
     var payText = document.getElementById('pay-text');
     payText.style.color = 'red';
     var bill_orders = JSON.parse(window.localStorage.getItem('bill_orders'));
+
+    // checking for upaid orders
     var isItEmpty = true;
     for (var i=1; i < bill_orders.length; i++) {
         if (bill_orders[i].status != 'paid') {
@@ -205,11 +195,15 @@ function getOptions() {
         }
     }
     console.log(bill_orders.length)
+
+    // if no unpaid orders, don't let customer pay
     if (isItEmpty == true) {
         document.getElementById('pay-foot').style.display = 'none';
         payText.style.color = "green"
         payText.innerText = "Bill has been paid. Have a great day! :)";
     }
+
+    // informing user that they need to enter email and payment info
     else if (payment.payment == "N/A" && payment.receipt == "N/A") {
         document.getElementById('pay-foot').style.display = 'none';
         payText.innerText = 'No payment method selected';
@@ -230,9 +224,11 @@ function getOptions() {
     }
 }
 
+// handling payments
 function handlePayment(frac) {
     var payment = Cookies.getJSON('payment');
     
+    // fractioonal or whole payments
     if (frac == 'F') {
         payment.amount = document.getElementById('partial-pay-amount').value;
         document.getElementById('partial-pay-amount').value = 0;
@@ -252,16 +248,21 @@ function handlePayment(frac) {
         for (i = 1; i < bill_orders.length; i++) {
             payment.amount += bill_orders[i].total;
         }
-        //console.log(payment.amount);
-        //console.log("bill_orders", bill_orders);
     }
+
     if (payment.tip.length <= 0) {payment.tip = 0}
     var totalPaid = Number(payment.amount + Number(payment.tip));
+
+    // processing order payments and printing status to modal window
     document.getElementById('pay-success-title').innerText = "Successfully paid $" + Number(totalPaid);
     document.getElementById('pay-success-title').style.color = 'green';
     var tip = payment.tip;
+
+    // buildPayments prepares payment data to be sent to the database
     var total = buildPayments(payment);
     var sucText = document.getElementById('pay-success-text');
+
+    // printing more output data
     total = (Number(total.toFixed(2))).toString();
     if (total < 0) {
         sucText.innerText = "Paid: $" + Number(payment.amount) + "\n+ Tip: $" + tip + "\nNot charged: $" + total-payment.amount;
@@ -274,10 +275,12 @@ function handlePayment(frac) {
 
     var payments = JSON.parse(window.localStorage.getItem('payments'));
 
+    // sending payment data to server
     for (var i=0; i < payments.length; i++) {
         sendPayment(payments[i]);
     }
 
+    // removing current order if full order is paid
     if (total <= 0) {
         sessionStorage.removeItem('current_order');
         document.getElementById('noGame').style.display = 'none';
@@ -288,18 +291,24 @@ function handlePayment(frac) {
         document.getElementById('playGame').style.display = 'unset';
     }
 
+    // reloading bill
     getOrdersByTable();
     document.getElementsByName( "order-pay-method" )[ 0 ].value = "N/A";
     document.getElementsByName( "order-receipt-method" )[ 0 ].value = "N/A";
 }
 
+// building payment data
 function buildPayments(payment) {
     var saveTip = payment.tip;
     money = Number(payment.amount);
     var payments = [{}];
+
+    // getting orders
     var orders = JSON.parse(window.localStorage.getItem('bill_orders'));
     var total = (money * -1);
     for (i=1; i < orders.length; i++) {
+
+        // building payment object for every order that's paid for
         total += orders[i].total;
         var newPayment = new Object();
         newPayment.tip = payment.tip;
@@ -309,17 +318,19 @@ function buildPayments(payment) {
         newPayment.amount = 0;
         newPayment.email = payment.email;
         newPayment ['_id'] = orders[i]._id;
+
+        //only paying for unpaid orders
         if (orders[i].status != 'paid') {
             payment.tip = 0;
+            // paying for whole order object
             if (money >= orders[i].total) {
-                console.log('whole')
                 newPayment.amount = orders[i].total;
                 money = money - orders[i].total;
                 orders[i].total = 0;
                 orders[i].status = 'paid';
             }
+            // paying for part of order object
             else {
-                console.log('part')
                 newPayment.amount = money;
                 orders[i].total = orders[i].total - money;
                 money = 0
@@ -327,6 +338,8 @@ function buildPayments(payment) {
         }
         payments.push(newPayment);
     }
+
+    // recording payment and order objects
     payments.splice(0,1);
     window.localStorage.setItem('payments', JSON.stringify(payments));
     window.localStorage.setItem('bill_orders', JSON.stringify(orders));
@@ -337,12 +350,10 @@ function buildPayments(payment) {
     return total;
 }
 
-// [{"total":0,"status":"paid"},{"_id":"5e95f5bf5c7b945a72190cf0","table":"16","rewards":"","status":"paid","items":[{"_id":"5e8e6fdebff48d4bf516cfc1","name":"Orange Juice","price":3,"calories":300,"ingredients":["Orange"],"hasIngredient":[1],"ingredientCount":[3],"allergens":[],"description":"Made with freshly squeezed oranges.","category":"drink","image":"http://64.225.29.130/img/is-orange-juice-healthy-1578411142.jpg","sent":"false"}],"subtotal":3,"tax":0.25,"total":0,"tip":0},{"_id":"5e961c695c7b945a72190cf6","table":"16","rewards":"","status":"ordered","items":[{"_id":"5e93edf1adb4ec78331d99c2","name":"Banana Split","price":4.99,"calories":500,"ingredients":["Pine Nuts","Banana","Chocolate Syrup","Vanilla Ice Cream","Whipped Cream","Cherry"],"hasIngredient":[0,0,0,0,0,0],"ingredientCount":[10,2,1,3,1,2],"allergens":[],"description":"Perfect Banana Split","category":"dessert","image":"http://64.225.29.130/img/perfect-banana-split-recipe-305712-13_preview-5b2bd062ba61770054b59b85.jpeg","sent":"false"}],"subtotal":4.99,"tax":0.41,"total":3},{"_id":"5e9625df5c7b945a72190cf7","table":"16","rewards":"","status":"ordered","items":[{"_id":"5e8e6fdebff48d4bf516cfc1","name":"Orange Juice","price":3,"calories":300,"ingredients":["Orange"],"hasIngredient":[1],"ingredientCount":[3],"allergens":[],"description":"Made with freshly squeezed oranges.","category":"drink","image":"http://64.225.29.130/img/is-orange-juice-healthy-1578411142.jpg","sent":"false"}],"subtotal":3,"tax":0.25,"total":3.25}]
-
+// sending
 function sendPayment(payment)
 {
-    
-	var order = {};
+    var order = {};
 
 	// Get order payment data
 	order[ "_id" ] = payment._id;
@@ -351,10 +362,10 @@ function sendPayment(payment)
 	order[ "receipt" ] = payment.receipt;
 	order[ "tip" ] = payment.tip;
     order[ "feedback" ] = payment.note;
-    //console.log("PAYMENT: ", payment);
 	order[ "email" ] = payment.email;
     console.log("ORDER: ", order);
 
+    // beaming it to the cloud
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
@@ -372,6 +383,7 @@ function sendPayment(payment)
     xmlHttp.send( JSON.stringify( order ) );
 }
 
+// recording and displaying email
 function submitEmail() {
     var payment = Cookies.getJSON('payment');
     var email = document.getElementById('email-input').value;
@@ -383,7 +395,6 @@ function submitEmail() {
     }
     else {
         payment['email'] = email;
-        //console.log(payment);
         Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
         getOptions();
     }

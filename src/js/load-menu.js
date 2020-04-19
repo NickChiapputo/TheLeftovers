@@ -1,14 +1,16 @@
+// loading menu items within a category
 function loadMenu()
 {
 	$(document).ready(function() {
+		// loading item for chosen type
 		var cats = sessionStorage.getItem('type');
 		var pageTitle = cats;
 		pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
 		document.getElementById('category').innerText = pageTitle;
 
+		// getting most popular item
 		var maxloc=-1;
 		maxloc = JSON.parse( sessionStorage.getItem('max') );
-		//console.log(maxloc);
 		if (maxloc != undefined) {
 			maxloc = maxloc[cats][0];
 		}
@@ -17,15 +19,13 @@ function loadMenu()
 		xmlHttp.onreadystatechange = function() {
 			if( this.readyState == 4 && this.status == 200 )
 			{
-				//var doc = document.getElementById( 'textarea-menu-view' );
 
 				// Response is a JSON array of items
 				var obj = JSON.parse( this.responseText );
 
 				var numItems = Object.keys( obj ).length;
 
-				//doc.innerHTML = "Number of Menu Items: " + numItems + "\n";
-
+				// grabbing items from database and displaying them to the screen
 				var i;
 				var j = 1;
 				var itemBox;
@@ -67,8 +67,8 @@ function loadMenu()
 	});
 }
 
+// grabbing a cookie
 function getCookieByName(name) {
-
 	var cook = document.cookie.split(';');
 	var temp;
 	for (var i=0; i< cook.length; i++) {
@@ -80,13 +80,18 @@ function getCookieByName(name) {
 	}
 }
 
+// loading a single item
 function load_item() {
 	suppressEnter();
 	$(document).ready(function() {
+		// grabbing chosen item from cookie and displaying it to page
 		var obj=Cookies.getJSON('current_item');
 		document.getElementById("item-name").innerText = obj.name;
 		document.getElementById("descrip").innerText = obj.description;
 		document.getElementById("food_pic").style.backgroundImage = "url(".concat(obj.image,")");
+
+		// displaying available ingredients
+		// unavailable ones will be shown but will be red and un-selectable
 		var ingArr = obj.ingredients;
 		var hasIng = obj.hasIngredient;
 		var ingCount = obj.ingredientCount;
@@ -94,6 +99,8 @@ function load_item() {
 		for (i=0; i < ingArr.length; i++) {
 			console.log( 'arr', inventory[ingArr[i]]);
 			console.log( 'count', ingCount[i]);
+
+			// out of stock ingredients
 			if ( inventory[ingArr[i]] == undefined || inventory[ingArr[i]] < ingCount[i] ) {
 				currLab = document.getElementById("top".concat(i+1));
 				currLab.innerText = ingArr[i] + ' (out of stock)';
@@ -102,6 +109,8 @@ function load_item() {
 				currBox = document.getElementById("topping_".concat(i+1));
 				currLab.checked = false;
 			}
+
+			// available ingredients
 			else {
 				currLab = document.getElementById("top".concat(i+1));
 				currLab.innerText = ingArr[i];
@@ -114,6 +123,8 @@ function load_item() {
 				}
 			}
 		}
+
+		// displaying allergens
 		var allergens = document.getElementById('allerg');
 		for (i=0; i < obj.allergens.length; i++) {
 			if (i > 0) {
@@ -127,6 +138,8 @@ function load_item() {
 	});
 }
 
+// displaying ingredients for confirm add item window
+// returning item object
 function load_ingredients() {
 		var obj=Cookies.getJSON('current_item');
 		var ingArr = obj.ingredients;
@@ -136,9 +149,7 @@ function load_ingredients() {
 		for (i=0; i < ingArr.length; i++) {
 			obj.hasIngredient[i] = 0;
 			currLab = document.getElementById("top".concat(i+1));
-			//currLab.innerText = ingArr[i];
 			currBox = document.getElementById("topping_".concat(i+1));
-			//currBox.style.visibility = "visible";
 			if (currBox.checked == true) {
 				str = str.concat(currLab.innerText, ', ');
 				obj.hasIngredient[i] = 1;
@@ -149,6 +160,7 @@ function load_ingredients() {
 		return(obj);
 }
 
+// loading items in current order
 function loadOrderItems() {
 	// supressing enter key
 	suppressEnter();
@@ -166,10 +178,8 @@ function loadOrderItems() {
 			location = "login.html";
 		}
 
-		// replace with real rewards num
-		// default is 0
+		// building empty table
 		var rewards = '';
-
 		if (sessionStorage.getItem('current_order') == null) {
 			var cur_ord = {
 				"table":table,
@@ -186,7 +196,6 @@ function loadOrderItems() {
 		}
 
 		order.table = table;
-
 		if (document.getElementById('pageTitle').innerText == "View Order") {
 			// adding new item
 			if (Cookies.get('new_item') == 1) {
@@ -205,7 +214,6 @@ function loadOrderItems() {
 			if (order.items == undefined || order.items.length == 0) {
 				document.getElementById('itemList').innerText = 'Tap "Add item" to order food';
 				order.status = "none";
-				//Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
 				sessionStorage.setItem('current_order', JSON.stringify(order));
 				document.getElementById("sendOrderBtn").style.display = 'none';
 				return;
@@ -249,6 +257,7 @@ function loadOrderItems() {
 					}
 				}
 
+				// applying free drink discound
 				if (order.items[i].category == 'drink' && freeDrinks > 0) {
 					freeDrinks = freeDrinks - 1;
 					order.items[i]['free_drink'] = 'true';
@@ -256,6 +265,7 @@ function loadOrderItems() {
 					output = output.concat(' (free drink with entree)');
 				}
 				else {
+					// applying kids and happy hour discount
 					order.items[i]['free_drink'] = 'false';
 					total += order.items[i].price;
 					output = output.concat(order.items[i].name, " $", order.items[i].price);
@@ -269,8 +279,7 @@ function loadOrderItems() {
 					}
 				}
 
-
-				
+				// printing menu
 				output = output.concat('\n');
 				for (j=0; j < order.items[i].ingredients.length; j++) {
 					if (order.items[i].hasIngredient[j] == '1') {
@@ -280,6 +289,8 @@ function loadOrderItems() {
 				output = output.concat('\n');
 			}
 		}
+
+		// changing send order button text
 		if (document.getElementById('pageTitle').innerText == "View Order") {
 			if (order.status == "in progress") {
 				if (order.items[0].sent == 'true') {
@@ -294,7 +305,7 @@ function loadOrderItems() {
 			}
 		}
 
-		//Cookies.set('current_order', order, {path: '/', sameSite: 'strict'});
+		// printing sub,tax, and total at bottom of order
 		console.log('current order: ',  order);
 		sessionStorage.setItem('current_order', JSON.stringify(order));
 		total = Number((total));
@@ -307,6 +318,7 @@ function loadOrderItems() {
 	});
 }
 
+// adding trailing 0s to numbers
 function addTrailingZeros(num) {
 	var str = (Number(num.toFixed(2))).toString();
 	var length = str.length;
@@ -327,6 +339,7 @@ function addTrailingZeros(num) {
 	return str;
 }
 
+// adding menu item to order
 function addToOrder(obj) {
 	obj.sent = 'false';
 	Cookies.set("current_item", JSON.stringify(obj), { path: '/', sameSite: 'strict' });
@@ -334,19 +347,21 @@ function addToOrder(obj) {
 	window.location.href='View-Order.html';
 }
 
+// saving current item in cookie
 function saveChoice(num) {
 	var obj = document.getElementById("food".concat(num));
 	var str = "current_item="
 	str = str.concat(obj.name);
-	//document.cookie = str.concat(";");
 	Cookies.set("current_item", obj.name, {path: '/', sameSite: 'strict'});
 }
 
+// setting type cookie
 function setType(type) {
 	console.log( "Set " );
 	sessionStorage.setItem('type', type );
 }
 
+// editing or removing an item
 function editRemoveItem(edRom) {
 	if (edRom == 1) {
 		var item = document.getElementById('edit-choice');
@@ -355,6 +370,8 @@ function editRemoveItem(edRom) {
 		var item = document.getElementById('remove-choice');
 	}
 	var selection = item.value - 1;
+
+	// displaying error message for selecting already sent items
 	if (selection >= 0 && selection < (JSON.parse(sessionStorage.getItem('current_order'))).items.length) {
 		Cookies.set('current_item', (JSON.parse(sessionStorage.getItem('current_order'))).items[selection], {path: '/', sameSite: 'strict'});
 		var temp = JSON.parse(sessionStorage.getItem('current_order'));
@@ -368,8 +385,9 @@ function editRemoveItem(edRom) {
 			err.innerText = "\nCannot delete or edit sent items";
 			err.style.color = "red";
 			err.style.display = "unset";
-			//console.log("sent");
 		}
+
+		// removing selected item
 		else {
 			temp.items.splice(selection, 1);
 			if (temp.items.length > 0) {
@@ -381,9 +399,10 @@ function editRemoveItem(edRom) {
 			if (edRom == 1) {
 				window.location.href='Menu-Item.html';
 			}
-			//console.log("unsent");
 		}
 	}
+
+	// displaying error for out of range items
 	else {
 		if (edRom == 1) {
 			var err = document.getElementById('cokies');
