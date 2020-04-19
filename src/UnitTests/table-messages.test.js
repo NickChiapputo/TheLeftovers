@@ -7,4 +7,3 @@ test('Should send a refill message', async() => {
     expect(sendHelp(note)).not.toBe(undefined);
 
 })
-
