@@ -25,6 +25,21 @@ test('Create rewards account', () => {
     expect(response.status).toBe(200);
 });
 
+//Create with no data
+test('Create rewards account', () => {
+    console.log = jest.fn();
+    var query = {
+                    "phone":"",
+                    "name":""
+                };
+
+    var url = "http://64.225.29.130/rewards/create"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
 //Create duplicate rewards account
 test('Cannot create duplicate rewards account', () => {
     console.log = jest.fn();
@@ -59,6 +74,20 @@ test('Search for rewards account with invalid number', () => {
     console.log = jest.fn();
     var query = {
                     "phone":"1231231234123123123",
+                };
+
+    var url = "http://64.225.29.130/rewards/search"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
+//Search for rewards account - none
+test('Search for rewards account with no phone number', () => {
+    console.log = jest.fn();
+    var query = {
+                    "phone":"",
                 };
 
     var url = "http://64.225.29.130/rewards/search"
