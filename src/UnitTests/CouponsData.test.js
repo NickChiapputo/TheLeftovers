@@ -29,11 +29,24 @@ test('Add a coupon to the Coupon database', () => {
 
 //Delete
 test('Cannot Delete with an invalid ID',() => {
-    console.log = jest.fn(); 
+    console.log = jest.fn();
     var query = {
         "_id" : ""
     };
     var url = "http://64.225.29.130/coupons/delete"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+})
+
+//Verify
+test('Cannot Verfiy with an invalid ID',() => {
+    console.log = jest.fn();
+    var query = {
+        "_id" : ""
+    };
+    var url = "http://64.225.29.130/coupons/verify"
     var method = "POST";
     var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
     console.log("Response status: "+response.status)
