@@ -85,7 +85,7 @@ function compBill(compAmt){
     var orderToComp = document.getElementById('comp-order-num').value;
 
     //set table Number
-    var table = Cookies.get('table-num');
+    var table = sessionStorage.getItem( 'tableid')
     if (table == undefined) {
         table = 0;
     }
@@ -229,7 +229,7 @@ function applyCoupon(code){
 
 function sendPayment(){
     //set table Number
-    var table = Cookies.get('table-num');
+    var table = sessionStorage.getItem( 'tableid')
     if (table == undefined) {
         table = 0;
     }
@@ -289,7 +289,7 @@ function payOrder(orderObj)
 	alert(order[ "tip" ]);
 	alert(order[ "feedback" ]);
 	alert(order[ "email" ]);*/
-    alert(JSON.stringify( order ));
+    //alert(JSON.stringify( order ));
 
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
@@ -306,6 +306,7 @@ function payOrder(orderObj)
 	// Send a POST request to 64.225.29.130/orders/pay
 	xmlHttp.open( "POST", "http://64.225.29.130/orders/pay" );
 	xmlHttp.send( JSON.stringify( order ) );
+    location.reload();
 }
 
 module.exports = {loadBill,showBill, compBill, sendComp, splitBill, applyCoupon, sendPayment,payOrder} ;
