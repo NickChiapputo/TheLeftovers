@@ -23,6 +23,19 @@ test('Create a table that already exists', () => {
     expect(response.status).toBe(500);
 });
 
+//Create table with no number
+test('Create a table with no number', () => {
+    console.log = jest.fn();
+    var query = {
+                    "table":""
+                };
+    var url = "http://64.225.29.130/tables/create"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
 //Create a negative table
 test('Create a table that is negative', () => {
     console.log = jest.fn();
@@ -112,6 +125,20 @@ test('Update table status to invalid status', () => {
     var query = {
                     "table":"1",
                     "status":"blah"
+                };
+    var url = "http://64.225.29.130/tables/update"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response status: "+response.status)
+    expect(response.status).toBe(400);
+});
+
+//Update an invalid table
+test('Update invalid table', () => {
+    console.log = jest.fn();
+    var query = {
+                    "table":"",
+                    "status":"sitting"
                 };
     var url = "http://64.225.29.130/tables/update"
     var method = "POST";

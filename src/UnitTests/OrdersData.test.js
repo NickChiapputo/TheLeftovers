@@ -1,5 +1,6 @@
 const {functions} = require('./OrdersData')
 const communication = require('../js/server-communication.js')
+var id
 
 test('Makes sure the Orders receives the get request', () => {
    expect.assertions(1);
@@ -29,20 +30,31 @@ test('Add an order to the order database', () => {
     var url = "http://64.225.29.130/orders/create"
     var method = "POST";
     var response = communication.communicateWithServer(JSON.stringify(order), method, url, false);
+
+    id = JSON.parse(response.responseText)[ "_id" ];
+
     console.log("Response text: " + response.text)
     expect(response.status).toBe(200);
 });
 
-//delete without id
-test('Delete an order without id from the order database', () => {
+//process payment with id
+test('Process payment without id from the order database', () => {
     console.log = jest.fn();
-    var query = { "_id":""
-    };
+    var query = { };
+
+    query[ "_id" ] = id;
+	query[ "amount" ] = "0.00";
+	query[ "method" ] = "Card";
+	query[ "receipt" ] = "Print";
+	query[ "tip" ] = "0.00";
+	query[ "feedback" ] = "feedback";
+	query[ "email" ] = "lol@gmail.com";
+
     var url = "http://64.225.29.130/orders/delete"
     var method = "POST";
     var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
     console.log("Response text: " + response.text)
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(200);
 
 });
 
@@ -59,6 +71,32 @@ test('Process payment without id from the order database', () => {
 	query[ "feedback" ] = "feedback";
 	query[ "email" ] = "lol@gmail.com";
 
+    var url = "http://64.225.29.130/orders/delete"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response text: " + response.text)
+    expect(response.status).toBe(400);
+
+});
+
+//delete with id
+test('Delete an order without id from the order database', () => {
+    console.log = jest.fn();
+    var query = { "_id":id
+    };
+    var url = "http://64.225.29.130/orders/delete"
+    var method = "POST";
+    var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
+    console.log("Response text: " + response.text)
+    expect(response.status).toBe(200);
+
+});
+
+//delete without id
+test('Delete an order without id from the order database', () => {
+    console.log = jest.fn();
+    var query = { "_id":""
+    };
     var url = "http://64.225.29.130/orders/delete"
     var method = "POST";
     var response = communication.communicateWithServer(JSON.stringify(query), method, url, false);
