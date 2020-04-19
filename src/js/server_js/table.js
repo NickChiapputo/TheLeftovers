@@ -101,8 +101,12 @@ function placeTable(tableNum, status){
 }
 
 function store(value){
+<<<<<<< Updated upstream
 	Cookies.set('table-num', value, {path: '/', sameSite: 'strict'});
 	//alert(Cookies.get('table-num'));
+=======
+	sessionStorage.setItem( 'tableid', value );
+>>>>>>> Stashed changes
 }
 
 module.exports = {getTableList, placeTable, store} ;

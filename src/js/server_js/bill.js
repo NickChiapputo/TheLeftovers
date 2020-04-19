@@ -1,7 +1,7 @@
 function loadBill(){
 
     //set table Number
-    var table = Cookies.get('table-num');
+    var table = sessionStorage.getItem( 'tableid')
     if (table == undefined) {
         table = 0;
     }
