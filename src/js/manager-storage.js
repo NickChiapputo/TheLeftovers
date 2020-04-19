@@ -1,5 +1,6 @@
 const init = function (e)
 {
+	//The following code loads up a selected menu item for editing purposes
 	var name = document.querySelector("#food-name");
 	var description = document.querySelector("#food-description");
 	var pic = document.querySelector("#food-picture");
@@ -8,6 +9,7 @@ const init = function (e)
 	var allergens = document.querySelector("#food-allergens");
 	var price = document.querySelector("#food-price");
 
+	//Uses the name stored in the sessionStorage of the clicked item
 	var params = {};
  		params['name']=sessionStorage.getItem('food-Item');
 
@@ -16,6 +18,7 @@ const init = function (e)
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
 		{
+			
 			var obj = JSON.parse( this.responseText );
 			var el = document.getElementById( "textarea-menu-create" );
 			name.innerHTML = obj.name;
@@ -24,6 +27,7 @@ const init = function (e)
 			pic.innerHTML = "<div class=\"item-large-image\" style=\"background-image: url("+obj.image+");max-height:70vh;min-height:70vh\"></div>";
 			allergens.innerHTML="Allergens="+obj.allergens;
 			price.innerHTML="Price=$"+obj.price;
+			//Stores all the previous information about the item in session storage
 			sessionStorage.setItem('food-item-name',obj.name);
 			sessionStorage.setItem('food-item-description',obj.description);
 			sessionStorage.setItem('food-item-calories',obj.calories);
@@ -32,7 +36,7 @@ const init = function (e)
 			sessionStorage.setItem('food-item-category',obj.category);
 			for(i=0; i< obj.ingredients.length; i++)
 			{
-				if(obj.hasIngredient[i]!=0)
+				if(obj.hasIngredient[i]!=0)//Checks ingredients that the obj is known to have
 				{
 					ingredients.innerHTML+="<input type=\"checkbox\" id=\"topping\" name=\"topping\" value=\"topping\" checked readOnly>";
 					ingredients.innerHTML+="<label>"+obj.ingredients[i]+":"+obj.ingredientCount[i]+"</label><br>";
@@ -52,10 +56,11 @@ const init = function (e)
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/menu/create
+	// Send a POST request to 64.225.29.130/menu/search
 	xmlHttp.open( "POST", "http://64.225.29.130/menu/search",true );
 	xmlHttp.send( JSON.stringify(params) );
 };
+//On load the information about the menu item will pop up
 document.addEventListener('DOMContentLoaded', function()
 {
     init();
@@ -74,9 +79,9 @@ function loadIngredients()
 			var obj = JSON.parse( this.responseText );
 			
 			var numItems = Object.keys( obj ).length;
-		//	var el = document.getElementById( "ingredientLabel" );
 			var elEdit = document.getElementById( "ingredientLabel-edit" );
 
+			//Loads all the posible ingredient options for editing purposes
 			var i;
 			for( i = 0; i < numItems; i++ )
 			{
@@ -154,8 +159,6 @@ function loadIngredients()
 						'</div>' + 
 					'</div>';
 
-		//		el.insertAdjacentHTML( 'afterend', ingredientSrc );
-
 				elEdit.insertAdjacentHTML( 'afterend', ingredientEditSrc );
 			}
 		}
@@ -175,7 +178,7 @@ function editMenuItem()
 	var formData = new FormData( editMenuItemForm );
 	formData.set("menu-item-edit-id",sessionStorage.getItem('food-item-id'));
 	document.getElementsByName("menu-item-edit-id")[0].value=sessionStorage.getItem('food-item-id');
-	if(formData.get("menu-item-edit-name")=="")
+	if(formData.get("menu-item-edit-name")=="")//If a user did not fill the information in for these attributes then old values will be saved
 	{
 		formData.set("menu-item-edit-name",sessionStorage.getItem('food-item-name'));
 	}
@@ -198,7 +201,7 @@ function editMenuItem()
 
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
-			if( this.readyState == 4 && this.status == 200 )
+			if( this.readyState == 4 && this.status == 200 )//On Success
 			{
 				var obj = JSON.parse( this.responseText );
 				var el = document.getElementById( "textarea-menu-edit" );
@@ -235,6 +238,7 @@ function editMenuItemSubmit()
 
 function deleteMenuItem()
 {
+	//Deletes the menu item of the name specified by the user and backs them out of the window
 	window.document.location="./editmenu.html";
 	var params = {};
 	params[ "name" ] = sessionStorage.getItem('food-Item');
@@ -261,7 +265,7 @@ function deleteMenuItem()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	// Send a POST request to 64.225.29.130/menu/delete with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete", true );
 	console.log( "Sending: " + JSON.stringify( params ) );
 	xmlHttp.send( JSON.stringify( params ) ); 

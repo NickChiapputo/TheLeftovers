@@ -1,5 +1,6 @@
 function createEmployee()
 {
+	//Populates paramaters with user input data
 	var params = {};
     params["first"] = document.getElementsByName( "first" )[ 0 ].value;
     params["middle"] = document.getElementsByName("middle")[0].value;
@@ -19,7 +20,7 @@ function createEmployee()
 
 			if( obj == null )
 			 	document.getElementById( 'textarea-create' ).innerHTML = "Unable to create item.\n";
-			else
+			else//On Success
 			 	document.getElementById( 'textarea-create' ).innerHTML = "Created Item: \n" + 
                      "     First:  " + obj.first+
                      "     Middle: " + obj.middle+
@@ -32,7 +33,7 @@ function createEmployee()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	// Send a POST request to 64.225.29.130/employees/create with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/employees/create" );
 	xmlHttp.send( JSON.stringify(params) );
 }
@@ -45,6 +46,7 @@ function createEmployeeFormSubmit()
 
 function deleteEmployee()
 {
+	//Grabs the specified id from the user
 	var params = {};
     params["_id"] = document.getElementsByName( "eid" )[ 0 ].value;
 
@@ -61,9 +63,9 @@ function deleteEmployee()
 			var obj = JSON.parse( this.responseText );
 
 			if( obj == null )
-			 	document.getElementById( 'textarea-create' ).innerHTML = "Unable to create item.\n";
-			else
-			 	document.getElementById( 'textarea-create' ).innerHTML = "Created Item: \n" + 
+			 	document.getElementById( 'textarea-create' ).innerHTML = "Unable to delete item.\n";
+			else//On success
+			 	document.getElementById( 'textarea-create' ).innerHTML = "Deleted Item: \n" + 
                      "     Eid:  " + obj._id;
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -72,7 +74,7 @@ function deleteEmployee()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	// Send a POST request to 64.225.29.130/employees/delete with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/employees/delete");
 	xmlHttp.send( JSON.stringify(params) );
 }
@@ -89,12 +91,10 @@ function getEmployeeList() {
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			//var doc = document.getElementById( 'textarea-view' );
-			// Response is a JSON array of items
+			//Displays the list of employees in tables format
 			var obj = JSON.parse( this.responseText );
 			var txt="";
 			var numItems = Object.keys( obj ).length;
-//			<!--doc.innerHTML = "<p>Number of Inventory Items: " + numItems + "</p>";-->
 			var i;
 			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>EID</th><th style=' background-color: black; color: white;'>First</th><th style=' background-color: black; color: white;'>Middle</th><th style=' background-color: black; color: white;'>Last</th><th style=' background-color: black; color: white;'>Pin</th><th style=' background-color: black; color: white;'>Type</th><th style=' background-color: black; color: white;'>Tips</th><th style=' background-color: black; color: white;'>Comps</th><th style=' background-color: black; color: white;'>Hours</th>"
 			for( i = 0; i < numItems; i++ )
@@ -148,7 +148,7 @@ function getEmployeeList() {
 		}
 	};
 
-	// Send a GET request to 64.225.29.130/inventory/view
+	// Send a GET request to 64.225.29.130/employees/view
 	xmlHttp.open( "GET", "http://64.225.29.130/employees/view", true );
 	xmlHttp.send();
 }
@@ -161,6 +161,7 @@ function getEmployeeFormSubmit()
 
 function editEmployee()
 {
+	//Edits an employee given from parameters that the user specified
 	var params = {};
 	params['_id'] = document.getElementsByName('EID')[0].value;
     params["first"] = document.getElementsByName( "efirst" )[ 0 ].value;
@@ -181,7 +182,7 @@ function editEmployee()
 
 			if( obj == null )
 			 	document.getElementById( 'textarea-edit' ).innerHTML = "Unable to edit item.\n";
-			else
+			else//On Success
 			 	document.getElementById( 'textarea-edit' ).innerHTML = "Edited Item: \n" + 
                      "     First:  " + obj.first+
                      "     Middle: " + obj.middle+
