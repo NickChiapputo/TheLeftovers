@@ -10,7 +10,8 @@ test('Makes sure the Menu receives the get request', () => {
          });
  });
  
-//  test('Can create a shift for an employee with a valid id',() => {
+
+//  test('Can create a menu item',() => {
 //                  const file = new File([''],'http://64.225.29.130/img/yd7b6zdowsr41.jpg',{
 //                      type: 'text/plain',
 //                      lastModified:new Date()
@@ -31,6 +32,7 @@ test('Makes sure the Menu receives the get request', () => {
 //                  console.log("Response text: "+response.status)
 //                  expect(response.status).toBe(200);
 //  })
+
  
 //delete an empty menu item
 test('Delete an empty item from the menu items database', () => {
@@ -67,3 +69,41 @@ test('Reject stats on an item from the menu items database', () => {
     console.log("Response text: " + response.text)
     expect(response.status).toBe(500);
 });
+
+ //delete an empty menu item
+ test('Delete an empty item from the menu items database', () => {
+     console.log = jest.fn();
+     var menuItem = { "name":"?" };
+ 
+     var url = "http://64.225.29.130/menu/delete"
+     var method = "POST";
+     var response = communication.communicateWithServer(JSON.stringify(menuItem), method, url, false);
+     console.log("Response text: " + response.text)
+     expect(response.status).toBe(200);
+ });
+ 
+ 
+ //get stat on a bad menu item
+ test('Receive stats on an item from the menu items database', () => {
+     console.log = jest.fn();
+     var menuItem = { "name":"Water" };
+ 
+     var url = "http://64.225.29.130/menu/stats"
+     var method = "POST";
+     var response = communication.communicateWithServer(JSON.stringify(menuItem), method, url, false);
+     console.log("Response text: " + response.text)
+     expect(response.status).toBe(200);
+ });
+ 
+ //reject getting stat on a bad menu item
+ test('Reject stats on an item from the menu items database', () => {
+     console.log = jest.fn();
+     var menuItem = { "name":"bad" };
+ 
+     var url = "http://64.225.29.130/menu/stats"
+     var method = "POST";
+     var response = communication.communicateWithServer(JSON.stringify(menuItem), method, url, false);
+     console.log("Response text: " + response.text)
+     expect(response.status).toBe(500);
+ });
+
