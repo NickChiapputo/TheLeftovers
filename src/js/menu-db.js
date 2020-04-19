@@ -742,7 +742,7 @@ async function createMenuItem( menuItem, db, res )
 	if( menuInsertResult && statInsertResult )
 	{
 		res.statusCode = 200;
-		res.end( JSON.stringify( menuInsertResult ) );
+		res.end( JSON.stringify( menuInsertResult.ops[ 0 ] ) );
 	}
 	else
 	{

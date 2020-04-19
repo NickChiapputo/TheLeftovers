@@ -66,6 +66,8 @@ function logRewardsAccounts()
 		// Get JSON object of rewards account
 		var obj = JSON.parse( response.responseText );
 
+		console.log( JSON.stringify( obj[ "lastMeal" ] ) );
+
 		// Save rewards account name and number
 		sessionStorage.setItem('rewards-name-save',obj[ "name" ]);
 		sessionStorage.setItem('rewards-number-save',obj[ "_id" ]);

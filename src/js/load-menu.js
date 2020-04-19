@@ -166,12 +166,12 @@ function loadOrderItems() {
 	suppressEnter();
 	$(document).ready(function() {
 		var order;
-		
+
 		// Get table ID
 		var table = sessionStorage.getItem('tableid');
 
 		// Check if table ID is not set or invalid
-		if ( table === null || table === "" || isNaN( parseInt( table ) ) || parseInt( table ) < 1 || parseInt( table ) > 20 ) 
+		if ( table === null || table === "" || isNaN( parseInt( table ) ) || parseInt( table ) < 1 || parseInt( table ) > 20 )
 		{
 			console.log( "Bad table ID: " + table );
 
@@ -242,13 +242,14 @@ function loadOrderItems() {
 					order.items[i].price = Number((order.items[i].price / 2).toFixed(2));
 				}
 
-								// Kid's menu discount (4:00-11:59pm Mondays)
-								if( order[ "items" ][ i ][ "category" ] === "kids" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23 && date.getDat() === 1 )
-								{
-									order[ "items" ][ i ][ "kids_discount" ] = true;
-									order[ "items" ][ i ][ "price" ] = 0;
-								}
-				
+
+				// Kid's menu discount (4:00-11:59pm Mondays)
+				if( order[ "items" ][ i ][ "category" ] === "kid" && order[ "items" ][ i ][ "kids_discount" ] === undefined && date.getHours() >= 16 && date.getHours() <= 23.5 )
+				{
+					order[ "items" ][ i ][ "kids_discount" ] = true;
+					order[ "items" ][ i ][ "price" ] = 0;
+				}
+
 				// printing name, price, discount
 				output = output.concat(i+1, ". ");
 				if (order.items[i].sent != 'false') {

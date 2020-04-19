@@ -77,9 +77,10 @@ const server = http.createServer( ( req, res ) =>  {
 	 	db.db( "restaurant" ).collection( "inventory" ).insertOne( newItem, function( err, result ) {
 	 		if( err )
 	 		{
+				console.log( "Unable to create new inventory item.\nError log: " + err.message );
 	 			res.statusCode = 500;								// Internal Server Error
-	 			res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
-	 			throw err;	
+	 			res.end( JSON.stringify( { "response" : "unable to create new item" } ) );	// Unsuccessful action
+	 			return;	
 	 		} 
 
 	 		// Display new item for debugging

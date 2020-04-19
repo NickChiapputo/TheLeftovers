@@ -1,10 +1,12 @@
 // getting orders for current table from databse
-function getOrdersByTable()
+function getOrdersByTable(tip)
 {
     $(document).ready(function() {
         var table = (sessionStorage.getItem('tableid'));
         // making new payment object
         var payment = Cookies.get('payment');
+        if( payment == null )
+        {
             payment = {}
             payment['tip'] = '';
             payment['note'] = '';
@@ -13,6 +15,7 @@ function getOrdersByTable()
             payment['amount'] = '';
             payment['email'] = '';
             Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
+        }
         if (table == undefined) {
             table = 0;
         }
@@ -55,6 +58,7 @@ function getOrdersByTable()
                                 + "    Table:     " + billOrders[ p ][ "table"] + "\n"
                                 + "    Subtotal: $" + billOrders[ p ][ "subtotal" ] + "\n"
                                 + "    Tax:      $" + billOrders[ p ][ "tax" ] + "\n"
+                                + "    Tip::     $" + tip + "\n";
                                 + "    Total:    $" + billOrders[ p ][ "total" ] + "\n\n";
                         subtotal += billOrders[p].subtotal;
                         tax += billOrders[p].tax;
@@ -88,11 +92,16 @@ function getOrdersByTable()
                     paid = (subtotal + tax - total);
                     out += "\n";
                     console.log(out);
+                    var roundedTip = addTrailingZeros( parseFloat( tip ) );
+                    console.log( typeof total );
+                    console.log( typeof roundedTip );
+                    console.log( "Tip: $" + roundedTip );
                     output += "Subtotal: $" + addTrailingZeros(subtotal) + '\n';
                     output += "Tax: $" + addTrailingZeros(tax) + '\n';
+                    output += "Tip: $" + roundedTip + '\n';
                     output += 'Paid: $' + addTrailingZeros(paid) + '\n';
                     output += '___________________________________________\n';
-                    output += 'Total: $' + addTrailingZeros(total) + '\n';
+                    output += 'Total: $' + addTrailingZeros(total + parseFloat( roundedTip ) ) + '\n';
                     document.getElementById('itemList').innerText = output;
                 }
                 else {
@@ -119,8 +128,11 @@ function addTip() {
     }
     var payment = Cookies.getJSON('payment');
     payment.tip = tip;
+    console.log( "Tip: " + tip );
     Cookies.set('payment', payment, {path: '/', sameSite: 'strict'});
     document.getElementById('tip-label').innerText = "Tip: $" + tip;
+
+    getOrdersByTable( tip );
 }
 
 // clearing note left for server
@@ -257,6 +269,7 @@ function handlePayment(frac) {
     document.getElementById('pay-success-title').innerText = "Successfully paid $" + Number(totalPaid);
     document.getElementById('pay-success-title').style.color = 'green';
     var tip = payment.tip;
+    console.log( "Tip: " + tip );
 
     // buildPayments prepares payment data to be sent to the database
     var total = buildPayments(payment);
