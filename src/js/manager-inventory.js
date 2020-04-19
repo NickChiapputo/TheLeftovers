@@ -114,7 +114,7 @@ function editFormSubmit()
 
 
 function createInventoryItem()
-{
+{				//Assigns data from user
 	var params = "name=" + document.getElementsByName( "name-create" )[ 0 ].value + 
 				"&count=" + document.getElementsByName( "count-create" )[ 0 ].value;
 
@@ -123,6 +123,7 @@ function createInventoryItem()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
 		{
+			//Successful creation
 			console.log( this.responseText );
 
 			// Response is a JSON object
@@ -177,7 +178,7 @@ function deleteInventoryItem()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	// Send a POST request to 64.225.29.130/inventory/delete with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/inventory/delete?" + params, true );
 	xmlHttp.send( params );
 }

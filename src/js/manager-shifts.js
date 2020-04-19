@@ -19,7 +19,7 @@ function employeeChangeShift( create )
 
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
-			if( this.readyState == 4 && this.status == 200 ) 
+			if( this.readyState == 4 && this.status == 200 ) //On Success
 			{
 				document.getElementById( "textarea-employees-" + ( create ? "create" : "remove" ) + "-shift" ).innerHTML = "Successful";
 			}
@@ -69,7 +69,7 @@ function employeeDeleteShift( create )
 
 		var xmlHttp = new XMLHttpRequest();
 		xmlHttp.onreadystatechange = function() {
-			if( this.readyState == 4 && this.status == 200 ) 
+			if( this.readyState == 4 && this.status == 200 )//On Success 
 			{
 				document.getElementById( "textarea-employees-" + ( create ? "create" : "remove" ) + "-shift" ).innerHTML = "Successful";
 			}
@@ -98,6 +98,7 @@ function employeeDeleteShiftSubmit( create )
 	return false;
 }
 
+//Displays the work schedule for the current week
 function displayShifts()
 {
 	let date = new Date();
@@ -113,7 +114,7 @@ function displayShifts()
 	{
 		month = '0' + month;
 	}
-
+	//Calculates the dates Sunday through Saturday for the current week
 	let day0= (year+'-'+month+'-'+(dt-date.getDay()));
 	let day1 = (year+'-'+month+'-'+(dt+1-date.getDay()));
 	let day2 = (year+'-'+month+'-'+(dt+2-date.getDay()));
@@ -134,18 +135,15 @@ function displayShifts()
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			//var doc = document.getElementById( 'textarea-view' );
-			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			var txt="";
 			var numItems = Object.keys( obj ).length;
-//			<!--doc.innerHTML = "<p>Number of Inventory Items: " + numItems + "</p>";-->
 			var i;
 			for( i = 0; i < numItems; i++ )
 			{
 				var currItem = obj[ i ];
 				var shifts = [];
-
+				//Checks to see what day the date that an individual is scheduled for falls under
 				currItem.shifts.forEach(function (shift) {
 						if(shift.date==day0)
 						{
@@ -202,12 +200,11 @@ function getEmployeeList() {
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
-			//var doc = document.getElementById( 'textarea-view' );
-			// Response is a JSON array of items
+
+			//Displays employee list in a table format
 			var obj = JSON.parse( this.responseText );
 			var txt="";
 			var numItems = Object.keys( obj ).length;
-//			<!--doc.innerHTML = "<p>Number of Inventory Items: " + numItems + "</p>";-->
 			var i;
 			txt += "<table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>EID</th><th style=' background-color: black; color: white;'>First</th><th style=' background-color: black; color: white;'>Middle</th><th style=' background-color: black; color: white;'>Last</th>";
 			for( i = 0; i < numItems; i++ )

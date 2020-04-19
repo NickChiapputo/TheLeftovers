@@ -13,7 +13,7 @@ function getCoupons()
 			
 			var numItems = Object.keys( obj ).length;
 			
-			
+			//Displays the list of coupons in a formatted table view			
 			var i;
 			var txt="";
 			txt += "<tr><table style='width:100%; border: 1px solid black;'>" + "<tr><th style=' background-color: black; color: white;'>CID</th><th style=' background-color: black; color: white;'>Text</th><th style=' background-color: black; color: white;'>Discount%</th><th style=' background-color: black; color: white;'>ExpirationDate</th><th style=' background-color: black; color: white;'>Rewards</th></tr>";
@@ -44,7 +44,7 @@ function createCouponSubmit()
 {
 	var coupon = {};
 
-	// Get coupon data
+	// Get coupon data from the user
 	coupon[ "name" ] = document.getElementsByName( "name" )[ 0 ].value;
 	coupon[ "discount" ] = document.getElementsByName( "discount" )[ 0 ].value;
 	coupon[ "expiration" ] = document.getElementsByName( "expiration" )[ 0 ].value;
@@ -70,7 +70,7 @@ function createCouponSubmit()
 
 	console.log( "Sending: " + JSON.stringify( coupon ) );
 
-	// Send a POST request to 64.225.29.130/employees/create
+	// Send a POST request to 64.225.29.130/coupons/create
 	xmlHttp.open( "POST", "http://64.225.29.130/coupons/create", true );
 	xmlHttp.send( JSON.stringify( coupon ) );
 }

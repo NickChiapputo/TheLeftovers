@@ -1,14 +1,13 @@
 function viewStats()
 {
 
-
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 )
 		{
             var obj = JSON.parse(this.responseText);
-            obj.forEach(function (d){
-                getStats(d.name);
+            obj.forEach(function (d){//Getting stats for each individual item
+                getStats(d.name);//Actual displays info for a given stat
             });
 			console.log( this.responseText );
 		}
@@ -18,13 +17,14 @@ function viewStats()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/menu/create
+	// Send a POST request to 64.225.29.130/menu/view
 	xmlHttp.open( "GET", "http://64.225.29.130/menu/view",true );
 	xmlHttp.send();
 }
 
 function getStats(name)
 {
+	//Searches for menuItem with the given name to display the statistics
 	var params = {};
 	params[ "name" ] =  name;
 

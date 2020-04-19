@@ -53,7 +53,7 @@ function getMenu()
 		}
 	};
 
-	// Send a GET request to 64.225.29.130/inventory/view
+	// Send a GET request to 64.225.29.130/menu/view
 	xmlHttp.open( "GET", "http://64.225.29.130/menu/view", true );
 	xmlHttp.send();
 	//var x = setTimeout(getMenu, 1000);
@@ -77,8 +77,7 @@ function loadIngredients()
 			
 			var numItems = Object.keys( obj ).length;
 			var el = document.getElementById( "ingredientLabel" );
-	//		var elEdit = document.getElementById( "ingredientLabel-edit" );
-
+			//Loads the ingredients for an item the manager is viewing
 			var i;
 			for( i = 0; i < numItems; i++ )
 			{
@@ -196,7 +195,7 @@ function deleteMenuItem()
 		}
 	};
 
-	// Send a POST request to 64.225.29.130/inventory/create with selected parameters in key-value format
+	// Send a POST request to 64.225.29.130/menu/delete with selected parameters in key-value format
 	xmlHttp.open( "POST", "http://64.225.29.130/menu/delete?" + params, true );
 	xmlHttp.send( params );
 }
