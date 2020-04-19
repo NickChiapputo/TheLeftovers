@@ -7,8 +7,6 @@ function getMessages()
 		xmlHttp.onreadystatechange = function() {
 			if( this.readyState == 4 && this.status == 200 )
 			{
-	//			var doc = document.getElementById( 'order-view-area' );
-
 				console.log( this.responseText );
 
 				// Response is a JSON array of items
@@ -29,7 +27,6 @@ function getMessages()
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
-	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
 				console.log( "Get Messages status response: " + this.status );
 			}
 		};
