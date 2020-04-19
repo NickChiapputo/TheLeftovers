@@ -1,4 +1,3 @@
-const {functions} = require('./TablesData')
 const communication = require('../js/server-communication.js')
 
 test('Get the list of tables from the table database', () => {
