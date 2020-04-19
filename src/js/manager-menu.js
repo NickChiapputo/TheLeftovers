@@ -14,6 +14,7 @@ function getMenu()
 			entree.innerHTML="";
 			drink.innerHTML="";
 			desserts.innerHTML="";
+			kid.innerHTML="";
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
 			
