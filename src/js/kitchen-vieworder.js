@@ -46,7 +46,7 @@ function getOrders()
 					var allergens;
 					var notes=[];
 					var y=i+1;
-					localStorage.setItem('btn'+y,"");
+					sessionStorage.setItem('btn'+y,"");
 					if(currItem.status=='ordered')
 					{
 						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
@@ -63,20 +63,17 @@ function getOrders()
 									ingredients.push(food.ingredients[k]);
 								}
 							}
-							
+							alert(food)
 							if(food.notes!=undefined)
 							{
 								notes.push(food.notes+"<br>");
 							}
-
 
 							if(ingredients.length!=0)
 							{
 								txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
 							}
 						});
-						
-
 						if(notes.length!=0)
 							txt+="Note:"+notes.join(",");
 							var ide = "";
