@@ -198,11 +198,11 @@ function createNewAccount( newAccount, collection, res )
 	collection.insertOne( newAccount, function( err, result ) {
  		if( err )
  		{
- 			console.log( "Error inserting." );
+ 			console.log( "Error inserting.\nError log: " + err.message );
  			res.statusCode = 500;								// Internal Server Error
  			res.end( JSON.stringify( { "succes" : "no" } ) );	// Unsuccessful action
- 			throw err;	
- 		} 
+ 			return;
+		} 
 
  		// Display new item for debugging
  		console.log( "Inserted: " + JSON.stringify( result.ops[ 0 ] ) );

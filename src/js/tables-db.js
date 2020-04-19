@@ -153,7 +153,7 @@ const server = http.createServer( ( req, res ) =>  {
 
 	 			// Get JSON object that only has table number
 	 			var tableNum = {};
-	 			tableNum[ "table" ] = obj[ "table" ];
+	 			tableNum[ "table" ] = parseInt( obj[ "table" ] );
 
 	 			// Update status
 	 			updateTableStatus( tableNum, table, collection, res );

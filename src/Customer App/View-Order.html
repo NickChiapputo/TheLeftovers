@@ -98,6 +98,7 @@
 							</div>
 							<div class="modal-body">    
 								<form id="myForm">
+									<!-- Asking user which item to edit -->
 									<input type="text" autocomplete="off" id="edit-choice" value="">
 									<button type="reset" class="btn btn-primary" onclick="editRemoveItem(1)">Edit</button>
 									<p id="cokies" style="display: none;">as</p>
@@ -123,6 +124,7 @@
 					</div>
 					<div class="modal-body">    
 					  <form id="myForm">
+						<!-- Asking user which item to remove -->
 						<input type="text" autocomplete="off" id="remove-choice">
 						<button type="reset" class="btn btn-primary" onclick="editRemoveItem(0)">Remove</button>
 						<p id="coookies"></p>
@@ -185,6 +187,7 @@
 					</div>
 					
 					<div class="modal-footer" >
+					  <!-- Confirming that user wants to send order -->
 					  <button type="button" id="send-dismiss" style="width: 100%;" class="btn btn-outline-success" data-dismiss="modal">Close window</button>
 					  <button type="button" id="send-no" class="btn btn-outline-danger" data-dismiss="modal">No</button>
 					  <button type="button" id="send-yes" class="btn btn-outline-success" data-dismiss="modal" onclick="send_order(); $('#order-sent').modal('show');">Yes</button>

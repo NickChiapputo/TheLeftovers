@@ -458,6 +458,11 @@ const server = http.createServer( ( req, res ) =>  {
 	 			findMenuItem( JSON.parse( body ), db.db( "restaurant" ).collection( "menu-item-stats" ), res ) 
 	 		});
 		}
+		else if( path == "/menu/view-available" )
+		{
+			console.log( "View available items." );
+			viewAvailable( db, res );	
+		}
 		else
 		{
 			console.log( "Invalid path: '" + path + "'.\n\n" );
@@ -486,6 +491,107 @@ function viewMenuItems( collection, res )
 		// Send list of items back
 		res.end( JSON.stringify( result ) );
 	} );
+}
+
+async function viewAvailable( db, res )
+{
+	var menuItemCollection = db.db( "restaurant" ).collection( "menu-items" );
+	var inventoryCollection = db.db( "restaurant" ).collection( "inventory" );
+
+	console.log( "Retrieving available menu items." );
+	
+	try
+	{
+		// Get list of menu items
+		var query = {};
+		var menuItemList = await getItems( query, menuItemCollection );
+
+		// Get number of menu items
+		var numItems = Object.keys( menuItemList ).length;
+
+		// Get list of ingredients
+		var ingredientList = await getItems( query, inventoryCollection );
+
+		// Get number of ingredients
+		var numIngredients = Object.keys( ingredientList ).length;
+
+		// Create array with each key being the ingredient name and the value being the number available
+		var ingredients = [];
+		var i;
+		for( i = 0; i < numIngredients; i++ )
+		{
+			// Get ingredient name
+			var name = ingredientList[ i ][ "name" ];
+			
+			// Get ingredient count
+			var count = ingredientList[ i ][ "count" ];
+
+			// Add object to array of ingredients
+			ingredients[ name ] = count;
+			console.log( "Add " + name + " (" + count + ")  to ingredient list." );
+		}
+
+		// Loop through each menu item and check ingredient availability
+		for( i = 0; i < numItems; i++ )
+		{
+			console.log( "Menu item '" + menuItemList[ i ][ "name" ] );
+
+			// Get current menu item ingredient list
+			var itemIngredients = menuItemList[ i ][ "ingredients" ];
+
+			// Get current menu item ingredient required counts
+			var itemIngredientRequiredCounts = menuItemList[ i ][ "ingredientCount" ];
+
+			// Get number of ingredients
+			var numIngredientsInItem = Object.keys( itemIngredients ).length;
+
+			// Loop through each ingredient and check availability.
+			// If any do not have enough, remove from menuItemList
+			var j;
+			for( j = 0; j < numIngredientsInItem; j++ )
+			{
+				// Get ingredient name
+				var ingredientName = itemIngredients[ j ];
+
+				// Get ingredient required count
+				var ingredientRequiredCount = itemIngredientRequiredCounts[ j ];
+
+				// Get ingredient count in inventory
+				var inventoryCount = ingredients[ ingredientName ];
+
+				// If required count is greater than avaiable, remove menu item from menuItemList
+				// Otherwise, continue.
+				console.log( "    " + ingredientName + " has " + inventoryCount + " and needs " + ingredientRequiredCount );
+				if( ingredientRequiredCount > inventoryCount )
+				{
+					console.log( "    Item '" + menuItemList[ i ][ "name" ] + "' does not have enough of '" + ingredientName + "' to be ordered." );
+
+					// Remove item from menu list
+					menuItemList.splice( i, 1 );
+
+					// Update number of menu items
+					numItems--;
+
+					i--;
+
+					// Break out of item ingredient loop
+					j = numIngredientsInItem;
+				}
+			}	
+		}
+
+		// Return menu list
+		console.log( "Available Menu Items:\n" + JSON.stringify( menuItemList ) );
+		res.end( JSON.stringify( menuItemList ) );
+	}
+	catch( e )
+	{
+		console.log( "Fatal error reading available menu items.\nError log: " + e.message );
+
+		res.statusCode = 500;
+		res.end( JSON.stringify( { "response" : "fatal error reading available menu items" } ) );
+		return;
+	}
 }
 
 
@@ -599,6 +705,11 @@ async function updateItem( query, action, collection, options )
 async function getItem( query, collection )
 {
 	return collection.findOne( query );
+}
+
+async function getItems( query, collection )
+{
+	return collection.find( query ).toArray();
 }
 
 async function createMenuItem( menuItem, db, res )

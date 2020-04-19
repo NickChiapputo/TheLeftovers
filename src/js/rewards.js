@@ -1,4 +1,4 @@
-function createRewardsAccount()
+function createRewardsAccount( manager )
 {
 	var phone = document.getElementsByName( "rewards-account-phone" )[ 0 ].value;
 	var name = document.getElementsByName( "rewards-account-name" )[ 0 ].value;
@@ -33,7 +33,7 @@ function createRewardsAccount()
 
 		alert( 'Account successfully created!\nYour ID is: ' + obj[ "_id" ] );
 
-		location = 'index.html';
+		location = true ? '../index.html' : 'index.html';
 	}
 	else
 	{
@@ -65,6 +65,8 @@ function logRewardsAccounts()
 	{
 		// Get JSON object of rewards account
 		var obj = JSON.parse( response.responseText );
+
+		console.log( JSON.stringify( obj[ "lastMeal" ] ) );
 
 		// Save rewards account name and number
 		sessionStorage.setItem('rewards-name-save',obj[ "name" ]);

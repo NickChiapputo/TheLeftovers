@@ -3,8 +3,15 @@ function sendHelp(note)
     var params = {}
     params['src']=sessionStorage.getItem('tableid');
     params['srcType']='table';
-    params['dest']=sessionStorage.getItem('tableid-messenger');
+
+    // Create query to search for current table information
+    var query = {};
+    query[ "table" ] = sessionStorage.getItem('tableid');
+
+    // Set server ID number from query response
+    params['dest']=JSON.parse( sendData( JSON.stringify( query ) ).responseText )[ "server" ];
     params['destType']='server';
+
     if(note=="help")//I labeled buttons wrong thats why it's opposite
     {
         params['request']='refill';
@@ -17,6 +24,7 @@ function sendHelp(note)
     {
         params['request']=note;
     }
+
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if( this.readyState == 4 && this.status == 200 ) 
@@ -27,7 +35,7 @@ function sendHelp(note)
             var obj = JSON.parse( this.responseText );
             var numItems = Object.keys( obj ).length;
 
-            alert("Server "+params['dest']+" was notified");
+            alert( "Your server was notified that you need " + ( note == 'help' ? "a refill" : "assistance" ) + ".\nThey will be with you shortly." );
             console.log( this.responseText );
         }
         else if( this.readyState == 4 && this.status != 200 )

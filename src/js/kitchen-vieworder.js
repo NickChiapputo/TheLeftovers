@@ -8,8 +8,7 @@ function getOrders()
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
 			var doc = document.getElementById( 'order-view-area' );
-
-			console.log( this.responseText );
+			// console.log( this.responseText );
 
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
@@ -19,7 +18,11 @@ function getOrders()
 			// Skipping reload if nothing has changed
 			var cooksOrders = sessionStorage.getItem('cooksOrders');
 			sessionStorage.setItem('cooksOrders', JSON.stringify(obj));
-			var isItDifferent = false;
+
+
+			var isItDifferent = false;	// CHANGE THIS BACK TO FALSE WHEN DONE
+
+
 			if (cooksOrders == null) {
 				cooksOrders = obj;
 				isItDifferent = true;
@@ -46,42 +49,65 @@ function getOrders()
 					var allergens;
 					var notes=[];
 					var y=i+1;
-					localStorage.setItem('btn'+y,"");
+					sessionStorage.setItem('btn'+y,"");
+
 					if(currItem.status=='ordered')
 					{
-						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
-						txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
-						txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>"
-						currItem.items.forEach(function (food) {
-							var ingredients=[];
-							txt+="<p>Name:"+food.name+"</p>";
+						// Create the collapsible button
+						txt += "<button type='button' id='btn" + y + "' class='col btn btn-info' data-toggle='collapse' data-target='#order" + y + "'>Order" + y + "</button> ";
+						
+						// Create the parent div for the order
+						txt += "<div id='order" + y + "' class='collapse'>"
 
-							for(k=0;k<food.ingredients.length;k++)
+						// Create the div for the content
+						txt += "<div class='col text-box scrollable'>";
+
+						// Display the table number
+						txt+="<p style='text-align: center'>Table:"+currItem.table+"</p>";
+
+						// Display the order notes
+						if( currItem.notes != undefined )
+						{
+							var orderNotes = currItem.notes.replace( /(\n)+/g, '<br>&emsp;&emsp;&emsp;' ) + "<br>";
+							txt += "<p>Order Notes:<br>&emsp;&emsp;&emsp;" + orderNotes;
+						}
+
+						var numMenuItems = currItem.items.length;
+
+						var j;
+						for( j = 0; j < numMenuItems; j++ )
+						{
+							// Get the current menu item
+							var food = currItem.items[ j ];
+							txt+="<p>Item " + ( j + 1 ) + ": " + food.name + "</p>";
+
+							// Display ingredients if they are added to the item
+							var ingredientNum = 1;
+							for( k = 0; k < food.ingredients.length; k++ )
 							{
-								if(food.hasIngredient[k]==1)
+								if( food.hasIngredient[ k ] == 1 )
 								{
-									ingredients.push(food.ingredients[k]);
+									txt += "<p>&emsp;Ingredient " + ingredientNum + ": " + food.ingredients[ k ] + "</p>";
+									ingredientNum++;
 								}
 							}
-							
-							if(food.notes!=undefined)
-							{
-								notes.push(food.notes+"<br>");
-							}
 
-
-							if(ingredients.length!=0)
+							// Display notes for the menu item
+							if( food.notes!=undefined )
 							{
-								txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
+								var foodNotes = food.notes.replace( /(\n)+/g, '<br>&emsp;&emsp;&emsp;' ) + "<br>"
+
+								txt += "<p>&emsp;Notes:<br>&emsp;&emsp;&emsp;" + foodNotes + "</p>";
 							}
-						});
+						}
+
+						sessionStorage.setItem('btn'+y,currItem._id);
+
+						// Add notify server button
+						txt += "</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button>";
 						
-
-						if(notes.length!=0)
-							txt+="Note:"+notes.join(",");
-							var ide = "";
-							sessionStorage.setItem('btn'+y,currItem._id);
-						txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
+						// Add mark as complete button
+						txt += "<button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+");changeStatus(" + y + "," + currItem.table + ")\">Mark-Complete</button></div><div style=\"background-color:black;font-size:3px\">-</div> ";
 					}
 				}
 				doc.innerHTML=txt;
@@ -100,11 +126,11 @@ function getOrders()
 	setTimeout(getOrders,5000);
 }
 
-function sendMessage(tableid)
+function sendMessage(server)
 {
 	var params = {};
 	params['srcType']="kitchen";
-	params['dest']=tableid;
+	params['dest']=server;
 	params['destType']="server";
 	params['request']="help";
 
@@ -118,7 +144,7 @@ function sendMessage(tableid)
 			var obj = JSON.parse( this.responseText );
 			var numItems = Object.keys( obj ).length;
 
-			alert("Server "+tableid+" was notified");
+			alert("Server "+server+" was notified");
 			console.log( this.responseText );
 		}
 		else if( this.readyState == 4 && this.status != 200 )
@@ -251,7 +277,7 @@ function help(managerid)
 		xmlHttp.send(JSON.stringify(params));
 }
 
-function changeStatus(count)
+function changeStatus(count, table)
 {
 	var ide=sessionStorage.getItem('btn'+count);
 	sessionStorage.setItem('btn'+count,"");
@@ -263,24 +289,42 @@ function changeStatus(count)
 		xmlHttp.onreadystatechange = function() {
 			if( this.readyState == 4 && this.status == 200 ) 
 			{
-	//			var doc = document.getElementById( 'order-view-area' );
-	
 				console.log( this.responseText );
-			
-				// Response is a JSON array of items
-				var obj = JSON.parse( this.responseText );
-				var numItems = Object.keys( obj ).length;
-	
-				console.log( this.responseText );
+
+				// Get server id
+				var query = {};
+				query[ "table" ] = table;
+				var method = "POST";
+				var url = "http://64.225.29.130/tables/search";
+				var asynchronous = false;
+
+				var response = communicateWithServer( JSON.stringify( query ), method, url, asynchronous );
+
+				console.log( response.responseText );
+
+				// Send complete message to server
+				var query = {};
+				query[ "src" ] = "";
+				query[ "srcType" ] = "kitchen";
+				query[ "dest" ] = JSON.parse( response.responseText )[ "server" ];
+				query[ "destType" ] = "server";
+				query[ "request" ] = "Kitchen has marked order for table " + table + " as complete.";
+
+				var method = "POST";
+				var url = "http://64.225.29.130/messages/send";
+				var asynchronous = false;
+
+				var response = communicateWithServer( JSON.stringify( query ), method, url, asynchronous );
+
+				console.log( "Response: " + response.responseText );
 			}
 			else if( this.readyState == 4 && this.status != 200 )
 			{
-	//			document.getElementById( 'textarea-orders-view' ).innerHTML = "Rewards accounts inventory status response: " + this.status;
-				console.log( "Rewards accounts inventory status response: " + this.status );
+				console.log( "Change order status response: " + this.status );
 			}
 		};
 	
-		// Send a GET request to 64.225.29.130/inventory/view
+		// Send a GET request to 64.225.29.130/orders/status
 		xmlHttp.open( "POST", "http://64.225.29.130/orders/status", true );
 		xmlHttp.send(JSON.stringify(params));
 }
