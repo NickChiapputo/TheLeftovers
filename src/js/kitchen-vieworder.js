@@ -8,6 +8,7 @@ function getOrders()
 		if( this.readyState == 4 && this.status == 200 ) 
 		{
 			var doc = document.getElementById( 'order-view-area' );
+			// console.log( this.responseText );
 
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
@@ -49,40 +50,60 @@ function getOrders()
 					var notes=[];
 					var y=i+1;
 					sessionStorage.setItem('btn'+y,"");
+
 					if(currItem.status=='ordered')
 					{
-						txt+="<button type=\"button\" id=\"btn"+y+"\" class=\"col btn btn-info\" data-toggle=\"collapse\" data-target=\"#order"+y+"\">Order"+y+"</button> ";
-						txt+="<div id=\"order"+y+"\" class=\"collapse\"> <div class=\"col text-box scrollable\">";
-						txt+="<p class=\"col-1\">Table:"+currItem.table+"</p>";
+						// Create the collapsible button
+						txt += "<button type='button' id='btn" + y + "' class='col btn btn-info' data-toggle='collapse' data-target='#order" + y + "'>Order" + y + "</button> ";
+						
+						// Create the parent div for the order
+						txt += "<div id='order" + y + "' class='collapse'>"
 
-						currItem.items.forEach(function (food) {
-							var ingredients=[];
-							txt+="<p>Name:"+food.name+"</p>";
+						// Create the div for the content
+						txt += "<div class='col text-box scrollable'>";
 
-							for(k=0;k<food.ingredients.length;k++)
+						// Display the table number
+						txt+="<p style='text-align: center'>Table:"+currItem.table+"</p>";
+
+						console.log( JSON.stringify( currItem ) );
+
+						// Display the order notes
+						if( currItem.notes != undefined )
+						{
+							var orderNotes = currItem.notes.replace( /(\n)+/g, '<br>&emsp;&emsp;&emsp;' ) + "<br>";
+							txt += "<p>Order Notes:<br>&emsp;&emsp;&emsp;" + orderNotes;
+						}
+
+						var numMenuItems = currItem.items.length;
+
+						var j;
+						for( j = 0; j < numMenuItems; j++ )
+						{
+							// Get the current menu item
+							var food = currItem.items[ j ];
+							txt+="<p>Item " + ( j + 1 ) + ": " + food.name + "</p>";
+
+							// Display ingredients if they are added to the item
+							var ingredientNum = 1;
+							for( k = 0; k < food.ingredients.length; k++ )
 							{
-								if(food.hasIngredient[k]==1)
+								if( food.hasIngredient[ k ] == 1 )
 								{
-									ingredients.push(food.ingredients[k]);
+									txt += "<p>&emsp;Ingredient " + ingredientNum + ": " + food.ingredients[ k ] + "</p>";
+									ingredientNum++;
 								}
 							}
 
-							if(food.notes!=undefined)
+							// Display notes for the menu item
+							if( food.notes!=undefined )
 							{
-								notes.push(food.notes+"<br>");
+								var foodNotes = food.notes.replace( /(\n)+/g, '<br>&emsp;&emsp;&emsp;' ) + "<br>"
+
+								txt += "<p>&emsp;Notes:<br>&emsp;&emsp;&emsp;" + foodNotes + "</p>";
 							}
+						}
 
-							if(ingredients.length!=0)
-							{
-								txt+="<p>Ingredients:"+ingredients.join(",")+"</p>"
-							}
-						});
-
-
-						if(notes.length!=0)
-							txt+="Note:"+notes.join(",");
-							var ide = "";
-							sessionStorage.setItem('btn'+y,currItem._id);
+						sessionStorage.setItem('btn'+y,currItem._id);
 						txt+="</div><button type=\"button\" value=\"Notify Server\" onclick=\"findTable("+currItem.table+")\">Notify Server</button><button type=\"button\" style=\"background-color:lightgreen;\" value=\"Notify Server\" onclick=\"changeColor("+y+")\">Mark-Complete</button><button type=\"button\" value=\"Notify Server\" style=\"background-color:red\" onclick=\"changeStatus("+y+")\">Clear</div><div style=\"background-color:black;font-size:3px\">-</div> ";
 					}
 				}
