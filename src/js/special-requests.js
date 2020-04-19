@@ -20,9 +20,9 @@ function clearList() {
     while (list.childNodes.length > 0) {
       list.removeChild(list.childNodes[list.childNodes.length - 1]);
     }
-    var obj=Cookies.getJSON('current_order');
+    var obj= JSON.parse( sessionStorage.getItem('current_order') );
     obj['notes'] = '';
-    Cookies.set('current_order', JSON.stringify(obj), { path: '/', sameSite: 'strict'});
+    sessionStorage.setItem( 'current_order', JSON.stringify( obj ) );
 }
 
 function submitList(ordItem) {
@@ -44,9 +44,9 @@ function submitList(ordItem) {
       Cookies.set('current_item', JSON.stringify(obj), { path: '/', sameSite: 'strict'});
     }
     else {
-      var obj=Cookies.getJSON('current_order');
+      var obj= JSON.parse( sessionStorage.getItem('current_order') );
       obj['notes'] = specRequest;
-      Cookies.set('current_order', JSON.stringify(obj), { path: '/', sameSite: 'strict'});
+      sessionStorage.setItem( 'current_order', JSON.stringify( obj ) );
     }
 }
 
