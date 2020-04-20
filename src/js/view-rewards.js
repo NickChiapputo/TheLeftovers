@@ -13,7 +13,7 @@ function printRewardsAccounts()
 		var i;
 		var next = '';
 		var text = '';
-		for( i = 0; i < numItems; i++ )
+		for( i = 0; i < 1; i++ )
 		{
 
 			text +=  '<div class="row">' +
