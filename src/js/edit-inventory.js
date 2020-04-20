@@ -70,7 +70,7 @@ const server = http.createServer( ( req, res ) => {
 		 	}
 
 		 	// Test if count is valid
-		 	if( obj.count === "" || obj.count === undefined || isNaN( parseInt( obj.count ) ) || parseInt( obj.count ) <= 0 )
+		 	if( obj.count === "" || obj.count === undefined || isNaN( parseInt( obj.count ) ) || parseInt( obj.count ) < 0 )
 		 	{
 		 		console.log( "Count is invalid ('" + obj.count + "')." );
 				var returnVal = { "success" : "no" };
