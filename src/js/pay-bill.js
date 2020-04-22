@@ -98,10 +98,10 @@ function getOrdersByTable(tip)
                     console.log( "Tip: $" + roundedTip );
                     output += "Subtotal: $" + addTrailingZeros(subtotal) + '\n';
                     output += "Tax: $" + addTrailingZeros(tax) + '\n';
-                    output += "Tip: $" + roundedTip + '\n';
+                    //output += "Tip: $" + roundedTip + '\n';
                     output += 'Paid: $' + addTrailingZeros(paid) + '\n';
                     output += '___________________________________________\n';
-                    output += 'Total: $' + addTrailingZeros(total + parseFloat( roundedTip ) ) + '\n';
+                    output += 'Total: $' + addTrailingZeros(total) + '\n';
                     document.getElementById('itemList').innerText = output;
                 }
                 else {
@@ -247,6 +247,7 @@ function handlePayment(frac) {
         if (payment.amount <= 0) {
             document.getElementById('noGame').style.display = 'unset';
             document.getElementById('playGame').style.display = 'none';
+            document.getElementById('dontPlayGame').style.display = 'none';
             document.getElementById('pay-success-title').innerText = "Invalid input";
             document.getElementById('pay-success-title').style.color = "red";
             document.getElementById('pay-success-text').innerText = "Enter a number above 0";
@@ -298,13 +299,17 @@ function handlePayment(frac) {
         sessionStorage.removeItem('current_order');
         document.getElementById('noGame').style.display = 'none';
         document.getElementById('playGame').style.display = 'unset';
+        document.getElementById('dontPlayGame').style.display = 'none';
     }
     else {
         document.getElementById('noGame').style.display = 'none';
-        document.getElementById('playGame').style.display = 'unset';
+        document.getElementById('playGame').style.display = 'none';
+        document.getElementById('dontPlayGame').style.display = 'unset';
     }
 
     // reloading bill
+    document.getElementById('tip-input').value = 0;
+    document.getElementById('tip-label').innerText = "Add tip";
     getOrdersByTable();
     document.getElementsByName( "order-pay-method" )[ 0 ].value = "N/A";
     document.getElementsByName( "order-receipt-method" )[ 0 ].value = "N/A";
