@@ -33,7 +33,7 @@ function createRewardsAccount( manager )
 
 		alert( 'Account successfully created!\nYour ID is: ' + obj[ "_id" ] );
 
-		location = !manager ? '../index.html' : 'index.html';
+		location = 'index.html';
 	}
 	else
 	{
