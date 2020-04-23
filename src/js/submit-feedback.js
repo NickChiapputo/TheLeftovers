@@ -35,6 +35,6 @@ function submitFeedback() {
         var response = communicateWithServer( query, method, url, asynchronous );
     }
 
-    // window.location="free-item-game.html";
+    window.location="free-item-game.html";
 
 }
