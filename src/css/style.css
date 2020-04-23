@@ -26,9 +26,15 @@
 }
 
 .page {
-    background-color:aquamar;
+    background-color:aquar;
     font-family: Arial, Helvetica, sans-serif;
     text-align:center;
+}
+
+.chart {
+    margin:200px auto;
+    width: 1000px;
+    height: 500px;
 }
 
 .center-div {

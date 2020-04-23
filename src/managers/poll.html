@@ -19,11 +19,18 @@
 			<!-- Used to verify the table login information -->
 		<script src="../js/customer/login.js"> </script> 
 
-		<script src="../js/logout.js"></script>
+        <script src="../js/logout.js"></script>
+        <script src="../js/poll.js"></script>
+        <!--Received from google charts-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+
+        </script>
+        <!--Received from google charts-->
 	</head>
 
 	<!-- clock()	: Update the time every 5 seconds. From get-time.js -->
-	<body onload="clock();" onbeforeunload="logout()">
+	<body onload="clock(); displayPoll()" onbeforeunload="logout()">
 
 		<!-- Header bar -->
 		<div id="header" class="container-fluid"> 
@@ -40,19 +47,14 @@
 					<p id="time"></p>
 				</div>
 			</div>
-		</div>
-
-		<div id="loginArea">
-			<form id="tableLogin">
-			    <label for="table" class="login"><b>Table Number</b></label>
-			    <input type="number" class="login" id="table-num-input" placeholder="Enter Table Number (1-20)" name="table" min="1" max="20" step="1" required>
-			</form>
-		</div>
-
-		<div class="row menu-row">
-			<div class="col menu-box" style="margin-left: auto; margin-right: auto;" onclick="sessionStorage.setItem('userType','man'); initializeTable();">
-				<h1 class="menu-text">Open Table</h1>
-			</div>
-		</div>
-	</body>
+        </div>
+        <div class="row">
+        <div class="col" id="piechart" style="width: 800px; height: 300px;"></div>
+        <div class= "col"id="piechart2" style="width: 800px; height: 300px;"></div>
+        </div>
+        <div class="row">
+        <div class="col" id="top_x_div" style="width: 600px; height: 350px;"></div>
+        <div class="col">Customer Feedback<p id="cmt"></p></div>
+        </div>
+    </body>
 </html>
