@@ -13,13 +13,13 @@ function getFreeReward(){
         alert(code);
         sessionStorage.removeItem('couponCode');
         // returning to homepage
-        window.location="menu.html";
+        window.location="index.html";
     }
     else
     { 
         // alerting the user that they lost the game and returning to the homepage
         alert("Sorry! better luck next time ☹️");
-        window.location="menu.html";
+        window.location="index.html";
     }
 }
 
