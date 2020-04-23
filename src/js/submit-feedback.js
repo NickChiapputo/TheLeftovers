@@ -20,12 +20,16 @@ function submitFeedback() {
     var input3 = document.getElementById('user-input-3').value;
     if (input3 == '') {input3 = 'N/A'}
 
+    var input4 = document.getElementById('user-input-4').value;
+    if (input4 == '') {input4 = 'N/A'}
+
     if (input1 !== 'N/A' || input2 !== 'N/A' || input3 !== 'N/A')
     {
         var feedback = {};
         feedback[ document.getElementById( "question-1" ).innerHTML ] = input1;
         feedback[ document.getElementById( "question-2" ).innerHTML ] = input2;
         feedback[ document.getElementById( "question-3" ).innerHTML ] = input3;
+        feedback[ document.getElementById( "question-4" ).innerHTML ] = input4;
 
         var query = JSON.stringify( feedback );
         var method = "POST";
@@ -35,6 +39,6 @@ function submitFeedback() {
         var response = communicateWithServer( query, method, url, asynchronous );
     }
 
-    // window.location="free-item-game.html";
+    window.location="free-item-game.html";
 
 }
