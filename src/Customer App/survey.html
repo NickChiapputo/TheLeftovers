@@ -72,22 +72,41 @@
 		<div id="body" class="container-fluid">
 			<p></p>
 
-			<h2 style="text-align: left; padding: 0vw 4vw;">1. On a scale of 1 to 10, how would you rate your experience today?</h1>
-			<div class="row" style="max-height: 20vh; min-height: 10vh;">
-				<input id="user-input-1" class="col rewardstext-box" style="height: 10vh; max-width: 90vw; min-width: 90vw;" type="number" max='10' min='1' autocomplete="off" required>
+			<h2 id="question-1" style="text-align: left; padding: 0vw 4vw;">How would you rate your experience today?</h1>
+			<div class="row survey" style="margin-left: 4vw; max-height: 20vh; min-height: 10vh;">
+				<label ><input type="radio" name="user-input-1" value="1" required> 1 </label>
+				<label ><input type="radio" name="user-input-1" value="2"> 2 </label>
+				<label ><input type="radio" name="user-input-1" value="3"> 3 </label>
+				<label ><input type="radio" name="user-input-1" value="4"> 4 </label>
+				<label ><input type="radio" name="user-input-1" value="5"> 5 </label>
+				<label ><input type="radio" name="user-input-1" value="6"> 6 </label>
+				<label ><input type="radio" name="user-input-1" value="7"> 7 </label>
+				<label ><input type="radio" name="user-input-1" value="8"> 8 </label>
+				<label ><input type="radio" name="user-input-1" value="9"> 9 </label>
+				<label ><input type="radio" name="user-input-1" value="10"> 10 </label>
             </div>
-			<h2 style="text-align: left; padding: 0vw 4vw;">2. What was your favorite/least favorite part of your experience?</h1>
-            <div class="row" style="max-height: 20vh; min-height: 10vh;">
-				<input id="user-input-2" class="col rewardstext-box" style="height: 10vh; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off" required>
+			<h2 id="question-2" style="text-align: left; padding: 0vw 4vw;">What was your favorite/least favorite part of your experience?</h1>
+            <div class="row survey" style="max-height: 20vh; min-height: 10vh;">
+				<select id="user-input-2">
+					<option value="" selected="selected"></option>
+					<option value="Service">Service</option>
+					<option value="Food">Food</option>
+					<option value="Environment">The environment (noise, visuals, etc.)</option>
+					<option value="System">The ordering system</option>
+				</select>
+				<!-- <input id="user-input-2" class="col rewardstext-box" style="height: 10vh; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off" required> -->
             </div>
-            <h2 style="text-align: left; padding: 0vw 4vw;">3. Are there any comments you'd like to give to the management staff?</h1>
+            <h2 id="question-3" style="text-align: left; padding: 0vw 4vw;">Are there any comments you'd like to give to the management staff?</h1>
             <div class="row" style="max-height: 20vh; min-height: 10vh;">
-				<input id="user-input-3" class="col rewardstext-box" style="height: 10vh; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off" required>
+				<input id="user-input-3" class="col rewardstext-box" style="height: 10vh; max-width: 90vw; min-width: 90vw;" type="text" autocomplete="off">
 			</div>
-			<!-- Guess Button -->
-			<div class="row menu-row">
-				<div onclick="submitFeedback();" style="cursor: pointer;" class="col menu-box">
+			<!-- Submit and Skip Buttons -->
+			<div class="row menu-row" style="max-width: 1000px; height: 150px; margin-left: auto; margin-right: auto;">
+				<div onclick="submitFeedback();" style="cursor: pointer; border-radius: 30px; border-width: 2px;" class="col menu-box">
 					<h1 class="menu-text">Submit feedback</h1>
+				</div>
+				<div onclick="window.location.href = 'free-item-game.html';" style="background: transparent; cursor: pointer; border: none; color: #212121; margin-top: auto; margin-bottom: 0;">
+					<p>Skip</p>
 				</div>
 			</div>
 		</div>
