@@ -92,7 +92,7 @@
     color: black;
     margin: auto;
     border: gray;
-    border-width: 0.3vw;
+    border-width: 2px;
     border-style: solid;
     font-size: 3vw;
     text-align: left;
@@ -264,3 +264,17 @@ a:hover, a:active {
     display: inline-block;
     cursor: pointer;
   }
+
+.survey label{
+    width: 60px;
+    margin-right: 20px;
+    margin-top: 20px;
+    padding: 0;
+    height: 18px;
+}
+
+.survey select{
+    height: 36px;
+    margin-left: 6vw;
+    padding: 0;
+}
