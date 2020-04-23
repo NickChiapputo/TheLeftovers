@@ -104,7 +104,6 @@ function load_item() {
 		for (i=0; i < ingArr.length; i++) {
 			if (i > 0)
 				document.getElementsByClassName('ingBr')[i-1].style.display = 'unset';
-			console.log(i, ingArr[i])
 
 			// out of stock ingredients
 			if ( inventory[ingArr[i]] == undefined || inventory[ingArr[i]] < ingCount[i] ) {
