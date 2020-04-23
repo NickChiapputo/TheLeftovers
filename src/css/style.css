@@ -199,6 +199,10 @@ a:hover, a:active {
     width: 100%;
 }
 
+.text-box::-webkit-scrollbar {
+    display: none;
+  }
+
 .split {
     height: 50%;
     width: 50%;
