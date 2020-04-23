@@ -6,7 +6,12 @@ function loadMenu()
 		var cats = sessionStorage.getItem('type');
 		var pageTitle = cats;
 		pageTitle = pageTitle[0].toUpperCase() + pageTitle.substr(1) + 's';
-		document.getElementById('category').innerText = pageTitle;
+		if (pageTitle == 'Fives') {
+			document.getElementById('category').innerText = "$5 Combos";
+		}
+		else {
+			document.getElementById('category').innerText = pageTitle;
+		}
 
 		// getting most popular item
 		var maxloc=-1;
@@ -97,8 +102,8 @@ function load_item() {
 		var ingCount = obj.ingredientCount;
 		var inventory  = JSON.parse(window.localStorage.getItem('inventory'));
 		for (i=0; i < ingArr.length; i++) {
-			console.log( 'arr', inventory[ingArr[i]]);
-			console.log( 'count', ingCount[i]);
+			if (i > 0)
+				document.getElementsByClassName('ingBr')[i-1].style.display = 'unset';
 
 			// out of stock ingredients
 			if ( inventory[ingArr[i]] == undefined || inventory[ingArr[i]] < ingCount[i] ) {

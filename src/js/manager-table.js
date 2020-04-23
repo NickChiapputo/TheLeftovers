@@ -8,13 +8,12 @@ function getTableList() {
 			// Response is a JSON array of items
 			var obj = JSON.parse( this.responseText );
       //get total number of tables
-			var numTables = Object.keys(obj).length;
+      var numTables = Object.keys(obj).length;
       //loop through tables
       for (var i = 0; i < numTables; i++){
         //Shows the manager every table and their status
         var currentTable = obj[i];
         	placeTable(currentTable.table, currentTable.status);
-
       }
 
 		}
@@ -46,7 +45,7 @@ function placeTable(tableNum, status){
       }
     }
   }
-
+  
   var col;
   //get correct column
   switch (status){
@@ -59,11 +58,12 @@ function placeTable(tableNum, status){
     case "eating":
       col = 2;
       break;
-    case "paid":
+    case "partially paid":
       col = 3;
       break;
   }
 
+console.log(status)
   //place table button in table
   for (var i = 1; i < table.rows.length; i++){
     if (table.rows[i].cells[col].innerHTML == "") {
