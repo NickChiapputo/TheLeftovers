@@ -297,6 +297,7 @@
 								</div>
 								
 								<div class="modal-footer" id="pay-foot">
+									<!-- No game is for failed payments, don't play game is for partial payments, play game is for full payments -->
 									<button type="button" data-toggle="modal" style="min-width: 100%;" class="btn btn-outline-success" onclick='sessionStorage.setItem("free-stuff-plz", "true"); window.location.href = "survey.html"' data-dismiss="modal" id="playGame">Close window</button>
 									<button type="button" data-toggle="modal" style="min-width: 100%;" class="btn btn-outline-success" data-dismiss="modal" id="dontPlayGame">Close window</button>
 									<button type="button" style="min-width: 100%;" class="btn btn-outline-danger" data-dismiss="modal" id="noGame">Close window</button>
