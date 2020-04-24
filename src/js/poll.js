@@ -165,6 +165,4 @@ function displayPoll()
     };
     //Retrieved from google charts https://developers.google.com/chart/interactive/docs/gallery/piechart
     
-    document.getElementById("cmt").innerHTML+=""
-    
 }
