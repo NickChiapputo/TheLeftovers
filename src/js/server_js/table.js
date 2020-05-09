@@ -47,7 +47,7 @@ function placeTable(tableNum, status){
     }
   }
 
-  var col;
+  var col = 0;
   //get correct column
   switch (status){
     case "sitting":
@@ -59,7 +59,7 @@ function placeTable(tableNum, status){
     case "eating":
       col = 2;
       break;
-    case "paid":
+    case "partially paid":
       col = 3;
       break;
   }

@@ -46,7 +46,7 @@ function placeTable(tableNum, status){
     }
   }
   
-  var col;
+  var col = 0;
   //get correct column
   switch (status){
     case "sitting":
